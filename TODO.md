@@ -4,16 +4,16 @@ The library completion record and published handoffs live in [NEEDS.md](NEEDS.md
 runtime task definitions and completion checkboxes live in [ROADMAP.md](ROADMAP.md).
 Keep status there so this file does not become a second, conflicting backlog.
 The backend baseline is `neuralnetwork v0.7.0`: NN-01–NN-12 are complete and
-NN-13 is blocked on RT-12. RT-01 has specified the runtime contract; all runtime code tasks remain pending.
+NN-13 is blocked on RT-12. RT-01–RT-05 are complete; named graph validation (RT-06) is next.
 
 ## Start here
 
 1. **RT-01 is complete**: read the [runtime contract](docs/runtime-contract.md)
    and [capability manifest](capabilities.json). They resolve the ownership,
    resource/cancellation, and numerical constraints against backend v0.7.0.
-2. Complete **RT-02–RT-03** for the Go module, pinned backend dependency,
-   verification workflow, and reproducible protobuf bindings.
-3. Complete **RT-04–RT-09** using the released tensor storage, shape helpers,
+2. **RT-02–RT-05 are complete**: read their handoffs for module verification,
+   reproducible wire bindings, immutable tensors, and shared inline decoding.
+3. Complete **RT-06–RT-09** using the released tensor storage, shape helpers,
    and M1 kernels. Build the **RT-10** fixture harness alongside them.
 4. Complete **RT-11** to demonstrate M1 with a working MLP and branching graph.
 5. Complete **RT-12** and hand off reproducible runtime graphs to unblock NN-13.

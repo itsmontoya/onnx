@@ -12,6 +12,7 @@ records, along with a dependency smoke test. The smoke test exercises exact
 int64 tensor storage and known protobuf wire bytes; tensor tests verify copied
 ownership, exact values, invalid arguments, and concurrent readers.
 RT-03 adds checked-in ONNX wire bindings and bounded internal protobuf decoding.
+RT-05 adds shared inline tensor conversion with aggregate payload accounting.
 There is no public model loader or execution API yet.
 Every operator in [the capability manifest](../capabilities.json) remains planned.
 
@@ -115,7 +116,61 @@ Decoding verifies wire syntax, not ONNX compatibility. Empty protobuf messages,
 unsupported versions/types, graph attributes, and other semantic features remain
 wire-decodable for later validation; none establish inference support. The byte
 limit bounds serialized input, not protobuf object-tree overhead or total heap.
-RT-05 and later tasks add payload ownership/accounting and semantic validation.
+RT-05 adds the payload ownership/accounting described below; graph and operator
+validation arrive in later tasks.
+
+## Inline tensor conversion
+
+`NewTensorDecoder(ctx, wire proto.Message, encodedBytes int64, limits TensorLimits)`
+constructs one internal decoder for an entire decoded model, attribute, or test
+TensorProto. Pass the actual original serialized byte count, including unknown
+fields and noncanonical wire encodings; a future reader loader must track that
+count while reading. Proto.Size is not a substitute for the original byte count.
+Use ParseModel/ReadModel or ParseTensor/ReadTensor first to enforce wire bounds.
+Pass the complete decoded model so all coexisting payloads are charged before
+any numerical conversion. Foreign schemas and sparse tensors are rejected.
+
+`Decode(ctx, value *onnxpb.TensorProto) (*tensor.Tensor, error)` converts any
+TensorProto registered within that message, including initializers and tensor
+attributes. It returns the pinned backend's owned tensor, keeping the public
+facade private to package onnx. Do not mutate the wire message during decoder
+use; after conversion, source wire bytes/values can be released independently of
+the owned tensor. The decoder is local to a load and is not concurrent. Repeated
+Decode calls allocate and charge separate owned copies.
+
+Float32 float_data and exact int64 int64_data must match the shape's element
+count. Raw data must match its byte count and is decoded in little-endian order.
+Float bits, including NaN payloads and signed zero, and all integer bits survive
+conversion. No dimensions means one scalar element; any zero dimension means
+zero elements. Empty tensors may omit payloads or use empty raw data. Empty
+repeated fields have no protobuf presence, so an empty typed field cannot be
+distinguished from an absent one after unmarshalling. A present raw field with
+nonempty typed data is rejected. Wrong typed fields, invalid shapes/counts,
+segments, unsupported dtypes, sparse values, and all external storage/location
+metadata are rejected; RT-14 must add an explicit resolver.
+
+TensorLimits selects defaults of 1 GiB MaxLoadBytes, 256 MiB
+MaxInitializerBytes, 64 MiB MaxTensorBytes, rank 32, dimension 2^31-1, and
+64 decoded-message levels. Zero fields choose defaults and negative fields
+fail. Apply the same recursion limit to parsing and payload traversal when
+raising it. Every dimension is checked even in empty tensors. Backend
+ValidateShape checks products/byte sizes/host indices without numeric allocation.
+Payload traversal also bounds cycles in manually constructed protobuf objects.
+
+`Usage() (loadBytes, initializerBytes int64)` reports logical reservations. Load
+bytes include original encoded bytes plus all decoded fields (numeric widths,
+string/byte lengths and retained unknown bytes), owned tensor copies, and raw
+conversion staging. Counting metadata and retaining successful staging charges
+is deliberately conservative. Typed conversion needs one new numeric copy;
+raw conversion needs two. Sum checks precede staging/backend allocations and
+failed or cancelled conversions leave usage unchanged. Cancellation is checked
+through payload traversal, every 1,024 raw elements, and around the synchronous
+backend copy; the backend copy itself is not interruptible. Go allocation
+headers, excess slice capacities, GC retention and total process heap are outside
+these logical limits. ErrInvalidTensor and ErrUnsupported classify semantic
+failures; ErrLimit covers wire and payload limits. Causes remain discoverable
+with errors.Is. Ordinary tests use checked-in literal bytes and Go values and
+need no Python.
 
 ## Profile fixture verification
 

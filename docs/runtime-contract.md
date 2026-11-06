@@ -1,7 +1,9 @@
 # Runtime contract and initial compatibility profile
 
 Status: RT-01 specifies the contract. RT-04 implements its Tensor constructors,
-accessors and metadata records; loading, sessions and operators are still planned.
+accessors and metadata records. RT-05 implements shared internal inline tensor
+conversion and load payload accounting; public loading, sessions and operators
+are still planned.
 [capabilities.json](../capabilities.json) records planned operator coverage;
 only records marked `implemented` may later be advertised as support. The
 [roadmap](../ROADMAP.md) identifies the implementation tasks and their acceptance
@@ -308,6 +310,18 @@ copies and raw-data staging must fit before allocation; sum using checked
 arithmetic. Release wire objects once the immutable plan is built. Many tiny
 wire objects can still have substantial allocator overhead; untrusted deployments
 may additionally enforce process/container limits.
+
+RT-05 implements these load accounting rules in the internal TensorDecoder.
+It counts the complete decoded ONNX message before converting any numeric value,
+including scalar/repeated fields at their actual width, strings/bytes, and unknown
+bytes. This conservatively includes shape and metadata payloads. Each successful
+conversion adds an owned copy; raw conversion also retains a staging charge for
+the load lifetime. TensorLimits implements the six load/shape limits used there
+(MaxLoadBytes, MaxInitializerBytes, MaxTensorBytes, MaxRank, MaxDimension and
+MaxRecursion). Wire byte limits remain separately enforced by RT-03. The future
+loader must pass the actual serialized byte count and complete decoded model;
+it must not account each tensor in isolation. See [development](development.md#inline-tensor-conversion)
+for the implemented internal API and its ownership requirements.
 
 RT-03 confirms that protobuf v1.36.12's configurable recursion limit applies to
 known messages. Unknown groups use the official protowire decoder's independent
