@@ -12,7 +12,9 @@ RT-02 establishes the Go module, pinned `neuralnetwork v0.7.0` and protobuf
 dependencies, and a verification workflow. There is no model loader or inference
 implementation yet, and no model compatibility is claimed. RT-03 adds generated
 ONNX wire bindings and bounded internal decoding; ordinary builds and tests need
-neither protoc nor Python.
+neither protoc nor Python. RT-04 adds immutable float32/int64 tensors and model
+metadata records, with owned constructor/accessor copies and exact integer
+storage. Public loading and execution arrive in later roadmap tasks.
 
 ## Implementation plans
 
