@@ -8,9 +8,9 @@ named outputs on the CPU without cgo or an installed native inference runtime.
 RT-01 now specifies the [runtime contract](docs/runtime-contract.md) and an
 initial [capability manifest](capabilities.json); every operator is still marked
 planned. This repository has no runnable inference implementation yet.
-The tensor storage and
-numerical kernels are available in `neuralnetwork` v0.7.0, but there is no Go
-module or runtime implementation here yet, and no model compatibility is claimed.
+RT-02 establishes the Go module, pinned `neuralnetwork v0.7.0` and protobuf
+dependencies, and a verification workflow. There is no model loader or inference
+implementation yet, and no model compatibility is claimed.
 
 ## Implementation plans
 
@@ -57,13 +57,14 @@ checked-in artifacts without Python or network access.
 
 ## Contributing
 
-Read [AGENTS.md](AGENTS.md) and [STYLEGUIDE.md](STYLEGUIDE.md), then the task and
-its dependency handoffs. Start with RT-01 in `ROADMAP.md`, using the released
+Read [AGENTS.md](AGENTS.md) and [STYLEGUIDE.md](STYLEGUIDE.md), then the next
+unchecked task and its dependency handoffs in `ROADMAP.md`, using the released
 backend contract linked from `NEEDS.md`. Implement runtime tasks here and
 coordinate later library changes in `neuralnetwork`. Record exact
 APIs, dependency revisions, ownership rules, validation results, and limitations
 in each completed task's handoff.
 
-Build commands and runnable API examples will be added when the module and
-first inference milestone exist. Pull request descriptions must preserve
-[the repository template](.github/PULL_REQUEST_TEMPLATE.md).
+Use Go 1.27.2 and the [development commands](docs/development.md) to build and
+verify this foundation, including cgo-disabled, `purego`, and race checks.
+Runnable inference examples arrive at RT-11. Pull request descriptions must
+preserve [the repository template](.github/PULL_REQUEST_TEMPLATE.md).

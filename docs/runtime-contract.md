@@ -30,8 +30,9 @@ Development references are Python **3.9.6**, ONNX **1.16.2**, NumPy **1.26.4**,
 and Python protobuf **4.25.3**. ONNX Runtime **1.19.2**, CPU provider, is a
 secondary development oracle for documented evaluator disagreements. Ordinary
 Go builds/tests must use checked-in fixtures, without Python, network access,
-cgo, C/C++ libraries, Metal, or an external inference service. RT-02 will pin a
-compatible Go toolchain and the pure-Go `google.golang.org/protobuf` dependency.
+cgo, C/C++ libraries, Metal, or an external inference service. RT-02 pins the
+Go 1.27.2 toolchain and pure-Go `google.golang.org/protobuf v1.36.12` dependency
+with a Go 1.26.1 module baseline; see [development](development.md).
 
 `tools/check_profile.py` builds a deterministic original Identity graph, checks
 it with the pinned ONNX checker, audits all 25 selected schema versions, and

@@ -9,7 +9,8 @@ Python reference tools may generate development fixtures; they are not runtime
 dependencies. A Go protobuf dependency is compatible with this goal.
 
 This document tracks the implementation plan. RT-01 has specified the contract;
-there is currently no Go module, runtime implementation, or generated schema.
+RT-02 provides the Go module and verification foundation. There is currently no
+runtime implementation or generated schema.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -206,7 +207,7 @@ RT-02 creates the module; no runtime conformance is claimed. RT-02 must pin used
 Go dependencies/toolchain and verification CI. RT-03 owns schema binding
 regeneration; RT-04 owns the proposed immutable facade.
 
-### [ ] RT-02 — Initialize the Go module and verification workflow
+### [x] RT-02 — Initialize the Go module and verification workflow
 
 **Depends on:** RT-01. **Likely files:** `go.mod`, `go.sum`, package documentation,
 and a focused CI workflow.
@@ -225,6 +226,39 @@ path replacements. Go module metadata names this project and includes only
 dependencies used by this runtime. Runtime builds do not
 require protoc, Python, Metal, cgo, or native shared libraries. The README remains
 accurate about which features have actually landed.
+
+**Handoff (RT-02):** The task revision is the commit introducing `go.mod`;
+obtain its exact hash with `git log -1 --format=%H -- go.mod`. Changed files are
+`go.mod`, `go.sum`, `doc.go`, `dependency_test.go`, `.github/workflows/go.yml`,
+`docs/development.md`, the runtime contract's dependency record, README, and this
+roadmap. Module `github.com/itsmontoya/onnx` declares Go 1.26.1 and selects
+toolchain Go 1.27.2.
+It pins published `neuralnetwork v0.7.0` at the recorded
+`6048452c57a0a293db4591cd2e2febd7d6b743a3` revision and pure-Go
+`google.golang.org/protobuf v1.36.12`; required SIMD/x/sys versions remain
+indirect dependencies. No `replace` directive or workspace is required.
+
+No production symbols are exported yet. The dependency smoke test checks an
+exact int64 scalar above 2^24 against literal protobuf wire bytes; importing the
+backend tensor package compiles its numerical dependency paths. This is a
+toolchain/dependency baseline, not ONNX conformance. Internal packages will be
+introduced with actual behavior in RT-03 and later, using the RT-01 boundaries.
+CI checks formatting, module tidiness, build, vet, normal tests, cgo-disabled
+tests, cgo-disabled `purego` tests, and races on Linux. Development documentation
+separates ordinary Go commands from optional Python profile-fixture regeneration
+and RT-03's forthcoming protobuf regeneration.
+
+Validation on Go 1.27.2, Darwin/arm64: `go mod verify`, `go fmt ./...`,
+`go mod tidy -diff`, `go build ./...`, `go vet ./...`, `go test ./...`,
+`CGO_ENABLED=0 go test ./...`, `CGO_ENABLED=0 go test -tags=purego ./...`,
+and `go test -race ./...` passed. Build/test commands used a writable
+`GOCACHE=/private/tmp/onnx-runtime-gocache` and network-disabled
+`GOPROXY=off GOSUMDB=off` after dependency retrieval. Local Markdown paths and
+`git diff --check` passed. An isolated source copy also built and passed
+cgo-disabled `purego` tests with `GOWORK=off` and networking disabled.
+The inherited pinned profile checker still passes. Normal builds need neither
+Python/protoc nor native runtime libraries. RT-03 must add pinned, reproducible
+ONNX bindings and bounded decoding; all capability records remain planned.
 
 ### [ ] RT-03 — Add reproducible ONNX protobuf bindings and bounded decoding
 
