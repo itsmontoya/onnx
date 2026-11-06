@@ -13,6 +13,7 @@ int64 tensor storage and known protobuf wire bytes; tensor tests verify copied
 ownership, exact values, invalid arguments, and concurrent readers.
 RT-03 adds checked-in ONNX wire bindings and bounded internal protobuf decoding.
 RT-05 adds shared inline tensor conversion with aggregate payload accounting.
+RT-06 adds whole-graph structural validation and immutable named graph records.
 There is no public model loader or execution API yet.
 Every operator in [the capability manifest](../capabilities.json) remains planned.
 
@@ -116,8 +117,9 @@ Decoding verifies wire syntax, not ONNX compatibility. Empty protobuf messages,
 unsupported versions/types, graph attributes, and other semantic features remain
 wire-decodable for later validation; none establish inference support. The byte
 limit bounds serialized input, not protobuf object-tree overhead or total heap.
-RT-05 adds the payload ownership/accounting described below; graph and operator
-validation arrive in later tasks.
+RT-05 adds the payload ownership/accounting described below. Graph and operator
+checks are separate from wire decoding: RT-06 implements the graph checks below,
+and RT-07 owns operator resolution.
 
 ## Inline tensor conversion
 
@@ -171,6 +173,66 @@ these logical limits. ErrInvalidTensor and ErrUnsupported classify semantic
 failures; ErrLimit covers wire and payload limits. Causes remain discoverable
 with errors.Is. Ordinary tests use checked-in literal bytes and Go values and
 need no Python.
+
+## Named graph validation
+
+`internal/graph.Build(ctx, model *onnxpb.ModelProto, encodedBytes int64, limits Limits)`
+returns an immutable `*graph.Graph`. Use bounded wire parsing first and pass the
+complete decoded model plus its actual original encoded length. The builder reads
+wire without mutation and creates one shared TensorDecoder. It converts every
+initializer and dense tensor attribute while the original pointers are registered,
+then releases decoder/wire references. No proto.Clone or second numerical copy is
+needed at load. Future reader loaders must count consumed bytes; existing
+ReadModel does not return that count, and proto.Size cannot reconstruct it.
+
+Build validates IR 8, exactly one empty-domain opset-13 import, a named top-level
+graph, unique producers/declarations/attributes, and all named references in
+declared topological order. Checking preceding producers rejects missing/forward
+references and cycles without reordering nodes. Repeated node labels are valid.
+Input/initializer overlap creates a default with a checked type/rank/fixed-axis
+contract; the input's leading symbolic/unknown batch is retained for overrides.
+Output/intermediate unknown ranks and dimensions remain distinct from scalars,
+fixed zero and shared symbols. Missing intermediate metadata is allowed.
+Statically contradictory declarations fail without full operator shape inference.
+
+Every node, including unused output paths, remains in Nodes. Empty input/output
+names keep their positions without creating values. Graph outputs may directly
+reference inputs or initializers; empty graphs and graphs without declared outputs
+are structurally accepted. Functions, function overloads/references, training,
+subgraphs, sparse storage and non-dense/unsupported types fail with context.
+Generic attribute kinds/defaults are checked, but allowed operator names, attribute
+names, arity and optional-slot positions must be resolved by RT-07 before execution.
+No current capability record becomes implemented through structural acceptance.
+
+Graph Metadata/Inputs/Outputs/Nodes/Values/Value accessors return copied records.
+Values retain producer indices, defaults and every metadata declaration. Harmless
+model/graph/node/value/tensor docs, properties, denotations, descriptive model
+domains and quantization annotations are preserved. Unknown fields remain in the
+source decoded wire object and are ignored semantically; the graph retains no
+protobuf objects. Constants privately own backend storage, expose copied typed
+values/shape/metadata, and provide Clone for future backend consumers. The future
+planner/executor must reserve these clones before allocation and avoid retaining
+both original and compiled numerical copies unnecessarily. Internal packages do
+not import the public facade.
+
+Later compilation is still part of the load budget: before calling deep snapshot
+accessors such as Nodes/Values, its consumer must reserve any copied attribute
+list/dimension payloads as well as numerical Constant.Clone bytes. It may use
+Graph.Usage conservatively when estimating an entire snapshot. Avoid retaining
+duplicate snapshots after producing a plan.
+
+Graph Limits contains Tensor (decode.TensorLimits), MaxNodes (100,000), MaxValues
+(200,000 distinct producers), MaxAttributes (400,000 aggregate), and MaxNameBytes
+(4,096 for each name/symbol/domain/doc/metadata/attribute string). Zero fields
+choose defaults, negatives fail. Tensor rank/dimension limits also apply to all
+metadata. String traversal follows descriptor order for deterministic diagnostics
+and skips numeric repeated payloads. Attribute scalar/list and dimension snapshots
+are reserved with TensorDecoder.ReservePayload before their allocation; owned
+tensor copies and raw staging remain charged by Decode. Usage includes the
+complete encoded/decoded payload and these reservations. Go object/header/slice
+capacity overhead and copying accessors after Build are outside the load budget.
+Cancellation is checked through traversal, graph loops, conversions and before
+publication; synchronous backend/protobuf operations remain bounded units.
 
 ## Profile fixture verification
 

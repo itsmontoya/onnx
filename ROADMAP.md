@@ -12,7 +12,8 @@ This document tracks the implementation plan. RT-01 has specified the contract;
 RT-02 provides the Go module and verification foundation. RT-03 adds generated
 wire bindings and bounded internal decoding. RT-04 supplies immutable public
 tensors and metadata records. RT-05 adds shared, budgeted inline tensor
-conversion. There is no inference runtime yet.
+conversion. RT-06 adds immutable named graphs and whole-model structural checks.
+There is no inference runtime yet.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -483,7 +484,7 @@ RT-07/RT-09 still own Constant schema/attribute validation and operator handling
 RT-14 must add explicit external resolution. No public loader, graph validator,
 operator, or session is enabled by this task.
 
-### [ ] RT-06 — Validate the model and build a named graph
+### [x] RT-06 — Validate the model and build a named graph
 
 **Depends on:** RT-01, RT-03, RT-05. **Deliverable:** internal graph/value/node
 records, version checks, and structural validation.
@@ -504,6 +505,92 @@ shared constants, defaulted inputs, missing imports, duplicate outputs, invalid
 order, cycles, and optional placeholders. Every structural failure identifies
 the node index or named value. Constants and symbolic metadata cannot change
 after the model is compiled.
+
+**Handoff (RT-06):** The task revision is the commit introducing
+`internal/graph/graph.go`; obtain its full hash with
+`git log -1 --format=%H -- internal/graph/graph.go`. Changed files are the new
+`internal/graph/` records, builder, validation/metadata helpers and matching tests;
+`internal/decode/tensor_decoder.go` and its reservation tests; README, TODO,
+package documentation, development/contract documentation, and this roadmap.
+Backend remains published `neuralnetwork v0.7.0`, commit
+`6048452c57a0a293db4591cd2e2febd7d6b743a3`; protobuf remains v1.36.12,
+and ONNX source remains v1.16.2 at
+`3bf92c03a9f27eba3bda1e5b9e63ea20ec213557`. No replacement/backend change
+or unpublished dependency is used.
+
+Internal API is `graph.Build(context.Context, *onnxpb.ModelProto, int64, Limits)
+(*Graph, error)`. Limits contains Tensor (decode.TensorLimits), MaxNodes,
+MaxValues, MaxAttributes and MaxNameBytes; zeros choose the contract defaults,
+negatives fail. Graph methods Metadata, Inputs, Outputs, Nodes, Values and
+Value(name) return independent records; Usage returns conservative load/owned
+constant bytes. The records are Metadata, ValueInfo, Value, Node, Attribute,
+Constant, Dimension/DimensionKind, AttributeKind, Property and Annotation.
+Value stores its producer index (-1 for sources), input/default state and all
+declarations. Constant methods Name, DocString, Metadata, DataType, Shape,
+ByteSize, Float32Values, Int64Values and Clone expose copied metadata/numerical
+values or an independent backend clone; no writable shared tensor is exposed.
+The new `TensorDecoder.ReservePayload(context.Context, int64) error` charges
+additional attribute scalar/list and dimension snapshots before allocation,
+without treating those as initializer bytes. No public loader/planner/executor
+or root error API is introduced.
+
+Build requires a complete decoded model and its actual original encoded length;
+future reader loaders must track consumption rather than use proto.Size. It uses
+one decoder with original registered tensor pointers, converts every initializer
+and dense tensor attribute, and retains neither wire nor decoder state. Logical
+usage includes encoded/decoded fields, owned tensors, raw staging and extra
+snapshot payloads. Compilation makes no extra numerical clones. Strings are
+immutable references; slice/header/object overhead remains outside the payload
+quota. Copying accessors allocate outside Build. The future compiler/executor
+must budget Constant.Clone before allocation and avoid retaining redundant
+compiled copies indefinitely. Internal records do not import the public facade.
+
+The whole declared graph is checked, including unused nodes. IR must be 8 and
+the sole operator import must have the empty domain and opset 13. Producer,
+input/output/initializer/declaration/attribute names are checked; topological
+preceding-producer checks reject missing/forward references and cycles without
+reordering. Node labels may repeat. Empty optional slots remain positional and
+create no values. Passthrough input/initializer outputs, zero-node graphs, empty
+graphs and graphs without outputs are structurally valid. Initializer defaults
+must match input dtype/rank/fixed axes without freezing symbolic/unknown leading
+batch sizes. Output/intermediate unknown ranks/dimensions remain valid; missing
+intermediate metadata needs no shape inference. Contradictory declarations fail.
+
+Functions/overloads/references, training, subgraphs, sparse storage, unsupported
+dtypes and non-dense value kinds fail with node/value context. Harmless model,
+graph, node, value and tensor documentation/properties/denotations, descriptive
+model domain, and quantization annotations are preserved; annotations enable no
+quantized execution. Unknown protobuf fields remain in source wire objects and
+are ignored semantically. Generic attribute kinds/payloads are checked, including
+proto3 scalar defaults and empty lists. Schema names, arity, optional positions,
+operator-specific attributes and numerical support remain RT-07/RT-09's work.
+Unresolved standard-domain operators are deliberately retained in this structural
+graph; no capability record is marked implemented. Errors wrap internal
+ErrInvalidModel/ErrInvalidArgument/ErrUnsupported/ErrLimit and retain context/
+decoder causes for errors.Is. Public structured errors remain planned.
+
+Validation on Go 1.27.2, Darwin/arm64 passed: gofmt, `go mod tidy -diff`,
+`go mod verify`, `go build ./...`, `go vet ./...`, `go test ./...`,
+`CGO_ENABLED=0 go test ./...`, `CGO_ENABLED=0 go test -tags=purego ./...`, and
+`go test -race ./...`, with the writable cache and offline dependency mode.
+Table tests cover branches/joins/shared constants, multiple IO, defaults,
+passthroughs, empty/scalar/unknown metadata, imports, all producer/reference
+failures, unsupported features, generic attributes, immutable wire/accessor
+snapshots, concurrent readers, aggregate boundary budgets and cancellation
+through construction/final publication. The noncanonical-wire test distinguishes
+actual encoded length from proto.Size. The pinned 25-schema/checker fixture,
+local Markdown paths, contract Go-block formatting and diff whitespace checks
+pass. Ordinary tests need no Python/protoc/native runtime.
+
+RT-07 must consume all nodes, resolve versioned schemas/capability status, validate
+operator-specific attribute/type/rank/optional-slot combinations, reconcile each
+Value's declarations with inferred/deferred metadata, and plan without numeric
+output allocations. It must use already-owned attribute constants rather than
+trying to decode copied protobuf pointers. Deep record accessors may copy large
+numeric attribute lists: reserve snapshot payloads before calling them (Usage
+provides a conservative whole-graph bound) and release redundant snapshots.
+RT-08 owns sessions, input symbol
+bindings/default overrides, requested-output copies and per-run clone budgets.
 
 ### [ ] RT-07 — Resolve versioned operators and plan types/shapes
 
