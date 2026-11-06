@@ -5,6 +5,8 @@
 The schema is licensed under [Apache-2.0](LICENSE), as stated by its SPDX header.
 The upstream release does not contain a root NOTICE file. This attribution
 documents the included source; no additional upstream notice was omitted.
+The scoped Git whitespace attribute preserves the schema's upstream trailing
+blank line rather than changing the pinned bytes.
 
 | File | Upstream path | SHA-256 |
 | --- | --- | --- |

@@ -10,6 +10,8 @@ or workspace are required.
 The root package currently contains documentation and a dependency smoke test.
 That test exercises exact int64 tensor storage and known protobuf wire bytes;
 it verifies the dependency/toolchain foundation, not ONNX model execution.
+RT-03 adds checked-in ONNX wire bindings and bounded internal protobuf decoding.
+There is no public model loader or execution API yet.
 Every operator in [the capability manifest](../capabilities.json) remains planned.
 
 ## Ordinary builds and tests
@@ -61,10 +63,52 @@ importing the public facade. Concrete numerical storage and kernels remain in
 
 ## Regeneration
 
-Regeneration is a development operation, separate from ordinary builds. RT-03
-will introduce pinned protobuf generation tools, vendored schema/license files,
-and checked-in generated bindings. There are no protobuf generation commands to
-run yet. Do not require generation during `go build` or `go test`.
+Regeneration is a development operation, separate from ordinary builds. Install
+the official [protoc 33.2 release](https://github.com/protocolbuffers/protobuf/releases/tag/v33.2)
+for your platform, then run this command from the repository root with Go 1.27.2:
+
+```sh
+go run ./tools/onnxgen
+git diff --exit-code -- internal/onnxpb
+```
+
+The tool verifies the [vendored schema](../third_party/onnx/README.md) SHA-256,
+requires protoc 33.2 and the module's exact protobuf v1.36.12, builds that
+version's official protoc-gen-go in a temporary directory, and invokes protoc.
+It splits the generated Go AST into one file per type, retaining that type's
+methods and enum values/maps together; descriptor initialization is separate.
+It preserves the generated protobuf logic instead of maintaining a wire parser.
+No schemas need importing. Repeated generation leaves all 36 generated files
+unchanged. Generated code retains upstream implementation style; the handwritten
+generation and decoding code follows this repository's style guide.
+
+Only optional regeneration requires protoc. Go builds and tests use checked-in
+bindings and require neither protoc nor Python. The generator itself can run
+offline after module dependencies have been downloaded.
+
+## Internal wire decoding
+
+`internal/decode` provides ParseModel/ReadModel and ParseTensor/ReadTensor.
+Each accepts a context and Limits: zero values select 64 MiB serialized bytes
+and 64 levels of known-message recursion. Byte input is checked before
+unmarshalling. Readers are consumed in chunks of at most 32 KiB, with at most
+limit+1 bytes consumed to detect excess, and are never closed. I/O errors retain
+their causes, repeated empty reads fail, and cancellation is checked between
+reads and before/after the synchronous protobuf call.
+
+Unknown fields are retained. In protobuf v1.36.12, MaxRecursion bounds known
+messages; unknown groups instead use protowire's fixed recursive allowance of
+10,000, permitting 10,001 nested group levels and rejecting the next level.
+Tests exercise both limits. Serialized bytes remain bounded in either case.
+This is the official decoder's behavior, not a uniform configurable depth bound.
+
+Decoding verifies wire syntax, not ONNX compatibility. Empty protobuf messages,
+unsupported versions/types, graph attributes, and other semantic features remain
+wire-decodable for later validation; none establish inference support. The byte
+limit bounds serialized input, not protobuf object-tree overhead or total heap.
+RT-05 and later tasks add payload ownership/accounting and semantic validation.
+
+## Profile fixture verification
 
 RT-01's existing profile-check fixture can be verified using its pinned Python
 3.9.6 environment with ONNX 1.16.2, NumPy 1.26.4, and protobuf 4.25.3:
