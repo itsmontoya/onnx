@@ -115,6 +115,26 @@ func (d *TensorDecoder) Usage() (loadBytes, initializerBytes int64) {
 	return d.loadBytes, d.initializerBytes
 }
 
+// ReservePayload charges an additional owned metadata/attribute snapshot before
+// allocating it. It does not charge initializer storage or reserve numeric tensors;
+// those must go through Decode. Failed reservations leave usage unchanged.
+func (d *TensorDecoder) ReservePayload(ctx context.Context, bytes int64) (err error) {
+	if d == nil || d.tensors == nil || ctx == nil || bytes < 0 {
+		return fmt.Errorf("%w: invalid payload reservation", ErrInvalidArgument)
+	}
+
+	if err = ctx.Err(); err != nil {
+		return fmt.Errorf("reserve snapshot payload: %w", err)
+	}
+
+	if bytes > d.limits.MaxLoadBytes-d.loadBytes {
+		return fmt.Errorf("%w: owned snapshot payload", ErrLimit)
+	}
+
+	d.loadBytes += bytes
+	return nil
+}
+
 func (d *TensorDecoder) validate(value *onnxpb.TensorProto) (dataType tensor.DataType, elements, bytes int64, err error) {
 	if value.Segment != nil {
 		return dataType, 0, 0, fmt.Errorf("%w: tensor segments", ErrUnsupported)
