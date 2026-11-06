@@ -1,0 +1,2 @@
+# Preserve the pinned upstream schema's trailing blank line byte-for-byte.
+third_party/onnx/onnx.proto whitespace=-blank-at-eof

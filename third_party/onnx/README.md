@@ -1,0 +1,24 @@
+# Pinned ONNX wire schema
+
+`onnx.proto` and `LICENSE` are unmodified files from ONNX **v1.16.2**, commit
+[`3bf92c03a9f27eba3bda1e5b9e63ea20ec213557`](https://github.com/onnx/onnx/tree/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557).
+The schema is licensed under [Apache-2.0](LICENSE), as stated by its SPDX header.
+The upstream release does not contain a root NOTICE file. This attribution
+documents the included source; no additional upstream notice was omitted.
+
+| File | Upstream path | SHA-256 |
+| --- | --- | --- |
+| `onnx.proto` | `onnx/onnx.proto` | `1023c7f39a568f309fdd0b445a81a7a0d90f74046e5967c2e817d4e4e06a5f1b` |
+| `LICENSE` | `LICENSE` | `cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30` |
+
+This proto2 schema has no imports. Other ONNX schemas, such as the separate
+operator-set serialization schema, are not needed to decode ModelProto or
+TensorProto and are not included. The source defines newer features and versions
+than this runtime supports; successful wire decoding does not accept them.
+
+The [generation instructions](../../docs/development.md#regeneration) use
+protoc **33.2** (generated version string **6.33.2**) and
+protoc-gen-go **v1.36.12**. The Go package mapping is supplied as a compiler
+option so this vendored source remains byte-identical to upstream. Generated
+declarations retain upstream/generated implementation style, with an automatic
+AST split placing each type and its methods in one file.
