@@ -16,16 +16,17 @@ RT-05 adds shared inline tensor conversion with aggregate payload accounting.
 RT-06 adds whole-graph structural validation and immutable named graph records.
 RT-07 adds versioned schema resolution, immutable execution plans, capability
 queries and structured compilation errors for a minimal Identity/Constant subset.
-There is no public model loader or execution API yet.
-[The capability manifest](../capabilities.json) marks only those two planners
-implemented, with explicit static-only and tensor-only Constant restrictions.
+RT-08 adds public Load/LoadBytes/LoadFile, shared Models and private serial
+Sessions with cancellation, finite budgets, defaults and owned requested outputs.
+[The capability manifest](../capabilities.json) marks only Identity and dense
+tensor-valued Constant implemented; numerical families remain RT-09 work.
 
 Public `NewTensor`, `NewFloat32`, and `NewInt64` delegate storage validation and
 allocation to the pinned backend. They copy caller shapes/payloads; shape and
 typed value accessors also copy. No public method exposes a writable backend
 pointer. Scalar shapes have one element, while a concrete zero dimension has
 zero elements. Constructors check representability rather than a load/run
-memory quota. See [the runtime contract](runtime-contract.md) for the intended
+memory quota. See [the runtime contract](runtime-contract.md) for the implemented
 loader/session budgets and ownership boundaries.
 
 ## Ordinary builds and tests
@@ -58,7 +59,7 @@ configured. Use `go mod tidy -diff` to check module metadata without rewriting i
 
 ## Package boundaries
 
-The [runtime contract](runtime-contract.md#public-surface-to-implement) defines
+The [runtime contract](runtime-contract.md#public-surface) defines
 the following boundaries. Create each internal package when its implementation
 task introduces real behavior, rather than adding empty packages in advance.
 
@@ -129,8 +130,9 @@ and RT-07 owns operator resolution.
 `NewTensorDecoder(ctx, wire proto.Message, encodedBytes int64, limits TensorLimits)`
 constructs one internal decoder for an entire decoded model, attribute, or test
 TensorProto. Pass the actual original serialized byte count, including unknown
-fields and noncanonical wire encodings; a future reader loader must track that
-count while reading. Proto.Size is not a substitute for the original byte count.
+fields and noncanonical wire encodings; the public reader loader tracks that
+count through ReadModelWithSize. Proto.Size is not a substitute for the original
+byte count.
 Use ParseModel/ReadModel or ParseTensor/ReadTensor first to enforce wire bounds.
 Pass the complete decoded model so all coexisting payloads are charged before
 any numerical conversion. Foreign schemas and sparse tensors are rejected.
@@ -185,8 +187,8 @@ complete decoded model plus its actual original encoded length. The builder read
 wire without mutation and creates one shared TensorDecoder. It converts every
 initializer and dense tensor attribute while the original pointers are registered,
 then releases decoder/wire references. No proto.Clone or second numerical copy is
-needed at load. Future reader loaders must count consumed bytes; existing
-ReadModel does not return that count, and proto.Size cannot reconstruct it.
+needed at load. ReadModelWithSize returns the actual encoded length for public
+reader loading; proto.Size cannot reconstruct it.
 
 Build validates IR 8, exactly one empty-domain opset-13 import, a named top-level
 graph, unique producers/declarations/attributes, and all named references in
@@ -213,7 +215,7 @@ model/graph/node/value/tensor docs, properties, denotations, descriptive model
 domains and quantization annotations are preserved. Unknown fields remain in the
 source decoded wire object and are ignored semantically; the graph retains no
 protobuf objects. Constants privately own backend storage, expose copied typed
-values/shape/metadata, and provide Clone for future backend consumers. The future
+values/shape/metadata, and provide Clone for backend consumers. The
 planner/executor must reserve these clones before allocation and avoid retaining
 both original and compiled numerical copies unnecessarily. Internal packages do
 not import the public facade.
@@ -244,7 +246,7 @@ independent operator records, including nested optional slots, attribute maps an
 JSON defaults. It reports planned entries explicitly. The private `compileGraph`
 bridge constructs `operators.NewRegistry([]capability.Record)` from those same
 records, then calls `operators.Compile(ctx, graph, registry, limits)`. There is no
-second operator support table and no public loader or compiler API yet.
+second operator support table; the compiler remains private to the public loader.
 
 Registry snapshots its records and resolves by exact domain/operator and imported
 opset. It selects the newest schema no newer than the import, then checks that
@@ -271,8 +273,8 @@ Value.Info merges declarations and inference, distinguishing absent rank, scalar
 fixed zero, symbolic and unknown dimensions. Value.Deferred means the merged
 shape is not concrete. All original Value.Declarations are retained: even a
 concrete inferred summary can contain a declared constraint that still needs
-runtime verification. RT-08 must check every produced value against both inferred
-metadata and declarations, and bind symbols afresh each run.
+runtime verification. RT-08 checks every produced value against both inferred
+metadata and declarations, and binds symbols afresh each run.
 
 Limits contains MaxLoadBytes (1 GiB), MaxTensorBytes (64 MiB), MaxRank (32) and
 MaxDimension (2^31-1); zero fields choose defaults and negatives fail. Pass the
@@ -295,7 +297,8 @@ and concrete input shapes when budget permits. Nil diagnostic shape means
 unknown or unavailable; a nonnil empty shape means scalar. Error.Is matches Kind
 and Unwrap retains Cause for errors.Is/As, including cancellation. Diagnostics
 iterate declared order and sort map-derived required names. The formatter
-currently says `onnx compile`; RT-08 must extend stage reporting for load/run.
+reports load/run stage through RT-08 while retaining compile as the internal
+default.
 Cancellation is checked before snapshots, through value/node/shape reservations
 and before publication. Cancelling compilation leaves the source and registry
 usable. Ordinary Go tests run offline; the pinned Python profile audit also
@@ -315,3 +318,56 @@ The first command checks the fixture and selected schemas; the second explicitly
 regenerates the original Identity fixture and provenance. Neither command is a
 Go test prerequisite. See [the runtime contract](runtime-contract.md) for source
 revisions and reference limitations.
+
+## Serial model sessions
+
+`Load(ctx, io.Reader, Options)`, `LoadBytes(ctx, []byte, Options)` and
+`LoadFile(ctx, string, Options)` return a validated, compiled `*Model`.
+Options/limits are copied and normalized before I/O. Load never closes its reader;
+LoadFile closes only its own file. ReadModelWithSize reuses the bounded decoder
+and reports consumed original bytes, including noncanonical varints/unknown fields.
+Wire, graph and planner causes map to the public Error classifications with load
+stage; errors.Is/As retain cancellation and I/O causes.
+
+A private executable plan snapshots Metadata/Inputs/Outputs/Values/Steps only
+after reserving `Plan.SnapshotBytes(ctx)`. This no-allocation estimate counts
+copied record/index/dimension payloads and a second input/output metadata copy;
+constants and immutable string bytes remain shared. It does not multiply prior
+load reservations or clone numerical storage. The public Model.Metadata returns
+independent records and remains available after Model.Close. Existing sessions
+retain their plan; new sessions fail with ErrClosed. A plan mutex bounds session
+count, including sessions outliving the model.
+
+Session.Run takes immutable tensors by reference, validates names, required/default
+inputs, dtype/rank/fixed axes and shared symbols, and creates a new private table,
+binding map and budget for each call. Every value checks both inferred Info and
+all original Declarations; Identity refinement must not erase a symbolic constraint.
+Every node executes even when its output is unrequested. Requested outputs are
+unique declared names returned in request order; empty requests use declaration
+order. Zero-node/input/initializer passthroughs and graphs without outputs work.
+
+The first evaluator retains all table entries and charges aliases conservatively.
+It counts resident model tensor bytes once, every bound/default source, each node
+result and all requested output copies. It reserves before every constant/output
+clone. Backend v0.7.0 tensor.go Clone directly copies into owned destination storage
+without numeric staging, so Identity/Constant/copies use zero numeric scratch.
+The workspace accounting path separately enforces workspace and combined live
+reservations, including checked sums; RT-09 must provide audited kernel bounds.
+Runtime metadata/Go headers/capacity/GC retention and earlier caller-retained
+outputs are outside these logical tensor budgets.
+
+A session's TryLock makes overlapping Run/Close return ErrBusy immediately. Failure
+or cancellation drops local state and releases the guard. Successful Close is
+idempotent, releases the session slot and makes later Run return ErrClosed. Separate
+sessions run concurrently with immutable shared plans/constants. Context checks
+cover runtime loops, before/after each node/copy and final publication. Backend
+copies remain synchronous with no in-kernel cancellation or partial output result.
+ExternalDataResolver defines the reserved Resolve signature, but nonnil options
+and external tensors fail as unsupported until RT-14; no resolver is called.
+
+The three original [session fixtures](../testdata/sessions/README.md) have checked-in
+bytes, pinned-checker provenance and hand-calculated expectations. Ordinary Go tests
+cover branches, multiple IO, shared exact int64 constants, bit-preserving float
+copies, default overrides, scalar/empty values, fresh symbol bindings, original
+constraints, lifecycle races, concurrent sessions, cancellation at every observed
+boundary, exact budgets and recovery. They need neither Python nor native runtime.

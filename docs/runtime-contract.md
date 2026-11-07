@@ -5,10 +5,10 @@ accessors and metadata records. RT-05 implements shared internal inline tensor
 conversion and load payload accounting. RT-06 implements internal version and
 whole-graph structural validation with immutable snapshots. RT-07 implements
 versioned static planning for Identity and dense tensor-valued Constant, the
-Capabilities query, and structured compilation errors. Public loading and
-sessions are still planned.
-[capabilities.json](../capabilities.json) records implemented planning restrictions
-and planned operator coverage; it does not yet claim executable inference. The
+Capabilities query, and structured compilation errors. RT-08 implements public
+loading, model/session lifecycle, finite run budgets, and serial execution for
+that subset. [capabilities.json](../capabilities.json) records the executable
+subset and planned operator coverage. The
 [roadmap](../ROADMAP.md) identifies the implementation tasks and their acceptance
 criteria. This project is an independent Go runtime, not Microsoft's ONNX Runtime.
 
@@ -107,7 +107,7 @@ and agreement between the declared kind and present payload. As in the
 absent scalar zero/string defaults and empty repeated lists are representable;
 operator-specific required attributes, types and arity remain RT-07's work.
 
-## Public surface to implement
+## Public surface
 
 Module `github.com/itsmontoya/onnx`, package `onnx`, owns the facade and lifecycle.
 `internal/onnxpb` contains only generated wire types; `internal/decode` bounded
@@ -122,8 +122,8 @@ converted at the facade boundary; it is not a second tensor storage engine.
 The Tensor/DataType/DimensionKind/Dimension/ValueInfo/Metadata declarations below
 are implemented by RT-04, along with ErrInvalidArgument. RT-07 implements
 Capabilities, Capability/CapabilityArity/CapabilityAttribute, Error, and
-ErrInvalidModel/ErrUnsupported/ErrLimit. Loader, model, session and public limits
-remain intended signatures until their implementation tasks are checked:
+ErrInvalidModel/ErrUnsupported/ErrLimit. RT-08 implements the loaders, model,
+session, public limits and lifecycle sentinels below:
 
 ```go
 // Tensor is an immutable facade containing one private backend *tensor.Tensor.
@@ -215,8 +215,9 @@ records with explicit status and returns a deep copy; it does not imply that
 planned operators can load. CapabilityArity has Min/Max integer counts and
 OptionalSlots (`[]int`). CapabilityAttribute has Type, Required and Default
 (`json.RawMessage`, preserving exact integers and absent versus zero defaults).
-Implemented currently means static planning: Identity preserves float32/int64
-type and shape; Constant accepts exactly one dense `value` tensor attribute.
+Implemented currently includes static planning and serial execution: Identity
+preserves float32/int64 type and shape; Constant accepts exactly one dense `value`
+tensor attribute.
 Scalar/list attribute forms remain planned for RT-09. Manifest format/version is separate
 from an ONNX imported opset. Every record lists the exact schema selected from
 release 1.16.2 at import 13; schema versions 11/12/1/9 are intentional for CNNs.
@@ -272,7 +273,7 @@ For example, after RT-08, LoadFile returns a model, Metadata describes `x`,
 NewSession creates execution state, and `Run(ctx, map[string]*Tensor{"x": x},
 RunOptions{Outputs: []string{"y"}})` yields `outputs[0].Name == "y"`. Close the
 session and model explicitly. RT-11 supplies a checked compiling example;
-this contract does not claim that sequence runs yet.
+the sequence is exercised by the checked-in session tests.
 
 ## Limits and cancellation
 
@@ -340,8 +341,8 @@ bytes. This conservatively includes shape and metadata payloads. Each successful
 conversion adds an owned copy; raw conversion also retains a staging charge for
 the load lifetime. TensorLimits implements the six load/shape limits used there
 (MaxLoadBytes, MaxInitializerBytes, MaxTensorBytes, MaxRank, MaxDimension and
-MaxRecursion). Wire byte limits remain separately enforced by RT-03. The future
-loader must pass the actual serialized byte count and complete decoded model;
+MaxRecursion). Wire byte limits remain separately enforced by RT-03. The public
+loader passes the actual serialized byte count and complete decoded model;
 it must not account each tensor in isolation. RT-06 does so and reserves extra
 owned attribute slice/scalar and dimension snapshot payload before allocation
 through TensorDecoder.ReservePayload. See [development](development.md#inline-tensor-conversion)
@@ -355,7 +356,7 @@ to the serialized byte limit; MaxRecursion is not a uniform unknown-group depth
 limit. Executable tests retain this distinction without introducing a second
 wire parser.
 
-The first executor may conservatively retain all intermediates until Run ends.
+The first executor conservatively retains all intermediates until Run ends.
 Charge shared model tensors once and each bound input reference conservatively;
 never hide memory by exempting defaults or aliases. Reserve outputs and node
 workspace before calling any allocating backend helper; release reservations
@@ -384,6 +385,17 @@ performs only metadata allocations, never full numeric output tensors. Scratch
 bounds must be updated if the pinned backend changes. Conservative rejection
 within configured budgets is preferable to an unaccounted large allocation.
 
+RT-08's Identity handler uses an immutable alias in its private value table and
+charges each alias conservatively. Initializers/defaults and Constant nodes use
+budgeted `Constant.Clone`; final outputs use a separate backend Clone. The
+released `tensor.Clone` directly allocates/copies into its destination, with no
+numeric accessor or staging buffer, so these handlers reserve zero numeric
+workspace. MaxWorkspaceBytes remains finite and the shared budget rejects scratch
+or combined live/workspace overflow before allocation. Later adapters must supply
+their audited scratch bounds. Run counts resident constants once even when a
+default is overridden, plus every bound/defaulted source, table alias and output
+copy. Failed runs drop their private tables and reservations.
+
 Kernels are synchronous and accept no context/check callback in v0.7.0.
 Cancellation is observed before/after each node and during runtime-owned bounded
 I/O/planning loops, never promised inside a running numerical kernel or protobuf
@@ -396,11 +408,12 @@ single large kernel, and no goroutine is abandoned to simulate cancellation.
 ## Errors and deterministic diagnostics
 
 Implemented sentinels are ErrInvalidArgument, ErrInvalidModel, ErrUnsupported,
-and ErrLimit; ErrBusy and ErrClosed remain planned for RT-08. State errors with no useful additional context
+ErrLimit, ErrBusy and ErrClosed. State errors with no useful additional context
 are returned directly. Semantic/operational errors use a structured Error:
 
 ```go
 type Error struct {
+	Stage     string // load, run, or compile (the default when empty)
 	Kind      error
 	NodeIndex int // -1 outside a node
 	NodeName  string
@@ -469,7 +482,7 @@ RT-02 establishes module/CI without pretending operators work. RT-03 regenerates
 wire bindings from the pinned source. RT-04 implements the immutable facade and
 metadata distinction. RT-05 accounts decoded and owned payloads. RT-06 validates
 the entire graph. RT-07 compiles versioned handlers and consults manifest status.
-RT-08 adds the lifecycle and limits, RT-09 M1 math, RT-10 differential fixtures,
+RT-08 implements lifecycle and limits; RT-09 adds M1 math, RT-10 differential fixtures,
 and RT-11 the first runnable user example. Follow the rest of the roadmap in
 dependency order; an optimization or further profile must never weaken these
 ownership/error/budget rules without an explicit reviewed contract change.
