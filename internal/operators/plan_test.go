@@ -159,6 +159,8 @@ func TestPlanConstantAndDefaults(t *testing.T) {
 			model.Graph.Input = nil
 			model.Graph.Output[0] = planInfo("y", tt.dataType, tt.shape...)
 			model.Graph.Node[0] = &onnxpb.NodeProto{OpType: proto.String("Constant"), Output: []string{"y"}, Attribute: []*onnxpb.AttributeProto{{Name: proto.String("value"), Type: onnxpb.AttributeProto_TENSOR.Enum(), T: &onnxpb.TensorProto{DataType: proto.Int32(tt.dataType), Dims: tt.shape, FloatData: tt.floats, Int64Data: tt.integers}}}}
+			model.Graph.Node[0].Output[0] = "constant"
+			model.Graph.Node = append(model.Graph.Node, &onnxpb.NodeProto{OpType: proto.String("Identity"), Input: []string{"constant"}, Output: []string{"y"}})
 			source := builtGraph(t, model)
 			constant := source.Nodes()[0].Attributes[0].Tensor
 			plan, err := Compile(context.Background(), source, registry, Limits{})
