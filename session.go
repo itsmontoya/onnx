@@ -1,0 +1,86 @@
+package onnx
+
+import (
+	"context"
+	"sync"
+)
+
+func newSession(plan *executionPlan) (out *Session) {
+	var s Session
+	s.plan, s.initialized = plan, true
+	return &s
+}
+
+// Session evaluates one call at a time with private value tables and budgets.
+// Overlapping Run or Close returns ErrBusy immediately. Failed/cancelled runs
+// leave it usable; outputs own copies that survive later runs and any Close.
+// A Session must not be copied after first use. Its zero value is invalid.
+type Session struct {
+	mu          sync.Mutex
+	plan        *executionPlan
+	initialized bool
+	closed      bool
+}
+
+// Run binds all required/defaulted inputs and executes every node serially.
+// Input tensors are immutable; callers must not change inputs or options during
+// the call. Cancellation is checked around synchronous copies and every node,
+// during runtime loops and before publication, with no in-kernel interruption.
+func (s *Session) Run(ctx context.Context, inputs map[string]*Tensor, options RunOptions) (outputs []NamedTensor, err error) {
+	if s == nil {
+		return nil, ErrInvalidArgument
+	}
+
+	if !s.mu.TryLock() {
+		return nil, ErrBusy
+	}
+
+	defer s.mu.Unlock()
+	if !s.initialized {
+		return nil, ErrInvalidArgument
+	}
+
+	if s.closed {
+		return nil, ErrClosed
+	}
+
+	if ctx == nil {
+		return nil, ErrInvalidArgument
+	}
+
+	var run *evaluation
+	if run, err = newEvaluation(ctx, s.plan); err != nil {
+		return nil, operationError("run", err, "")
+	}
+
+	if outputs, err = run.run(inputs, options); err != nil {
+		return nil, operationError("run", err, "")
+	}
+
+	return outputs, nil
+}
+
+// Close releases the session's slot and plan reference. It is idempotent after
+// success, and returns ErrBusy without waiting for or cancelling an active Run.
+func (s *Session) Close() (err error) {
+	if s == nil {
+		return ErrInvalidArgument
+	}
+
+	if !s.mu.TryLock() {
+		return ErrBusy
+	}
+
+	defer s.mu.Unlock()
+	if !s.initialized {
+		return ErrInvalidArgument
+	}
+
+	if s.closed {
+		return nil
+	}
+
+	s.plan.release()
+	s.closed, s.plan = true, nil
+	return nil
+}

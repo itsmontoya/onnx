@@ -6,12 +6,16 @@ import (
 )
 
 var (
-	// ErrInvalidArgument identifies invalid tensor or compilation arguments.
+	// ErrInvalidArgument identifies invalid public arguments or zero receivers.
 	ErrInvalidArgument = runtimeerror.ErrInvalidArgument
 	// ErrInvalidModel identifies contradictory graph or operator declarations.
 	ErrInvalidModel = graph.ErrInvalidModel
 	// ErrUnsupported identifies a feature outside an implemented capability.
 	ErrUnsupported = graph.ErrUnsupported
-	// ErrLimit identifies a configured load or tensor resource limit.
+	// ErrLimit identifies a configured load, session or run resource limit.
 	ErrLimit = graph.ErrLimit
+	// ErrBusy identifies an overlapping Run or Close on the same session.
+	ErrBusy = runtimeerror.ErrBusy
+	// ErrClosed identifies an operation requiring an open model or session.
+	ErrClosed = runtimeerror.ErrClosed
 )

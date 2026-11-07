@@ -1,0 +1,29 @@
+{
+  "description": "Original RT-08 lifecycle/execution fixtures; hand-calculated expectations in session_test.go.",
+  "license": "Original repository fixtures; no upstream model copied",
+  "onnx_source_revision": "3bf92c03a9f27eba3bda1e5b9e63ea20ec213557",
+  "reference_versions": {
+    "python": "3.9.6",
+    "onnx": "1.16.2",
+    "numpy": "1.26.4",
+    "protobuf": "4.25.3"
+  },
+  "ir_version": 8,
+  "opsets": {
+    "": 13
+  },
+  "models": {
+    "branch_defaults.onnx": {
+      "sha256": "3962ab4b4a39a49753088e2b0a3ba793a6e0eddd9d5b09379b3296b76b826259",
+      "bytes": 489
+    },
+    "passthrough.onnx": {
+      "sha256": "f5ab7459c7f83c34b32e8db59cd54f37ab5281beffc997c5de09d307055fc422",
+      "bytes": 118
+    },
+    "empty.onnx": {
+      "sha256": "83b63b888b81c752a3ce2e4b05c61e2f3e8c71f9cbb86300824bef94e45f4e8e",
+      "bytes": 40
+    }
+  }
+}

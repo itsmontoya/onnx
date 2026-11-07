@@ -23,12 +23,23 @@ func ParseModel(ctx context.Context, data []byte, limits Limits) (out *onnxpb.Mo
 // ReadModel reads at most the byte limit plus one, without closing source.
 // Context cancellation is checked between reads and before/after unmarshalling.
 func ReadModel(ctx context.Context, source io.Reader, limits Limits) (out *onnxpb.ModelProto, err error) {
+	out, _, err = ReadModelWithSize(ctx, source, limits)
+	return out, err
+}
+
+// ReadModelWithSize also reports the actual encoded length for load accounting.
+// The length includes noncanonical encodings and retained unknown fields.
+func ReadModelWithSize(ctx context.Context, source io.Reader, limits Limits) (out *onnxpb.ModelProto, encodedBytes int64, err error) {
 	var data []byte
 	if data, err = readWire(ctx, source, limits, "model"); err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return ParseModel(ctx, data, limits)
+	if out, err = ParseModel(ctx, data, limits); err != nil {
+		return nil, 0, err
+	}
+
+	return out, int64(len(data)), nil
 }
 
 // ParseTensor decodes TensorProto wire bytes using the same bounded decoder.

@@ -26,6 +26,12 @@ func TestErrorClassificationAndCause(t *testing.T) {
 		t.Fatal("classification-only message")
 	}
 
+	for _, stage := range []string{"load", "run"} {
+		if message := (&Error{Stage: stage, Kind: ErrInvalidArgument, NodeIndex: -1}).Error(); message != "onnx "+stage+": onnx: invalid argument" {
+			t.Fatalf("stage %q: %s", stage, message)
+		}
+	}
+
 	var absent *Error
 	if absent.Unwrap() != nil || absent.Is(ErrInvalidArgument) || absent.Error() != "onnx: <nil error>" {
 		t.Fatal("nil diagnostic receiver")

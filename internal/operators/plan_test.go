@@ -508,3 +508,40 @@ func TestPlanStaticShapeLimits(t *testing.T) {
 		})
 	}
 }
+
+func TestPlanSnapshotBytesWithoutNumericalCopies(t *testing.T) {
+	registry := planRegistry(t)
+	var baseline int64
+	for _, count := range []int{1, 4096} {
+		model := planFixture()
+		model.Graph.Initializer = []*onnxpb.TensorProto{{Name: proto.String("unused"), DataType: proto.Int32(1), Dims: []int64{int64(count)}, FloatData: make([]float32, count)}}
+		plan, err := Compile(context.Background(), builtGraph(t, model), registry, Limits{})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		bytes, err := plan.SnapshotBytes(context.Background())
+		if err != nil || bytes <= 0 {
+			t.Fatalf("snapshot estimate: %d, %v", bytes, err)
+		}
+
+		if baseline != 0 && bytes != baseline {
+			t.Fatalf("snapshot estimate charges shared numerical storage: %d != %d", bytes, baseline)
+		}
+
+		baseline = bytes
+		if allocations := testing.AllocsPerRun(10, func() { _, err = plan.SnapshotBytes(context.Background()) }); allocations != 0 || err != nil {
+			t.Fatalf("snapshot estimator allocated: %g, %v", allocations, err)
+		}
+
+		if _, err = plan.SnapshotBytes(nil); !errors.Is(err, graph.ErrInvalidArgument) {
+			t.Fatalf("nil snapshot context: %v", err)
+		}
+
+		ctx, cancel := context.WithCancel(context.Background())
+		cancel()
+		if _, err = plan.SnapshotBytes(ctx); !errors.Is(err, context.Canceled) {
+			t.Fatalf("cancelled snapshot: %v", err)
+		}
+	}
+}

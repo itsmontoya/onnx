@@ -2,6 +2,8 @@ package operators
 
 import (
 	"context"
+	"fmt"
+	"math"
 
 	"github.com/itsmontoya/onnx/internal/graph"
 )
@@ -91,6 +93,79 @@ func (p *Plan) Steps() (steps []Step) {
 // Initializer bytes are unchanged: compilation shares rather than copies tensors.
 func (p *Plan) Usage() (loadBytes, initializerBytes int64) {
 	return p.loadBytes, p.initializerBytes
+}
+
+// SnapshotBytes bounds the logical payload copied by one call to each deep
+// accessor plus a consumer's second input/output metadata copy. It allocates no
+// snapshots. Constants and immutable string bytes are shared, not copied; Go
+// headers/capacity overhead remains outside payload accounting.
+func (p *Plan) SnapshotBytes(ctx context.Context) (bytes int64, err error) {
+	if ctx == nil || p == nil {
+		return 0, fmt.Errorf("%w: snapshot context or plan", graph.ErrInvalidArgument)
+	}
+
+	// Fixed numeric metadata fits in 32 logical bytes per record; dimension
+	// records use a conservative 16 bytes for their kind and int64 size.
+	bytes = 32
+	for repeat := 0; repeat < 2; repeat++ {
+		for _, infos := range [][]graph.ValueInfo{p.inputs, p.outputs} {
+			for _, info := range infos {
+				if err = ctx.Err(); err != nil {
+					return 0, err
+				}
+
+				if err = addSnapshotInfo(&bytes, info); err != nil {
+					return 0, err
+				}
+			}
+		}
+	}
+	for _, value := range p.values {
+		if err = ctx.Err(); err != nil {
+			return 0, err
+		}
+
+		if err = addSnapshotInfo(&bytes, value.Info); err != nil {
+			return 0, err
+		}
+
+		for _, declaration := range value.Declarations {
+			if err = addSnapshotInfo(&bytes, declaration); err != nil {
+				return 0, err
+			}
+		}
+	}
+	for _, step := range p.steps {
+		if err = ctx.Err(); err != nil {
+			return 0, err
+		}
+
+		if bytes > math.MaxInt64-32 || int64(len(step.Inputs)) > (math.MaxInt64-bytes-32)/8 {
+			return 0, fmt.Errorf("%w: snapshot input indices", graph.ErrLimit)
+		}
+
+		bytes += 32 + int64(len(step.Inputs))*8
+		if int64(len(step.Outputs)) > (math.MaxInt64-bytes)/8 {
+			return 0, fmt.Errorf("%w: snapshot output indices", graph.ErrLimit)
+		}
+
+		bytes += int64(len(step.Outputs)) * 8
+	}
+
+	if err = ctx.Err(); err != nil {
+		return 0, err
+	}
+
+	return bytes, nil
+}
+
+func addSnapshotInfo(bytes *int64, info graph.ValueInfo) (err error) {
+	if *bytes > math.MaxInt64-32 || int64(len(info.Dimensions)) > (math.MaxInt64-*bytes-32)/16 {
+		return fmt.Errorf("%w: snapshot dimensions", graph.ErrLimit)
+	}
+
+	*bytes += 32 + int64(len(info.Dimensions))*16
+	return nil
 }
 
 func cloneInfos(infos []graph.ValueInfo) (out []graph.ValueInfo) {

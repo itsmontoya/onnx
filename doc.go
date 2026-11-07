@@ -1,12 +1,12 @@
-// Package onnx is the foundation for a Go-native ONNX inference runtime.
+// Package onnx loads and evaluates a bounded Go-native ONNX inference subset.
 //
-// The module currently provides immutable typed tensors, model metadata records,
-// bounded internal wire/tensor decoding, named graph validation, and static
-// Identity/Constant planning. Capabilities reports implemented restrictions and
-// planned operators. Public loading and sessions are not implemented yet.
-// Tensor values can be shared by
-// concurrent readers; constructors and accessors copy, and no mutable backend
-// storage is exposed.
-// The planned initial profile is ONNX IR 8, standard-domain opset 13, float32
-// computation, and int64 constants and shape values.
+// Load, LoadBytes and LoadFile accept IR 8, standard-domain opset 13 models.
+// Identity and dense tensor-valued Constant execute serially; Capabilities lists
+// their restrictions and planned operators. Models share immutable plans across
+// sessions; each session permits one Run at a time and returns owned outputs.
+// Tensor constructors and accessors copy, and no mutable backend is exposed.
+//
+// Options applies finite logical load/run limits. Cancellation is checked around
+// synchronous backend/protobuf calls, between nodes and before publication.
+// Ordinary builds and tests require no cgo, Python or native inference runtime.
 package onnx
