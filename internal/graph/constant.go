@@ -46,6 +46,9 @@ func (c *Constant) Metadata() (metadata []Property) { return slices.Clone(c.meta
 // DataType returns the exact numerical storage type.
 func (c *Constant) DataType() (dataType tensor.DataType) { return c.value.DataType() }
 
+// Rank returns the concrete rank without allocating a shape snapshot.
+func (c *Constant) Rank() (rank int) { return c.value.Rank() }
+
 // Shape returns an independent concrete shape.
 func (c *Constant) Shape() (shape []int64) { return c.value.Shape() }
 

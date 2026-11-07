@@ -67,7 +67,7 @@ func TestConstantAndMetadataOwnership(t *testing.T) {
 	}
 
 	constant := value.Default
-	if constant.Name() != "w" || constant.DocString() != "weight docs" || constant.DataType() != tensor.Float32 || constant.ByteSize() != 8 || !reflect.DeepEqual(constant.Shape(), []int64{2}) || constant.Metadata()[0].Value != "value" {
+	if constant.Name() != "w" || constant.DocString() != "weight docs" || constant.DataType() != tensor.Float32 || constant.Rank() != 1 || constant.ByteSize() != 8 || !reflect.DeepEqual(constant.Shape(), []int64{2}) || constant.Metadata()[0].Value != "value" {
 		t.Fatal("constant metadata changed")
 	}
 
