@@ -201,8 +201,8 @@ def main():
              zero_feeds, {"y": f([[-np.inf], [np.nan], [np.inf]])}, status="unsupported",
              reason="BatchNormalization-9 adapter is RT-13; zero variance/epsilon literal formula differs from ORT's three NaNs.",
              observations=True)
-    original("deferred_reduction18", [node("ReduceMean", ["data", "axes"], noop_with_empty_axes=1)],
-             {"data": f([1, 2]), "axes": i([])}, {"y": f([1, 2])}, status="unsupported", opset=18,
+    original("deferred_reduction18", [node("ReduceMean", ["data"], noop_with_empty_axes=1)],
+             {"data": f([1, 2])}, {"y": f([1, 2])}, status="unsupported", opset=18,
              reason="NN-12 reduction contract uses opset18; no opset13 reduction adapter/coverage is implied.")
 
     with tarfile.open(args.source_archive) as archive:

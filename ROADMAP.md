@@ -16,6 +16,7 @@ conversion. RT-06 adds immutable named graphs and whole-model structural checks.
 RT-07 adds versioned operator resolution and immutable Identity/Constant planning.
 RT-08 adds public loaders, model/session lifecycle and serial Identity/Constant
 execution. RT-09 adds all M1 numerical handlers and scalar/list Constants.
+RT-10 supplies the reusable offline typed fixture and differential harness.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -929,7 +930,7 @@ differential conformance harness. RT-11 adds runnable public examples and multip
 batch sizes. Shape/CNN/external data, other versions/dtypes and optimization
 remain explicit gaps; no backend, training or optimizer changes were made.
 
-### [ ] RT-10 — Build the fixture and differential conformance harness
+### [x] RT-10 — Build the fixture and differential conformance harness
 
 **Depends on:** RT-03, RT-04. **Deliverables:** fixture provenance manifest,
 `testdata/` models/values, deterministic generation tooling, and Go test harness.
@@ -957,6 +958,79 @@ count as supported cases. The harness supports both isolated operators and
 end-to-end graphs, and it reports input/output names and mismatch positions.
 See the [ONNX backend testing documentation](https://onnx.ai/onnx/repo-docs/OnnxBackendTest.html)
 for the upstream suite's role; use cases from the pinned release.
+
+**Handoff (RT-10):** Implementation revision
+`70d5ef59161fbe0a2c290e6ee9b7448328618b68`, based on RT-09
+`0f3c29f39316bed55fb795dcd1d3b407c19b0c26`, on `rt-10-conformance`.
+The final task revision is the commit introducing this handoff; obtain it with
+`git log -1 --format=%H -- ROADMAP.md`. That revision also aligns the deferred
+opset-18 identity fixture with NN-12's omitted-axes encoding. Backend remains
+published `neuralnetwork v0.7.0` at
+`6048452c57a0a293db4591cd2e2febd7d6b743a3`; protobuf v1.36.12, Go
+1.26.1 baseline/Go 1.27.2 toolchain and production capabilities are unchanged.
+No public/exported signatures, production logic or numerical adapters change.
+
+Changed files: root `conformance_artifact_test.go`, `conformance_value_test.go`,
+`conformance_comparison_test.go`, `conformance_case_test.go` and
+`conformance_suite_test.go`; `tools/check_conformance.py`; models, named typed/raw
+TensorProto values, provenance, full upstream audit and guide under
+`testdata/conformance/`; README, TODO, NEEDS, development/runtime contract,
+third-party attribution and this roadmap. Existing RT-09 models/provenance stay
+unchanged. Each test-only type and all its methods share a file; the suite's
+constructor uses a local concrete value and explicit named-result returns.
+
+The reusable runner hashes and decodes model/value artifacts offline through
+the shared bounded decoder, validates recorded envelope/schema identities,
+loads/runs public sessions and compares retained outputs after closing both
+owners. Names/output order, type, shape/count and int64 payloads are exact.
+Finite floats use `abs(got-want) <= 1e-5+1e-5*abs(want)`, NaN classification,
+exact infinity signs and explicit per-case signed-zero policy. Unexpected
+nonfinite values fail finite expectations. Nonempty MatMul/Gemm zero signs are
+relaxed; empty MatMul contractions require positive zero. The numeric regression
+injects `[4,7]` into the hand-calculated Add output `[4,6]` and requires the
+same fixture comparison path to report input/output names, flat offset 1 and
+row-major position `[1]`. Separate cases assert exact integers above 2^24 and
+both extrema, scalars/empties, shape/type/name errors and nonfinite handling.
+
+There are **86 reference agreements**, **one empty-axis Softmax extension** and
+**nine explicit ErrUnsupported rejections**; no skips count as support. The
+agreements reuse RT-09's 80 reference results and add six original independently
+hand-calculated cases, including a two-output branch. Six deferred cases retain
+actual Gather-empty, pooling-ceil/NaN, BatchNormalization-9 stored-statistics/
+zero-domain and opset-18 reduction observations. BN literals independently
+cross-check ORT; evaluator momentum and ORT's zero-domain difference remain
+visible. All these deferred models are rejected at load and establish no
+M2/M3/reduction execution support.
+
+Pinned source audit: official ONNX v1.16.2 commit
+`3bf92c03a9f27eba3bda1e5b9e63ea20ec213557` contains **1,422** backend models,
+including 352 IR-7/opset-13 models and **zero** exact IR-8/opset-13 models.
+The complete path/hash/envelope audit is checked in. Three selected upstream
+M1 operator models and their values retain original bytes as version-rejection
+tests. This is the pinned suite's availability constraint: original checked
+IR-8/opset-13 graphs provide positive coverage; no upstream version numbers
+were rewritten and no profile expansion was made. Copied artifacts retain
+Apache-2.0 attribution and the included upstream license; no root NOTICE exists.
+Original fixture provenance accurately records that this repository has no
+LICENSE rather than inventing a formal license from fixture origin.
+
+Validation passed on Go 1.27.2 Darwin/arm64: gofmt, `go mod tidy -diff`,
+`go mod verify`, build, vet, normal tests, `CGO_ENABLED=0 go test ./...`,
+`CGO_ENABLED=0 go test -tags=purego ./...`, and `go test -race ./...`, with
+`GOCACHE=/private/tmp/onnx-runtime-gocache` and offline Go dependency mode.
+Pinned Python 3.9.6 / ONNX 1.16.2 / NumPy 1.26.4 / protobuf 4.25.3 /
+ORT 1.19.2 regeneration and an unchanged second verification pass reproduce all
+fixtures/audit using the archive command in the fixture guide. The original
+25-schema/default/capability/profile checker and 81-model M1 reference checker,
+handwritten Go spacing/type-method colocation, contract Go-block formatting,
+local Markdown targets and diff checks pass. Normal Go tests invoke no Python,
+network or shared runtime. Hosted Linux verification is required before handing
+the stacked PR to the next task.
+
+RT-11 is next: public runnable MLP/branch examples, at least two batch sizes,
+and an integration report. Reuse this harness/corpus, preserve explicit
+extension/rejection counts and the unchanged version envelope. RT-12/RT-13 own
+deferred shape/CNN adapters; NN-12 reductions remain later opset-selected work.
 
 ### [ ] RT-11 — Demonstrate and document the first working runtime
 

@@ -6642,7 +6642,7 @@
       ],
       "model": {
         "path": "conformance/models/deferred_reduction18.onnx",
-        "sha256": "da4baececb5702b2cef7378b34b4a2cf65187df21c24f292f660bf48645a24ab"
+        "sha256": "d7f3b33aab3ee392abf1c79a0f4793cfbd9c5a92ceca331f943062c93b61e43a"
       },
       "comparison": {
         "absolute": 1e-05,
@@ -6655,13 +6655,6 @@
           "tensor": {
             "path": "conformance/values/deferred_reduction18/input_data.pb",
             "sha256": "4bf9cec5173a762838640769524b711d68bee2309fcf948ba881769223d9efc6"
-          }
-        },
-        {
-          "name": "axes",
-          "tensor": {
-            "path": "conformance/values/deferred_reduction18/input_axes.pb",
-            "sha256": "bc7696b033c058f76657e115b081bfa677ffa9210d20ec998c4ba3ede9101334"
           }
         }
       ],
@@ -6680,11 +6673,12 @@
           "outputs": [
             {
               "shape": [
-                1
+                2
               ],
               "dtype": "float32",
               "bits": [
-                1069547520
+                1065353216,
+                1073741824
               ]
             }
           ]

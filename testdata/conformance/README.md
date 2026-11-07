@@ -82,7 +82,7 @@ They do not count as runtime numerical coverage:
 | MaxPool NaN | Independent output propagates NaN; evaluator filters it; ORT output retained | RT-13 |
 | BatchNormalization-9 | Stored statistics give `[2.5,4.5]`, agreeing with ORT; evaluator applies momentum and differs | RT-13 |
 | BatchNormalization zero domain | Literal formula gives `[-Inf,NaN,+Inf]`; ORT gives three NaNs; evaluator also retained | RT-13 |
-| NN-12 reduction boundary | Explicit empty ReduceMean axes use opset 18 and `noop_with_empty_axes=1`; no opset-13 reduction support implied | Later profile/operator task |
+| NN-12 reduction boundary | Omitted ReduceMean axes express identity with opset 18 and `noop_with_empty_axes=1`, matching NN-12; no opset-13 reduction support implied | Later profile/operator task |
 
 BN expectations follow `scale*(x-mean)/sqrt(variance+epsilon)+bias`, with the
 supplied statistics unchanged. ORT 1.19.2 uses CPUExecutionProvider, one
