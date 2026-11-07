@@ -162,6 +162,7 @@ func (c *compiler) node(node graph.Node) (err error) {
 	step.Index, step.Name = node.Index, node.Name
 	step.Domain, step.Operator = node.Domain, node.Operator
 	step.Opset, step.SchemaVersion = c.plan.metadata.Opset, record.SchemaVersion
+	step.DocString, step.Metadata = node.DocString, node.Metadata
 	for _, name := range node.Inputs {
 		index := c.plan.indices[name]
 		if name == "" {

@@ -16,6 +16,8 @@ type Step struct {
 	Operator      string
 	Opset         int64
 	SchemaVersion int64
+	DocString     string
+	Metadata      []graph.Property
 	Inputs        []int
 	Outputs       []int
 	Constant      *graph.Constant
@@ -23,6 +25,7 @@ type Step struct {
 
 func (s Step) clone() (out Step) {
 	out = s
+	out.Metadata = slices.Clone(s.Metadata)
 	out.Inputs = slices.Clone(s.Inputs)
 	out.Outputs = slices.Clone(s.Outputs)
 	return out

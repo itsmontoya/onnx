@@ -327,6 +327,8 @@ func TestPlanPassthroughAndOwnership(t *testing.T) {
 	wait.Wait()
 
 	model = planFixture()
+	model.Graph.Node[0].DocString = proto.String("node docs")
+	model.Graph.Node[0].MetadataProps = []*onnxpb.StringStringEntryProto{{Key: proto.String("node"), Value: proto.String("original")}}
 	plan, err = Compile(context.Background(), builtGraph(t, model), registry, Limits{})
 	if err != nil {
 		t.Fatal(err)
@@ -334,7 +336,8 @@ func TestPlanPassthroughAndOwnership(t *testing.T) {
 
 	plan.Steps()[0].Inputs[0] = 99
 	plan.Steps()[0].Outputs[0] = 99
-	if plan.Steps()[0].Inputs[0] != 0 || plan.Steps()[0].Outputs[0] != 1 {
+	plan.Steps()[0].Metadata[0].Value = "mutated"
+	if plan.Steps()[0].Inputs[0] != 0 || plan.Steps()[0].Outputs[0] != 1 || plan.Steps()[0].DocString != "node docs" || plan.Steps()[0].Metadata[0].Value != "original" {
 		t.Fatal("step snapshots share slots")
 	}
 }
