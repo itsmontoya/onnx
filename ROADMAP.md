@@ -17,6 +17,8 @@ RT-07 adds versioned operator resolution and immutable Identity/Constant plannin
 RT-08 adds public loaders, model/session lifecycle and serial Identity/Constant
 execution. RT-09 adds all M1 numerical handlers and scalar/list Constants.
 RT-10 supplies the reusable offline typed fixture and differential harness.
+RT-11 demonstrates MLP/branching inference with multi-batch reference goldens,
+a runnable public example and the first integration report.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -1032,7 +1034,7 @@ and an integration report. Reuse this harness/corpus, preserve explicit
 extension/rejection counts and the unchanged version envelope. RT-12/RT-13 own
 deferred shape/CNN adapters; NN-12 reductions remain later opset-selected work.
 
-### [ ] RT-11 — Demonstrate and document the first working runtime
+### [x] RT-11 — Demonstrate and document the first working runtime
 
 **Depends on:** RT-09, RT-10. **Deliverables:** a small inference example,
 an integration report, and accurate getting-started documentation.
@@ -1050,6 +1052,80 @@ M1 fixtures match reference outputs; lifecycle/race checks pass. A clean clone
 can run the documented commands. The capability table lists every M1
 restriction. This is the first usable milestone; M2/M3/optimization are not
 presented as prerequisites for showing inference working.
+
+**Handoff (RT-11):** Implementation revision
+`e527d778ace196ce6ddb8362cc349501ec6859bf`, based on RT-10
+`dc9898b48e23c6fab82429f8f0039718342b51bc`, on `rt-11-inference-examples`.
+The final task revision is the commit introducing this handoff; obtain it with
+`git log -1 --format=%H -- ROADMAP.md`. Backend remains published
+`neuralnetwork v0.7.0` at `6048452c57a0a293db4591cd2e2febd7d6b743a3`,
+protobuf v1.36.12, Go 1.26.1 baseline/Go 1.27.2 toolchain. No production runtime
+logic, dependency, public API signature, capability status or contract changes.
+
+Changed files: [examples/inference/main.go](examples/inference/main.go),
+[inference_integration_test.go](inference_integration_test.go),
+[tools/check_inference.py](tools/check_inference.py), the two models, 12 named
+TensorProto values, provenance and guide under [testdata/inference](testdata/inference/README.md),
+[getting started](docs/getting-started.md), [integration report](docs/integration-rt11.md),
+README, TODO, NEEDS, development/runtime-contract documentation and this roadmap.
+The example uses actual `LoadFile(ctx, path, Options{})`, `Model.Metadata`,
+`Model.NewSession`, `NewFloat32(shape, values)`,
+`Session.Run(ctx, map[string]*Tensor, RunOptions{})`, named result/value accessors
+and both `Close() (err error)` methods. Named-error deferred cleanup joins close
+failures. No reference tool is imported or invoked by normal Go code/tests.
+
+Both original IR-8/opset-13 models declare float32 `["batch", 2]` I/O and keep
+all four weight/bias initializers inline. MLP is Gemm/Relu/Gemm/Softmax. Branch
+adds the named `residual` input, joins it with shared logits and fans out into
+named `probabilities` and `delta` outputs. Four actual ONNX 1.16.2 evaluator
+returns cover both graphs at batches 1 and 3, independently cross-checked by
+NumPy formulas. They are additional to RT-10's unchanged 86 agreements, one
+extension and nine explicit rejections. No complete-profile/ORT/performance
+claim is made; original provenance records the existing missing repository
+LICENSE rather than inventing a license.
+
+The generator pins Python 3.9.6, ONNX 1.16.2 source
+`3bf92c03a9f27eba3bda1e5b9e63ea20ec213557`, NumPy 1.26.4 and protobuf 4.25.3,
+checks exact tool versions/full ONNX checker acceptance, and reproduces all
+model/value hashes. MLP SHA-256:
+`04df066d0a12b0e6ddf2ba89e9e452768939a745ddd574cfb39780d0e14c06f9`;
+branch: `3c8710155dd18231cdfcc730d0a98b2d6c158dfeb8c7a47c1f3d0765982f4446`;
+provenance: `9fa5307cf7e12b632d1057f6d6cac8c8f799ae8dcc1fd21ef5267ea95058feb7`.
+Its generated getting-started table contains every implemented M1 record's
+types, schema, arity/optional slots, attributes/defaults and restrictions from
+`capabilities.json`. Export guidance preserves the exact IR/import envelope and
+explains unsupported-feature diagnostics rather than trusting exporter defaults.
+
+Offline integration tests reuse RT-10's artifact/typed-value/comparison helpers:
+hash/envelope/type/shape/name/count checks are exact; finite floats use
+atol=rtol=1e-5 with explicit nonfinite/zero-sign rules. They validate symbolic
+metadata, run both batches through one session per model, request reversed named
+output order and compare retained outputs after later runs and both Close calls.
+Two sessions per shared numerical model also start concurrently at batches 1
+and 3; outputs compare after joining, with race checks passing. Owned outputs,
+immutable weights, finite budgets and cancellation granularity are unchanged.
+
+Validation passed on Go 1.27.2 Darwin/arm64 with the temporary GOCACHE and offline
+Go dependency mode: gofmt/go fmt, `go mod tidy -diff`, `go mod verify`, build,
+vet, normal tests, cgo-disabled tests, cgo-disabled purego tests and race tests.
+All four cgo-disabled CLI graph/batch combinations and a purego branch run pass.
+A fresh clone of the implementation revision ran cached dependency download,
+the full cgo-disabled suite and all four examples offline with a clean tree.
+Pinned profile/schema, 81-model M1, 96-case conformance/1,422-model upstream and
+RT-11 regeneration/table checks pass, as do handwritten if/var spacing and
+type/method colocation, contract Go-block formatting, local Markdown targets
+and diff checks. [Hosted Linux verification](https://github.com/itsmontoya/onnx/actions/runs/42425356391)
+also passed formatting, tidy, build, vet, normal, cgo-disabled, purego and race
+checks at the implementation revision. The final stacked PR must retain green
+checks before the next task starts.
+
+RT-12 is next: consume these reproducible MLP fixtures and add shape operators
+and a shape-heavy graph with named I/O/reference outputs for at least two batch
+sizes. Publish its exact accessible runtime revision/backend version/hashes to
+unblock [NN-13](https://github.com/itsmontoya/neuralnetwork/blob/v0.7.0/docs/handoffs/NN-13.md).
+RT-11 alone does not unblock it. Shape/CNN/external data, broader profiles,
+optimization and the root license decision remain separate tasks; none blocks
+the working M1 examples demonstrated here.
 
 ## M2 and M3: useful model coverage
 

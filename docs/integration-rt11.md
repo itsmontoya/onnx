@@ -1,8 +1,9 @@
 # RT-11 first working runtime integration report
 
 Verified on 2026-11-07 with Go 1.27.2 on Darwin/arm64, based on RT-10 revision
-`dc9898b48e23c6fab82429f8f0039718342b51bc`. The implementation/final revisions
-are recorded in [the RT-11 handoff](../ROADMAP.md). This task adds fixtures,
+`dc9898b48e23c6fab82429f8f0039718342b51bc`. Implementation revision is
+`e527d778ace196ce6ddb8362cc349501ec6859bf`; the final handoff revision is
+recorded in [the RT-11 handoff](../ROADMAP.md). This task adds fixtures,
 examples, tests and documentation; no production implementation, public API,
 capability status, dependency or numerical policy changes.
 
@@ -115,8 +116,12 @@ The optional pinned Python profile/schema checker, 81-model M1 checker,
 96-case conformance regeneration/audit and RT-11 generation check also passed.
 Normal Go tests call none of those tools and require no network, Python, protoc
 or native shared runtime. Formatting, local Markdown targets, handwritten Go
-style and diff whitespace are checked before publication. Hosted Linux checks
-and a clean-clone run are recorded in the task handoff once verified.
+if/var spacing and type/method colocation, contract Go-block formatting and diff
+whitespace checks passed. A fresh clone of the implementation revision passed
+cached dependency download, the full cgo-disabled suite and all four examples
+offline with a clean tree. [Hosted Linux verification](https://github.com/itsmontoya/onnx/actions/runs/42425356391)
+passed formatting, tidy, build, vet, normal, cgo-disabled, purego and race checks
+at that revision. Final stacked-PR status is verified before the next task.
 
 ## Limits and next work
 
