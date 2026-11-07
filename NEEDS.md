@@ -19,6 +19,10 @@ files matched the adjacent source checkout. NN-01–NN-12 are implemented.
 [its tracked handoff][nn-13]. RT-01–RT-09 now implement the runtime contract
 through serial M1 sessions, including broadcast arithmetic, products, activations
 and exact float/int Constant forms.
+RT-10 adds offline typed conformance fixtures and retains the backend reference
+differences as documented extensions or explicit future-adapter rejections;
+see [the fixture guide](testdata/conformance/README.md). No M2/M3 or reduction
+runtime support follows from these reference records.
 
 The library's `NEEDS.md` is ignored and is not included in the release tree.
 Use the published [tensor contract][tensor-contract], source, tests, and tracked

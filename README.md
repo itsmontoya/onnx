@@ -28,6 +28,12 @@ The module pins `neuralnetwork v0.7.0`, protobuf v1.36.12, and Go 1.27.2 with a
 Go 1.26.1 baseline. Ordinary builds/tests require neither protoc nor Python.
 No general ONNX compatibility is claimed beyond the documented subset.
 
+RT-10's [offline conformance harness](testdata/conformance/README.md) verifies
+86 reference agreements, one documented empty-Softmax extension and nine explicit
+rejections, using hashed model/typed TensorProto fixtures. The pinned upstream
+suite contains no exact IR 8/opset 13 model; selected original upstream bytes
+remain unsupported-version tests rather than numerical coverage claims.
+
 ## Implementation plans
 
 - [NEEDS.md](NEEDS.md) records the verified `neuralnetwork` v0.7.0 baseline,
@@ -50,8 +56,8 @@ block the first working runtime or release readiness.
 
 The current CPU profile accepts ONNX IR 8, standard-domain opset 13, and dense
 float32/int64 values. Named graph inputs/outputs and branching are implemented.
-Broadcasting, matrix products and activations are implemented. RT-10 expands the
-fixture/conformance harness; RT-11 supplies user examples. Later milestones add
+Broadcasting, matrix products, activations and the RT-10 fixture/conformance
+harness are implemented. RT-11 supplies user examples. Later milestones add
 tensor transformations, 2D CNN operators, external weights and a documented release.
 
 The [roadmap's coverage tables](ROADMAP.md#milestones-and-coverage) specify

@@ -1,0 +1,7014 @@
+{
+  "format_version": 1,
+  "onnx_source_revision": "3bf92c03a9f27eba3bda1e5b9e63ea20ec213557",
+  "reference_versions": {
+    "python": "3.9.6",
+    "onnx": "1.16.2",
+    "numpy": "1.26.4",
+    "protobuf": "4.25.3",
+    "onnxruntime": "1.19.2"
+  },
+  "original_license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+  "upstream_license": "Apache-2.0; third_party/onnx/LICENSE; pinned source has no root NOTICE.",
+  "upstream_audit": {
+    "path": "conformance/upstream_audit.json",
+    "sha256": "32356c5b07b204fa05967995083089811caa50ba57704a2f32e94916bb4e323f"
+  },
+  "cases": [
+    {
+      "name": "m1_add_matching",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Add",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/add_matching.onnx",
+        "sha256": "78afc11e73399ad0b8b63266c9ff272dfd87a56e6edb54750366a9c2c281030a"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_add_matching/input_a.pb",
+            "sha256": "8bc79e88480691bd2b98d386826326c877c723fb964b9f0355c2d7ccb964f748"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_add_matching/input_b.pb",
+            "sha256": "846db76ac751f0834181e3246ec05ad1a257a49ae1f85d650f4ed5dc75d551a9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_add_matching/output_y.pb",
+            "sha256": "93e51b1462aa562d45588aa44bc7244a07ab040e3e426b96c2c9792c7348561e"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1077936128,
+                1086324736,
+                1093664768
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_add_broadcast",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Add",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/add_broadcast.onnx",
+        "sha256": "de9a029d7a5a87794aa22c0f11771c0154df2670084c66f7250fd5bb15205868"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_add_broadcast/input_a.pb",
+            "sha256": "b7add3e0da464d6c005a3393e9d02880489acdeda908946ddb52293b1d301fe8"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_add_broadcast/input_b.pb",
+            "sha256": "d418b2bb40f6c443d601d348643af68f511088dc40d9ebc4ec9161538f7ea562"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_add_broadcast/output_y.pb",
+            "sha256": "186cde766c57df743ac858945f639b4c6824893921dc76f1b7b3b81bcf2c18ac"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1077936128,
+                1084227584,
+                1091567616,
+                1084227584,
+                1088421888,
+                1093664768
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_add_scalar",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Add",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/add_scalar.onnx",
+        "sha256": "46a996c3c084750952f31da8d80de2649d89e7c9bc0283b4e5f510408846d65b"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_add_scalar/input_a.pb",
+            "sha256": "1d7d921d254a55acc79a7c4810aeb6224cdfb750eeb690d7250d083bb2e57caf"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_add_scalar/input_b.pb",
+            "sha256": "6777f079420d8a75507afb54b9218da0745bceccecebadf5111bc0da369651ab"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_add_scalar/output_y.pb",
+            "sha256": "77abec0dab22adff528ba9c9292fd14371ecc56c05d32683ae574dfd6ea99e65"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1077936128,
+                1082130432,
+                1086324736
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_add_empty",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Add",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/add_empty.onnx",
+        "sha256": "c2d80041190b9395bd20f7718561230f3ece5bd91c1dd368e38fadfc3b7e5d48"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_add_empty/input_a.pb",
+            "sha256": "a076e5b26eb8468a968fa80749acbc23927c8d7887fe142c1469e8cd4d098ffd"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_add_empty/input_b.pb",
+            "sha256": "e512ef59def0ae42b34db9d48cd2046985b030599285926fdcb0edd9137ca241"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_add_empty/output_y.pb",
+            "sha256": "b94a46dd212ea9c9483ba9049f0c64a0ab4c15442cf2ee120e222fa97cfc32b4"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                0,
+                3
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_sub_matching",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Sub",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/sub_matching.onnx",
+        "sha256": "ebabeec628b2dbdc7d8dc665bc4b1b7acd2dc481085d935f71215189f98e15f1"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_sub_matching/input_a.pb",
+            "sha256": "8bc79e88480691bd2b98d386826326c877c723fb964b9f0355c2d7ccb964f748"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_sub_matching/input_b.pb",
+            "sha256": "846db76ac751f0834181e3246ec05ad1a257a49ae1f85d650f4ed5dc75d551a9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_sub_matching/output_y.pb",
+            "sha256": "c735751189bf93d3c7fec086ce8f131bd0d37e07f148ce30f5d977e33c3eb51a"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                3212836864,
+                3221225472,
+                3231711232
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_sub_broadcast",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Sub",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/sub_broadcast.onnx",
+        "sha256": "eba4962091b8d415f1bbf53d49c2a369f75afb2591d9a26d499bfdfb72f9b279"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_sub_broadcast/input_a.pb",
+            "sha256": "b7add3e0da464d6c005a3393e9d02880489acdeda908946ddb52293b1d301fe8"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_sub_broadcast/input_b.pb",
+            "sha256": "d418b2bb40f6c443d601d348643af68f511088dc40d9ebc4ec9161538f7ea562"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_sub_broadcast/output_y.pb",
+            "sha256": "6c17413eaa7f8b5b07328de37112c13aa220f32d78d23a4b820de58188bb3769"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                3212836864,
+                3225419776,
+                3235905536,
+                1065353216,
+                3212836864,
+                3231711232
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_sub_scalar",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Sub",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/sub_scalar.onnx",
+        "sha256": "97962c4517e25aa63f0ca1d5dbe3b3b2acd9863e45f0817a360ce9f25eb9bcc6"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_sub_scalar/input_a.pb",
+            "sha256": "1d7d921d254a55acc79a7c4810aeb6224cdfb750eeb690d7250d083bb2e57caf"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_sub_scalar/input_b.pb",
+            "sha256": "6777f079420d8a75507afb54b9218da0745bceccecebadf5111bc0da369651ab"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_sub_scalar/output_y.pb",
+            "sha256": "226b1f1649aca8277ac9e5517096a3c8854680072b3ccb315c9951c6a7f1c708"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                0,
+                3221225472
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_sub_empty",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Sub",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/sub_empty.onnx",
+        "sha256": "b5e18c0bc248bcace06fe5dc13610f8f618e3dd33adde399dddc38456d91c134"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_sub_empty/input_a.pb",
+            "sha256": "a076e5b26eb8468a968fa80749acbc23927c8d7887fe142c1469e8cd4d098ffd"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_sub_empty/input_b.pb",
+            "sha256": "e512ef59def0ae42b34db9d48cd2046985b030599285926fdcb0edd9137ca241"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_sub_empty/output_y.pb",
+            "sha256": "b94a46dd212ea9c9483ba9049f0c64a0ab4c15442cf2ee120e222fa97cfc32b4"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                0,
+                3
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_mul_matching",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Mul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/mul_matching.onnx",
+        "sha256": "3845d06500a3f7acbda301c7bc6e1e8f2cb950556ad03774cbf5b7cecb658602"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_mul_matching/input_a.pb",
+            "sha256": "8bc79e88480691bd2b98d386826326c877c723fb964b9f0355c2d7ccb964f748"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_mul_matching/input_b.pb",
+            "sha256": "846db76ac751f0834181e3246ec05ad1a257a49ae1f85d650f4ed5dc75d551a9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_mul_matching/output_y.pb",
+            "sha256": "28d859b7a60bdbcb2d6edfcff43a007afe3288d53c7cbf902da7b965e7676226"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                1090519040,
+                1103101952
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_mul_broadcast",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Mul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/mul_broadcast.onnx",
+        "sha256": "d2915dd16111718c17f92bb888a69c4cfae2a89f5c1f7f9df4749f56f8f66710"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_mul_broadcast/input_a.pb",
+            "sha256": "b7add3e0da464d6c005a3393e9d02880489acdeda908946ddb52293b1d301fe8"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_mul_broadcast/input_b.pb",
+            "sha256": "d418b2bb40f6c443d601d348643af68f511088dc40d9ebc4ec9161538f7ea562"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_mul_broadcast/output_y.pb",
+            "sha256": "e24cb3e708e8ae164f0265a3606cfd2dffd1a963e036aecf7391a7321cea37f4"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                1082130432,
+                1090519040,
+                1086324736,
+                1094713344,
+                1103101952
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_mul_scalar",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Mul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/mul_scalar.onnx",
+        "sha256": "da7e32789802542c868510573728e0744c60f796d6bd78ebf6deca672902be73"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_mul_scalar/input_a.pb",
+            "sha256": "1d7d921d254a55acc79a7c4810aeb6224cdfb750eeb690d7250d083bb2e57caf"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_mul_scalar/input_b.pb",
+            "sha256": "6777f079420d8a75507afb54b9218da0745bceccecebadf5111bc0da369651ab"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_mul_scalar/output_y.pb",
+            "sha256": "5706cc22e8f2aa0f90fc50151cd696decbdf7d51c06c6725f0268f2738b94df4"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                1082130432,
+                1090519040
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_mul_empty",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Mul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/mul_empty.onnx",
+        "sha256": "329f54d88dd4d5c4fd4c1b1d8bb37cf9d03fbc95d1a97a95cf28b58eebc971a1"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_mul_empty/input_a.pb",
+            "sha256": "a076e5b26eb8468a968fa80749acbc23927c8d7887fe142c1469e8cd4d098ffd"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_mul_empty/input_b.pb",
+            "sha256": "e512ef59def0ae42b34db9d48cd2046985b030599285926fdcb0edd9137ca241"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_mul_empty/output_y.pb",
+            "sha256": "b94a46dd212ea9c9483ba9049f0c64a0ab4c15442cf2ee120e222fa97cfc32b4"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                0,
+                3
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_div_matching",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Div",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/div_matching.onnx",
+        "sha256": "71efd4474372f97fefa9b59644de72fca4f5f25013c189bf35163a85ace6db76"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_div_matching/input_a.pb",
+            "sha256": "8bc79e88480691bd2b98d386826326c877c723fb964b9f0355c2d7ccb964f748"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_div_matching/input_b.pb",
+            "sha256": "846db76ac751f0834181e3246ec05ad1a257a49ae1f85d650f4ed5dc75d551a9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_div_matching/output_y.pb",
+            "sha256": "5882705665d59c554b56118c80e478b393d6db14f4bcde5629a873054be2677d"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1056964608,
+                1056964608,
+                1052770304
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_div_broadcast",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Div",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/div_broadcast.onnx",
+        "sha256": "0912263d8ea3fe02335ea938ba172ecbdd4c306e946b15731cfc1de6505480ad"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_div_broadcast/input_a.pb",
+            "sha256": "b7add3e0da464d6c005a3393e9d02880489acdeda908946ddb52293b1d301fe8"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_div_broadcast/input_b.pb",
+            "sha256": "d418b2bb40f6c443d601d348643af68f511088dc40d9ebc4ec9161538f7ea562"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_div_broadcast/output_y.pb",
+            "sha256": "eb7f169e614e8648d9a8dd1330fd13bb19124567925b3fd2090fb59d3177db22"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1056964608,
+                1048576000,
+                1040187392,
+                1069547520,
+                1061158912,
+                1052770304
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_div_scalar",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Div",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/div_scalar.onnx",
+        "sha256": "3f96812029fe925d069bd51ae0c119913e4bc0ffd1214ea06ddd25fc3cceffb9"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_div_scalar/input_a.pb",
+            "sha256": "1d7d921d254a55acc79a7c4810aeb6224cdfb750eeb690d7250d083bb2e57caf"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_div_scalar/input_b.pb",
+            "sha256": "6777f079420d8a75507afb54b9218da0745bceccecebadf5111bc0da369651ab"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_div_scalar/output_y.pb",
+            "sha256": "2d4e48965523828486a064dd618d189a107f189732fda512ac9940fd245498fb"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                1065353216,
+                1056964608
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_div_empty",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Div",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/div_empty.onnx",
+        "sha256": "f3fddf183c137c6f16fdd36272241c3ffa18d1ae86dccdea11edb0cb73aa68d1"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_div_empty/input_a.pb",
+            "sha256": "a076e5b26eb8468a968fa80749acbc23927c8d7887fe142c1469e8cd4d098ffd"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_div_empty/input_b.pb",
+            "sha256": "e512ef59def0ae42b34db9d48cd2046985b030599285926fdcb0edd9137ca241"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_div_empty/output_y.pb",
+            "sha256": "b94a46dd212ea9c9483ba9049f0c64a0ab4c15442cf2ee120e222fa97cfc32b4"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                0,
+                3
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_div_nonfinite",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Div",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/div_nonfinite.onnx",
+        "sha256": "ddc385695d398663d9f449e3b2e33727fca06c059b1941d3fc6babc911ad297a"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_div_nonfinite/input_a.pb",
+            "sha256": "1303fcca354291bf0c8341d37923c4968fb42fed06aaabf52a2eca5f0da9dce4"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_div_nonfinite/input_b.pb",
+            "sha256": "eaa8dddc7db3bf9ad024d12b86a16a5128e8ed8c41e961259792e33b12673ffa"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_div_nonfinite/output_y.pb",
+            "sha256": "4681e9ca603f966979b61e54d30aa01a46c7932757317bf8229bba9fe0826602"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                5
+              ],
+              "dtype": "float32",
+              "bits": [
+                2139095040,
+                2139095040,
+                2143289344,
+                2143289344,
+                2147483648
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_matmul_dot",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "MatMul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/matmul_dot.onnx",
+        "sha256": "24247f9aa7c600b4f85c0b893ab48a37e909dad6742b022de454b18b824cb32c"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_dot/input_a.pb",
+            "sha256": "fb1d70c9cd7bcf9f1f607e8285ec45de2718f4ebeab4cfd3ef3f75004ada8b66"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_dot/input_b.pb",
+            "sha256": "2f64cb0209c960b22735afb09ad348e1e90fbc80e9e7409b1a2763b51a1dcdf6"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_dot/output_y.pb",
+            "sha256": "818a6347ac3e856c4bec7a56b5526d6b0a74df5989bfc8837f4db4ff44e7cf0c"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [],
+              "dtype": "float32",
+              "bits": [
+                1093664768
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_matmul_vector_matrix",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "MatMul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/matmul_vector_matrix.onnx",
+        "sha256": "068c8e20e71b1cd538f5eb6e7e0adb5cf4b657eaa98e2a2820dd35497bfb810d"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_vector_matrix/input_a.pb",
+            "sha256": "fb1d70c9cd7bcf9f1f607e8285ec45de2718f4ebeab4cfd3ef3f75004ada8b66"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_vector_matrix/input_b.pb",
+            "sha256": "30b44f4278e02b7135d8a36cde52b3b5ad4f9a236ffc4efd9a9f229222678160"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_vector_matrix/output_y.pb",
+            "sha256": "3e0554c9cd201c5df151e514387087cc1cc0b2704ee86dd2bfb6b621dd112e9e"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1091567616,
+                1094713344,
+                1097859072
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_matmul_matrix_vector",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "MatMul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/matmul_matrix_vector.onnx",
+        "sha256": "72e4fe58bf06babd6781d3a1e010a0a50dfd355fb68e1833edd0cd9a6a1cdaa7"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_matrix_vector/input_a.pb",
+            "sha256": "5b50b73b79ce2a19bdabfaccc3e0069df655a6d4e1690a15a1b307545a865982"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_matrix_vector/input_b.pb",
+            "sha256": "5e231409c53591eb3897c42586f5cfaf9265c5c7ced72cc10491e6cd8a6f0e51"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_matrix_vector/output_y.pb",
+            "sha256": "c51a2a5ad749ebea61fd6cad2a30ced10d749e9ff93f82efc2248bde453f19d2"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1090519040,
+                1099956224
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_matmul_batch",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "MatMul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/matmul_batch.onnx",
+        "sha256": "3398424e12511c1cd3b7eeba5f9a2924ee64a7f961a4aaf154224602942a5de8"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_batch/input_a.pb",
+            "sha256": "ebaf8b6c2f32d764acc341545eb6788eca24d27b9713685976605d6ec377982d"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_batch/input_b.pb",
+            "sha256": "ba242fde0ea3ab8e41025ff2bc0bdafe819224ae06731d4ddf59164f6211792b"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_batch/output_y.pb",
+            "sha256": "6ad09051501b33ec83031d50405e205f8af5646ee8b75b7c4715a81fec6b4792"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2,
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1092616192,
+                1095761920,
+                1105199104,
+                1109393408,
+                1105199104,
+                1106771968,
+                1120403456,
+                1121976320,
+                1110966272,
+                1116078080,
+                1115684864,
+                1119617024,
+                1126957056,
+                1128333312,
+                1131675648,
+                1133051904
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_matmul_empty_contraction",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "MatMul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/matmul_empty_contraction.onnx",
+        "sha256": "2d4ae35b3b6c17abe205761c03cddefd7581c47f6357d37debeab7a5d8a695b8"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_empty_contraction/input_a.pb",
+            "sha256": "1900358ca109a86daf659e7f0f9e6135fc790b1e0aebcc9346d83573fb4d79bd"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_empty_contraction/input_b.pb",
+            "sha256": "57704570794f9a79dbc4d6751d54117f9667888419ce18e15ea60957cebb7be9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_empty_contraction/output_y.pb",
+            "sha256": "5df8b53d3d8cd79c9ca28d5025dad333d2408aeee3cfb2c78c52c7a491942459"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_matmul_empty_output",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "MatMul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/matmul_empty_output.onnx",
+        "sha256": "877e7bb63ca1f6f297c430d7caea68d5f301eda2fb0a179fbb8571e0b81d8eaf"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_empty_output/input_a.pb",
+            "sha256": "a4cc7e3b65f32b704b78f496bbe86b7847104ae6f462c5c3d1e208097a96ad56"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_empty_output/input_b.pb",
+            "sha256": "0699c632118d72439084938bf9198b00637b6a80d54d701ff374a1ce9c8eb53b"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_matmul_empty_output/output_y.pb",
+            "sha256": "4656d5282d6cc6026fc8c71dd7bffed487695f9751f25ba94738f651fb442136"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0,
+                1
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_00_absent",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_00_absent.onnx",
+        "sha256": "7a432851d343f05e188e30b6f496351654bca195d3fa99528e9f3cb407689163"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_absent/input_a.pb",
+            "sha256": "5b50b73b79ce2a19bdabfaccc3e0069df655a6d4e1690a15a1b307545a865982"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_absent/input_b.pb",
+            "sha256": "30b44f4278e02b7135d8a36cde52b3b5ad4f9a236ffc4efd9a9f229222678160"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_absent/output_y.pb",
+            "sha256": "f63c56e571f0fbc27ba4dbd2e0de11920907afc957fe3c9faad7414dc2a6079f"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1083179008,
+                1086324736,
+                1089470464,
+                1092091904,
+                1095761920,
+                1099169792
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_00_scalar",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_00_scalar.onnx",
+        "sha256": "d51e0143b8560cfaa7bb2ce277f7889d5273ca9c1dc0e26badb932bde1e89462"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_scalar/input_a.pb",
+            "sha256": "5b50b73b79ce2a19bdabfaccc3e0069df655a6d4e1690a15a1b307545a865982"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_scalar/input_b.pb",
+            "sha256": "30b44f4278e02b7135d8a36cde52b3b5ad4f9a236ffc4efd9a9f229222678160"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_scalar/input_c.pb",
+            "sha256": "4e10763b1400a3b7bf8064fc43f7d6eb6328672e09d529385fdc1a6ecfc86c7d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_scalar/output_y.pb",
+            "sha256": "594ceda0a7c1683e9bbf72fbebc17d1d9a0229c3a48a34711666ac4650f0837b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1091043328,
+                1092616192,
+                1094189056,
+                1096286208,
+                1099431936,
+                1101266944
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_00_vector",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_00_vector.onnx",
+        "sha256": "e967e9f91d7a74f29bf1929de7f4fd36ea2180a678df94ea6f30059a2c98b85c"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_vector/input_a.pb",
+            "sha256": "5b50b73b79ce2a19bdabfaccc3e0069df655a6d4e1690a15a1b307545a865982"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_vector/input_b.pb",
+            "sha256": "30b44f4278e02b7135d8a36cde52b3b5ad4f9a236ffc4efd9a9f229222678160"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_vector/input_c.pb",
+            "sha256": "7752fbea1895b914e56c6752056b6fbc870b726681ae8468579b9021bd145396"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_vector/output_y.pb",
+            "sha256": "c84e6edeeedbeca9040309cd950ff5ed87dc05f9d3713eab88eede8b6a29b6d3"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1092616192,
+                1096286208,
+                1094189056,
+                1099431936,
+                1102315520
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_00_row",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_00_row.onnx",
+        "sha256": "3dcb132b464c0bde9c06c963e8072cb7639fdd54b845b698fa7f735f47e834ba"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_row/input_a.pb",
+            "sha256": "5b50b73b79ce2a19bdabfaccc3e0069df655a6d4e1690a15a1b307545a865982"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_row/input_b.pb",
+            "sha256": "30b44f4278e02b7135d8a36cde52b3b5ad4f9a236ffc4efd9a9f229222678160"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_row/input_c.pb",
+            "sha256": "76efee95c50a15a27e2f719eca2317e2cb631e1185f33aac7684009a4f9829b2"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_row/output_y.pb",
+            "sha256": "c84e6edeeedbeca9040309cd950ff5ed87dc05f9d3713eab88eede8b6a29b6d3"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1092616192,
+                1096286208,
+                1094189056,
+                1099431936,
+                1102315520
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_00_column",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_00_column.onnx",
+        "sha256": "5eee3288f11f61b331156bd80858e35452f9e46da4d63886fbab3ef76dd9a072"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_column/input_a.pb",
+            "sha256": "5b50b73b79ce2a19bdabfaccc3e0069df655a6d4e1690a15a1b307545a865982"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_column/input_b.pb",
+            "sha256": "30b44f4278e02b7135d8a36cde52b3b5ad4f9a236ffc4efd9a9f229222678160"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_column/input_c.pb",
+            "sha256": "8d7bf2eb9f9b9ca50c16d8bd27ce138bf885c7d559d28ac2984adbc6ce87ba7c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_column/output_y.pb",
+            "sha256": "77db93accb6b8796079062e276d246e17a271303d8e50cebd5c455056ae2d931"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1090519040,
+                1092091904,
+                1096286208,
+                1099431936,
+                1101266944
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_00_full",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_00_full.onnx",
+        "sha256": "4d7343d00d5721afc3dce212f3b07bd4ac927a28ce52794e7c5abe7a51b2bd40"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_full/input_a.pb",
+            "sha256": "5b50b73b79ce2a19bdabfaccc3e0069df655a6d4e1690a15a1b307545a865982"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_full/input_b.pb",
+            "sha256": "30b44f4278e02b7135d8a36cde52b3b5ad4f9a236ffc4efd9a9f229222678160"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_full/input_c.pb",
+            "sha256": "f7aef70ba29c1f6df9034200fc5470e49d5cca220fa2699bb27dbb05eafa1b6d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_00_full/output_y.pb",
+            "sha256": "8a6ab7904720fde5d6492672acac65f5563f596b3237b3a102b88fa184a8bfce"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1092616192,
+                1096286208,
+                1099694080,
+                1102577664,
+                1105461248
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_01_absent",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_01_absent.onnx",
+        "sha256": "c86ac793dd27e2229cb583985a7213ee9c2bd79e17e04d2dbfcae19b840a45ed"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_absent/input_a.pb",
+            "sha256": "5b50b73b79ce2a19bdabfaccc3e0069df655a6d4e1690a15a1b307545a865982"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_absent/input_b.pb",
+            "sha256": "ad5f4d6605f9fe53ca245bd969c8318076a9ba7f8e0e1e5b7de15fcc6130cd2c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_absent/output_y.pb",
+            "sha256": "f63c56e571f0fbc27ba4dbd2e0de11920907afc957fe3c9faad7414dc2a6079f"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1083179008,
+                1086324736,
+                1089470464,
+                1092091904,
+                1095761920,
+                1099169792
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_01_scalar",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_01_scalar.onnx",
+        "sha256": "3f826809d064cfffc436de338561fe573659f169e36283f5811eeb27effde2b1"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_scalar/input_a.pb",
+            "sha256": "5b50b73b79ce2a19bdabfaccc3e0069df655a6d4e1690a15a1b307545a865982"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_scalar/input_b.pb",
+            "sha256": "ad5f4d6605f9fe53ca245bd969c8318076a9ba7f8e0e1e5b7de15fcc6130cd2c"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_scalar/input_c.pb",
+            "sha256": "4e10763b1400a3b7bf8064fc43f7d6eb6328672e09d529385fdc1a6ecfc86c7d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_scalar/output_y.pb",
+            "sha256": "594ceda0a7c1683e9bbf72fbebc17d1d9a0229c3a48a34711666ac4650f0837b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1091043328,
+                1092616192,
+                1094189056,
+                1096286208,
+                1099431936,
+                1101266944
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_01_vector",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_01_vector.onnx",
+        "sha256": "992880ca01824c0d990c935d83644ec48925237b779bbedae4102be3ab751526"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_vector/input_a.pb",
+            "sha256": "5b50b73b79ce2a19bdabfaccc3e0069df655a6d4e1690a15a1b307545a865982"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_vector/input_b.pb",
+            "sha256": "ad5f4d6605f9fe53ca245bd969c8318076a9ba7f8e0e1e5b7de15fcc6130cd2c"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_vector/input_c.pb",
+            "sha256": "7752fbea1895b914e56c6752056b6fbc870b726681ae8468579b9021bd145396"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_vector/output_y.pb",
+            "sha256": "c84e6edeeedbeca9040309cd950ff5ed87dc05f9d3713eab88eede8b6a29b6d3"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1092616192,
+                1096286208,
+                1094189056,
+                1099431936,
+                1102315520
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_01_row",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_01_row.onnx",
+        "sha256": "8d97a7f333f3f3c7e94376df76c8b15d7602c9225bd5f8762ede79dde7545fa3"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_row/input_a.pb",
+            "sha256": "5b50b73b79ce2a19bdabfaccc3e0069df655a6d4e1690a15a1b307545a865982"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_row/input_b.pb",
+            "sha256": "ad5f4d6605f9fe53ca245bd969c8318076a9ba7f8e0e1e5b7de15fcc6130cd2c"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_row/input_c.pb",
+            "sha256": "76efee95c50a15a27e2f719eca2317e2cb631e1185f33aac7684009a4f9829b2"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_row/output_y.pb",
+            "sha256": "c84e6edeeedbeca9040309cd950ff5ed87dc05f9d3713eab88eede8b6a29b6d3"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1092616192,
+                1096286208,
+                1094189056,
+                1099431936,
+                1102315520
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_01_column",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_01_column.onnx",
+        "sha256": "17ac57c689bdffed30c133ccda3f21aa3de6488347ec37a2e8550cf356629cb8"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_column/input_a.pb",
+            "sha256": "5b50b73b79ce2a19bdabfaccc3e0069df655a6d4e1690a15a1b307545a865982"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_column/input_b.pb",
+            "sha256": "ad5f4d6605f9fe53ca245bd969c8318076a9ba7f8e0e1e5b7de15fcc6130cd2c"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_column/input_c.pb",
+            "sha256": "8d7bf2eb9f9b9ca50c16d8bd27ce138bf885c7d559d28ac2984adbc6ce87ba7c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_column/output_y.pb",
+            "sha256": "77db93accb6b8796079062e276d246e17a271303d8e50cebd5c455056ae2d931"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1090519040,
+                1092091904,
+                1096286208,
+                1099431936,
+                1101266944
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_01_full",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_01_full.onnx",
+        "sha256": "706e56d2c9fb33b3a0dcee79366b54c8248567d6846c5225b8cd9d7873f246f9"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_full/input_a.pb",
+            "sha256": "5b50b73b79ce2a19bdabfaccc3e0069df655a6d4e1690a15a1b307545a865982"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_full/input_b.pb",
+            "sha256": "ad5f4d6605f9fe53ca245bd969c8318076a9ba7f8e0e1e5b7de15fcc6130cd2c"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_full/input_c.pb",
+            "sha256": "f7aef70ba29c1f6df9034200fc5470e49d5cca220fa2699bb27dbb05eafa1b6d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_01_full/output_y.pb",
+            "sha256": "8a6ab7904720fde5d6492672acac65f5563f596b3237b3a102b88fa184a8bfce"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1092616192,
+                1096286208,
+                1099694080,
+                1102577664,
+                1105461248
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_10_absent",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_10_absent.onnx",
+        "sha256": "92de935cc6343222215af982658a95f3328fe27af04634864c7d067e477ce971"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_absent/input_a.pb",
+            "sha256": "d8f7ca186c6d6e5843225f76f15dc9c266edf8af98b8a3dbfeb5b7f77ef6470e"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_absent/input_b.pb",
+            "sha256": "30b44f4278e02b7135d8a36cde52b3b5ad4f9a236ffc4efd9a9f229222678160"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_absent/output_y.pb",
+            "sha256": "f63c56e571f0fbc27ba4dbd2e0de11920907afc957fe3c9faad7414dc2a6079f"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1083179008,
+                1086324736,
+                1089470464,
+                1092091904,
+                1095761920,
+                1099169792
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_10_scalar",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_10_scalar.onnx",
+        "sha256": "513b3f2d2d0ef51a98cb807796795aa353dcda75c09b3a6e6483774d694c719b"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_scalar/input_a.pb",
+            "sha256": "d8f7ca186c6d6e5843225f76f15dc9c266edf8af98b8a3dbfeb5b7f77ef6470e"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_scalar/input_b.pb",
+            "sha256": "30b44f4278e02b7135d8a36cde52b3b5ad4f9a236ffc4efd9a9f229222678160"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_scalar/input_c.pb",
+            "sha256": "4e10763b1400a3b7bf8064fc43f7d6eb6328672e09d529385fdc1a6ecfc86c7d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_scalar/output_y.pb",
+            "sha256": "594ceda0a7c1683e9bbf72fbebc17d1d9a0229c3a48a34711666ac4650f0837b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1091043328,
+                1092616192,
+                1094189056,
+                1096286208,
+                1099431936,
+                1101266944
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_10_vector",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_10_vector.onnx",
+        "sha256": "a278fd94c7e6cdee41e8787547d0d2b7f998e1d0cb63a8edfc2344a3fa706b3f"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_vector/input_a.pb",
+            "sha256": "d8f7ca186c6d6e5843225f76f15dc9c266edf8af98b8a3dbfeb5b7f77ef6470e"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_vector/input_b.pb",
+            "sha256": "30b44f4278e02b7135d8a36cde52b3b5ad4f9a236ffc4efd9a9f229222678160"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_vector/input_c.pb",
+            "sha256": "7752fbea1895b914e56c6752056b6fbc870b726681ae8468579b9021bd145396"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_vector/output_y.pb",
+            "sha256": "c84e6edeeedbeca9040309cd950ff5ed87dc05f9d3713eab88eede8b6a29b6d3"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1092616192,
+                1096286208,
+                1094189056,
+                1099431936,
+                1102315520
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_10_row",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_10_row.onnx",
+        "sha256": "c0776cdb87c7208f05a1f1e26d3ca159dcf16e72c6ccb918c991f29d29366a4d"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_row/input_a.pb",
+            "sha256": "d8f7ca186c6d6e5843225f76f15dc9c266edf8af98b8a3dbfeb5b7f77ef6470e"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_row/input_b.pb",
+            "sha256": "30b44f4278e02b7135d8a36cde52b3b5ad4f9a236ffc4efd9a9f229222678160"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_row/input_c.pb",
+            "sha256": "76efee95c50a15a27e2f719eca2317e2cb631e1185f33aac7684009a4f9829b2"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_row/output_y.pb",
+            "sha256": "c84e6edeeedbeca9040309cd950ff5ed87dc05f9d3713eab88eede8b6a29b6d3"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1092616192,
+                1096286208,
+                1094189056,
+                1099431936,
+                1102315520
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_10_column",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_10_column.onnx",
+        "sha256": "4bf5e1908ae30d749962bfa2e748b704bde8d2a6b6af12b130d7150cab71dd76"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_column/input_a.pb",
+            "sha256": "d8f7ca186c6d6e5843225f76f15dc9c266edf8af98b8a3dbfeb5b7f77ef6470e"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_column/input_b.pb",
+            "sha256": "30b44f4278e02b7135d8a36cde52b3b5ad4f9a236ffc4efd9a9f229222678160"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_column/input_c.pb",
+            "sha256": "8d7bf2eb9f9b9ca50c16d8bd27ce138bf885c7d559d28ac2984adbc6ce87ba7c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_column/output_y.pb",
+            "sha256": "77db93accb6b8796079062e276d246e17a271303d8e50cebd5c455056ae2d931"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1090519040,
+                1092091904,
+                1096286208,
+                1099431936,
+                1101266944
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_10_full",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_10_full.onnx",
+        "sha256": "4a6f05eae173ce40cba7db5cd65759ded77e6fbd61ce392801bd1bf197d637c6"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_full/input_a.pb",
+            "sha256": "d8f7ca186c6d6e5843225f76f15dc9c266edf8af98b8a3dbfeb5b7f77ef6470e"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_full/input_b.pb",
+            "sha256": "30b44f4278e02b7135d8a36cde52b3b5ad4f9a236ffc4efd9a9f229222678160"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_full/input_c.pb",
+            "sha256": "f7aef70ba29c1f6df9034200fc5470e49d5cca220fa2699bb27dbb05eafa1b6d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_10_full/output_y.pb",
+            "sha256": "8a6ab7904720fde5d6492672acac65f5563f596b3237b3a102b88fa184a8bfce"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1092616192,
+                1096286208,
+                1099694080,
+                1102577664,
+                1105461248
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_11_absent",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_11_absent.onnx",
+        "sha256": "80dd78828afb9c6013721225e8dd98fab42bee9437950d5f98259b3cc6731f9f"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_absent/input_a.pb",
+            "sha256": "d8f7ca186c6d6e5843225f76f15dc9c266edf8af98b8a3dbfeb5b7f77ef6470e"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_absent/input_b.pb",
+            "sha256": "ad5f4d6605f9fe53ca245bd969c8318076a9ba7f8e0e1e5b7de15fcc6130cd2c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_absent/output_y.pb",
+            "sha256": "f63c56e571f0fbc27ba4dbd2e0de11920907afc957fe3c9faad7414dc2a6079f"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1083179008,
+                1086324736,
+                1089470464,
+                1092091904,
+                1095761920,
+                1099169792
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_11_scalar",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_11_scalar.onnx",
+        "sha256": "f825f42391906a1bd01e21e1294a4d8de2b1f7cdd5eb519ef8562f5eb22abf2c"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_scalar/input_a.pb",
+            "sha256": "d8f7ca186c6d6e5843225f76f15dc9c266edf8af98b8a3dbfeb5b7f77ef6470e"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_scalar/input_b.pb",
+            "sha256": "ad5f4d6605f9fe53ca245bd969c8318076a9ba7f8e0e1e5b7de15fcc6130cd2c"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_scalar/input_c.pb",
+            "sha256": "4e10763b1400a3b7bf8064fc43f7d6eb6328672e09d529385fdc1a6ecfc86c7d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_scalar/output_y.pb",
+            "sha256": "594ceda0a7c1683e9bbf72fbebc17d1d9a0229c3a48a34711666ac4650f0837b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1091043328,
+                1092616192,
+                1094189056,
+                1096286208,
+                1099431936,
+                1101266944
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_11_vector",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_11_vector.onnx",
+        "sha256": "64b74bd22cb83c32f0ad711e63be921282bf3a8b2aa932a5ff89a777ac99a577"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_vector/input_a.pb",
+            "sha256": "d8f7ca186c6d6e5843225f76f15dc9c266edf8af98b8a3dbfeb5b7f77ef6470e"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_vector/input_b.pb",
+            "sha256": "ad5f4d6605f9fe53ca245bd969c8318076a9ba7f8e0e1e5b7de15fcc6130cd2c"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_vector/input_c.pb",
+            "sha256": "7752fbea1895b914e56c6752056b6fbc870b726681ae8468579b9021bd145396"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_vector/output_y.pb",
+            "sha256": "c84e6edeeedbeca9040309cd950ff5ed87dc05f9d3713eab88eede8b6a29b6d3"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1092616192,
+                1096286208,
+                1094189056,
+                1099431936,
+                1102315520
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_11_row",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_11_row.onnx",
+        "sha256": "a7a8f55c09b3bd8e5f161df82d81a932b44af9aca71061aacbf8001d04975b8c"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_row/input_a.pb",
+            "sha256": "d8f7ca186c6d6e5843225f76f15dc9c266edf8af98b8a3dbfeb5b7f77ef6470e"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_row/input_b.pb",
+            "sha256": "ad5f4d6605f9fe53ca245bd969c8318076a9ba7f8e0e1e5b7de15fcc6130cd2c"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_row/input_c.pb",
+            "sha256": "76efee95c50a15a27e2f719eca2317e2cb631e1185f33aac7684009a4f9829b2"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_row/output_y.pb",
+            "sha256": "c84e6edeeedbeca9040309cd950ff5ed87dc05f9d3713eab88eede8b6a29b6d3"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1092616192,
+                1096286208,
+                1094189056,
+                1099431936,
+                1102315520
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_11_column",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_11_column.onnx",
+        "sha256": "740a64882798350115e27204e40626fdb06cb2548f03240045716c571c813c84"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_column/input_a.pb",
+            "sha256": "d8f7ca186c6d6e5843225f76f15dc9c266edf8af98b8a3dbfeb5b7f77ef6470e"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_column/input_b.pb",
+            "sha256": "ad5f4d6605f9fe53ca245bd969c8318076a9ba7f8e0e1e5b7de15fcc6130cd2c"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_column/input_c.pb",
+            "sha256": "8d7bf2eb9f9b9ca50c16d8bd27ce138bf885c7d559d28ac2984adbc6ce87ba7c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_column/output_y.pb",
+            "sha256": "77db93accb6b8796079062e276d246e17a271303d8e50cebd5c455056ae2d931"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1090519040,
+                1092091904,
+                1096286208,
+                1099431936,
+                1101266944
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_11_full",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_11_full.onnx",
+        "sha256": "13a2bf5383e1bc316a6998bce5e6bb4f06187ac955bf386b8a48ea65ffad11d4"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_full/input_a.pb",
+            "sha256": "d8f7ca186c6d6e5843225f76f15dc9c266edf8af98b8a3dbfeb5b7f77ef6470e"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_full/input_b.pb",
+            "sha256": "ad5f4d6605f9fe53ca245bd969c8318076a9ba7f8e0e1e5b7de15fcc6130cd2c"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_full/input_c.pb",
+            "sha256": "f7aef70ba29c1f6df9034200fc5470e49d5cca220fa2699bb27dbb05eafa1b6d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_11_full/output_y.pb",
+            "sha256": "8a6ab7904720fde5d6492672acac65f5563f596b3237b3a102b88fa184a8bfce"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1087373312,
+                1092616192,
+                1096286208,
+                1099694080,
+                1102577664,
+                1105461248
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_defaults",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_defaults.onnx",
+        "sha256": "55407d2baef537b842b287c9dab1c10a2a9f7b481f6abc8a1d5f94bbb963d29a"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_defaults/input_a.pb",
+            "sha256": "6442db0b4a65662420bd75170a3143c34ea1107809d8b9da2f55546b766d4c33"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_defaults/input_b.pb",
+            "sha256": "00c5f7fc1a3db7f98e083529033b297221ea42677589a84de9cac87aedc5e4a2"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_defaults/output_y.pb",
+            "sha256": "a5aeedc0676ec8f1ef9cb0d3c6661633a59e1fc67e10bd40c22417a8b8427d8a"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1086324736
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_beta_zero",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_beta_zero.onnx",
+        "sha256": "c9c3584619f00dee18fe6a3f1cb34acc6004e4871eea5389d4098b916aa29320"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_beta_zero/input_a.pb",
+            "sha256": "6442db0b4a65662420bd75170a3143c34ea1107809d8b9da2f55546b766d4c33"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_beta_zero/input_b.pb",
+            "sha256": "00c5f7fc1a3db7f98e083529033b297221ea42677589a84de9cac87aedc5e4a2"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_beta_zero/input_c.pb",
+            "sha256": "3900149cba5bda800b88545d163c03ea735cff38d5cfd8e4a42e1bdd00c199cb"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_beta_zero/output_y.pb",
+            "sha256": "a5aeedc0676ec8f1ef9cb0d3c6661633a59e1fc67e10bd40c22417a8b8427d8a"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1086324736
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_gemm_empty_contraction",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/gemm_empty_contraction.onnx",
+        "sha256": "b4af22733cb4705a34b521a38c9f48e0874f09b9f7e5988ffe040cc959270761"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": false
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_empty_contraction/input_a.pb",
+            "sha256": "1900358ca109a86daf659e7f0f9e6135fc790b1e0aebcc9346d83573fb4d79bd"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_empty_contraction/input_b.pb",
+            "sha256": "57704570794f9a79dbc4d6751d54117f9667888419ce18e15ea60957cebb7be9"
+          }
+        },
+        {
+          "name": "c",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_empty_contraction/input_c.pb",
+            "sha256": "4e10763b1400a3b7bf8064fc43f7d6eb6328672e09d529385fdc1a6ecfc86c7d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_gemm_empty_contraction/output_y.pb",
+            "sha256": "a3bbef7cfadd870144691cf1e923fa7814946bc7713c0320118a2acecbdbb0ae"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                1073741824,
+                1073741824,
+                1073741824,
+                1073741824,
+                1073741824
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_relu_finite",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/relu_finite.onnx",
+        "sha256": "18343753e9b0aadf469d8d7517fb8fa3fe3ea337e15232800336627c33149f3f"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_relu_finite/input_x.pb",
+            "sha256": "95eb02e0f266dcadedf7860fc77e7d66fa39cd7ac735178b53d22323787b644c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_relu_finite/output_y.pb",
+            "sha256": "ab86fdd5e21ba3684efe8af3acc6e9ee01bebf547ef2298d313b42722196922d"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                5
+              ],
+              "dtype": "float32",
+              "bits": [
+                0,
+                0,
+                0,
+                1065353216,
+                1077936128
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_relu_nonfinite",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/relu_nonfinite.onnx",
+        "sha256": "73233e8ef6c7bedbd59931507ab2260e42095fe83a527a21d877a40fb68959d7"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_relu_nonfinite/input_x.pb",
+            "sha256": "a6201a8357f5cae2db4f82f20ab6888453a3c7e3e456e037e62671f7c58fde03"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_relu_nonfinite/output_y.pb",
+            "sha256": "9903de11f7810dbe689ef057fa005398ce9995f067dd38fc53614a8319514bb1"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                0,
+                2139095040,
+                2143289344
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_relu_scalar",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/relu_scalar.onnx",
+        "sha256": "e404e11c51cc059251e491951263e307a1912da2b02c0a0da03224b6fd771750"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_relu_scalar/input_x.pb",
+            "sha256": "bf7dfa83ea74c729f6a856fbe665aad392081933af8c1fef1154818f5a832da6"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_relu_scalar/output_y.pb",
+            "sha256": "29ed2d56a1cdebde1169930e7ef3bf80a0c672104cafb3a9365b1826b268f6a7"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [],
+              "dtype": "float32",
+              "bits": [
+                0
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_relu_empty",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/relu_empty.onnx",
+        "sha256": "c0a4b7cb31509eac35c813dfc12566848283c99f3dc990d7268ce27079f7ce28"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_relu_empty/input_x.pb",
+            "sha256": "2398b5101e5bc65e18d23cf7f49e92abcdb04ccfca0e0e3b54f0fd4b3c474e56"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_relu_empty/output_y.pb",
+            "sha256": "e45ba625e152e8e5907890f88e3dce7197a5e67cf51d6bf0b0181f809d50949b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0,
+                3
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_sigmoid_finite",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Sigmoid",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/sigmoid_finite.onnx",
+        "sha256": "5af62d716c8a03b55c13374dcf9cc3d56f3327eea3211d5be30f9d61f759bcd1"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_sigmoid_finite/input_x.pb",
+            "sha256": "95eb02e0f266dcadedf7860fc77e7d66fa39cd7ac735178b53d22323787b644c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_sigmoid_finite/output_y.pb",
+            "sha256": "f7d834829358e0a8ee15eaaface354c42a6a177c0bfe14db0bdd21212176b384"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                5
+              ],
+              "dtype": "float32",
+              "bits": [
+                1039409321,
+                1056964608,
+                1056964608,
+                1060841128,
+                1064557542
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_sigmoid_nonfinite",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Sigmoid",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/sigmoid_nonfinite.onnx",
+        "sha256": "2f32dcca8fc1e74ed50000e155b1b6da9db8d8b9844bd8a43d84dd516ee18fbf"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_sigmoid_nonfinite/input_x.pb",
+            "sha256": "a6201a8357f5cae2db4f82f20ab6888453a3c7e3e456e037e62671f7c58fde03"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_sigmoid_nonfinite/output_y.pb",
+            "sha256": "b220f90cd09056c78ed21ea87076a888cbeac2bf6e287cace802e57b0d0a9b12"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                0,
+                1065353216,
+                2143289344
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_sigmoid_scalar",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Sigmoid",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/sigmoid_scalar.onnx",
+        "sha256": "c9ac694ca071143aace6e41641e6f74162c1e4be8c3afa2a51db712ad6b29fd3"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_sigmoid_scalar/input_x.pb",
+            "sha256": "bf7dfa83ea74c729f6a856fbe665aad392081933af8c1fef1154818f5a832da6"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_sigmoid_scalar/output_y.pb",
+            "sha256": "a1678f9382b419549befd8e10d49542bceb5ef77b9ea2813903b707f2175e7c7"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [],
+              "dtype": "float32",
+              "bits": [
+                1049211569
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_sigmoid_empty",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Sigmoid",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/sigmoid_empty.onnx",
+        "sha256": "80a020deccc48eabd99659fecb615f49bd3b72edd7dedd580e3059bc81408d9d"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_sigmoid_empty/input_x.pb",
+            "sha256": "2398b5101e5bc65e18d23cf7f49e92abcdb04ccfca0e0e3b54f0fd4b3c474e56"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_sigmoid_empty/output_y.pb",
+            "sha256": "e45ba625e152e8e5907890f88e3dce7197a5e67cf51d6bf0b0181f809d50949b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0,
+                3
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_tanh_finite",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Tanh",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/tanh_finite.onnx",
+        "sha256": "ecee6b31f1d2d8a8ecc305df0fbcd401b546b0d668ff072662d7e34cda463e34"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_tanh_finite/input_x.pb",
+            "sha256": "95eb02e0f266dcadedf7860fc77e7d66fa39cd7ac735178b53d22323787b644c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_tanh_finite/output_y.pb",
+            "sha256": "ea05524fa2808bca94a9da1c5d74619a773627e3cfd0b1251197a8dae7528706"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                5
+              ],
+              "dtype": "float32",
+              "bits": [
+                3212233347,
+                2147483648,
+                0,
+                1061353430,
+                1065270249
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_tanh_nonfinite",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Tanh",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/tanh_nonfinite.onnx",
+        "sha256": "ec56171db2389c582775d7468fdb130602f7338e4af910983eaabd3ad1ce84ac"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_tanh_nonfinite/input_x.pb",
+            "sha256": "a6201a8357f5cae2db4f82f20ab6888453a3c7e3e456e037e62671f7c58fde03"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_tanh_nonfinite/output_y.pb",
+            "sha256": "0551ae3de98905ab4246a7bd268c0a7234b9d1cf78fe0fc8e644f0ddb0553c3b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                3212836864,
+                1065353216,
+                2143289344
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_tanh_scalar",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Tanh",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/tanh_scalar.onnx",
+        "sha256": "eb315013b6b2087065dcaa7e11799bd93f50957887daf94180a9993e1c2e8f7a"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_tanh_scalar/input_x.pb",
+            "sha256": "bf7dfa83ea74c729f6a856fbe665aad392081933af8c1fef1154818f5a832da6"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_tanh_scalar/output_y.pb",
+            "sha256": "1431cf6b4ef9b80f9303a405ceb4920e180ab5ce9bb2f34b02dea1fabe028b9a"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [],
+              "dtype": "float32",
+              "bits": [
+                3208837078
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_tanh_empty",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Tanh",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/tanh_empty.onnx",
+        "sha256": "2259162b7b13d18bce38ebebb60a10cde891e92f43dcc7306aafe860e25ba1ac"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_tanh_empty/input_x.pb",
+            "sha256": "2398b5101e5bc65e18d23cf7f49e92abcdb04ccfca0e0e3b54f0fd4b3c474e56"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_tanh_empty/output_y.pb",
+            "sha256": "e45ba625e152e8e5907890f88e3dce7197a5e67cf51d6bf0b0181f809d50949b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0,
+                3
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_softmax_axis_-1",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/softmax_axis_-1.onnx",
+        "sha256": "4eb059e9a8df43fd751113a7b6355e3f4f5087530b258146919b3b1934c2ead3"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_axis_-1/input_x.pb",
+            "sha256": "1fc5483b6c71abe4a784b7b14e9be6abc1a04192e987a9c64263c0f58ab1449f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_axis_-1/output_y.pb",
+            "sha256": "bff3cd5f8985ce88f448fb13c42779db31002d3771a5b1b7883c19d0e02734a6"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1049211569,
+                1060841128,
+                1049211569,
+                1060841128,
+                1049211569,
+                1060841128,
+                1049211569,
+                1060841128,
+                1049211569,
+                1060841128,
+                1049211569,
+                1060841128
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_softmax_axis_0",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/softmax_axis_0.onnx",
+        "sha256": "f38310807553834596723a8a71b3b1d2c5e4607092563d445668dede64c1eddd"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_axis_0/input_x.pb",
+            "sha256": "1fc5483b6c71abe4a784b7b14e9be6abc1a04192e987a9c64263c0f58ab1449f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_axis_0/output_y.pb",
+            "sha256": "da43750c1993bf15091ac3b89e7260e51c31b937e14fbf20fdd403de0a38b6cf"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                992086972,
+                992086972,
+                992086972,
+                992086972,
+                992086972,
+                992086972,
+                1065311733,
+                1065311733,
+                1065311733,
+                1065311733,
+                1065311733,
+                1065311733
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_softmax_axis_1",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/softmax_axis_1.onnx",
+        "sha256": "211bf3ac10f97276c99438a6111e88b84c05eb20e5bead43f2d08b76e8cc32ec"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_axis_1/input_x.pb",
+            "sha256": "1fc5483b6c71abe4a784b7b14e9be6abc1a04192e987a9c64263c0f58ab1449f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_axis_1/output_y.pb",
+            "sha256": "2c2414a60ca7fbe42d5ce94ebe44fc25a18e2dda86eebf48f15d55385960784d"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1015156452,
+                1015156452,
+                1039155315,
+                1039155315,
+                1063118715,
+                1063118715,
+                1015156452,
+                1015156452,
+                1039155315,
+                1039155315,
+                1063118715,
+                1063118715
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_softmax_axis_-2",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/softmax_axis_-2.onnx",
+        "sha256": "ed125b067923b8099961ed77fe28c4bfb1f4d3b10139aac9ed3fe12b269fb500"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_axis_-2/input_x.pb",
+            "sha256": "1fc5483b6c71abe4a784b7b14e9be6abc1a04192e987a9c64263c0f58ab1449f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_axis_-2/output_y.pb",
+            "sha256": "2c2414a60ca7fbe42d5ce94ebe44fc25a18e2dda86eebf48f15d55385960784d"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1015156452,
+                1015156452,
+                1039155315,
+                1039155315,
+                1063118715,
+                1063118715,
+                1015156452,
+                1015156452,
+                1039155315,
+                1039155315,
+                1063118715,
+                1063118715
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_softmax_default",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/softmax_default.onnx",
+        "sha256": "a4d3947719eab0960906bd75b02450bddcec579113756e1236c01cdc7396548d"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_default/input_x.pb",
+            "sha256": "d6b554bbde21e49e4043f147f9747459b513a63177a29d067a0d2b93f06e9294"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_default/output_y.pb",
+            "sha256": "c15aa632fbbe2e908211fcfa8989cc9189941f55a6f2a65d46d4d6f291321e9e"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1035493875,
+                1048222234,
+                1059736891,
+                1035493875,
+                1048222234,
+                1059736891
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_softmax_nonfinite",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/softmax_nonfinite.onnx",
+        "sha256": "f5abd0757ce318ca56b521332d056b6833498f018fae8561a5c79f0a9912d442"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_nonfinite/input_x.pb",
+            "sha256": "5f2278babf35d6508821b86721c9b5daae274f30bcdb2946fad1fc0ac911ef9a"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_nonfinite/output_y.pb",
+            "sha256": "380b6b152ec8fc561b36a5bfcec250db96c457956eab0b7b9c757866e4c6139d"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                4,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                2143289344,
+                2143289344,
+                2143289344,
+                2143289344,
+                2143289344,
+                2143289344,
+                0,
+                1065353216
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_softmax_empty_axis",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "extension",
+      "reason": "zero-size array to reduction operation maximum which has no identity",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/softmax_empty_axis.onnx",
+        "sha256": "42cfc54e8b0a91332b3b6852bd3eda19197375a38fb407a78c8126685d0a8a87"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_empty_axis/input_x.pb",
+            "sha256": "6160b39dbc015eaf8010991c339234fb97fafa4ce412a055a7819f4029cb3c11"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_softmax_empty_axis/output_y.pb",
+            "sha256": "b94a46dd212ea9c9483ba9049f0c64a0ab4c15442cf2ee120e222fa97cfc32b4"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "rejected",
+          "error": "zero-size array to reduction operation maximum which has no identity"
+        }
+      }
+    },
+    {
+      "name": "m1_identity",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Identity",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/identity.onnx",
+        "sha256": "7e2c1780fd25155cb5ee2643c33a6505ccf9cb8481a201d42765cd205b9a416d"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_identity/input_x.pb",
+            "sha256": "052ce22a0895bff5b3e269e98827734f41b47030440f1b589472f46fdbb8f46c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_identity/output_y.pb",
+            "sha256": "e08b73c1066328f316783efae155651d0095f11b8db1f32c621ed63f86ada8c2"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                3225419776
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_constant_float",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Constant",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/constant_float.onnx",
+        "sha256": "29d0b78424c167e90594808c63d681ccd9e2c6fa233337a84e1c9465623c94a5"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_constant_float/output_y.pb",
+            "sha256": "749fe0df057527a32369a0b527675d710e1d86e1ef680536f6c7de01017c4591"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [],
+              "dtype": "float32",
+              "bits": [
+                1069547520
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_constant_floats",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Constant",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/constant_floats.onnx",
+        "sha256": "e3f6b280c2c751cc5e05d895ea7ca60d297f37fa310ef4360d22110ca7d1d41f"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_constant_floats/output_y.pb",
+            "sha256": "971587863c8fdd4351015a9043745043b7433f23b5fb6492836c03133d9126d7"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_constant_int",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Constant",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/constant_int.onnx",
+        "sha256": "987301041265109f068ec20e7b2b3e0966103b9be57770010c9d377a799b2fc8"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_constant_int/output_y.pb",
+            "sha256": "17fb63b555f5febd25d25ab43a035ebcfca165ecd0bea8c2b92efa59f0d20a9a"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [],
+              "dtype": "int64",
+              "integers": [
+                9223372036854775807
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_constant_ints",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Constant",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/constant_ints.onnx",
+        "sha256": "20cc3943532d48e4c19c17471be036365f4dfdc20553799b880a1889c1f372c5"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_constant_ints/output_y.pb",
+            "sha256": "aa8400f603425e4fc3b00ebef7397890aaf1f96c59a6697bf4fd4ed50394971c"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "integers": [
+                16777217,
+                -9223372036854775808
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_constant_floats_empty",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Constant",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/constant_floats_empty.onnx",
+        "sha256": "76d6b619a268d26b4c7a66515873423fd3ac8391fe2cde5c9fe3d5fd98f5c228"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_constant_floats_empty/output_y.pb",
+            "sha256": "9d3c8960b94b23ffd5f83e5182edfa028fe2c36d50f6f979e01cc057217ed8db"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_constant_ints_empty",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Constant",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/constant_ints_empty.onnx",
+        "sha256": "38de0a0cc2fe78e9dc5a19272d4d079e6b15d3901279219c6e65f7523e641bdb"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_constant_ints_empty/output_y.pb",
+            "sha256": "a699b49a38d20272a9f1f40bfa868d07fcbb9d6189ee18af10217f3a10e9d6b5"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0
+              ],
+              "dtype": "int64",
+              "integers": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_constant_tensor",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Constant",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/constant_tensor.onnx",
+        "sha256": "4a145de198e0e89e320b29d4bd041443bfe715884693e54855ac821138d55eaf"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_constant_tensor/output_y.pb",
+            "sha256": "3edbb5406510c2c38371db765accab80a7e8a59cf7eb496998da3e04caa18e40"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_constant_int_tensor",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Constant",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/constant_int_tensor.onnx",
+        "sha256": "4c275273e9cdb73ca4d6f48b5bfa354fc4c1be5334343348e58211ae1aa68136"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_constant_int_tensor/output_y.pb",
+            "sha256": "27a733f790919f89d1ed08126f91e286a21175369923b300ff397459a96b0244"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "integers": [
+                16777217,
+                9223372036854775807
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_mlp",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/mlp.onnx",
+        "sha256": "f07fd068d930d506c54a08e065e18f0d82b3d9f30c6a036f11acde4f31007981"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_mlp/input_x.pb",
+            "sha256": "a2f7ffe4333064cc3671db5c58d898dd78fef85f0de670cc33766d6a96f92d39"
+          }
+        },
+        {
+          "name": "w",
+          "tensor": {
+            "path": "conformance/values/m1_mlp/input_w.pb",
+            "sha256": "16b9a17c3c05e110f4743205143d731945df2b115ae720e4f81363ab2d26f1ef"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_mlp/input_b.pb",
+            "sha256": "ec4f6d4a49d0db9a478d15c7c737400af7872dfa62fcdc927d68c03c8493a28f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_mlp/output_y.pb",
+            "sha256": "7c30ddd8e08d0e959465f60cebe685f6191e21f7c5df17dce72b7b3d575585c9"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065311733,
+                992086972,
+                1065353112,
+                919480846
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_residual",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "MatMul",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Add",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Add",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/residual.onnx",
+        "sha256": "942c0c711863819cbd85e794ecbc6a1f2c6b593d42545c0722899765089081a4"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_residual/input_x.pb",
+            "sha256": "a2f7ffe4333064cc3671db5c58d898dd78fef85f0de670cc33766d6a96f92d39"
+          }
+        },
+        {
+          "name": "w",
+          "tensor": {
+            "path": "conformance/values/m1_residual/input_w.pb",
+            "sha256": "16b9a17c3c05e110f4743205143d731945df2b115ae720e4f81363ab2d26f1ef"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/values/m1_residual/input_b.pb",
+            "sha256": "ec4f6d4a49d0db9a478d15c7c737400af7872dfa62fcdc927d68c03c8493a28f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_residual/output_y.pb",
+            "sha256": "2b54a801b968b9ec5e491c48eaed24f140710e474c435296d8b28b3763c817f0"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1088421888,
+                1073741824,
+                1097859072,
+                1082130432
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "m1_mlp_initializers",
+      "origin": "tools/check_m1.py; original repository graphs and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m1/mlp_initializers.onnx",
+        "sha256": "fbcc32e09151a650e525e4d01be6425d6821ed3b28d099c0f007786d2505890f"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/values/m1_mlp_initializers/input_x.pb",
+            "sha256": "a2f7ffe4333064cc3671db5c58d898dd78fef85f0de670cc33766d6a96f92d39"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/m1_mlp_initializers/output_y.pb",
+            "sha256": "7c30ddd8e08d0e959465f60cebe685f6191e21f7c5df17dce72b7b3d575585c9"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065311733,
+                992086972,
+                1065353112,
+                919480846
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "hand_add",
+      "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Add",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "conformance/models/hand_add.onnx",
+        "sha256": "1e2582b545529d448a66be9adc7ebbc4faa921a078d5f6af3e67f844a1e2a23d"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "left",
+          "tensor": {
+            "path": "conformance/values/hand_add/input_left.pb",
+            "sha256": "c65b88044abaac4f287974dd6f9452bea74458dc28ebfee75cc9045fcc03526a"
+          }
+        },
+        {
+          "name": "right",
+          "tensor": {
+            "path": "conformance/values/hand_add/input_right.pb",
+            "sha256": "cede68bbfc34b47fe619f368fc88ca1e3adc645317b73108979b3989ba94b6d0"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/hand_add/output_y.pb",
+            "sha256": "4f118b98c426128c0b38e436e34f504e91c6623ca5d786e2a1b09c9c85f6f5ba"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1082130432,
+                1086324736
+              ]
+            }
+          ]
+        },
+        "oracle": "independent literal/formula"
+      }
+    },
+    {
+      "name": "hand_branch",
+      "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Add",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Mul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "conformance/models/hand_branch.onnx",
+        "sha256": "a69d4d4616c7296f167e595fb48101c7f58d25f780fe9a9c1e5d1b984a27d028"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "left",
+          "tensor": {
+            "path": "conformance/values/hand_branch/input_left.pb",
+            "sha256": "c65b88044abaac4f287974dd6f9452bea74458dc28ebfee75cc9045fcc03526a"
+          }
+        },
+        {
+          "name": "right",
+          "tensor": {
+            "path": "conformance/values/hand_branch/input_right.pb",
+            "sha256": "cede68bbfc34b47fe619f368fc88ca1e3adc645317b73108979b3989ba94b6d0"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "product",
+          "tensor": {
+            "path": "conformance/values/hand_branch/output_product.pb",
+            "sha256": "6cb93eea6352e935d57c4fad07e870dede9662eefe8aa1fe325fba202357025c"
+          }
+        },
+        {
+          "name": "sum",
+          "tensor": {
+            "path": "conformance/values/hand_branch/output_sum.pb",
+            "sha256": "fae98d8720e1dbff065505f014978faedfc88ec9d325e20dbca375beb3be9728"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1094713344,
+                1103101952
+              ]
+            },
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1082130432,
+                1086324736
+              ]
+            }
+          ]
+        },
+        "oracle": "independent literal/formula"
+      }
+    },
+    {
+      "name": "hand_exact_int64",
+      "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Identity",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "conformance/models/hand_exact_int64.onnx",
+        "sha256": "5f22da01b3849ab9ec8accfc91b576c92fdef1dedb671bc4a34c7c1338e7ece3"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "exact",
+          "tensor": {
+            "path": "conformance/values/hand_exact_int64/input_exact.pb",
+            "sha256": "a91566269416859b347dfff7bd7e4bd200ddf3e659d65fbaae456bb2317ec96d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/hand_exact_int64/output_y.pb",
+            "sha256": "a20ea59aa0a25c6de5120190c421b4fd069c30f5ce1c70e14c3640e3fb2cb545"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "int64",
+              "integers": [
+                16777217,
+                -9223372036854775808,
+                9223372036854775807
+              ]
+            }
+          ]
+        },
+        "oracle": "independent literal/formula"
+      }
+    },
+    {
+      "name": "hand_empty_int64",
+      "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Identity",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "conformance/models/hand_empty_int64.onnx",
+        "sha256": "2d763393a8c0b1bb47a1c4b84f92122f40d91b58b80f62cc7e73b1ea007fc901"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "empty",
+          "tensor": {
+            "path": "conformance/values/hand_empty_int64/input_empty.pb",
+            "sha256": "1190fec65ac95bd3162e9216b719ceca81a8de8f73fe32e63abcfce48e495e9c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/hand_empty_int64/output_y.pb",
+            "sha256": "177c05b4a40565b70408532097a40fd2aa25b6276b7929a9deda937f545c602c"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                0,
+                3
+              ],
+              "dtype": "int64",
+              "integers": []
+            }
+          ]
+        },
+        "oracle": "independent literal/formula"
+      }
+    },
+    {
+      "name": "hand_special_identity",
+      "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Identity",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "conformance/models/hand_special_identity.onnx",
+        "sha256": "7d7017f0aaa4bfe0d9f0f81c8219a53048ae75e2bce6abe35d19ab7e468453db"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "special",
+          "tensor": {
+            "path": "conformance/values/hand_special_identity/input_special.pb",
+            "sha256": "2ee018cb0cc4ba6c3b6fe162ab41005fde7a9ae35ebfba3a0122b25db372f61a"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/hand_special_identity/output_y.pb",
+            "sha256": "fafbde9ee353cd29fd237521518d7c21ac8497d2a9ec07c588cabfc37cbf565b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                5
+              ],
+              "dtype": "float32",
+              "bits": [
+                2147483648,
+                0,
+                2139095040,
+                4286578688,
+                2143289345
+              ]
+            }
+          ]
+        },
+        "oracle": "independent literal/formula"
+      }
+    },
+    {
+      "name": "hand_scalar",
+      "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Identity",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "conformance/models/hand_scalar.onnx",
+        "sha256": "d7ff92f58489d3e1ee9fe9e0f31a7349f57a3258dbdd629dfca8252b9108dd18"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "scalar",
+          "tensor": {
+            "path": "conformance/values/hand_scalar/input_scalar.pb",
+            "sha256": "cf3d41a0c5dffde5a81e32a6d055a57469f62947034a288ab83c85d5da4545de"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/hand_scalar/output_y.pb",
+            "sha256": "c3ca274792e3c18d7c3df9554e8a135e05c0c831defcd63f22d634f34b8897c0"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [],
+              "dtype": "float32",
+              "bits": [
+                2147483648
+              ]
+            }
+          ]
+        },
+        "oracle": "independent literal/formula"
+      }
+    },
+    {
+      "name": "deferred_gather_empty",
+      "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "unsupported",
+      "reason": "Gather-13 adapter is RT-12; reference loses empty indices/prefix shape.",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "conformance/models/deferred_gather_empty.onnx",
+        "sha256": "73d7f0e7c32839e8f611ffd5996d6a20bda366ff5c39434e325e38d09121adca"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "data",
+          "tensor": {
+            "path": "conformance/values/deferred_gather_empty/input_data.pb",
+            "sha256": "1ac7d1858d52421021b422fcea9274fa1be5b046d263f64196be15f14d10f809"
+          }
+        },
+        {
+          "name": "indices",
+          "tensor": {
+            "path": "conformance/values/deferred_gather_empty/input_indices.pb",
+            "sha256": "f66ec5610c908586200b9d2583e506e6fbb340180be6366d83b2f0ab14d8916f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/deferred_gather_empty/output_y.pb",
+            "sha256": "268a8fda385993c1b7e4f2a54a3b3e507cd5bc0c66c0df2375976fabf52511fc"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        },
+        "oracle": "independent literal/formula"
+      }
+    },
+    {
+      "name": "deferred_pool_ceil",
+      "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "unsupported",
+      "reason": "AveragePool-11 adapter is RT-13; full kernel divisors include partial ceil windows.",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "AveragePool",
+          "version": 11
+        }
+      ],
+      "model": {
+        "path": "conformance/models/deferred_pool_ceil.onnx",
+        "sha256": "3b7e0b4a040be81d86dd0dfa33cb8ca84237bfe47e71627da19bfa3995748511"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "data",
+          "tensor": {
+            "path": "conformance/values/deferred_pool_ceil/input_data.pb",
+            "sha256": "110c3157912a7668e68e02869600ae92f1ea082abf84cb592e08050923d702fc"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/deferred_pool_ceil/output_y.pb",
+            "sha256": "7ccf4804646b38729783d56b15c9a609a8733112b647a3bff6af5718bf244e6a"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1077936128,
+                1074790400,
+                1081081856,
+                1074790400
+              ]
+            }
+          ]
+        },
+        "oracle": "independent literal/formula",
+        "ort": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1077936128,
+                1074790400,
+                1081081856,
+                1074790400
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "deferred_pool_nan",
+      "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "unsupported",
+      "reason": "MaxPool-12 adapter is RT-13; reference filters input NaNs.",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "MaxPool",
+          "version": 12
+        }
+      ],
+      "model": {
+        "path": "conformance/models/deferred_pool_nan.onnx",
+        "sha256": "f901781abff2cdbfbd7d5c4c435caadb62ee2bd5b81f778701b273da891c12de"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "data",
+          "tensor": {
+            "path": "conformance/values/deferred_pool_nan/input_data.pb",
+            "sha256": "e14adf507b29a8fd1230340b11b98c9141c40db5ad7158c08318701603c1742b"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/deferred_pool_nan/output_y.pb",
+            "sha256": "069a893141475d6daca6a428fcb9f142a783a6eeb838b72b7dd8b31630940658"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1077936128
+              ]
+            }
+          ]
+        },
+        "oracle": "independent literal/formula",
+        "ort": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                2143289344
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "deferred_normalization",
+      "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "unsupported",
+      "reason": "BatchNormalization-9 adapter is RT-13; stored-statistics formula and ORT agree; evaluator applies momentum.",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "BatchNormalization",
+          "version": 9
+        }
+      ],
+      "model": {
+        "path": "conformance/models/deferred_normalization.onnx",
+        "sha256": "2d54bfe7966b0027cdb25979f5413aa613c90b8a53d82a634f5e9819d75055fd"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "data",
+          "tensor": {
+            "path": "conformance/values/deferred_normalization/input_data.pb",
+            "sha256": "9e761b820d0c980bd8e4ae7803548da94f7f39808e48be1f541239073fa2c651"
+          }
+        },
+        {
+          "name": "scale",
+          "tensor": {
+            "path": "conformance/values/deferred_normalization/input_scale.pb",
+            "sha256": "b1b839fd2108a66ec1ceefbc8cb71c6e3fcff2eb5a216d075997adba39003abb"
+          }
+        },
+        {
+          "name": "bias",
+          "tensor": {
+            "path": "conformance/values/deferred_normalization/input_bias.pb",
+            "sha256": "a7e9c722b067cd09a2c78b33a7044e708fbc38746b0981b03a8295901a8879d3"
+          }
+        },
+        {
+          "name": "mean",
+          "tensor": {
+            "path": "conformance/values/deferred_normalization/input_mean.pb",
+            "sha256": "569605c53cd8043e1bd7fa6449e6bed41fabe08eb7e28b7af9a5ee3104255962"
+          }
+        },
+        {
+          "name": "variance",
+          "tensor": {
+            "path": "conformance/values/deferred_normalization/input_variance.pb",
+            "sha256": "8d64885bc01996e3ceda23aeb608c1c09df7b4a3dd2bd450866eb5f6e16e0ffa"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/deferred_normalization/output_y.pb",
+            "sha256": "a43e5569f4a0e523caae94b2a11701ec05d6130900243de0b215cf0508d58003"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1074864118,
+                1082858304
+              ]
+            }
+          ]
+        },
+        "oracle": "independent literal/formula",
+        "ort": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1075838976,
+                1083179008
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "deferred_normalization_zero",
+      "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "unsupported",
+      "reason": "BatchNormalization-9 adapter is RT-13; zero variance/epsilon literal formula differs from ORT's three NaNs.",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "BatchNormalization",
+          "version": 9
+        }
+      ],
+      "model": {
+        "path": "conformance/models/deferred_normalization_zero.onnx",
+        "sha256": "8c9da1da96cae5d4fef3569a7f9e8f322435a0b827012e6a6a736d3d06ef5142"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "data",
+          "tensor": {
+            "path": "conformance/values/deferred_normalization_zero/input_data.pb",
+            "sha256": "b78725499844b56684ccedd7d3873f93ccde96361a379dee0d93c12b8a5fa324"
+          }
+        },
+        {
+          "name": "scale",
+          "tensor": {
+            "path": "conformance/values/deferred_normalization_zero/input_scale.pb",
+            "sha256": "9cd383b799f75bc05d8491a28fb46de96caf7e03803a1b1278cfa4759ee784c6"
+          }
+        },
+        {
+          "name": "bias",
+          "tensor": {
+            "path": "conformance/values/deferred_normalization_zero/input_bias.pb",
+            "sha256": "a366e11e99432aa402c8ef8533cb7957151e73530f736d736232e4e79c492ddf"
+          }
+        },
+        {
+          "name": "mean",
+          "tensor": {
+            "path": "conformance/values/deferred_normalization_zero/input_mean.pb",
+            "sha256": "b39156782ce84411e441d678bfb9eaf1ae93c3afb04e2c7ae2b0e5d25b5d2efd"
+          }
+        },
+        {
+          "name": "variance",
+          "tensor": {
+            "path": "conformance/values/deferred_normalization_zero/input_variance.pb",
+            "sha256": "2c01101bdfd047299bf9a66842e5eb428d2352b94025d0c8b716f9eb5e5b97d0"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/deferred_normalization_zero/output_y.pb",
+            "sha256": "0b07f5d362768f0e2f1ee4f7abe2b3f6dafd84cbbc9f9ecbecd467651af085ae"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                3229081332,
+                0,
+                1081597684
+              ]
+            }
+          ]
+        },
+        "oracle": "independent literal/formula",
+        "ort": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                2143289344,
+                2143289344,
+                2143289344
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "deferred_reduction18",
+      "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "unsupported",
+      "reason": "NN-12 reduction contract uses opset18; no opset13 reduction adapter/coverage is implied.",
+      "ir_version": 8,
+      "opsets": {
+        "": 18
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "ReduceMean",
+          "version": 18
+        }
+      ],
+      "model": {
+        "path": "conformance/models/deferred_reduction18.onnx",
+        "sha256": "da4baececb5702b2cef7378b34b4a2cf65187df21c24f292f660bf48645a24ab"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "data",
+          "tensor": {
+            "path": "conformance/values/deferred_reduction18/input_data.pb",
+            "sha256": "4bf9cec5173a762838640769524b711d68bee2309fcf948ba881769223d9efc6"
+          }
+        },
+        {
+          "name": "axes",
+          "tensor": {
+            "path": "conformance/values/deferred_reduction18/input_axes.pb",
+            "sha256": "bc7696b033c058f76657e115b081bfa677ffa9210d20ec998c4ba3ede9101334"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/values/deferred_reduction18/output_y.pb",
+            "sha256": "528b1a63dc3bf5cd3c62cb6c5615f5ec8ff01152ec7842c92784dd34233bda15"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1069547520
+              ]
+            }
+          ]
+        },
+        "oracle": "independent literal/formula"
+      }
+    },
+    {
+      "name": "upstream_test_softmax_axis_0",
+      "origin": "https://github.com/onnx/onnx/tree/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_softmax_axis_0/",
+      "license": "Apache-2.0; third_party/onnx/LICENSE; pinned source has no root NOTICE.",
+      "status": "unsupported",
+      "reason": "Unmodified upstream case has IR7; runtime accepts exactly IR8 (opset13 is compatible).",
+      "ir_version": 7,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "conformance/upstream/test_softmax_axis_0/model.onnx",
+        "sha256": "acfbc4529229bca10ca4bb0e4693657360b7785e333c6dda96bc746a6f6389ac"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/upstream/test_softmax_axis_0/input_0.pb",
+            "sha256": "6c5c3f93c9327672634b153c34d8d4155ccaa0f290e9f194fe877cefbec989d6"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/upstream/test_softmax_axis_0/output_0.pb",
+            "sha256": "81178700d3d8cf400ac37bf0a5449f71f6e42728e3f4d6a1566bcfdeaf44ce2c"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3,
+                4,
+                5
+              ],
+              "dtype": "float32",
+              "bits": [
+                1049280724,
+                1045058035,
+                1048656552,
+                1057085487,
+                1052378789,
+                1050690917,
+                1052352152,
+                1048776028,
+                1037237551,
+                1046067305,
+                1048044056,
+                1058533808,
+                1051703282,
+                1036439179,
+                1053251729,
+                1051612941,
+                1056897523,
+                1045742191,
+                1049896591,
+                1055525065,
+                1058583468,
+                1048729516,
+                1046907576,
+                1038619295,
+                1057689711,
+                1057038559,
+                1041647691,
+                1049089309,
+                1054626153,
+                1058859305,
+                1048222160,
+                1045378000,
+                1053259435,
+                1059028673,
+                1052056453,
+                1049756372,
+                1053023046,
+                1058025237,
+                1050645033,
+                1049020608,
+                1040691115,
+                1057767341,
+                1057341438,
+                1052920571,
+                1035952628,
+                1044050360,
+                1056652610,
+                1056251271,
+                1055846222,
+                1043505909,
+                1057186053,
+                1045497202,
+                1049153890,
+                1049579227,
+                1048808426,
+                1052747296,
+                1039444756,
+                1047167292,
+                1053574983,
+                1049570936
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "upstream_test_gemm_default_no_bias",
+      "origin": "https://github.com/onnx/onnx/tree/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_gemm_default_no_bias/",
+      "license": "Apache-2.0; third_party/onnx/LICENSE; pinned source has no root NOTICE.",
+      "status": "unsupported",
+      "reason": "Unmodified upstream case has IR7; runtime accepts exactly IR8 (opset13 is compatible).",
+      "ir_version": 7,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "conformance/upstream/test_gemm_default_no_bias/model.onnx",
+        "sha256": "90b287be06a7b400352f86965d83811692bfcbfe9961477cb033341ee6aea189"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "a",
+          "tensor": {
+            "path": "conformance/upstream/test_gemm_default_no_bias/input_0.pb",
+            "sha256": "7136d4f7f1227fed8b12fe2ae5a29a4e103fcd085284d3c32226635d2461331b"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "conformance/upstream/test_gemm_default_no_bias/input_1.pb",
+            "sha256": "f6dac3ad25426de706520f93a6a96a76c722cd1ae26daf5798b10800f7a49835"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/upstream/test_gemm_default_no_bias/output_0.pb",
+            "sha256": "282d0931cacc9c0d220f2dbf41f7327d042cf0a5936d803d90b6fd6926c44ccc"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                3
+              ],
+              "dtype": "float32",
+              "bits": [
+                1080010263,
+                1080287504,
+                1075448932,
+                1076900352,
+                1077774227,
+                1075040052
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "upstream_test_tanh",
+      "origin": "https://github.com/onnx/onnx/tree/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_tanh/",
+      "license": "Apache-2.0; third_party/onnx/LICENSE; pinned source has no root NOTICE.",
+      "status": "unsupported",
+      "reason": "Unmodified upstream case has IR7; runtime accepts exactly IR8 (opset13 is compatible).",
+      "ir_version": 7,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Tanh",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "conformance/upstream/test_tanh/model.onnx",
+        "sha256": "537039b5f72cfc7a75ecbe80c6a0f8a87af6e9dbd60ff599e0b8b1c64f211a58"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "conformance/upstream/test_tanh/input_0.pb",
+            "sha256": "0180f5665325e343077736e4903fa43513ae714ceb131deee45b842370df289a"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "conformance/upstream/test_tanh/output_0.pb",
+            "sha256": "f5ea55dae8f1e4ccab9cead4223985e4ef6c8bf0aa346aada320d0e9a5881858"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3,
+                4,
+                5
+              ],
+              "dtype": "float32",
+              "bits": [
+                1064396141,
+                1052940877,
+                1061201175,
+                1064977855,
+                1064570931,
+                3208674186,
+                1060988171,
+                3189362981,
+                3184698632,
+                1053239421,
+                1041399078,
+                1063617356,
+                1059341735,
+                1039661002,
+                1054174273,
+                1050985828,
+                1063743821,
+                3192860404,
+                1050361946,
+                3207689667,
+                3212634736,
+                1058207815,
+                1060295494,
+                3206636868,
+                1064998686,
+                3211101308,
+                1027296210,
+                3191699444,
+                1063858349,
+                1063666352,
+                1042114704,
+                1052304256,
+                3207976476,
+                3212210158,
+                3198895758,
+                1042206519,
+                1062713550,
+                1062574558,
+                3200054418,
+                3197516532,
+                3209166733,
+                3210984705,
+                3211766281,
+                1064688497,
+                3203430691,
+                3201497041,
+                3210304606,
+                1059502395,
+                3211557332,
+                3193347639,
+                3208039977,
+                1052558470,
+                3203460826,
+                3209945325,
+                3169242823,
+                1053740910,
+                1032324822,
+                1050038071,
+                3205472021,
+                3199335441
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

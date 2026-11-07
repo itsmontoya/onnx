@@ -8,6 +8,13 @@ documents the included source; no additional upstream notice was omitted.
 The scoped Git whitespace attribute preserves the schema's upstream trailing
 blank line rather than changing the pinned bytes.
 
+RT-10 also includes three unmodified backend model/value cases under
+[`testdata/conformance/upstream/`](../../testdata/conformance/README.md).
+Their provenance records exact upstream paths, this revision, Apache-2.0
+attribution and each file's SHA-256. The license above covers these artifacts;
+no additional root NOTICE exists in the pinned archive. These IR-7 cases are
+explicit unsupported-version tests, not claimed runtime numerical support.
+
 | File | Upstream path | SHA-256 |
 | --- | --- | --- |
 | `onnx.proto` | `onnx/onnx.proto` | `1023c7f39a568f309fdd0b445a81a7a0d90f74046e5967c2e817d4e4e06a5f1b` |

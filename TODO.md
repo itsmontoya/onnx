@@ -4,8 +4,8 @@ The library completion record and published handoffs live in [NEEDS.md](NEEDS.md
 runtime task definitions and completion checkboxes live in [ROADMAP.md](ROADMAP.md).
 Keep status there so this file does not become a second, conflicting backlog.
 The backend baseline is `neuralnetwork v0.7.0`: NN-01–NN-12 are complete and
-NN-13 is blocked on RT-12. RT-01–RT-09 are complete; the broader fixture and
-differential conformance harness (RT-10) is next.
+NN-13 is blocked on RT-12. RT-01–RT-10 are complete; runnable M1 examples and
+the first integration report (RT-11) are next.
 
 ## Start here
 
@@ -16,8 +16,9 @@ differential conformance harness (RT-10) is next.
    reproducible wire bindings, immutable tensors, shared inline decoding, and
    validated named graphs, versioned immutable execution plans, serial sessions,
    and M1 numerical adapters.
-3. Complete **RT-10** using RT-09’s focused M1 models, values and reference
-   provenance as an initial corpus. Expand the fixture and differential harness.
+3. **RT-10 is complete**: read the offline conformance handoff and
+   [fixture/provenance guide](testdata/conformance/README.md), including the
+   exact upstream-version audit and explicit unsupported reference records.
 4. Complete **RT-11** to demonstrate M1 with a working MLP and branching graph.
 5. Complete **RT-12** and hand off reproducible runtime graphs to unblock NN-13.
 

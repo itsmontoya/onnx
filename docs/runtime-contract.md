@@ -8,7 +8,9 @@ versioned static planning for Identity and dense tensor-valued Constant, the
 Capabilities query, and structured compilation errors. RT-08 implements public
 loading, model/session lifecycle, finite run budgets, and serial execution for
 that subset. RT-09 implements M1 arithmetic, products and activations, plus
-float/int scalar/list Constant forms. [capabilities.json](../capabilities.json)
+float/int scalar/list Constant forms. RT-10 implements the offline conformance
+harness with typed fixtures and explicit reference exceptions.
+[capabilities.json](../capabilities.json)
 records the executable
 subset and planned operator coverage. The
 [roadmap](../ROADMAP.md) identifies the implementation tasks and their acceptance
@@ -487,6 +489,23 @@ policy. Hand-calculated fixtures prevent decoder/comparator round trips from
 being the only oracle. Store real reference failures separately; skips never
 count as implemented support. BN-9, nonfinite and empty cases require the
 independent/reference distinctions above and in [NEEDS.md](../NEEDS.md).
+
+RT-10's [fixture manifest and comparison rules](../testdata/conformance/README.md)
+implement these obligations for current M1 operators: 86 reference agreements,
+one explicit extension and nine unsupported-model rejections. All model and
+TensorProto value hashes are verified offline. Unexpected NaNs/infinities fail
+finite expectations; infinity signs are exact; zero-sign policy is explicit per
+case. A wrong numerical result must identify named inputs/output and its flat
+and multidimensional mismatch position.
+
+The pinned suite's 1,422 backend models contain no exact IR-8/opset-13 envelope.
+Copied upstream models retain their IR-7 bytes as version rejection tests;
+independent original IR-8/opset-13 models provide numerical coverage. This does
+not broaden accepted versions. Deferred Gather/CNN/reduction observations are
+retained reference records with explicit unsupported errors, never implemented
+coverage. Original fixture origin is distinct from licensing: this repository
+has no LICENSE; copied ONNX artifacts retain the upstream Apache-2.0 attribution
+and included license.
 
 RT-02 establishes module/CI without pretending operators work. RT-03 regenerates
 wire bindings from the pinned source. RT-04 implements the immutable facade and
