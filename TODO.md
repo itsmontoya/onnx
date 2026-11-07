@@ -4,8 +4,8 @@ The library completion record and published handoffs live in [NEEDS.md](NEEDS.md
 runtime task definitions and completion checkboxes live in [ROADMAP.md](ROADMAP.md).
 Keep status there so this file does not become a second, conflicting backlog.
 The backend baseline is `neuralnetwork v0.7.0`: NN-01–NN-12 are complete and
-NN-13 is blocked on RT-12. RT-01–RT-10 are complete; runnable M1 examples and
-the first integration report (RT-11) are next.
+NN-13 is blocked on RT-12. RT-01–RT-11 are complete; shape tensors and
+transformations (RT-12) are next.
 
 ## Start here
 
@@ -19,7 +19,9 @@ the first integration report (RT-11) are next.
 3. **RT-10 is complete**: read the offline conformance handoff and
    [fixture/provenance guide](testdata/conformance/README.md), including the
    exact upstream-version audit and explicit unsupported reference records.
-4. Complete **RT-11** to demonstrate M1 with a working MLP and branching graph.
+4. **RT-11 is complete**: run the [MLP and branching examples](docs/getting-started.md)
+   and read the [integration report](docs/integration-rt11.md), including the
+   four reference agreements at batches 1 and 3 and current M1 restrictions.
 5. Complete **RT-12** and hand off reproducible runtime graphs to unblock NN-13.
 
 ## Subsequent milestones

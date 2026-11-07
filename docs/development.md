@@ -23,6 +23,8 @@ Constant scalar/list forms. [The capability manifest](../capabilities.json)
 records all 12 implemented operators and their restrictions. RT-10 adds a reusable
 offline fixture runner and differential comparison with typed TensorProto values,
 explicit exception classifications and a complete pinned upstream-envelope audit.
+RT-11 adds the [runnable MLP/branch examples](getting-started.md), four dynamic-
+batch reference agreements and [their integration report](integration-rt11.md).
 
 Public `NewTensor`, `NewFloat32`, and `NewInt64` delegate storage validation and
 allocation to the pinned backend. They copy caller shapes/payloads; shape and
@@ -59,6 +61,13 @@ The `purego` tag selects the backend's portable CPU path.
 build, vet, normal tests, both cgo-disabled configurations, and race tests on
 Linux. Local baseline checks also run on Darwin/arm64. A separate linter is not
 configured. Use `go mod tidy -diff` to check module metadata without rewriting it.
+
+The [RT-11 fixture guide](../testdata/inference/README.md) documents optional
+`tools/check_inference.py` regeneration with pinned reference tools. Normal Go
+tests load checked-in bytes, validate hashes/metadata, compare golden named
+outputs for batches 1 and 3, retain outputs across runs/Close and exercise two
+sessions concurrently on each shared numerical plan. The generator also checks
+that the getting-started M1 table exactly reflects `capabilities.json`.
 
 ## Package boundaries
 

@@ -1,0 +1,329 @@
+{
+  "format_version": 1,
+  "onnx_source_revision": "3bf92c03a9f27eba3bda1e5b9e63ea20ec213557",
+  "reference_versions": {
+    "python": "3.9.6",
+    "onnx": "1.16.2",
+    "numpy": "1.26.4",
+    "protobuf": "4.25.3"
+  },
+  "original_license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+  "cases": [
+    {
+      "name": "mlp_batch_1",
+      "origin": "tools/check_inference.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "inference/models/mlp.onnx",
+        "sha256": "04df066d0a12b0e6ddf2ba89e9e452768939a745ddd574cfb39780d0e14c06f9"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "features",
+          "tensor": {
+            "path": "inference/values/mlp_batch_1/input_features.pb",
+            "sha256": "a7c5c17b754dff70e1f1bc139307bf424a60c5f9ec608e82117fe2d8f0422519"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "probabilities",
+          "tensor": {
+            "path": "inference/values/mlp_batch_1/output_probabilities.pb",
+            "sha256": "6cd5938d54d8f5867c7501edd050016dc52b7073a39461a96c6bd6fbcc8ee3bb"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "evaluator": "onnx.reference.ReferenceEvaluator"
+        },
+        "independent": "NumPy affine/ReLU/stable-softmax formula matched reference"
+      }
+    },
+    {
+      "name": "mlp_batch_3",
+      "origin": "tools/check_inference.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "inference/models/mlp.onnx",
+        "sha256": "04df066d0a12b0e6ddf2ba89e9e452768939a745ddd574cfb39780d0e14c06f9"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "features",
+          "tensor": {
+            "path": "inference/values/mlp_batch_3/input_features.pb",
+            "sha256": "8a764901fd7ba19fb1ae3a4a09f87ab2e73d1bf1744483cc5f31f2d762ada6cb"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "probabilities",
+          "tensor": {
+            "path": "inference/values/mlp_batch_3/output_probabilities.pb",
+            "sha256": "1e79f8dfb02ff5490df19d497ea382e463e4dcd15ac41ab6629892a2a0273984"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "evaluator": "onnx.reference.ReferenceEvaluator"
+        },
+        "independent": "NumPy affine/ReLU/stable-softmax formula matched reference"
+      }
+    },
+    {
+      "name": "branch_batch_1",
+      "origin": "tools/check_inference.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Add",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Sub",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "inference/models/branch.onnx",
+        "sha256": "3c8710155dd18231cdfcc730d0a98b2d6c158dfeb8c7a47c1f3d0765982f4446"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "features",
+          "tensor": {
+            "path": "inference/values/branch_batch_1/input_features.pb",
+            "sha256": "a7c5c17b754dff70e1f1bc139307bf424a60c5f9ec608e82117fe2d8f0422519"
+          }
+        },
+        {
+          "name": "residual",
+          "tensor": {
+            "path": "inference/values/branch_batch_1/input_residual.pb",
+            "sha256": "23b2c14e6ac5644d3451b4dbf9a351b03dcf3723163cc9b0c797bac29f13e0c5"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "probabilities",
+          "tensor": {
+            "path": "inference/values/branch_batch_1/output_probabilities.pb",
+            "sha256": "65a4795476c1aad887b56540477c048ac4083f39ddab23a4fd6963ff29ae4a06"
+          }
+        },
+        {
+          "name": "delta",
+          "tensor": {
+            "path": "inference/values/branch_batch_1/output_delta.pb",
+            "sha256": "351d4a9eaac418d419c7f124d4a040a112b191bdc63dba957b9ab6747b20b3f6"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "evaluator": "onnx.reference.ReferenceEvaluator"
+        },
+        "independent": "NumPy affine/ReLU/stable-softmax formula matched reference"
+      }
+    },
+    {
+      "name": "branch_batch_3",
+      "origin": "tools/check_inference.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Add",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Sub",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "inference/models/branch.onnx",
+        "sha256": "3c8710155dd18231cdfcc730d0a98b2d6c158dfeb8c7a47c1f3d0765982f4446"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "features",
+          "tensor": {
+            "path": "inference/values/branch_batch_3/input_features.pb",
+            "sha256": "8a764901fd7ba19fb1ae3a4a09f87ab2e73d1bf1744483cc5f31f2d762ada6cb"
+          }
+        },
+        {
+          "name": "residual",
+          "tensor": {
+            "path": "inference/values/branch_batch_3/input_residual.pb",
+            "sha256": "5d95f88fd8d07fcd7c330afc5c5ea60365b7fc48e407876b0483c2ace8cbc04c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "probabilities",
+          "tensor": {
+            "path": "inference/values/branch_batch_3/output_probabilities.pb",
+            "sha256": "765ca63d47c04d152523306d8cfbf889fe5d9a9a25136f4826e248b475454776"
+          }
+        },
+        {
+          "name": "delta",
+          "tensor": {
+            "path": "inference/values/branch_batch_3/output_delta.pb",
+            "sha256": "da0fa26b1ab1127e583ea5047ac2f8f83832f76a9b7c9c3f553f31841967e783"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "evaluator": "onnx.reference.ReferenceEvaluator"
+        },
+        "independent": "NumPy affine/ReLU/stable-softmax formula matched reference"
+      }
+    }
+  ]
+}
