@@ -1,8 +1,8 @@
 // Package onnx loads and evaluates a bounded Go-native ONNX inference subset.
 //
 // Load, LoadBytes and LoadFile accept IR 8, standard-domain opset 13 models.
-// Identity and dense tensor-valued Constant execute serially; Capabilities lists
-// their restrictions and planned operators. Models share immutable plans across
+// M1 arithmetic, products, activations, Identity and Constant execute serially;
+// Capabilities lists exact restrictions and planned operators. Models share immutable plans across
 // sessions; each session permits one Run at a time and returns owned outputs.
 // Tensor constructors and accessors copy, and no mutable backend is exposed.
 //

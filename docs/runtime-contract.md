@@ -7,7 +7,9 @@ whole-graph structural validation with immutable snapshots. RT-07 implements
 versioned static planning for Identity and dense tensor-valued Constant, the
 Capabilities query, and structured compilation errors. RT-08 implements public
 loading, model/session lifecycle, finite run budgets, and serial execution for
-that subset. [capabilities.json](../capabilities.json) records the executable
+that subset. RT-09 implements M1 arithmetic, products and activations, plus
+float/int scalar/list Constant forms. [capabilities.json](../capabilities.json)
+records the executable
 subset and planned operator coverage. The
 [roadmap](../ROADMAP.md) identifies the implementation tasks and their acceptance
 criteria. This project is an independent Go runtime, not Microsoft's ONNX Runtime.
@@ -215,10 +217,11 @@ records with explicit status and returns a deep copy; it does not imply that
 planned operators can load. CapabilityArity has Min/Max integer counts and
 OptionalSlots (`[]int`). CapabilityAttribute has Type, Required and Default
 (`json.RawMessage`, preserving exact integers and absent versus zero defaults).
-Implemented currently includes static planning and serial execution: Identity
-preserves float32/int64 type and shape; Constant accepts exactly one dense `value`
-tensor attribute.
-Scalar/list attribute forms remain planned for RT-09. Manifest format/version is separate
+Implemented includes M1 static planning and serial execution: float32
+Add/Sub/Mul/Div, MatMul/Gemm, Relu/Sigmoid/Tanh/Softmax, and float32/int64
+Identity/Constant. Constant accepts exactly one dense `value` tensor or
+`value_float`, `value_floats`, `value_int`, `value_ints` attribute.
+Manifest format/version is separate
 from an ONNX imported opset. Every record lists the exact schema selected from
 release 1.16.2 at import 13; schema versions 11/12/1/9 are intentional for CNNs.
 
@@ -374,11 +377,14 @@ metadata) are:
 
 | Path | Scratch charge in addition to live inputs/destination |
 | --- | --- |
-| Relu/Sigmoid/Tanh | At least 3 times input bytes (input matrix, output matrix, copied values); any runtime nonfinite patch buffers add their copies |
+| Relu | 6 times input bytes: three backend bridge buffers plus original destination, input snapshot and output snapshot while constructing the corrected owned result |
+| Sigmoid/Tanh | 3 times input bytes: input matrix, output matrix, copied values |
 | MatMul | Full temporary output plus, for each batch block, copied left/right matrices and two product-block buffers; conservatively sum per-block temporaries over all batches when GC retention matters |
 | Gemm | Copied A/B, product matrix and copied product values, plus transposed B when both transpose flags are set |
 | Shape/Constant/typed/raw conversion | Actual accessor/staging/copy buffers in addition to the owned destination |
-| Shape transforms, arithmetic, CNN, Softmax | Charge any actual numerical scratch; zero scratch may be claimed only after auditing the selected kernel |
+| Add/Sub/Mul | 4 times output bytes for matching nonempty shapes (two copied inputs, matrix destination and copied values); zero numeric scratch for broadcasting or empties |
+| Div/Softmax | Zero numeric scratch; audited direct destination kernels |
+| Shape transforms/CNN | Future adapters must audit all numerical scratch |
 
 Budget validation precedes allocation and arithmetic must not overflow. Planning
 performs only metadata allocations, never full numeric output tensors. Scratch
@@ -392,7 +398,11 @@ released `tensor.Clone` directly allocates/copies into its destination, with no
 numeric accessor or staging buffer, so these handlers reserve zero numeric
 workspace. MaxWorkspaceBytes remains finite and the shared budget rejects scratch
 or combined live/workspace overflow before allocation. Later adapters must supply
-their audited scratch bounds. Run counts resident constants once even when a
+their audited scratch bounds. RT-09 reserves the complete destination plus
+workspace once before allocating or calling each numerical handler, including
+cumulative MatMul batch copies. Empty output paths use no numeric scratch;
+Gemm with an empty contraction uses one output-sized temporary. Run counts
+resident constants once even when a
 default is overridden, plus every bound/defaulted source, table alias and output
 copy. Failed runs drop their private tables and reservations.
 
@@ -451,7 +461,7 @@ fixture tolerance is not a universal numerical error bound.
 
 | Case | Chosen runtime behavior and reference record |
 | --- | --- |
-| Relu NaN | Propagate NaN as ONNX 1.16.2's evaluator does. RT-09 must wrap/patch the backend's NaN-to-positive-zero behavior with accounted temporary storage. Negative zero becomes positive zero as in that evaluator. |
+| Relu NaN | Propagate NaN as ONNX 1.16.2's evaluator does. RT-09 patches the backend's NaN-to-positive-zero behavior with accounted temporary storage. Negative zero becomes positive zero as in that evaluator. |
 | Softmax-13 | Default axis -1; normalize only that axis, stable maximum subtraction. Scalars/invalid axes fail. Empty tensors succeed after axis validation, including an empty reduction axis; record the evaluator's zero-length reduction rejection as a deliberate extension, never a passing reference comparison. Nonfinite nonempty slices retain backend/evaluator NaNs. |
 | Div | IEEE float32 division, including signed infinity/NaN for zero denominators; do not use the older matrix division error contract. |
 | MatMul/Gemm | ONNX vector/batch promotion and unidirectional optional Gemm C; empty contractions produce zeros before alpha/beta. Validate supplied bias even when beta is zero. |

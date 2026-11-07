@@ -190,6 +190,16 @@ func (b *builder) node(index int, wire *onnxpb.NodeProto) (err error) {
 
 		n.Attributes = append(n.Attributes, value)
 	}
+	if n.Operator == "Constant" && len(n.Attributes) == 1 {
+		attribute := &n.Attributes[0]
+		expected := map[string]AttributeKind{"value_float": FloatAttribute, "value_floats": FloatsAttribute, "value_int": IntAttribute, "value_ints": IntsAttribute}
+		if kind, exists := expected[attribute.Name]; exists && attribute.Kind == kind {
+			if attribute.Tensor, err = newAttributeConstant(b.ctx, b.decoder, *attribute); err != nil {
+				return err
+			}
+		}
+	}
+
 	b.graph.nodes = append(b.graph.nodes, n)
 	return nil
 }

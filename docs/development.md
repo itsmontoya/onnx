@@ -18,8 +18,9 @@ RT-07 adds versioned schema resolution, immutable execution plans, capability
 queries and structured compilation errors for a minimal Identity/Constant subset.
 RT-08 adds public Load/LoadBytes/LoadFile, shared Models and private serial
 Sessions with cancellation, finite budgets, defaults and owned requested outputs.
-[The capability manifest](../capabilities.json) marks only Identity and dense
-tensor-valued Constant implemented; numerical families remain RT-09 work.
+RT-09 adds M1 float32 arithmetic/products/activations and exact float/int
+Constant scalar/list forms. [The capability manifest](../capabilities.json)
+records all 12 implemented operators and their restrictions.
 
 Public `NewTensor`, `NewFloat32`, and `NewInt64` delegate storage validation and
 allocation to the pinned backend. They copy caller shapes/payloads; shape and
@@ -260,9 +261,9 @@ Compile visits every node, including unused paths, and rejects planned/unknown
 operators, invalid arity, required empty slots, extra outputs, unknown attributes
 and incorrect attribute kinds. Identity-13 preserves float32/int64 type and shape
 at any rank, including scalar and empty tensors. Constant-13 requires exactly one
-`value` TENSOR attribute, already converted and owned by graph.Build. Float/int
-scalar/list attributes remain unsupported until RT-09. Neither handler allocates
-or clones numerical output storage. Defaulted input metadata keeps its symbolic
+`value` TENSOR or `value_float`/`value_floats`/`value_int`/`value_ints` attribute,
+already converted and owned by graph.Build. Planning allocates no numerical
+output storage. Defaulted input metadata keeps its symbolic
 or unknown batch dimension rather than the initializer's current size.
 
 Plan stores input/output contracts, source/producer-ordered Values and resolved
@@ -287,8 +288,9 @@ when transient snapshots become unreachable. Go object/header/capacity overhead
 is excluded, consistent with graph/decode accounting. Static shapes are checked
 with backend ValidateShape and finite limits without numerical allocation;
 partially known shapes retain checks for Run. Initializer usage never increases
-during compilation. RT-09 must charge any later scalar/list Constant conversion
-against both load and initializer quotas before constructing storage.
+during compilation. Scalar/list Constant materialization goes through
+TensorDecoder.Materialize during graph building and charges both load and
+initializer quotas before constructing owned storage.
 
 Compilation errors use public Error (an internal shared type alias), retaining
 ErrInvalidArgument/ErrInvalidModel/ErrUnsupported/ErrLimit classifications and
@@ -352,7 +354,9 @@ result and all requested output copies. It reserves before every constant/output
 clone. Backend v0.7.0 tensor.go Clone directly copies into owned destination storage
 without numeric staging, so Identity/Constant/copies use zero numeric scratch.
 The workspace accounting path separately enforces workspace and combined live
-reservations, including checked sums; RT-09 must provide audited kernel bounds.
+reservations, including checked sums. RT-09 numericalCall reserves each complete
+node destination/workspace before allocation, using the audited bounds in the
+[runtime contract](runtime-contract.md#limits-and-cancellation).
 Runtime metadata/Go headers/capacity/GC retention and earlier caller-retained
 outputs are outside these logical tensor budgets.
 
@@ -371,3 +375,29 @@ cover branches, multiple IO, shared exact int64 constants, bit-preserving float
 copies, default overrides, scalar/empty values, fresh symbol bindings, original
 constraints, lifecycle races, concurrent sessions, cancellation at every observed
 boundary, exact budgets and recovery. They need neither Python nor native runtime.
+
+## M1 numerical adapters and development fixtures
+
+RT-09 maps Add/Sub/Mul/Div, MatMul/Gemm, Relu/Sigmoid/Tanh and Softmax-13 to
+v0.7.0 tensor kernels. Static inference propagates known ranks/dimensions and
+checks broadcasting, contractions, Gemm bias, transpose flags and Softmax axes.
+Unknown dimensions defer concrete compatibility checks to contextual node errors
+at Run. Gemm defaults alpha/beta to 1, flags to 0, and accepts omitted or empty C;
+Softmax defaults axis to -1. Runtime graph values and immutable initializers use
+the same numerical paths. No training objects or optimization are involved.
+
+Relu corrects backend NaN-to-zero results with budgeted snapshots and an owned
+copy; negative zero becomes positive zero. Softmax accepts empty axes after axis
+validation; the pinned evaluator rejects that case. All other nonfinite behavior
+follows the audited backend/reference fixtures. Integer Constants never pass
+through float32 storage.
+
+`tools/check_m1.py` deterministically reproduces 81 original IR 8/opset 13 models
+and [their provenance and named values](../testdata/m1/provenance.json) using the
+pinned Python/ONNX/NumPy/protobuf versions. Run with the same reference environment
+as `tools/check_profile.py`; `--write` regenerates deliberately. Eighty models
+match ONNX 1.16.2 reference results; the empty-axis Softmax case retains its
+reference rejection and independently expected empty output. Ordinary Go tests
+verify hashes and outputs offline, with finite tolerance 1e-5 + 1e-5*abs(expected),
+NaN classification, infinity signs and specified zero signs. This is focused M1
+coverage; RT-10 remains responsible for the broader conformance harness.

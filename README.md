@@ -5,13 +5,15 @@ A Go-native ONNX inference runtime built on
 Load an `.onnx` model, bind named immutable Go tensors, and evaluate named outputs
 on the CPU without cgo or an installed native inference runtime.
 
-RT-01–RT-08 implement the [runtime contract](docs/runtime-contract.md), bounded
+RT-01–RT-09 implement the [runtime contract](docs/runtime-contract.md), bounded
 protobuf and inline tensor loading, named graph validation, versioned planning,
 and serial sessions. The executable subset is deliberately narrow: ONNX IR 8,
-standard-domain opset 13, dense float32/int64 Identity and the dense `value` tensor
-form of Constant. Branching, multiple inputs/outputs, default overrides,
+standard-domain opset 13, float32 Add/Sub/Mul/Div, MatMul/Gemm,
+Relu/Sigmoid/Tanh/Softmax, and float32/int64 Identity/Constant. Branching, multiple
+inputs/outputs, default overrides,
 passthroughs, scalar/empty tensors and symbolic leading batches are supported.
-Arithmetic, activations and scalar/list Constant forms arrive at RT-09.
+Constant accepts dense tensors and float/int scalar/list forms. Relu propagates
+NaN; empty-axis Softmax is an explicit extension of the pinned evaluator.
 
 `Load`, `LoadBytes`, and `LoadFile` return an immutable shared Model. Create a
 Session with `NewSession`, then call `Run` with named inputs and optional requested
@@ -48,7 +50,8 @@ block the first working runtime or release readiness.
 
 The current CPU profile accepts ONNX IR 8, standard-domain opset 13, and dense
 float32/int64 values. Named graph inputs/outputs and branching are implemented.
-RT-09 adds broadcasting, matrix products and activations. Later milestones add
+Broadcasting, matrix products and activations are implemented. RT-10 expands the
+fixture/conformance harness; RT-11 supplies user examples. Later milestones add
 tensor transformations, 2D CNN operators, external weights and a documented release.
 
 The [roadmap's coverage tables](ROADMAP.md#milestones-and-coverage) specify
