@@ -169,6 +169,32 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 				inputs[slot] = e.values[valueIndex]
 			}
 		}
+		if operators.IsShapeOperator(step.Operator) {
+			var shape *shapeCall
+			if shape, err = newShapeCall(step, inputs, e.plan.limits); err != nil {
+				return err
+			}
+
+			if err = e.budget.reserve(0, shape.workspace); err != nil {
+				return err
+			}
+
+			defer e.budget.releaseWorkspace()
+			if err = shape.plan(e.ctx); err != nil {
+				return err
+			}
+
+			if err = e.budget.reserve(shape.bytes, 0); err != nil {
+				return err
+			}
+
+			if backend, err = shape.run(e.ctx); err != nil {
+				return err
+			}
+
+			break
+		}
+
 		if call, err = newNumericalCall(step, inputs, e.plan.limits); err != nil {
 			return err
 		}

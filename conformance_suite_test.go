@@ -69,6 +69,11 @@ func (s *conformanceSuite) validate() (err error) {
 			if fixture.Name != "m1_softmax_empty_axis" || fixture.Reason == "" || observation.Status != "rejected" {
 				return fmt.Errorf("case %q unrecognized runtime extension", fixture.Name)
 			}
+		case "difference":
+			if fixture.Name != "deferred_gather_empty" || fixture.Reason == "" || observation.Status != "returned" {
+				return fmt.Errorf("case %q unrecognized reference difference", fixture.Name)
+			}
+
 		case "unsupported":
 			if fixture.Reason == "" {
 				return fmt.Errorf("case %q lacks an explicit exception reason", fixture.Name)
@@ -103,11 +108,11 @@ func TestConformanceSuite(t *testing.T) {
 			}
 		})
 	}
-	if !maps.Equal(counts, map[string]int{"agreement": 86, "extension": 1, "unsupported": 9}) {
+	if !maps.Equal(counts, map[string]int{"agreement": 86, "extension": 1, "difference": 1, "unsupported": 8}) {
 		t.Fatalf("case classification counts changed: %v", counts)
 	}
 
-	t.Logf("%d reference agreements, %d documented extensions, %d explicit rejections; no skips", counts["agreement"], counts["extension"], counts["unsupported"])
+	t.Logf("%d reference agreements, %d documented extensions, %d reference shape differences, %d explicit rejections; no skips", counts["agreement"], counts["extension"], counts["difference"], counts["unsupported"])
 }
 
 func TestConformanceSuiteDetectsNumericError(t *testing.T) {

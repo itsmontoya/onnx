@@ -29,7 +29,7 @@ func readInferenceCases(t *testing.T) (cases []conformanceCase) {
 	}
 
 	versions := map[string]string{"python": "3.9.6", "onnx": "1.16.2", "numpy": "1.26.4", "protobuf": "4.25.3"}
-	if suite.FormatVersion != 1 || suite.ONNXSourceRevision != "3bf92c03a9f27eba3bda1e5b9e63ea20ec213557" || !maps.Equal(suite.ReferenceVersions, versions) || suite.OriginalLicense == "" || len(suite.Cases) != 4 {
+	if suite.FormatVersion != 1 || suite.ONNXSourceRevision != "3bf92c03a9f27eba3bda1e5b9e63ea20ec213557" || !maps.Equal(suite.ReferenceVersions, versions) || suite.OriginalLicense == "" || len(suite.Cases) != 6 {
 		t.Fatal("inference provenance differs")
 	}
 
@@ -38,7 +38,7 @@ func readInferenceCases(t *testing.T) (cases []conformanceCase) {
 
 func TestInferenceFixtures(t *testing.T) {
 	cases := readInferenceCases(t)
-	for _, graph := range []string{"mlp", "branch"} {
+	for _, graph := range []string{"mlp", "branch", "shape"} {
 		t.Run(graph, func(t *testing.T) {
 			var fixtures []conformanceCase
 			for _, fixture := range cases {
@@ -57,7 +57,7 @@ func TestInferenceFixtures(t *testing.T) {
 
 func TestInferenceConcurrentSessions(t *testing.T) {
 	cases := readInferenceCases(t)
-	for _, graph := range []string{"mlp", "branch"} {
+	for _, graph := range []string{"mlp", "branch", "shape"} {
 		t.Run(graph, func(t *testing.T) {
 			var fixtures []conformanceCase
 			for _, fixture := range cases {
@@ -131,7 +131,10 @@ func runInferenceBatches(t *testing.T, graph string, fixtures []conformanceCase)
 			t.Error(closeErr)
 		}
 	})
-	checkInferenceMetadata(t, graph, model.Metadata())
+	if graph != "shape" {
+		checkInferenceMetadata(t, graph, model.Metadata())
+	}
+
 	session := modelSession(t, model)
 	var retained [][]NamedTensor
 	for index, fixture := range fixtures {
@@ -209,7 +212,12 @@ func runInferenceBatch(t *testing.T, session *Session, fixture conformanceCase, 
 		t.Fatal(inputErr)
 	}
 
-	if !slices.Equal(inputs["features"].Shape(), []int64{batch, 2}) || fixture.Status != "agreement" {
+	shape := []int64{batch, 2}
+	if fixture.Model.Path == "inference/models/shape.onnx" {
+		shape = []int64{batch, 2, 3}
+	}
+
+	if !slices.Equal(inputs["features"].Shape(), shape) || fixture.Status != "agreement" {
 		t.Fatal("fixture batch or reference status differs")
 	}
 

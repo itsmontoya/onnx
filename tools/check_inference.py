@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproduce original RT-11 dynamic-batch models and actual reference goldens."""
+"""Reproduce original RT-11/RT-12 dynamic-batch models and actual reference goldens."""
 import argparse
 import hashlib
 import json
@@ -113,6 +113,47 @@ def main():
                           "outputs": [tensor_value(case, "output", key, value) for key, value in zip(output_names, expected)],
                           "observations": {"reference": {"status": "returned", "evaluator": "onnx.reference.ReferenceEvaluator"},
                                            "independent": "NumPy affine/ReLU/stable-softmax formula matched reference"}})
+    # RT-12 keeps RT-11 model/value bytes unchanged and adds a concrete
+    # runtime shape subgraph without inferred intermediate value_info.
+    shape_nodes = [helper.make_node("Shape", ["features"], ["input_shape"], name="concrete_shape"),
+                   helper.make_node("Gather", ["input_shape", "batch_index"], ["batch"], name="batch_dimension"),
+                   helper.make_node("Unsqueeze", ["batch", "vector_axis"], ["batch_vector"], name="batch_vector"),
+                   helper.make_node("Concat", ["batch_vector", "infer_tail"], ["target"], axis=0, name="target_shape"),
+                   helper.make_node("Reshape", ["features", "target"], ["reshaped"], name="runtime_reshape"),
+                   helper.make_node("Unsqueeze", ["reshaped", "trailing_axis"], ["expanded"], name="expand"),
+                   helper.make_node("Transpose", ["expanded"], ["reversed"], name="reverse"),
+                   helper.make_node("Squeeze", ["reversed", "vector_axis"], ["squeezed"], name="squeeze"),
+                   helper.make_node("Flatten", ["squeezed"], ["flat"], axis=0, name="flatten")]
+    shape_inputs = [helper.make_tensor_value_info("features", TensorProto.FLOAT, ["batch", 2, 3])]
+    shape_outputs = [helper.make_tensor_value_info("reshaped", TensorProto.FLOAT, ["batch", 6]),
+                     helper.make_tensor_value_info("target", TensorProto.INT64, [2]),
+                     helper.make_tensor_value_info("flat", TensorProto.FLOAT, [1, None])]
+    shape_weights = {"batch_index": np.asarray(0, np.int64), "vector_axis": np.asarray([0], np.int64),
+                     "infer_tail": np.asarray([-1], np.int64), "trailing_axis": np.asarray([-1], np.int64)}
+    shape_graph = helper.make_graph(shape_nodes, "shape", shape_inputs, shape_outputs,
+                                   [numpy_helper.from_array(value, name=key) for key, value in shape_weights.items()])
+    shape_model = helper.make_model(shape_graph, producer_name="itsmontoya/onnx RT-12", ir_version=8,
+                                    opset_imports=[helper.make_opsetid("", 13)])
+    checker.check_model(shape_model, full_check=True)
+    shape_record = artifact("inference/models/shape.onnx", shape_model.SerializeToString(deterministic=True))
+    for batch in [1, 3]:
+        case = f"shape_batch_{batch}"
+        feeds = {"features": np.arange(1, batch * 6 + 1, dtype=np.float32).reshape(batch, 2, 3)}
+        expected = ReferenceEvaluator(shape_model).run(None, feeds)
+        independent = [feeds["features"].reshape(batch, 6), np.asarray([batch, -1], np.int64),
+                       feeds["features"].reshape(batch, 6).T.reshape(1, -1)]
+        for returned, calculated in zip(expected, independent):
+            np.testing.assert_array_equal(returned, calculated)
+        cases.append({"name": case, "origin": "tools/check_inference.py; original RT-12 graph and values",
+                      "license": LICENSE, "status": "agreement", "reason": "", "ir_version": 8,
+                      "opsets": {"": 13}, "schemas": [{"domain": "", "operator": node.op_type,
+                          "version": defs.get_schema(node.op_type, 13).since_version} for node in shape_nodes],
+                      "model": shape_record, "comparison": {"absolute": 0, "relative": 0, "signed_zero": True},
+                      "inputs": [tensor_value(case, "input", key, value) for key, value in feeds.items()],
+                      "outputs": [tensor_value(case, "output", key, value) for key, value in
+                                  zip(["reshaped", "target", "flat"], expected)],
+                      "observations": {"reference": {"status": "returned", "evaluator": "onnx.reference.ReferenceEvaluator"},
+                                       "independent": "NumPy reshape/transposed row-major formula matches exactly"}})
     manifest = {"format_version": 1, "onnx_source_revision": REVISION, "reference_versions": VERSIONS,
                 "original_license": LICENSE, "cases": cases}
     artifacts["inference/provenance.json"] = (json.dumps(manifest, indent=2, allow_nan=False) + "\n").encode()
@@ -125,13 +166,13 @@ def main():
             raise SystemExit("inference fixture differs: " + path)
     guide = ROOT / "docs/getting-started.md"
     text = guide.read_text()
-    start, end = "<!-- M1 capabilities start -->", "<!-- M1 capabilities end -->"
+    start, end = "<!-- Implemented capabilities start -->", "<!-- Implemented capabilities end -->"
     generated = text.split(start)[0] + start + "\n\n" + capability_table() + "\n\n" + end + text.split(end)[1]
     if args.write:
         guide.write_text(generated)
     if guide.read_text() != generated:
-        raise SystemExit("getting-started M1 table differs from capabilities.json")
-    print("PASS: 2 checker-validated IR-8/opset-13 models, 4 actual reference agreements, batches 1 and 3; canonical M1 table")
+        raise SystemExit("getting-started implemented table differs from capabilities.json")
+    print("PASS: 3 checker-validated IR-8/opset-13 models, 6 actual reference agreements, batches 1 and 3; canonical implemented table")
 
 
 if __name__ == "__main__":

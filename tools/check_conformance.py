@@ -179,8 +179,8 @@ def main():
     # Future adapters remain rejections. Preserve actual reference differences now.
     original("deferred_gather_empty", [node("Gather", ["data", "indices"], axis=1)],
              {"data": np.arange(6, dtype=np.float32).reshape(2, 3), "indices": np.empty((0, 2), np.int64)},
-             {"y": np.empty((2, 0, 2), np.float32)}, status="unsupported",
-             reason="Gather-13 adapter is RT-12; reference loses empty indices/prefix shape.")
+             {"y": np.empty((2, 0, 2), np.float32)}, status="difference",
+             reason="RT-12 applies exact prefix/indices/suffix shape [2,0,2]; evaluator incorrectly returns [0]. NumPy take independently confirms expected shape.")
     original("deferred_pool_ceil", [node("AveragePool", ["data"], kernel_shape=[2, 2], strides=[2, 2],
                                         ceil_mode=1, count_include_pad=1)],
              {"data": np.arange(1, 10, dtype=np.float32).reshape(1, 1, 3, 3)},

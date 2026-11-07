@@ -1,9 +1,10 @@
 # Offline conformance fixtures
 
 RT-10 runs 96 classified cases in ordinary Go tests: **86 reference agreements**,
-**one documented extension**, and **nine explicit unsupported-model rejections**.
-No test skips contribute to coverage. Runtime production code and the accepted
-IR 8/standard-domain opset 13 profile are unchanged.
+**one documented extension**, **one executed reference shape difference**, and
+**eight explicit unsupported-model rejections**. RT-12 enables the empty Gather
+case with its independently expected shape.
+No test skips contribute to coverage. The accepted IR 8/standard-domain opset 13 envelope remains unchanged.
 
 [The provenance manifest](provenance.json) records each case's origin, actual
 license status, IR/imports, selected operator schemas, named TensorProto inputs
@@ -71,13 +72,14 @@ real addition fixture expecting `[4,6]` and requires a diagnostic identifying
 
 ## Deferred reference differences
 
-Six original future-milestone models all require `ErrUnsupported`; expected
-values and actual reference observations are retained for later adapters.
-They do not count as runtime numerical coverage:
+The empty Gather model now executes and compares its exact shape with the
+independent expected output. The five remaining future-milestone models require
+`ErrUnsupported`; their expected values and actual observations remain retained
+and do not count as runtime numerical coverage:
 
 | Case | Independent expectation and retained reference behavior | Owner |
 | --- | --- | --- |
-| Empty Gather indices | Shape `[2,0,2]`; evaluator returns `[0]` | RT-12 |
+| Empty Gather indices | Shape `[2,0,2]`; evaluator returns `[0]` | RT-12 implemented difference |
 | AveragePool ceil window | Including padding uses full-kernel divisors; `[3,2.25,3.75,2.25]`; actual evaluator and ORT outputs retained | RT-13 |
 | MaxPool NaN | Independent output propagates NaN; evaluator filters it; ORT output retained | RT-13 |
 | BatchNormalization-9 | Stored statistics give `[2.5,4.5]`, agreeing with ORT; evaluator applies momentum and differs | RT-13 |

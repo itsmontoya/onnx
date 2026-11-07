@@ -1,4 +1,4 @@
-// Command inference runs the checked-in dynamic-batch MLP or branching graph.
+// Command inference runs the checked-in dynamic-batch MLP, branching or shape graph.
 package main
 
 import (
@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	graph := flag.String("graph", "mlp", "fixture graph: mlp or branch")
+	graph := flag.String("graph", "mlp", "fixture graph: mlp, branch or shape")
 	batch := flag.Int("batch", 1, "fixture batch size: 1 or 3")
 	flag.Parse()
 	if err := run(*graph, *batch); err != nil {
@@ -55,6 +55,16 @@ func run(graph string, batch int) (err error) {
 	}
 
 	for _, output := range outputs {
+		if output.Tensor.DataType() == onnx.Int64 {
+			var integers []int64
+			if integers, err = output.Tensor.Int64Values(); err != nil {
+				return fmt.Errorf("read output %q: %w", output.Name, err)
+			}
+
+			fmt.Printf("%s %v = %v\n", output.Name, output.Tensor.Shape(), integers)
+			continue
+		}
+
 		var values []float32
 		if values, err = output.Tensor.Float32Values(); err != nil {
 			return fmt.Errorf("read output %q: %w", output.Name, err)
@@ -66,8 +76,8 @@ func run(graph string, batch int) (err error) {
 }
 
 func fixtureInputs(graph string, batch int) (inputs map[string]*onnx.Tensor, err error) {
-	if graph != "mlp" && graph != "branch" {
-		return nil, fmt.Errorf("graph must be mlp or branch")
+	if graph != "mlp" && graph != "branch" && graph != "shape" {
+		return nil, fmt.Errorf("graph must be mlp, branch or shape")
 	}
 
 	if batch != 1 && batch != 3 {
@@ -81,7 +91,20 @@ func fixtureInputs(graph string, batch int) (inputs map[string]*onnx.Tensor, err
 		value    *onnx.Tensor
 	)
 
-	if value, err = onnx.NewFloat32(shape, features[:batch*2]); err != nil {
+	if graph == "shape" {
+		features = make([]float32, batch*6)
+		for index := range features {
+			features[index] = float32(index + 1)
+		}
+		shape = []int64{int64(batch), 2, 3}
+	}
+
+	count := batch * 2
+	if graph == "shape" {
+		count = batch * 6
+	}
+
+	if value, err = onnx.NewFloat32(shape, features[:count]); err != nil {
 		return nil, fmt.Errorf("create features: %w", err)
 	}
 

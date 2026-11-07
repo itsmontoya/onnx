@@ -172,7 +172,7 @@ func TestLoadRejectsWholeModel(t *testing.T) {
 		{"ir", func(model *onnxpb.ModelProto) { model.IrVersion = proto.Int64(9) }, ErrUnsupported, false},
 		{"missing input reference", func(model *onnxpb.ModelProto) { model.Graph.Node[0].Input[0] = "absent" }, ErrInvalidModel, false},
 		{"unused planned node", func(model *onnxpb.ModelProto) {
-			model.Graph.Node = append(model.Graph.Node, &onnxpb.NodeProto{OpType: proto.String("Flatten"), Input: []string{"x"}, Output: []string{"unused"}})
+			model.Graph.Node = append(model.Graph.Node, &onnxpb.NodeProto{OpType: proto.String("GlobalAveragePool"), Input: []string{"x"}, Output: []string{"unused"}})
 		}, ErrUnsupported, true},
 		{"unknown attribute", func(model *onnxpb.ModelProto) {
 			model.Graph.Node[0].Attribute = []*onnxpb.AttributeProto{{Name: proto.String("extra"), Type: onnxpb.AttributeProto_INT.Enum()}}

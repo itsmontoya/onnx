@@ -78,7 +78,7 @@ func hasPlanner(record capability.Record) (supported bool) {
 	}
 
 	switch record.Operator {
-	case "Identity", "Constant", "Add", "Sub", "Mul", "Div", "MatMul", "Gemm", "Relu", "Sigmoid", "Tanh", "Softmax":
+	case "Identity", "Constant", "Add", "Sub", "Mul", "Div", "MatMul", "Gemm", "Relu", "Sigmoid", "Tanh", "Softmax", "Shape", "Flatten", "Transpose", "Reshape", "Squeeze", "Unsqueeze", "Gather", "Concat":
 		return true
 	}
 	return false

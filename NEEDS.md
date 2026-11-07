@@ -15,19 +15,19 @@ Reviewed on 2026-11-06 against published [`v0.7.0`][backend-release], commit
 [`6048452c57a0a293db4591cd2e2febd7d6b743a3`][backend-commit]. The GitHub tag
 was verified, and all 87 published tensor, handoff, tensor-design, and module
 files matched the adjacent source checkout. NN-01–NN-12 are implemented.
-**NN-13 remains blocked on RT-12**, as recorded in [PR #114][nn13-pr] and
+**NN-13 optimization is not implemented**, as recorded in [PR #114][nn13-pr] and
 [its tracked handoff][nn-13]. RT-01–RT-09 now implement the runtime contract
 through serial M1 sessions, including broadcast arithmetic, products, activations
 and exact float/int Constant forms.
 RT-10 adds offline typed conformance fixtures and retains the backend reference
 differences as documented extensions or explicit future-adapter rejections;
-see [the fixture guide](testdata/conformance/README.md). No M2/M3 or reduction
-runtime support follows from these reference records.
+see [the fixture guide](testdata/conformance/README.md). M3 and reduction runtime support remain deferred. RT-12 implements the M2
+shape adapters with the reference exceptions below.
 RT-11 demonstrates this working M1 runtime with original MLP and two-input/
 two-output branching models at batches 1 and 3. The [integration report](docs/integration-rt11.md)
 records reference comparisons, provenance/hashes, lifecycle/concurrent-session
-checks and exact supported restrictions. RT-12's shape-heavy graph is still
-required before NN-13 can resume; these MLP results do not claim to unblock it.
+checks and exact supported restrictions. RT-12 adds a shape-heavy graph at both batch sizes and supplies the
+[accessible runtime handoff](docs/handoff-nn13.md) needed to resume NN-13.
 
 The library's `NEEDS.md` is ignored and is not included in the release tree.
 Use the published [tensor contract][tensor-contract], source, tests, and tracked
@@ -72,12 +72,11 @@ Fixture versions, tolerances, hashes, and actual reference exceptions are record
 in the [published fixture provenance][backend-fixtures]. A reference rejection
 or disagreement must not count as a passing compatibility case.
 
-### Unblocking NN-13
+### RT-12 inputs for NN-13
 
-Begin runtime work at RT-01 using the released copying backend. Complete
-RT-11 and RT-12, then provide an accessible runtime source revision and handoff
-with reproducible MLP and shape-heavy graphs, named inputs/expected outputs,
-and runs for at least two batch sizes. NN-13 can then measure the unchanged
+RT-11 and RT-12 use the released copying backend and provide the
+[runtime source/fixture handoff](docs/handoff-nn13.md), including reproducible
+MLP and shape-heavy graphs, named inputs/expected outputs and batches 1 and 3. NN-13 can then measure the unchanged
 baseline, select a justified bridge/workspace change, and report before/after
 latency, allocations, copied bytes, and peak live memory with ownership/race
 checks. Its [handoff][nn-13] defines the full measurement plan.
@@ -508,3 +507,17 @@ opset.
 [nn-11]: https://github.com/itsmontoya/neuralnetwork/blob/v0.7.0/docs/handoffs/NN-11.md
 [nn-12]: https://github.com/itsmontoya/neuralnetwork/blob/v0.7.0/docs/handoffs/NN-12.md
 [nn-13]: https://github.com/itsmontoya/neuralnetwork/blob/v0.7.0/docs/handoffs/NN-13.md
+
+### Normative RT-12 shape adapter decisions
+
+The published [NN-07][nn-07] and [NN-08][nn-08] exceptions are binding runtime
+inputs. Flatten computes both concrete split products, accepting valid empty
+prefixes where the pinned evaluator rejects inferred -1 reshaping. Gather uses
+the exact data-prefix + full-indices-shape + data-suffix formula; the evaluator's
+empty-indices `[0]` shortcut is retained as a real disagreement. Neither is
+counted as unqualified reference agreement. The [M2 fixture guide](testdata/m2/README.md)
+records 60 agreements, two Flatten rejections and four Gather differences.
+Reshape-13 zero means copy the same-position input dimension; one -1 may be
+inferred only when the known product is nonzero. Omitted Squeeze axes remove all
+unit dimensions; explicitly empty axes preserve shape. Unsqueeze axes normalize
+against output rank. All transforms preserve exact int64 and float32 bits.

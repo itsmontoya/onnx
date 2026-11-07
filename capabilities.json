@@ -412,7 +412,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-12",
       "data_types": [
         "float32",
@@ -436,7 +436,8 @@
         }
       },
       "restrictions": [
-        "type preserving; split axis in [-rank,rank], default 1"
+        "type preserving; split axis in [-rank,rank], default 1",
+        "explicit concrete products for empty prefixes; documented evaluator rejection difference"
       ]
     },
     {
@@ -445,7 +446,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-12",
       "data_types": [
         "float32",
@@ -473,7 +474,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-12",
       "data_types": [
         "float32",
@@ -496,7 +497,7 @@
         }
       },
       "restrictions": [
-        "type preserving; perm defaults to reverse; complete unique permutation"
+        "type preserving; perm defaults to reverse; complete unique nonnegative permutation"
       ]
     },
     {
@@ -505,7 +506,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-12",
       "data_types": [
         "float32",
@@ -526,7 +527,7 @@
       "attributes": {},
       "restrictions": [
         "optional int64 rank-one axes input; omitted axes remove all unit dimensions",
-        "explicit axes must be unique and name unit dimensions"
+        "explicit axes must be unique and name unit dimensions; explicit empty axes are identity"
       ]
     },
     {
@@ -535,7 +536,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-12",
       "data_types": [
         "float32",
@@ -562,7 +563,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-12",
       "data_types": [
         "float32",
@@ -589,7 +590,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-12",
       "data_types": [
         "float32",
@@ -623,7 +624,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-12",
       "data_types": [
         "float32",
@@ -646,7 +647,7 @@
         }
       },
       "restrictions": [
-        "float32/int64 inputs with equal rank >= 1 and equal non-axis dimensions",
+        "float32/int64 inputs of one type with equal rank >= 1 and equal non-axis dimensions; checked axis sum",
         "required axis; nonempty variadic input list"
       ]
     },

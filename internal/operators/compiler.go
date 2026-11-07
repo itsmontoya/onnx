@@ -31,6 +31,7 @@ func newCompiler(ctx context.Context, source *graph.Graph, registry *Registry, l
 	}
 
 	c.plan.indices = make(map[string]int)
+	c.constants = make(map[int]*graph.Constant)
 	return &c, nil
 }
 
@@ -40,6 +41,7 @@ type compiler struct {
 	registry  *Registry
 	plan      *Plan
 	loadBytes int64
+	constants map[int]*graph.Constant
 }
 
 func (c *compiler) compile(source *graph.Graph) (err error) {
@@ -137,6 +139,10 @@ func (c *compiler) addValue(source graph.Value) (err error) {
 
 	c.plan.indices[value.Name] = len(c.plan.values)
 	c.plan.values = append(c.plan.values, value)
+	if source.Default != nil && !source.Input {
+		c.constants[len(c.plan.values)-1] = source.Default
+	}
+
 	return nil
 }
 
@@ -203,6 +209,12 @@ func (c *compiler) node(node graph.Node) (err error) {
 			return fmt.Errorf("output value %q: %w", value.Name, err)
 		}
 	}
+	if step.Constant != nil {
+		c.constants[step.Outputs[0]] = step.Constant
+	} else if step.Operator == "Identity" {
+		c.constants[step.Outputs[0]] = c.constants[step.Inputs[0]]
+	}
+
 	c.plan.steps = append(c.plan.steps, step)
 	return nil
 }
@@ -245,7 +257,12 @@ func (c *compiler) infer(node graph.Node, step *Step) (info graph.ValueInfo, con
 				inputs[slot] = c.plan.values[index].Info
 			}
 		}
-		info, err = inferNumerical(node, step, inputs)
+		if IsShapeOperator(node.Operator) {
+			info, err = c.inferShape(node, step, inputs)
+		} else {
+			info, err = inferNumerical(node, step, inputs)
+		}
+
 		return info, nil, err
 	}
 
@@ -256,6 +273,63 @@ func (c *compiler) infer(node graph.Node, step *Step) (info graph.ValueInfo, con
 	constant = node.Attributes[0].Tensor
 	info, err = c.constantInfo(node.Outputs[0], constant)
 	return info, constant, err
+}
+
+func (c *compiler) inferShape(node graph.Node, step *Step, inputs []graph.ValueInfo) (info graph.ValueInfo, err error) {
+	for _, attribute := range node.Attributes {
+		if attribute.Name == "perm" {
+			if len(attribute.Ints) > c.limits.MaxRank {
+				return info, fmt.Errorf("%w: permutation rank", graph.ErrLimit)
+			}
+
+			if err = c.reserve(int64(len(attribute.Ints)) * 8); err != nil {
+				return info, err
+			}
+		}
+	}
+	if len(inputs) > 1 && step.Inputs[1] >= 0 && node.Operator != "Gather" && node.Operator != "Concat" && inputs[1].ShapeKnown && len(inputs[1].Dimensions) == 1 && inputs[1].Dimensions[0].Kind == graph.FixedDimension {
+		count := inputs[1].Dimensions[0].Value
+		// Shape/axis vector lengths can exceed the data rank. Account
+		// for output dimension records and local metadata copies too.
+		if count > c.limits.MaxLoadBytes/128 {
+			return info, fmt.Errorf("%w: shape metadata payload", graph.ErrLimit)
+		}
+
+		if err = c.reserve(count * 128); err != nil {
+			return info, err
+		}
+
+		if count > int64(c.limits.MaxRank) || node.Operator == "Unsqueeze" && inputs[0].ShapeKnown && count > int64(c.limits.MaxRank-len(inputs[0].Dimensions)) {
+			return info, fmt.Errorf("%w: shape or axes length exceeds rank limit", graph.ErrLimit)
+		}
+
+		if node.Operator == "Squeeze" && inputs[0].ShapeKnown && count > int64(len(inputs[0].Dimensions)) {
+			return info, fmt.Errorf("%w: Squeeze axes exceed input rank", graph.ErrInvalidModel)
+		}
+	}
+
+	var (
+		values []int64
+		known  bool
+	)
+
+	if len(step.Inputs) > 1 && step.Inputs[1] >= 0 && node.Operator != "Concat" {
+		constantInput := c.constants[step.Inputs[1]]
+		if constantInput != nil && constantInput.DataType() == tensor.Int64 {
+			if err = c.reserve(constantInput.ByteSize()); err != nil {
+				return info, err
+			}
+
+			if values, err = constantInput.Int64Values(); err != nil {
+				return info, err
+			}
+
+			known = true
+		}
+	}
+
+	planner := newShapePlanner(c.ctx, step, inputs, values, known)
+	return planner.infer(node)
 }
 
 func (c *compiler) constantInfo(name string, constant *graph.Constant) (info graph.ValueInfo, err error) {

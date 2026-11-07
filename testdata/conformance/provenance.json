@@ -6172,8 +6172,8 @@
       "name": "deferred_gather_empty",
       "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
       "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
-      "status": "unsupported",
-      "reason": "Gather-13 adapter is RT-12; reference loses empty indices/prefix shape.",
+      "status": "difference",
+      "reason": "RT-12 applies exact prefix/indices/suffix shape [2,0,2]; evaluator incorrectly returns [0]. NumPy take independently confirms expected shape.",
       "ir_version": 8,
       "opsets": {
         "": 13
