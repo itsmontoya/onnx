@@ -3,11 +3,14 @@
 RT-12 implements a working M2 runtime against the unchanged copying backend
 `github.com/itsmontoya/neuralnetwork v0.7.0`, published commit
 [`6048452c57a0a293db4591cd2e2febd7d6b743a3`](https://github.com/itsmontoya/neuralnetwork/tree/6048452c57a0a293db4591cd2e2febd7d6b743a3).
-The [runtime branch](https://github.com/itsmontoya/onnx/tree/rt-12-shape-operators)
-contains its source, fixtures, example and baseline benchmarks. The implementation
-revision is the commit introducing this handoff (`git log --reverse --format=%H
--- docs/handoff-nn13.md | head -1`); the completed RT-12 roadmap handoff records
-that full revision. No local replace or unpublished backend is used.
+The accessible implementation revision is
+[`3b2895ab233b28c0c7fc731e5927e82c99416fcf`](https://github.com/itsmontoya/onnx/tree/3b2895ab233b28c0c7fc731e5927e82c99416fcf),
+on [rt-12-shape-operators](https://github.com/itsmontoya/onnx/tree/rt-12-shape-operators),
+stacked in [PR #12](https://github.com/itsmontoya/onnx/pull/12) over RT-11
+`93babe6159cd80b0fc6f940657de23fb857bb404`. It contains the runtime, hashed
+fixtures, runnable example and baseline benchmarks. The final handoff revision
+is the commit introducing the RT-12 completion record in ROADMAP.md. No local
+replace or unpublished backend is used.
 
 This supplies NN-13's required runtime inputs. It does not implement NN-13 or
 RT-16, alter backend ownership, or claim optimization results. Follow the

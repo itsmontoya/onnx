@@ -12,7 +12,7 @@ capability status, dependency or numerical policy changes.
 M1 accepts IR 8, exactly empty-domain opset 13, dense float32 numerical operators,
 and float32/int64 Identity/Constant. All 12 implemented operators and their
 arity/type/rank/attribute/empty-value restrictions are listed in the
-[generated M1 table](getting-started.md#m1-capability-table), sourced from
+[generated M1 table](getting-started.md#implemented-capability-table), sourced from
 [capabilities.json](../capabilities.json). Planned capability records establish
 no runtime support. This report verifies concrete cases, not arbitrary ONNX
 models or complete upstream profile coverage.
@@ -83,7 +83,7 @@ and owned output storage survives closure.
 
 These are **four additional reference agreements**. RT-09 remains 81 models:
 80 actual reference agreements plus one explicit empty-axis Softmax extension.
-RT-10 remains 86 agreements, one extension and nine explicit unsupported-model
+At the RT-11 revision, RT-10 had 86 agreements, one extension and nine explicit unsupported-model
 rejections. Its pinned source audit still contains 1,422 backend models and
 zero exact IR-8/opset-13 envelopes; original upstream bytes remain rejection
 fixtures. No skips, evaluator rejection or deferred shape/CNN observation count
@@ -144,3 +144,9 @@ these reproducible MLP models, that enables the
 [NN-13 measurement plan](https://github.com/itsmontoya/neuralnetwork/blob/v0.7.0/docs/handoffs/NN-13.md).
 RT-11 alone does not unblock NN-13. The first working M1 inference demonstrated
 here already runs without those later tasks.
+
+RT-12 subsequently adds all M2 operators and a shape-heavy graph at both batch
+sizes. Its [current handoff](handoff-nn13.md) supplies NN-13's runtime inputs.
+The conformance corpus now executes the former Gather rejection as one explicit
+shape difference, leaving 86 agreements, one extension and eight unsupported
+rejections. The report above preserves the RT-11 measurements and fixture bytes.

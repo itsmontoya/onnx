@@ -114,6 +114,6 @@ in each completed task's handoff.
 
 Use Go 1.27.2 and the [development commands](docs/development.md) to build and
 verify this foundation, including cgo-disabled, `purego`, and race checks.
-The [inference guide](docs/getting-started.md) covers the working M1 examples.
+The [inference guide](docs/getting-started.md) covers the working MLP and shape examples.
 Pull request descriptions must preserve
 [the repository template](.github/PULL_REQUEST_TEMPLATE.md).

@@ -18,7 +18,8 @@ RT-08 adds public loaders, model/session lifecycle and serial Identity/Constant
 execution. RT-09 adds all M1 numerical handlers and scalar/list Constants.
 RT-10 supplies the reusable offline typed fixture and differential harness.
 RT-11 demonstrates MLP/branching inference with multi-batch reference goldens,
-a runnable public example and the first integration report.
+a runnable public example and the first integration report. RT-12 adds all M2
+shape operators, exact runtime shape subgraphs, and the NN-13 baseline handoff.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -33,10 +34,10 @@ is ignored and absent from the release; use the published handoffs instead.
 
 [PR #114](https://github.com/itsmontoya/neuralnetwork/pull/114) leaves NN-13
 optimization blocked on a working RT-12 runtime and graph benchmarks. The
-released copying backend is sufficient for M1–M4. Start at RT-01, complete
-RT-11/RT-12, and publish an accessible runtime revision with reproducible MLP
-and shape-heavy fixtures for at least two batch sizes. That unblocks NN-13;
-RT-16 consumes its results later and is not an NN-13 prerequisite. The existing
+released copying backend is sufficient for M1–M4. RT-11/RT-12 now provide an [accessible runtime revision and handoff](docs/handoff-nn13.md)
+with reproducible MLP/shape-heavy fixtures and baseline commands at batches 1
+and 3. NN-13 can measure that unchanged copying baseline; RT-16 consumes its
+results later and is not an NN-13 prerequisite. The existing
 NN dependencies below identify released contracts to consume, not missing work
 to repeat. Backend kernel tests do not establish runtime ONNX compatibility.
 
@@ -1129,7 +1130,7 @@ the working M1 examples demonstrated here.
 
 ## M2 and M3: useful model coverage
 
-### [ ] RT-12 — Integrate shape tensors and transformations
+### [x] RT-12 — Integrate shape tensors and transformations
 
 **Depends on:** RT-11, NN-07, NN-08. **Deliverable:** all M2 operators in the
 coverage table and runtime-dependent shape evaluation.
@@ -1154,6 +1155,116 @@ and exact backend version, reproducible MLP and shape-heavy fixtures with hashes
 named inputs/expected outputs, and runnable examples for at least two batch
 sizes. Link [NN-13's measurement plan](https://github.com/itsmontoya/neuralnetwork/blob/v0.7.0/docs/handoffs/NN-13.md).
 Do not wait for RT-16 to establish the unchanged copying baseline.
+
+**Handoff (RT-12):** Accessible implementation revision
+[`3b2895ab233b28c0c7fc731e5927e82c99416fcf`](https://github.com/itsmontoya/onnx/tree/3b2895ab233b28c0c7fc731e5927e82c99416fcf),
+based on RT-11 `93babe6159cd80b0fc6f940657de23fb857bb404`, on
+`rt-12-shape-operators`; [stacked PR #12](https://github.com/itsmontoya/onnx/pull/12)
+targets `rt-11-inference-examples`. The final task revision is the commit
+introducing this completion record; retrieve it with
+`git log -1 --format=%H -- ROADMAP.md`. Backend remains published
+`neuralnetwork v0.7.0` at `6048452c57a0a293db4591cd2e2febd7d6b743a3`,
+protobuf v1.36.12, Go 1.26.1 baseline/Go 1.27.2 toolchain. No local replace,
+backend edit or exported runtime signature change.
+
+Changed production files: [shape_call.go](shape_call.go), evaluation.go,
+internal/operators/compiler.go, shape_planner.go, shape_rules.go, step.go,
+plan.go and registry.go; [capabilities.json](capabilities.json) now records
+exactly 20 implemented operators. Tests cover those boundaries in
+shape_call_test.go, m2_integration_test.go, inference_integration_test.go and
+the existing capability/model/planner suites. [tools/check_m2.py](tools/check_m2.py)
+and [testdata/m2](testdata/m2/README.md) add exact typed fixtures; existing
+inference/conformance/profile tools and documentation track current statuses.
+The public example gains `-graph shape`; [inference_benchmark_test.go](inference_benchmark_test.go)
+provides Load/First/Warm benchmarks. README, TODO, NEEDS, runtime/development/
+getting-started guides and the [NN-13 handoff](docs/handoff-nn13.md) record the
+implemented contracts and unchanged copying baseline.
+
+All eight M2 schema-13 operators execute with float32/int64 data as applicable.
+Shape produces exact int64 dimensions from each concrete runtime input. Flatten
+uses the split-axis products (default 1); Transpose defaults to full reversal
+and validates complete unique nonnegative permutations. Reshape-13 accepts a
+rank-one int64 shape, copies same-position input dimensions for 0, infers at
+most one -1, allows an unambiguous inferred zero, and rejects ambiguous zero
+products, dimensions below -1, repeated -1, invalid products and allowzero.
+Squeeze/Unsqueeze consume schema-13 rank-one int64 axes inputs. Omitted Squeeze
+axes remove all concrete unit dimensions; explicit-empty axes are identity.
+Unsqueeze axes are mandatory and normalize in output rank. Gather preserves
+prefix + full indices shape + suffix, handles arbitrary-rank/scalar/empty int64
+indices and negative values, and validates every index even for empty results.
+Concat requires a nonempty same-type/rank list, checks non-axis dimensions and
+checked axis sums, including otherwise-empty tensors.
+
+The compiler's focused shapePlanner propagates metadata without allocating
+numerical node outputs. It reserves copied immutable initializer/Constant/
+Identity int64 access before validating known values; overridable graph-input
+defaults remain dynamic. Shape/axes metadata copies are also bounded before
+allocation. Genuinely runtime values/ranks defer to Run; missing intermediate
+value_info is allowed. Runtime shapeCall reserves int64 accessor/Shape staging
+before copying, then adds the complete destination while staging remains live.
+Audited v0.7.0 transforms/Concat/Gather Into paths require no additional
+numerical scratch. Existing M1 reservations, errors, cancellation boundaries,
+model/session ownership/defaults, independent output copies and concurrency
+remain intact. Separate calls create fresh value/symbol tables. No storage
+reuse, constant folding, backend bridge, NN-13 or RT-16 optimization is added.
+
+The [66 M2 fixtures](testdata/m2/provenance.json) include **60 evaluator
+agreements**, **two empty-Flatten evaluator rejections**, and **four empty-Gather
+shape differences**, each independently checked with NumPy. Int64 extrema and
+values above 2^53 remain exact; transform floats preserve NaN payload bits,
+infinity signs and signed zeros. Static invalid constant values fail Load;
+dynamic invalid axes/reshape/Gather values fail contextually and recover.
+Tests cover omitted versus explicit-empty axes, output-rank axes, default and
+invalid permutations, scalars/empties, input-default override, sum/product
+bounds and exact staging/destination live budgets before numerical allocation.
+The original conformance suite keeps 86 agreements and one Softmax extension,
+now executes its previously deferred Gather case as one independent expected
+shape difference, and retains eight genuine unsupported-model rejections.
+Actual evaluator `[0]` results remain in provenance; no difference counts as
+unqualified agreement. NEEDS makes the NN-07/08 exceptions normative.
+
+The shape-heavy graph composes Shape → Gather → Unsqueeze/Concat → Reshape →
+Unsqueeze → Transpose → Squeeze → Flatten at batches 1 and 3, without inferred
+intermediate value_info. Named output `target` remains int64 `[batch,-1]`;
+`reshaped` and `flat` compare exactly with independent row-major formulas.
+One shared session runs both batches; separate sessions start concurrently;
+retained outputs compare after later runs/Close. Omitted Squeeze also changes
+rank correctly through batches 1 → 3 → 1 without stale state.
+
+The [NN-13 handoff](docs/handoff-nn13.md) links the published measurement plan,
+accessible runtime/backend revisions, model and every named input/output hash,
+regeneration, examples and runnable baseline commands. Existing MLP SHA-256 is
+unchanged: `04df066d0a12b0e6ddf2ba89e9e452768939a745ddd574cfb39780d0e14c06f9`;
+shape model: `64800db535d7fd83d30f98d7c30ccf402c00e444a082a9d0865c812ed79b2cb6`;
+inference provenance: `547933bf4e3be8e5e57e537820a1529822fcf3ddda17d953a83e98eca887ff2c`;
+M2 provenance: `4bd43bb170feb5427a4f596ba4a171ff1da03cd251558e80e22adb1121fba59f`.
+Pinned Python 3.9.6 / ONNX 1.16.2 source
+`3bf92c03a9f27eba3bda1e5b9e63ea20ec213557` / NumPy 1.26.4 /
+protobuf 4.25.3 reproduces these files; the conformance audit additionally uses
+ORT 1.19.2. No repository LICENSE is invented for original fixtures.
+
+Validation passed on Go 1.27.2 Darwin/arm64 with temporary GOCACHE and offline
+Go dependencies: gofmt/go fmt, tidy-diff, mod verify, build, vet, normal,
+CGO_ENABLED=0, CGO_ENABLED=0 purego and race suites. All six public CLI
+model/batch combinations and a purego shape run pass. A fresh implementation
+clone passes cached dependency download, the cgo-disabled suite and MLP/shape
+examples for both batches offline with a clean tree. Pinned profile/defaults
+(25 schemas, 20 implemented), unchanged 81-model M1, 66-case M2, 96-case
+conformance/1,422-model upstream audit and three-model/six-case inference/table
+reproduction pass. Handwritten spacing/type-method colocation, contract Go-block
+formatting, local Markdown targets and diff checks pass. The baseline benchmark
+smoke executes Load/First/Warm for both graphs/batches; no optimized result,
+copied-byte measurement or peak-memory report is claimed.
+[Hosted Linux verification](https://github.com/itsmontoya/onnx/actions/runs/42427087896)
+passed formatting, tidy, build, vet, normal, cgo-disabled, purego and race checks
+at the implementation revision. Final PR-head verification must remain green.
+
+RT-13 is next: add the bounded CNN adapters and composed CNN fixture against
+NN-09/10/11, retaining their reference differences. NN-13 may independently
+consume this published handoff; RT-16 remains later. External weights, broader
+profiles, reductions, optimization and the root license decision remain separate
+maintainer-controlled work. The final stacked PR must be open, unmerged, based
+on RT-11 and green before starting the next task.
 
 ### [ ] RT-13 — Integrate 2D CNN operators
 

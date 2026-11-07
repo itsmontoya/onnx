@@ -67,7 +67,7 @@ The [RT-11 fixture guide](../testdata/inference/README.md) documents optional
 tests load checked-in bytes, validate hashes/metadata, compare golden named
 outputs for batches 1 and 3, retain outputs across runs/Close and exercise two
 sessions concurrently on each shared numerical plan. The generator also checks
-that the getting-started M1 table exactly reflects `capabilities.json`.
+that the getting-started implemented table exactly reflects `capabilities.json`.
 
 ## Package boundaries
 

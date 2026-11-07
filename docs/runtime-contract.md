@@ -393,7 +393,8 @@ metadata) are:
 | CNN | Future adapters must audit all numerical scratch |
 
 Budget validation precedes allocation and arithmetic must not overflow. Planning
-performs only metadata allocations, never full numeric output tensors. Scratch
+never constructs numerical node outputs. RT-12 inspects immutable int64 constant
+values through copied accessors only after reserving their load payload. Scratch
 bounds must be updated if the pinned backend changes. Conservative rejection
 within configured budgets is preferable to an unaccounted large allocation.
 
