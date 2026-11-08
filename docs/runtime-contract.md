@@ -315,6 +315,13 @@ and attribute string payload. Ranks/dimensions apply to all metadata, constants,
 and runtime values, including otherwise-unused empty dimensions. Initializers
 and Constant payloads together count against MaxInitializerBytes.
 
+RT-15 preflights the whole graph's distinct value count before initializer
+conversion or external resolution. Defaulted inputs reuse a source name; empty
+optional slots do not count. Duplicate producers still fail structural validation.
+An oversized malformed graph can therefore report its count limit before a
+later tensor/reference error. Decoded payload fields are counted in schema
+descriptor order so the first overflowing field is deterministic.
+
 | Field | Default | Accounted resource |
 | --- | ---: | --- |
 | MaxModelBytes | 64 MiB | Serialized bytes; reader consumes at most limit+1 to detect oversize |
@@ -422,7 +429,10 @@ Cancellation is observed before/after each node and during runtime-owned bounded
 I/O/planning loops, never promised inside a running numerical kernel or protobuf
 unmarshal. If cancellation arrives during the final node/output copying, check
 again before publishing and return the context error without partial outputs.
-RT-15 audits this granularity; a future in-kernel callback needs a published
+The [RT-15 audit](hardening-rt15.md) tests this granularity across M1–M4 and polls
+node-slot assembly and Concat input planning as well. Synchronous backend shape
+helpers and deep snapshot/copy accessors also run to completion between polls.
+A future in-kernel callback needs a published
 backend contract/revision. There is no cancellation-latency guarantee for a
 single large kernel, and no goroutine is abandoned to simulate cancellation.
 

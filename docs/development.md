@@ -400,6 +400,30 @@ copies, default overrides, scalar/empty values, fresh symbol bindings, original
 constraints, lifecycle races, concurrent sessions, cancellation at every observed
 boundary, exact budgets and recovery. They need neither Python nor native runtime.
 
+## Resource hardening and fuzzing
+
+The [RT-15 audit](hardening-rt15.md) maps every finite default to its validation
+and enforcement tests and records allocation, error, cancellation and lifecycle
+evidence. Budget tests include simultaneous workspace/destination reservations
+and measured rejection before 1 MiB numeric allocations.
+
+Native Go fuzz targets use checked-in real fixtures and malformed seeds, finite
+wire/known-recursion/model/tensor/graph/run limits and no external resolver.
+Inputs above their 16 KiB cap are skipped. Normal tests execute seeds offline
+without Python; a short mutation smoke can be run explicitly:
+
+```sh
+GOMAXPROCS=2 go test ./internal/decode -run '^$' -fuzz '^FuzzProtobufEntrypoints$' -fuzztime=3s -parallel=2
+GOMAXPROCS=2 go test ./internal/decode -run '^$' -fuzz '^FuzzTensorDecode$' -fuzztime=3s -parallel=2
+GOMAXPROCS=2 go test ./internal/graph -run '^$' -fuzz '^FuzzGraphReferences$' -fuzztime=3s -parallel=2
+GOMAXPROCS=2 go test . -run '^$' -fuzz '^FuzzShapeAttributePlanning$' -fuzztime=3s -parallel=2
+```
+
+The Go workflow includes these bounded smokes. They test robustness within their
+caps and do not broaden operator/version compatibility. Process RSS is outside
+logical payload accounting, and synchronous protobuf/backend calls complete
+between context polls with no cancellation-latency guarantee.
+
 ## M1 numerical adapters and development fixtures
 
 RT-09 maps Add/Sub/Mul/Div, MatMul/Gemm, Relu/Sigmoid/Tanh and Softmax-13 to
