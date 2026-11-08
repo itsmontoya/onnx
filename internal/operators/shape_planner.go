@@ -318,6 +318,10 @@ func (p *shapePlanner) gather(info graph.ValueInfo) (out graph.ValueInfo, err er
 func (p *shapePlanner) concat(info graph.ValueInfo) (out graph.ValueInfo, err error) {
 	var reference *graph.ValueInfo
 	for index := range p.inputs {
+		if err = p.ctx.Err(); err != nil {
+			return info, err
+		}
+
 		input := &p.inputs[index]
 		if input.DataType != tensor.Invalid {
 			if info.DataType != tensor.Invalid && info.DataType != input.DataType {
@@ -343,6 +347,10 @@ func (p *shapePlanner) concat(info graph.ValueInfo) (out graph.ValueInfo, err er
 	info.ShapeKnown, info.Dimensions = true, slices.Clone(reference.Dimensions)
 	info.Dimensions[axis] = fixed(0)
 	for _, input := range p.inputs {
+		if err = p.ctx.Err(); err != nil {
+			return info, err
+		}
+
 		if !input.ShapeKnown {
 			info.Dimensions[axis] = graph.Dimension{}
 			continue

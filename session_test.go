@@ -553,3 +553,53 @@ func TestSessionCancellationAtEveryBoundaryAndRecovery(t *testing.T) {
 		t.Fatalf("deadline cause: %v, %v", outputs, err)
 	}
 }
+
+func TestSessionBudgetRejectionBeforeNumericAllocation(t *testing.T) {
+	const payloadBytes int64 = 1 << 20
+	tests := []struct {
+		name     string
+		operator string
+		limits   Limits
+		node     int
+	}{
+		{"scratch", "Relu", Limits{MaxWorkspaceBytes: 1024}, 0},
+		{"intermediate", "Relu", Limits{MaxLiveBytes: payloadBytes + 1024}, 0},
+		{"output clone", "Identity", Limits{MaxLiveBytes: 2*payloadBytes + 1024}, -1},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			wire := modelWire(t, "profile/identity")
+			wire.Graph.Node[0].OpType = proto.String(tt.operator)
+			session := modelSession(t, loadedModel(t, modelBytes(t, wire), Options{Limits: tt.limits}))
+			small := map[string]*Tensor{"x": floatTensor(t, []int64{1, 2}, []float32{3, 4})}
+			retained, err := session.Run(context.Background(), small, RunOptions{})
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			large := map[string]*Tensor{"x": floatTensor(t, []int64{payloadBytes / 8, 2}, make([]float32, payloadBytes/4))}
+			var failed []NamedTensor
+			result := testing.Benchmark(func(b *testing.B) {
+				for b.Loop() {
+					failed, err = session.Run(context.Background(), large, RunOptions{})
+				}
+			})
+			var diagnostic *Error
+			if failed != nil || !errors.Is(err, ErrLimit) || !errors.As(err, &diagnostic) || diagnostic.NodeIndex != tt.node {
+				t.Fatalf("budget rejection: %v, %v", failed, err)
+			}
+
+			// Any destination, scratch bridge or requested clone would allocate at
+			// least a MiB. Only the small table, metadata and errors may allocate.
+			if result.AllocedBytesPerOp() > 32<<10 {
+				t.Fatalf("rejected run allocated numerical payload: %d bytes", result.AllocedBytesPerOp())
+			}
+
+			if _, err = session.Run(context.Background(), small, RunOptions{}); err != nil {
+				t.Fatalf("budget failure left session state: %v", err)
+			}
+
+			assertFloats(t, retained[0].Tensor, []int64{1, 2}, []float32{3, 4})
+		})
+	}
+}

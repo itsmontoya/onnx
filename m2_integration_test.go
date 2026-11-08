@@ -312,3 +312,58 @@ func TestM2DefaultShapeCanBeOverridden(t *testing.T) {
 		t.Fatalf("default override: %v, %v", outputs, err)
 	}
 }
+
+func TestM2CancellationAndRecovery(t *testing.T) {
+	selected := map[string]bool{
+		"shape_float32": true, "flatten_default_float32": true,
+		"transpose_explicit_float32": true, "reshape_zero_infer_int64": true,
+		"squeeze_negative_int64": true, "unsqueeze_scalar_float32": true,
+		"concat_negative_float32": true, "gather_general_int64": true,
+	}
+	var exercised int
+	for _, fixture := range readM2Cases(t) {
+		if !selected[fixture.Name] {
+			continue
+		}
+
+		exercised++
+		t.Run(fixture.Name, func(t *testing.T) {
+			data, err := fixture.Model.read()
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			inputs, inputErr := fixture.readInputs()
+			if inputErr != nil {
+				t.Fatal(inputErr)
+			}
+
+			session := modelSession(t, loadedModel(t, data, Options{}))
+			baseline := newCancelContext(0)
+			retained, runErr := session.Run(baseline, inputs, RunOptions{})
+			baseline.cancel()
+			if runErr != nil {
+				t.Fatal(runErr)
+			}
+
+			for boundary := 1; boundary <= baseline.checks; boundary++ {
+				ctx := newCancelContext(boundary)
+				outputs, cancelErr := session.Run(ctx, inputs, RunOptions{})
+				ctx.cancel()
+				if outputs != nil || !errors.Is(cancelErr, context.Canceled) {
+					t.Fatalf("boundary %d: %v, %v", boundary, outputs, cancelErr)
+				}
+			}
+			if _, err = session.Run(context.Background(), inputs, RunOptions{}); err != nil {
+				t.Fatalf("cancellation left session state: %v", err)
+			}
+
+			if err = fixture.compareOutputs(retained); err != nil {
+				t.Fatalf("cancellation changed retained outputs: %v", err)
+			}
+		})
+	}
+	if exercised != len(selected) {
+		t.Fatalf("exercised %d shape handlers, want %d", exercised, len(selected))
+	}
+}

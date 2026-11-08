@@ -119,6 +119,47 @@ func validateFeatures(ctx context.Context, wire *onnxpb.GraphProto, limits Limit
 	return nil
 }
 
+// validateValueCount rejects the whole graph before any initializer conversion.
+// Defaulted inputs reuse their named source; empty optional slots are absent.
+func validateValueCount(ctx context.Context, wire *onnxpb.GraphProto, limit int) (err error) {
+	seen := make(map[string]bool)
+	for _, input := range wire.Input {
+		if err = countValue(ctx, seen, input.GetName(), limit); err != nil {
+			return err
+		}
+	}
+	for _, initializer := range wire.Initializer {
+		if err = countValue(ctx, seen, initializer.GetName(), limit); err != nil {
+			return err
+		}
+	}
+	for index, node := range wire.Node {
+		for _, name := range node.Output {
+			if err = countValue(ctx, seen, name, limit); err != nil {
+				return nodeError(index, node, err)
+			}
+		}
+	}
+	return nil
+}
+
+func countValue(ctx context.Context, seen map[string]bool, name string, limit int) (err error) {
+	if err = ctx.Err(); err != nil {
+		return fmt.Errorf("value %q: %w", name, err)
+	}
+
+	if name == "" || seen[name] {
+		return nil
+	}
+
+	if len(seen) >= limit {
+		return fmt.Errorf("%w: value %q exceeds named value count", ErrLimit, name)
+	}
+
+	seen[name] = true
+	return nil
+}
+
 func validateAttribute(wire *onnxpb.AttributeProto) (err error) {
 	if wire.RefAttrName != nil || wire.G != nil || len(wire.Graphs) != 0 || wire.SparseTensor != nil || len(wire.SparseTensors) != 0 || wire.Tp != nil || len(wire.TypeProtos) != 0 {
 		return fmt.Errorf("%w: function reference, subgraph, sparse or type-valued attribute", ErrUnsupported)
