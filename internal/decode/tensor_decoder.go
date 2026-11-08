@@ -16,40 +16,22 @@ import (
 // and its original encoded length. Do not mutate wire during the decoder's life.
 // The decoder retains tensor messages, but never borrows their numeric storage.
 func NewTensorDecoder(ctx context.Context, wire proto.Message, encodedBytes int64, limits TensorLimits) (out *TensorDecoder, err error) {
-	return NewTensorDecoderWithResolver(ctx, wire, encodedBytes, limits, nil)
+	var d TensorDecoder
+	if err = d.initialize(ctx, wire, encodedBytes, limits, nil); err != nil {
+		return nil, err
+	}
+
+	return &d, nil
 }
 
 // NewTensorDecoderWithResolver also permits explicitly resolved external ranges.
 // The resolver remains caller-owned; each returned reader is closed by Decode.
 func NewTensorDecoderWithResolver(ctx context.Context, wire proto.Message, encodedBytes int64, limits TensorLimits, resolver ExternalDataResolver) (out *TensorDecoder, err error) {
-	var (
-		d            TensorDecoder
-		decodedBytes int64
-	)
-
-	if d.limits, err = limits.normalized(); err != nil {
+	var d TensorDecoder
+	if err = d.initialize(ctx, wire, encodedBytes, limits, resolver); err != nil {
 		return nil, err
 	}
 
-	if ctx == nil || wire == nil || !wire.ProtoReflect().IsValid() || encodedBytes < 0 {
-		return nil, fmt.Errorf("%w: context, wire message or encoded byte count", ErrInvalidArgument)
-	}
-
-	if wire.ProtoReflect().Descriptor().ParentFile() != onnxpb.File_onnx_proto {
-		return nil, fmt.Errorf("%w: message is not from the pinned ONNX schema", ErrInvalidArgument)
-	}
-
-	if encodedBytes > d.limits.MaxLoadBytes {
-		return nil, fmt.Errorf("%w: encoded payload", ErrLimit)
-	}
-
-	d.resolver = resolver
-	d.tensors = make(map[*onnxpb.TensorProto]bool)
-	if decodedBytes, err = countPayload(ctx, wire.ProtoReflect(), d.limits.MaxRecursion, d.limits.MaxLoadBytes-encodedBytes, d.tensors); err != nil {
-		return nil, err
-	}
-
-	d.loadBytes = encodedBytes + decodedBytes
 	return &d, nil
 }
 
@@ -66,6 +48,35 @@ type TensorDecoder struct {
 	tensors          map[*onnxpb.TensorProto]bool
 	loadBytes        int64
 	initializerBytes int64
+}
+
+func (d *TensorDecoder) initialize(ctx context.Context, wire proto.Message, encodedBytes int64, limits TensorLimits, resolver ExternalDataResolver) (err error) {
+	var decodedBytes int64
+
+	if d.limits, err = limits.normalized(); err != nil {
+		return err
+	}
+
+	if ctx == nil || wire == nil || !wire.ProtoReflect().IsValid() || encodedBytes < 0 {
+		return fmt.Errorf("%w: context, wire message or encoded byte count", ErrInvalidArgument)
+	}
+
+	if wire.ProtoReflect().Descriptor().ParentFile() != onnxpb.File_onnx_proto {
+		return fmt.Errorf("%w: message is not from the pinned ONNX schema", ErrInvalidArgument)
+	}
+
+	if encodedBytes > d.limits.MaxLoadBytes {
+		return fmt.Errorf("%w: encoded payload", ErrLimit)
+	}
+
+	d.resolver = resolver
+	d.tensors = make(map[*onnxpb.TensorProto]bool)
+	if decodedBytes, err = countPayload(ctx, wire.ProtoReflect(), d.limits.MaxRecursion, d.limits.MaxLoadBytes-encodedBytes, d.tensors); err != nil {
+		return err
+	}
+
+	d.loadBytes = encodedBytes + decodedBytes
+	return nil
 }
 
 // Decode validates a dense tensor before allocating numerical storage.

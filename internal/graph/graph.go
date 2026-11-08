@@ -12,26 +12,22 @@ import (
 // Apply bounded wire parsing first; do not mutate model during this call. No wire
 // message or decoder is retained. Operator/schema validation belongs to RT-07.
 func Build(ctx context.Context, model *onnxpb.ModelProto, encodedBytes int64, limits Limits) (out *Graph, err error) {
-	return BuildWithResolver(ctx, model, encodedBytes, limits, nil)
+	var g Graph
+	if err = g.build(ctx, model, encodedBytes, limits, nil); err != nil {
+		return nil, err
+	}
+
+	return &g, nil
 }
 
 // BuildWithResolver also resolves external tensors through an explicit resolver.
 // It retains neither the resolver nor its readers after this synchronous call.
 func BuildWithResolver(ctx context.Context, model *onnxpb.ModelProto, encodedBytes int64, limits Limits, resolver decode.ExternalDataResolver) (out *Graph, err error) {
-	var (
-		g Graph
-		b *builder
-	)
-
-	if b, err = newBuilder(ctx, model, encodedBytes, limits, &g, resolver); err != nil {
+	var g Graph
+	if err = g.build(ctx, model, encodedBytes, limits, resolver); err != nil {
 		return nil, err
 	}
 
-	if err = b.build(model); err != nil {
-		return nil, err
-	}
-
-	g.loadBytes, g.initializerBytes = b.decoder.Usage()
 	return &g, nil
 }
 
@@ -47,6 +43,21 @@ type Graph struct {
 	indices          map[string]int
 	loadBytes        int64
 	initializerBytes int64
+}
+
+func (g *Graph) build(ctx context.Context, model *onnxpb.ModelProto, encodedBytes int64, limits Limits, resolver decode.ExternalDataResolver) (err error) {
+	var b *builder
+
+	if b, err = newBuilder(ctx, model, encodedBytes, limits, g, resolver); err != nil {
+		return err
+	}
+
+	if err = b.build(model); err != nil {
+		return err
+	}
+
+	g.loadBytes, g.initializerBytes = b.decoder.Usage()
+	return nil
 }
 
 // Metadata returns an independent descriptive snapshot.
