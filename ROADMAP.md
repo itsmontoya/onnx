@@ -25,7 +25,9 @@ RT-14 adds explicit external float32/int64 tensor ranges and a confined director
 resolver, plus an externalized MLP with unchanged reference values.
 RT-15 audits finite limits and lifecycle/cancellation behavior, preflights named
 value counts before tensor conversion, stabilizes payload diagnostics and adds
-bounded native Go fuzz targets.
+bounded native Go fuzz targets. RT-18 documents the implemented M1–M4 subset,
+generates its support table from the validation manifest, and records release
+checks, actual reference outcomes and third-party notices.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -1584,7 +1586,7 @@ RT-18 documentation is next; RT-16/NN-13 optimization remains separate. Keep thi
 stacked RT-15 branch/PR open on RT-14, with hosted checks green; no merge or later
 task is performed here.
 
-### [ ] RT-18 — Publish complete usage and compatibility documentation
+### [x] RT-18 — Publish complete usage and compatibility documentation
 
 **Depends on:** RT-12, RT-13, RT-14, RT-15 and passing M1–M4 conformance cases.
 RT-16/RT-17 are optional later improvements, not release blockers.
@@ -1604,6 +1606,35 @@ if available. Update README/TODO and the task handoffs to match shipped code.
 are reproducible. The release checklist captures passing tests, reference
 comparisons, and known gaps; no skipped tests are advertised as support. Do not
 call the package fully ONNX-compliant or imply compatibility with every model.
+
+**Handoff (2026-11-08):** [The RT-18 handoff](docs/handoff-rt18.md) records
+implementation/documentation revision
+`928496894ca25fa0dd2edbca939abb9081e54a72`, based on RT-15
+`3a5b5b3baa0bb1bce1e6a7d378157ab2f1c8aac0`. README, usage/development/contract
+and package GoDoc now describe the shipped M1–M4 APIs, ownership, concurrency,
+limits/cancellation, errors, external resolution, export origins and restrictions.
+`go run ./tools/capabilitiesgen` checks the generated support table directly from
+the same embedded Capabilities records used by validation; `-write` regenerates
+it, Python inference checking delegates to it, and CI checks drift without Python.
+The [release checklist](docs/release-checklist.md) and
+[third-party notices](third_party/README.md) retain actual reference exceptions,
+pinned dependency/license texts and honest release gaps. No project LICENSE
+exists; choosing it and original-fixture licensing, merging, and publishing a
+tag remain separate maintainer actions. No license was invented.
+
+Full local module/build/vet/uncached normal/cgo-disabled/purego/race checks,
+canonical-table drift/recovery, compiling API snippets, documented sentinel
+failures, protobuf/all fixture regeneration, four bounded fuzz smokes and
+Markdown/style/diff checks pass on Go 1.27.2 Darwin/arm64. A fresh clone ran all
+20 MLP/branch/shape/CNN/external batch-1/3 variants with cleared environment,
+Go-only PATH, offline cached dependencies and CGO_ENABLED=0, including purego.
+Runtime APIs, IR 8/opset 13 float32/int64 CPU subset, 25 operators, backend
+v0.7.0 and protobuf v1.36.12 are unchanged. No benchmark performance result or
+broader support is claimed; hosted Linux checks must pass on the final stacked
+PR head. TODO/NEEDS current status is updated without deleting prior history.
+Keep the dedicated RT-18 branch/PR open on RT-15. RT-16 is next in document
+order after NN-13 provides measurements; RT-17/RT-19 remain later tasks. No
+later task, merge or publication is part of this handoff.
 
 ## Later: performance and compatibility expansion
 

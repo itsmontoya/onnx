@@ -71,7 +71,7 @@ git diff --check
 - [x] The MLP and CNN examples run at batches 1 and 3 in a fresh checkout with
   `CGO_ENABLED=0`; the external MLP also runs. Go-only PATH, cleared environment,
   offline cached modules and `GOTOOLCHAIN=local` demonstrate no Python/protoc/
-  compiler/native inference service invocation. Both default and purego paths
+  C/C++ compiler or native inference service invocation. Both default and purego paths
   pass. This validates runtime use after initial Go dependency provisioning.
 - [x] The guide's public API snippets compile and its failure probe reproduces
   unsupported IR, absent external resolver, byte-budget and missing-input

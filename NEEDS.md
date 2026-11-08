@@ -21,13 +21,16 @@ through serial M1 sessions, including broadcast arithmetic, products, activation
 and exact float/int Constant forms.
 RT-10 adds offline typed conformance fixtures and retains the backend reference
 differences as documented extensions or explicit future-adapter rejections;
-see [the fixture guide](testdata/conformance/README.md). M3 and reduction runtime support remain deferred. RT-12 implements the M2
+see [the fixture guide](testdata/conformance/README.md). RT-13 implements the
+bounded M3 CNN subset; reduction runtime support remains deferred. RT-12 implements the M2
 shape adapters with the reference exceptions below.
 RT-11 demonstrates this working M1 runtime with original MLP and two-input/
 two-output branching models at batches 1 and 3. The [integration report](docs/integration-rt11.md)
 records reference comparisons, provenance/hashes, lifecycle/concurrent-session
 checks and exact supported restrictions. RT-12 adds a shape-heavy graph at both batch sizes and supplies the
-[accessible runtime handoff](docs/handoff-nn13.md) needed to resume NN-13.
+[accessible runtime handoff](docs/handoff-nn13.md) needed to resume NN-13. RT-14 adds explicit external weights, RT-15 hardens
+resource/lifecycle behavior, and RT-18 documents the M1–M4 subset and
+[release checks](docs/release-checklist.md). Backend revisions remain unchanged.
 
 The library's `NEEDS.md` is ignored and is not included in the release tree.
 Use the published [tensor contract][tensor-contract], source, tests, and tracked

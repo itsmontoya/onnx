@@ -4,9 +4,10 @@ The library completion record and published handoffs live in [NEEDS.md](NEEDS.md
 runtime task definitions and completion checkboxes live in [ROADMAP.md](ROADMAP.md).
 Keep status there so this file does not become a second, conflicting backlog.
 The backend baseline is `neuralnetwork v0.7.0`: NN-01–NN-12 are complete and
-RT-01–RT-14 are complete. The [NN-13 runtime handoff](docs/handoff-nn13.md)
+RT-01–RT-15 and RT-18 are complete. The [NN-13 runtime handoff](docs/handoff-nn13.md)
 supplies its baseline inputs. CNN adapters and explicit external weights are
-implemented; resource/lifecycle hardening (RT-15) is next.
+implemented and hardened. RT-18 documents the M1–M4 subset; the next task in
+document order is RT-16, after NN-13 provides its measurements.
 
 ## Start here
 
@@ -28,7 +29,13 @@ implemented; resource/lifecycle hardening (RT-15) is next.
 6. **RT-13 is complete**: read the [CNN fixtures](testdata/m3/README.md) and
    [integration report](docs/integration-rt13.md).
 7. **RT-14 is complete**: read the [external fixtures](testdata/external/README.md)
-   and [integration report](docs/integration-rt14.md). Complete **RT-15** next.
+   and [integration report](docs/integration-rt14.md).
+8. **RT-15 is complete**: read the [resource/lifecycle audit](docs/hardening-rt15.md).
+9. **RT-18 is complete**: read [usage](docs/getting-started.md), the
+   [release checklist](docs/release-checklist.md), [notices](third_party/README.md)
+   and [handoff](docs/handoff-rt18.md). Complete **RT-16** next when NN-13
+   measurements are available, then RT-17 and RT-19. Publishing a tag and
+   deciding the absent project license remain maintainer actions.
 
 ## Subsequent milestones
 
@@ -36,7 +43,7 @@ implemented; resource/lifecycle hardening (RT-15) is next.
 | --- | --- | --- |
 | M2: shape processing | NN-07–NN-08 available in v0.7.0 | RT-12 complete |
 | M3: 2D CNNs | NN-09–NN-11 available in v0.7.0 | RT-13 complete |
-| M4: external weights and release readiness | Released copying backend | RT-14–RT-15, RT-18 |
+| M4: external weights and release readiness | Released copying backend | RT-14–RT-15, RT-18 complete |
 | Later: performance and broader coverage | NN-12 available; resume NN-13 after RT-12 | RT-16–RT-17, RT-19 |
 
 The detailed tasks define the actual dependency edges. Optional performance and
