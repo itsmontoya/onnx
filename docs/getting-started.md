@@ -1,16 +1,16 @@
 # Run inference in Go
 
-The first working milestone runs MLPs, named branching graphs, runtime shape subgraphs and 2D CNNs on the CPU
+The M1–M4 runtime runs MLPs, named branching graphs, runtime shape subgraphs and 2D CNNs on the CPU
 entirely in Go. It accepts **ONNX IR 8, empty standard domain, imported opset 13**
 and the implemented operator subsets below. Python, protoc, a C/C++ inference
 runtime and a shared library are unnecessary for normal use.
 
 ## Try the checked-in examples
 
-Install Go 1.27.2. For the reviewable RT-14 checkout, run:
+Install Go 1.27.2. For the reviewable RT-18 checkout, run:
 
 ```sh
-git clone --branch rt-14-external-data https://github.com/itsmontoya/onnx.git
+git clone --branch rt-18-usage-compatibility https://github.com/itsmontoya/onnx.git
 cd onnx
 go mod download
 CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 1
@@ -63,13 +63,59 @@ ORT for both batches; the pinned ONNX evaluator differs. See the
 
 ## Use the public API
 
+```go
+func infer(ctx context.Context) (outputs []onnx.NamedTensor, err error) {
+	var (
+		model   *onnx.Model
+		session *onnx.Session
+		input   *onnx.Tensor
+	)
+
+	if model, err = onnx.LoadFile(ctx, "testdata/inference/models/mlp.onnx", onnx.Options{}); err != nil {
+		return nil, err
+	}
+
+	defer func() { err = errors.Join(err, model.Close()) }()
+	if session, err = model.NewSession(); err != nil {
+		return nil, err
+	}
+
+	defer func() { err = errors.Join(err, session.Close()) }()
+	if input, err = onnx.NewFloat32([]int64{1, 2}, []float32{1, 2}); err != nil {
+		return nil, err
+	}
+
+	return session.Run(ctx, map[string]*onnx.Tensor{"features": input},
+		onnx.RunOptions{Outputs: []string{"probabilities"}})
+}
+```
+
+This function imports `context`, `errors` and `github.com/itsmontoya/onnx`.
+Read `outputs[0].Tensor.Float32Values()` for a copied `[]float32`. Read
+`model.Metadata()` to inspect names, dtype, declared rank/dimensions and
+`ValueInfo.Defaulted` before constructing inputs. Do not copy Model or Session
+structs after use; use their pointers. The caller must not mutate the Run input
+map or output-name slice during a call.
+
+
 The compiling [example](../examples/inference/main.go) demonstrates the full
 sequence: `LoadFile(ctx, path, Options{})`, `model.Metadata()`,
 `model.NewSession()`, `NewFloat32(shape, values)`, `session.Run`, reading each
 `NamedTensor.Name` and `Tensor.Float32Values()`, then closing both owners.
 Its deferred cleanup joins close errors into the returned error. `Load` accepts
 an `io.Reader`; `LoadBytes` accepts a borrowed byte slice for the loading call.
-All loaders publish an owned immutable plan.
+Load never closes the caller's reader; LoadFile opens and closes its own file.
+LoadBytes borrows bytes during loading only; do not mutate them until it returns.
+All loaders publish an owned immutable plan and retain no resolver.
+
+An initializer with a graph-input name makes that input optional. Omit the map
+entry to use its default, or supply an override satisfying the input's declared
+dtype/rank/fixed dimensions and symbols. The default's concrete batch size does
+not restrict an otherwise dynamic leading axis. Other inputs are required;
+initializers absent from graph inputs cannot be overridden. Missing/unexpected
+names, nil tensors and duplicate/unknown requested outputs fail explicitly.
+Each Run binds symbols afresh. Every graph node is validated at Load and executed
+at Run, including branches outside the requested outputs.
 
 Supply inputs as `map[string]*onnx.Tensor`. Empty `RunOptions{}` requests all
 declared outputs in declaration order. For the branch, request a specific order
@@ -87,8 +133,18 @@ the session reusable. Cancellation is checked around synchronous kernels and
 between nodes; it does not interrupt a running kernel. `Options{}` selects
 finite default limits, including 16 sessions; zero limit fields select defaults
 and negative values fail. See [the contract](runtime-contract.md#limits-and-cancellation)
-for exact budgets and accounting; they are logical payload limits, not a hard
-process heap quota.
+for all fourteen defaults and accounting; they limit logical payloads rather
+than process RSS, Go object/allocator/GC overhead or previously retained outputs.
+For example, `Options{Limits: Limits{MaxTensorBytes: 8 << 20, MaxSessions: 4}}`
+lowers just those defaults (qualify these names with `onnx.` in another package).
+Constructors/accessors operate outside load/run budgets; caller retention still
+uses memory. Independent sessions have separate run budgets.
+
+Context cancellation/deadlines reach `errors.Is`. Checks occur between bounded
+reads, through runtime-owned planning/conversion loops, around each synchronous
+node/copy, and before publication. A kernel, protobuf unmarshal or backend deep
+copy finishes between polls. A custom resolver must cooperate to interrupt its
+own blocked Resolve/Read. There is no single-kernel cancellation-latency promise.
 
 ## Prepare a compatible model
 
@@ -128,7 +184,10 @@ when available. Envelope errors have no invented node context.
 ## Implemented capability table
 
 This table is generated and checked against [capabilities.json](../capabilities.json)
-by `tools/check_inference.py`. Every row uses the empty domain/imported opset 13;
+by `go run ./tools/capabilitiesgen`, using the same embedded records as
+`Capabilities()` and the compiler registry. Run `go run ./tools/capabilitiesgen -write`
+to update it deliberately; the no-write command fails on drift and runs in CI.
+The optional `tools/check_inference.py` reference check verifies it too. Every row uses the empty domain/imported opset 13;
 optional input slots are zero-based. Only listed attributes are accepted, with
 the recorded types/defaults; required inputs/outputs cannot have empty names.
 Each operator has exactly one nonempty output. Gemm C may be omitted or have an
@@ -188,27 +247,32 @@ and outputs as the inline MLP, stored in one shared file. Every loader, includin
 LoadFile, requires an explicit resolver for external tensors:
 
 ```go
-resolver, err := onnx.NewDirectoryResolver("testdata/external/models")
-if err != nil {
-    return err
-}
+func loadExternal(ctx context.Context) (model *onnx.Model, err error) {
+	var resolver *onnx.DirectoryResolver
+	if resolver, err = onnx.NewDirectoryResolver("testdata/external/models"); err != nil {
+		return nil, err
+	}
 
-defer resolver.Close()
-model, err := onnx.LoadFile(ctx, "testdata/external/models/mlp.onnx",
-    onnx.Options{ExternalData: resolver})
-if err != nil {
-    return err
+	defer func() { err = errors.Join(err, resolver.Close()) }()
+	return onnx.LoadFile(ctx, "testdata/external/models/mlp.onnx",
+		onnx.Options{ExternalData: resolver})
 }
-
-defer model.Close()
 ```
 
-Close the resolver when loading finishes; the model has independent owned
+The caller closes the returned Model. Close the resolver when loading finishes; the model has independent owned
 weights. The directory helper rejects traversal/absolute paths and symlink
 escapes at open, and supplies separate bounded readers per range. It is
 unsupported on js/plan9; [the memory resolver example](../examples/external/memory_resolver.go)
 shows a portable explicit allowlist that also works without a directory helper.
-Neither loader nor helper guesses a base directory or fetches URLs.
+Each returned reader is closed by the loader, including readers returned with
+resolution errors. Resolve receives exact byte length even when length metadata
+is omitted; a short range or close error prevents model publication.
+Neither loader nor helper guesses a base directory or fetches URLs. The resolver
+is caller-owned and must support concurrent loads if shared. The helper permits
+internal relative symlinks but rejects escapes during open. It does not isolate
+hard links, mounts or filesystem boundaries, and callers must provide stable file
+content; concurrent truncation fails exact reading. Its successful Close leaves
+already returned readers usable.
 
 ```sh
 CGO_ENABLED=0 go run ./examples/external -batch 1
@@ -221,3 +285,138 @@ An omitted length still resolves exactly the tensor's byte count, and a supplied
 length must match it. Checksum and unknown keys are unsupported. See the
 [runtime contract](runtime-contract.md#external-tensor-data) for
 budgets, reader ownership, cancellation and filesystem limits.
+
+## Reproduce supported authoring and failures
+
+The tested model origins are the original deterministic graphs generated with
+ONNX helper/numpy_helper and the pinned checker/evaluator, plus the separately
+identified unmodified upstream rejection fixtures. No PyTorch, TensorFlow or
+third-party exporter version has been validated here. Their opset flag alone
+cannot establish compatibility.
+
+For optional development authoring, use **Python 3.9.6, ONNX 1.16.2, NumPy
+1.26.4 and protobuf 4.25.3** in an isolated environment. The [fixture guide](../testdata/inference/README.md) records hash provenance.
+To provision the optional reference tools using a Python 3.9.6 interpreter:
+
+```sh
+python3 -m venv /tmp/onnx-reference
+/tmp/onnx-reference/bin/python -m pip install onnx==1.16.2 numpy==1.26.4 protobuf==4.25.3 onnxruntime==1.19.2
+. /tmp/onnx-reference/bin/activate
+python --version
+```
+
+The generators require exactly Python 3.9.6 and the listed versions; an interpreter
+with another version will be rejected. With that environment active, run:
+
+```sh
+python tools/check_profile.py
+python tools/check_inference.py
+python tools/check_m2.py
+python tools/check_m3.py
+python tools/check_external.py
+```
+
+These no-write commands reproduce the actual authored IR-8/opset-13 bytes,
+checker outcomes, typed expected outputs and retained reference differences.
+M3 additionally requires pinned **onnxruntime 1.19.2**, CPUExecutionProvider.
+Use each generator's `--write` only to replace artifacts intentionally. The
+MLP/branch generator constructs original graphs with
+`helper.make_opsetid("", 13)` and explicit IR 8, adds float32 initializers and
+symbolic batch I/O, then runs the full checker and independent NumPy comparisons.
+The CNN generator uses stored-statistics normalization and records the ONNX
+and ORT outcomes independently. These tested authoring instructions do not
+convert arbitrary newer graphs. For another exporter, inspect its actual output
+and compare every supported graph with a trusted independent reference first.
+
+The following probe uses only Go and checked-in models. Run from the repository
+root; its expected failures are checked by sentinel identity, not brittle error
+strings. It exits unsuccessfully if any documented failure stops being enforced.
+
+```sh
+probe_dir=$(mktemp -d)
+cat > "$probe_dir/main.go" <<'GO'
+package main
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"os"
+
+	"github.com/itsmontoya/onnx"
+)
+
+func main() {
+	if err := probe(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
+
+func probe() (err error) {
+	var (
+		ctx   = context.Background()
+		model *onnx.Model
+	)
+
+	_, err = onnx.LoadFile(ctx, "testdata/conformance/upstream/test_tanh/model.onnx", onnx.Options{})
+	if !errors.Is(err, onnx.ErrUnsupported) {
+		return fmt.Errorf("original IR-7 fixture: want ErrUnsupported, got %v", err)
+	}
+
+	_, err = onnx.LoadFile(ctx, "testdata/external/models/mlp.onnx", onnx.Options{})
+	if !errors.Is(err, onnx.ErrUnsupported) {
+		return fmt.Errorf("external weights without resolver: want ErrUnsupported, got %v", err)
+	}
+
+	_, err = onnx.LoadFile(ctx, "testdata/inference/models/mlp.onnx",
+		onnx.Options{Limits: onnx.Limits{MaxModelBytes: 1}})
+	if !errors.Is(err, onnx.ErrLimit) {
+		return fmt.Errorf("wire byte budget: want ErrLimit, got %v", err)
+	}
+
+	if model, err = onnx.LoadFile(ctx, "testdata/inference/models/mlp.onnx", onnx.Options{}); err != nil {
+		return err
+	}
+
+	defer func() { err = errors.Join(err, model.Close()) }()
+	var session *onnx.Session
+	if session, err = model.NewSession(); err != nil {
+		return err
+	}
+
+	defer func() { err = errors.Join(err, session.Close()) }()
+	_, err = session.Run(ctx, nil, onnx.RunOptions{})
+	if !errors.Is(err, onnx.ErrInvalidArgument) {
+		return fmt.Errorf("missing features input: want ErrInvalidArgument, got %v", err)
+	}
+
+	fmt.Println("PASS: unsupported IR, absent resolver, byte limit, missing input")
+	return nil
+}
+GO
+CGO_ENABLED=0 go run "$probe_dir/main.go"
+rm -r "$probe_dir"
+```
+
+Use `errors.Is` for `ErrInvalidArgument` (invalid API input), `ErrInvalidModel`
+(contradictory graph/wire declarations), `ErrUnsupported` (outside this profile),
+`ErrLimit`, `ErrBusy` and `ErrClosed`. Cancellation/deadlines and underlying I/O
+causes are also preserved. For node diagnostics:
+
+```go
+var diagnostic *onnx.Error
+if errors.As(err, &diagnostic) {
+	fmt.Printf("stage=%s node=%d operator=%s value=%s\n",
+		diagnostic.Stage, diagnostic.NodeIndex, diagnostic.Operator, diagnostic.Value)
+}
+```
+
+The diagnostic also retains node name, domain, imported opset and relevant
+concrete shapes when available; envelope failures do not invent node context.
+Load rejects known static issues; input-dependent axes/ranks/shapes fail at Run.
+See [existing validation and recovery tests](../session_test.go) and
+[external failure tests](../external_integration_test.go) for checksum/unknown-key,
+dynamic shape and resolver/read/close failures. The
+[release checklist](release-checklist.md) records tested platforms, actual
+reference disagreements, licensing status and remaining gaps.

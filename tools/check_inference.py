@@ -5,6 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 import platform
+import subprocess
 
 import google.protobuf
 import numpy as np
@@ -16,26 +17,6 @@ ROOT = Path(__file__).resolve().parents[1]
 VERSIONS = {"python": "3.9.6", "onnx": "1.16.2", "numpy": "1.26.4", "protobuf": "4.25.3"}
 REVISION = "3bf92c03a9f27eba3bda1e5b9e63ea20ec213557"
 LICENSE = "No repository LICENSE is present; original fixtures have no separately declared license."
-
-
-def capability_table():
-    manifest = json.loads((ROOT / "capabilities.json").read_text())
-    rows = ["| Operator (schema) | Types | Inputs → outputs | Attributes | Restrictions |",
-            "| --- | --- | --- | --- | --- |"]
-    for entry in manifest["operators"]:
-        if entry["status"] != "implemented":
-            continue
-        def arity(value):
-            count = str(value["min"]) if value["min"] == value["max"] else f'{value["min"]}–{value["max"]}'
-            return count + (f'; optional slots {value["optional_slots"]}' if value["optional_slots"] else "")
-        attributes = []
-        for name, value in entry["attributes"].items():
-            default = f'={value["default"]}' if "default" in value else ""
-            attributes.append(f'`{name}:{value["type"]}{default}`')
-        rows.append(f'| {entry["operator"]} ({entry["schema_version"]}) | {", ".join(entry["data_types"])} | '
-                    f'{arity(entry["inputs"])} → {arity(entry["outputs"])} | {", ".join(attributes) or "None"} | '
-                    f'{"; ".join(entry["restrictions"])} |')
-    return "\n".join(rows)
 
 
 def main():
@@ -164,14 +145,10 @@ def main():
             destination.write_bytes(payload)
         if not destination.exists() or destination.read_bytes() != payload:
             raise SystemExit("inference fixture differs: " + path)
-    guide = ROOT / "docs/getting-started.md"
-    text = guide.read_text()
-    start, end = "<!-- Implemented capabilities start -->", "<!-- Implemented capabilities end -->"
-    generated = text.split(start)[0] + start + "\n\n" + capability_table() + "\n\n" + end + text.split(end)[1]
+    command = ["go", "run", "./tools/capabilitiesgen"]
     if args.write:
-        guide.write_text(generated)
-    if guide.read_text() != generated:
-        raise SystemExit("getting-started implemented table differs from capabilities.json")
+        command.append("-write")
+    subprocess.run(command, cwd=ROOT, check=True)
     print("PASS: 3 checker-validated IR-8/opset-13 models, 6 actual reference agreements, batches 1 and 3; canonical implemented table")
 
 

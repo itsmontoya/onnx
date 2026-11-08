@@ -19,6 +19,8 @@ jobs:
         run: test -z "$(gofmt -l $(git ls-files '*.go'))"
       - name: Check module metadata
         run: go mod tidy -diff
+      - name: Check generated support table
+        run: CGO_ENABLED=0 go run ./tools/capabilitiesgen
       - name: Build
         run: go build ./...
       - name: Vet
