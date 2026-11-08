@@ -704,8 +704,9 @@
       },
       "restrictions": [
         "float32 NCHW rank four; ONNX [M,C/group,kH,kW] weights",
-        "positive groups/strides/dilations; optional [M] bias",
-        "auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads"
+        "positive channels/filters/kernels/strides/dilations; group divides input/output channels; optional [M] bias",
+        "auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads",
+        "kernel_shape must match weights when present; dynamic weights/bias; nonpositive floor spatial extents clamp to zero"
       ]
     },
     {
@@ -765,9 +766,10 @@
         }
       },
       "restrictions": [
-        "float32 NCHW rank four; 2D kernel/strides/dilations/pads",
+        "float32 NCHW rank four; positive 2D kernel/strides/dilations; nonnegative pads",
         "values output only; second empty slot allowed, nonempty indices unsupported",
-        "storage_order must be 0; ceil_mode must be 0/1; documented empty/nonfinite differences"
+        "storage_order must be 0; ceil_mode must be 0/1; documented empty/nonfinite differences",
+        "auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; ceil mode trims starts in right padded region"
       ]
     },
     {
@@ -821,8 +823,9 @@
         }
       },
       "restrictions": [
-        "float32 NCHW rank four; 2D kernel/strides/pads; no dilation attribute",
-        "ceil_mode/count_include_pad must be 0/1; full-kernel divisor when including pad"
+        "float32 NCHW rank four; positive 2D kernel/strides; nonnegative pads; no dilation attribute",
+        "ceil_mode/count_include_pad must be 0/1; full-kernel divisor when including pad",
+        "auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; ceil mode trims starts in right padded region"
       ]
     },
     {
@@ -886,7 +889,7 @@
       },
       "restrictions": [
         "float32 rank-two or NCHW rank-four input and [C] parameters",
-        "one inference output; reject nonempty additional outputs and training_mode",
+        "exactly one inference output slot; reject all additional output slots and training_mode",
         "finite nonnegative epsilon; finite momentum in [0,1] accepted but no statistics update",
         "independent stored-statistics reference; documented evaluator/ORT differences"
       ]

@@ -20,6 +20,7 @@ RT-10 supplies the reusable offline typed fixture and differential harness.
 RT-11 demonstrates MLP/branching inference with multi-batch reference goldens,
 a runnable public example and the first integration report. RT-12 adds all M2
 shape operators, exact runtime shape subgraphs, and the NN-13 baseline handoff.
+RT-13 adds all five bounded M3 CNN adapters and a composed multi-batch CNN.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -1266,7 +1267,7 @@ profiles, reductions, optimization and the root license decision remain separate
 maintainer-controlled work. The final stacked PR must be open, unmerged, based
 on RT-11 and green before starting the next task.
 
-### [ ] RT-13 — Integrate 2D CNN operators
+### [x] RT-13 — Integrate 2D CNN operators
 
 **Depends on:** RT-12, NN-09, NN-10, NN-11. **Deliverable:** all M3 adapters in
 the coverage table and a small end-to-end CNN fixture.
@@ -1292,6 +1293,117 @@ average padding divisors, and nondefault normalization epsilon. Reject a
 requested MaxPool indices output or unsupported storage order explicitly in
 this initial profile. A composed Conv/normalization/activation/pooling/flatten/
 Gemm model matches reference outputs for multiple batches.
+
+**Handoff (RT-13):** Accessible implementation revision
+[`fa06c9d58814727adfa97ac31646d16a101c4fca`](https://github.com/itsmontoya/onnx/tree/fa06c9d58814727adfa97ac31646d16a101c4fca),
+documentation revision `7b1f52475920aef78bb778025c22deda785b0edf`, based on
+RT-12 `007b8abe53b63f35ae4d09abaed93015b7256b4d`, on
+`rt-13-cnn-operators`. [Stacked PR #13](https://github.com/itsmontoya/onnx/pull/13)
+is open and unmerged against `rt-12-shape-operators`. The final task revision
+is the commit introducing this completion record; retrieve it with
+`git log -1 --format=%H -- ROADMAP.md`. Backend remains published
+`neuralnetwork v0.7.0` at `6048452c57a0a293db4591cd2e2febd7d6b743a3`,
+protobuf v1.36.12, Go 1.26.1 baseline/Go 1.27.2 toolchain. No local replace,
+backend modification or exported runtime signature change.
+
+Production changes: [cnn_call.go](cnn_call.go), evaluation.go,
+internal/operators/cnn_config.go, cnn_planner.go, compiler.go, step.go,
+registry.go and plan.go. `CNNConfig` retains actual schema defaults, fixed-size
+Conv/Pool configs and normalization metadata; `Pads` computes checked concrete
+SAME geometry and `Shape` validates metadata before any numerical destination.
+The compiler infers each known spatial axis without allocating numerical
+outputs and validates known rank/channel/group/kernel/bias/statistic constraints.
+Unknown intermediate ranks/shapes defer to contextual Run checks. Fixed numerical
+step and deep snapshot metadata reserve 256 bytes, including embedded configs.
+`cnnCall` reserves full destinations before using the published direct
+Conv2DInto, MaxPool2DInto, AveragePool2DInto, GlobalAveragePoolInto and
+BatchNormalizationInto loops. Audited numerical scratch is zero: no accessors,
+packing, layers, training caches or output numerical tensors at load time.
+
+Conv-11 consumes float32 NCHW and ONNX [M,C/group,kH,kW] weights, positive
+groups/strides/dilations, optional [M] bias and exact kernel_shape matching when
+present. Groups/depthwise multipliers, dynamic weights/bias, asymmetric pads,
+NOTSET/VALID/SAME_UPPER/SAME_LOWER are implemented. SAME uses checked integer
+ceil division/effective kernels and resolves each invocation; non-NOTSET
+automatic padding conflicts with explicit pads. Nonpositive floor spatial
+extents clamp to zero. MaxPool-12 is rank-four float32 values only,
+storage_order 0, with dilation and ceil_mode 0/1. A second empty output name
+remains slot -1; named indices fail explicitly. AveragePool-11 has no dilation
+attribute, uses count_include_pad 0/1 and full-kernel included divisors even
+for partial ceil windows. Ceil geometry trims trailing starts at or beyond
+input+beginPad. GlobalAveragePool-1 returns [N,C,1,1]. Empty/all-padding max
+windows return -Inf; averages use NaN/zero according to their divisor; global
+empty spatial reductions return NaN. NaNs propagate through max.
+
+BatchNormalization-9 accepts rank 2 or NCHW rank 4, four [C] parameter/statistic
+tensors and exactly one output slot. Epsilon is finite/nonnegative. Finite
+momentum in [0,1] is retained as metadata without statistics updates; inference
+uses `scale*(x-mean)/sqrt(variance+epsilon)+bias`. Reject later training_mode
+and all extra output slots, including empty training slots. Negative variance,
+nonfinite inputs and zero variance/epsilon retain literal float32 domain results.
+Actual evaluator/ORT exceptions remain explicit in [M3 documentation](testdata/m3/README.md).
+
+[tools/check_m3.py](tools/check_m3.py) and [provenance](testdata/m3/provenance.json)
+provide 87 original offline typed cases: **49 evaluator agreements, 26 executed
+differences and 12 evaluator rejections** with independent expected results.
+ORT 1.19.2 gives **66 agreements, six differences and 15 rejections**. Actual
+shapes, bits and errors are retained separately. Tests cover grouped/depthwise/
+dilated/asymmetric/SAME convolution, padded negative maxima, ceil trimming,
+full-kernel partial-window divisors, empty/all-padding values, nonfinite domains
+and nondefault normalization epsilon. The schema-9 evaluator applies momentum;
+ORT additionally differs on zero variance/epsilon. Selected automatic-padding,
+ceil/nonfinite/empty results also differ; none is advertised as universal ONNX
+agreement. The inherited 96-case conformance set now has 87 agreements, one
+empty-Softmax extension, four executed differences and four version/operator
+rejections. The ceil-average case agrees with both oracles. Three unchanged
+upstream IR-7 models and the opset-18 reduction remain rejected; the 1,422-model
+upstream envelope/hash audit is unchanged.
+
+The composed symbolic-batch [CNN](testdata/m3/models/cnn.onnx) runs
+Conv → BatchNormalization → Relu → MaxPool → Flatten → Gemm with no intermediate
+value_info. Named `features:float32[batch,1,4,4]` produces
+`logits:float32[batch,3]` and `pooled:float32[batch,2,2,2]`. Both batches 1 and 3
+match independent NumPy formulas and ORT; the evaluator differs. The public
+example gains `-graph cnn`; tests reuse a session for 1 → 3 → 1, start independent
+sessions concurrently and preserve outputs after subsequent runs/failures/Close.
+Reshape-fed unknown CNN ranks/shapes exercise dynamic failures/recovery and
+changing weights, bias and SAME spatial geometry. Exact zero-scratch/live
+budgets, destination/publication failures, pre-allocation overflow and every
+observed cancellation boundary are covered. Cancellation brackets synchronous
+kernels; no in-kernel interruption or storage optimization is claimed.
+
+CNN model SHA-256:
+`eb3189e921756a9138588cc1247c4563faa8745418220f56a457a21bd2056796`;
+M3 provenance:
+`be7505137619c7ea8402eb3573bf678788b7c97b88c2ac1c6cfe12b16667ecfb`;
+updated conformance provenance:
+`bd1b7d7d8659ef7289207d33772d0651226f5df7cc5b6639a4800a404e69849e`.
+M1/M2 and prior inference model/value bytes remain unchanged. Their exact
+provenance hashes, every named CNN input/output hash, commands and reference
+restrictions are in [the integration report](docs/integration-rt13.md). Pinned
+Python 3.9.6 / ONNX 1.16.2 source
+`3bf92c03a9f27eba3bda1e5b9e63ea20ec213557` / NumPy 1.26.4 /
+protobuf 4.25.3 / ORT 1.19.2 reproduces all fixtures. Ordinary Go tests remain
+Python-free and offline. No repository LICENSE is invented.
+
+Validation passed on Go 1.27.2 Darwin/arm64 with temporary GOCACHE and cached
+offline dependencies: formatting, tidy-diff, mod verify, build, vet, normal,
+CGO_ENABLED=0, CGO_ENABLED=0 purego and race suites. All eight public graph/batch
+CLI combinations and a purego CNN run pass. A fresh implementation checkout
+passes cached dependency download, the cgo-disabled suite and both CNN batches
+offline with a clean tree. All inherited profile/defaults (25 schemas and 25
+implemented records), 81-model M1, 66-case M2, 96-case conformance/upstream audit,
+three-model/six-case inference/table and new 87-case M3 reproduction pass.
+Handwritten if/var spacing/type-method colocation, local Markdown targets and
+diff checks pass. [Hosted Linux verification](https://github.com/itsmontoya/onnx/actions/runs/42428899615)
+passed formatting, tidy, build, vet, normal, cgo-disabled, purego and race at the
+documentation revision. Final PR-head verification must remain green.
+
+RT-14 is next: explicit external tensor-data resolution. Further robustness,
+release documentation, profiles/types/layouts, MaxPool indices, training
+normalization, reductions and optimization remain separate tasks. NN-13 may
+consume the unchanged RT-12 baseline independently. Keep this stacked PR open,
+unmerged, based on RT-12 and green; no later task is started here.
 
 ## M4: loading, robustness, and a documented release
 
