@@ -114,7 +114,6 @@ func TestLoadValidationAndCauses(t *testing.T) {
 		{"negative limit", context.Background(), Options{Limits: Limits{MaxSessions: -1}}, nil, ErrInvalidArgument},
 		{"cancelled", cancelled, Options{}, nil, context.Canceled},
 		{"io cause", context.Background(), Options{}, readFailure, readFailure},
-		{"external resolver", context.Background(), Options{ExternalData: &testResolver{}}, nil, ErrUnsupported},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -6,7 +6,7 @@ import (
 	"github.com/itsmontoya/onnx/internal/decode"
 )
 
-// Limits bounds structural records, strings and inline conversion for one build.
+// Limits bounds structural records, strings and dense tensor conversion for one build.
 // Tensor limits retain decode.TensorLimits defaults. Zero fields select finite
 // defaults; byte limits measure logical payload rather than Go object overhead.
 type Limits struct {

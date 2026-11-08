@@ -31,10 +31,32 @@
     "sequence_map_optional_values",
     "unsupported_dtypes",
     "tensor_segments",
-    "external_data_until_RT-14",
     "dynamic_nonleading_input_dimensions",
-    "unknown_input_rank"
+    "unknown_input_rank",
+    "external_checksum_metadata",
+    "unknown_external_metadata_keys"
   ],
+  "weights": {
+    "status": "implemented",
+    "task": "RT-14",
+    "storage": [
+      "inline",
+      "external"
+    ],
+    "data_types": [
+      "float32",
+      "int64"
+    ],
+    "restrictions": [
+      "explicit resolver required for external tensors in every loader",
+      "recognized external keys: location, offset, length; duplicates rejected",
+      "exact tensor byte length; nonnegative decimal int64 offset and length; checked range",
+      "checksum metadata and unknown keys unsupported",
+      "bounded reads and owned copies charged to aggregate load and initializer limits",
+      "DirectoryResolver uses os.Root; unavailable on js and plan9; rejects traversal, absolute paths and symlink escapes",
+      "no implicit directory or automatic URL fetching"
+    ]
+  },
   "operators": [
     {
       "domain": "",

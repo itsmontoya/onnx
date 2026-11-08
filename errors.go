@@ -16,6 +16,6 @@ var (
 	ErrLimit = graph.ErrLimit
 	// ErrBusy identifies an overlapping Run or Close on the same session.
 	ErrBusy = runtimeerror.ErrBusy
-	// ErrClosed identifies an operation requiring an open model or session.
+	// ErrClosed identifies an operation requiring an open model, session or resolver.
 	ErrClosed = runtimeerror.ErrClosed
 )

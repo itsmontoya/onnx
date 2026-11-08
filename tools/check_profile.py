@@ -26,6 +26,11 @@ def main():
         raise SystemExit("reference tool versions differ: " + repr(actual))
 
     manifest = json.loads((ROOT / "capabilities.json").read_text())
+    weights = manifest.get("weights", {})
+    if weights.get("status") != "implemented" or weights.get("task") != "RT-14" or weights.get("storage") != ["inline", "external"] or weights.get("data_types") != ["float32", "int64"]:
+        raise SystemExit("RT-14 weight capability differs")
+    if "external_data_until_RT-14" in manifest["unsupported_features"] or "external_checksum_metadata" not in manifest["unsupported_features"]:
+        raise SystemExit("RT-14 external restrictions differ")
     operators = manifest["operators"]
     if len(operators) != 25 or len({entry["operator"] for entry in operators}) != 25:
         raise SystemExit("initial profile must contain 25 distinct operators")

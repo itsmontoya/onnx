@@ -96,7 +96,7 @@ func TestAttributeInvalidStructure(t *testing.T) {
 		{"type attribute", &onnxpb.AttributeProto{Name: proto.String("a"), Type: onnxpb.AttributeProto_TYPE_PROTO.Enum(), Tp: &onnxpb.TypeProto{}}, ErrUnsupported},
 		{"type list", &onnxpb.AttributeProto{Name: proto.String("a"), Type: onnxpb.AttributeProto_TYPE_PROTOS.Enum()}, ErrUnsupported},
 		{"tensor wrong dtype", &onnxpb.AttributeProto{Name: proto.String("a"), Type: onnxpb.AttributeProto_TENSOR.Enum(), T: &onnxpb.TensorProto{DataType: proto.Int32(11)}}, ErrUnsupported},
-		{"tensor external data", &onnxpb.AttributeProto{Name: proto.String("a"), Type: onnxpb.AttributeProto_TENSOR.Enum(), T: &onnxpb.TensorProto{DataType: proto.Int32(1), DataLocation: onnxpb.TensorProto_EXTERNAL.Enum()}}, ErrUnsupported},
+		{"tensor external data", &onnxpb.AttributeProto{Name: proto.String("a"), Type: onnxpb.AttributeProto_TENSOR.Enum(), T: &onnxpb.TensorProto{DataType: proto.Int32(1), DataLocation: onnxpb.TensorProto_EXTERNAL.Enum()}}, decode.ErrInvalidTensor},
 		{"malformed tensor", &onnxpb.AttributeProto{Name: proto.String("a"), Type: onnxpb.AttributeProto_TENSOR.Enum(), T: &onnxpb.TensorProto{DataType: proto.Int32(7), Int64Data: []int64{1, 2}}}, decode.ErrInvalidTensor},
 	}
 

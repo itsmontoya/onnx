@@ -3,6 +3,7 @@ package graph
 import (
 	"context"
 
+	"github.com/itsmontoya/onnx/internal/decode"
 	"github.com/itsmontoya/onnx/internal/onnxpb"
 )
 
@@ -11,12 +12,18 @@ import (
 // Apply bounded wire parsing first; do not mutate model during this call. No wire
 // message or decoder is retained. Operator/schema validation belongs to RT-07.
 func Build(ctx context.Context, model *onnxpb.ModelProto, encodedBytes int64, limits Limits) (out *Graph, err error) {
+	return BuildWithResolver(ctx, model, encodedBytes, limits, nil)
+}
+
+// BuildWithResolver also resolves external tensors through an explicit resolver.
+// It retains neither the resolver nor its readers after this synchronous call.
+func BuildWithResolver(ctx context.Context, model *onnxpb.ModelProto, encodedBytes int64, limits Limits, resolver decode.ExternalDataResolver) (out *Graph, err error) {
 	var (
 		g Graph
 		b *builder
 	)
 
-	if b, err = newBuilder(ctx, model, encodedBytes, limits, &g); err != nil {
+	if b, err = newBuilder(ctx, model, encodedBytes, limits, &g, resolver); err != nil {
 		return nil, err
 	}
 

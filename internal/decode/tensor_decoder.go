@@ -16,6 +16,12 @@ import (
 // and its original encoded length. Do not mutate wire during the decoder's life.
 // The decoder retains tensor messages, but never borrows their numeric storage.
 func NewTensorDecoder(ctx context.Context, wire proto.Message, encodedBytes int64, limits TensorLimits) (out *TensorDecoder, err error) {
+	return NewTensorDecoderWithResolver(ctx, wire, encodedBytes, limits, nil)
+}
+
+// NewTensorDecoderWithResolver also permits explicitly resolved external ranges.
+// The resolver remains caller-owned; each returned reader is closed by Decode.
+func NewTensorDecoderWithResolver(ctx context.Context, wire proto.Message, encodedBytes int64, limits TensorLimits, resolver ExternalDataResolver) (out *TensorDecoder, err error) {
 	var (
 		d            TensorDecoder
 		decodedBytes int64
@@ -37,6 +43,7 @@ func NewTensorDecoder(ctx context.Context, wire proto.Message, encodedBytes int6
 		return nil, fmt.Errorf("%w: encoded payload", ErrLimit)
 	}
 
+	d.resolver = resolver
 	d.tensors = make(map[*onnxpb.TensorProto]bool)
 	if decodedBytes, err = countPayload(ctx, wire.ProtoReflect(), d.limits.MaxRecursion, d.limits.MaxLoadBytes-encodedBytes, d.tensors); err != nil {
 		return nil, err
@@ -46,20 +53,22 @@ func NewTensorDecoder(ctx context.Context, wire proto.Message, encodedBytes int6
 	return &d, nil
 }
 
-// TensorDecoder converts registered inline TensorProto values to owned backend
+// TensorDecoder converts registered dense TensorProto values to owned backend
 // tensors. Use one decoder per load to aggregate initializer/Constant copies.
 // It is not safe for concurrent calls or mutation of registered wire messages.
 // Raw conversion reserves staging plus an owned copy; typed conversion reserves
-// its owned copy. Successful staging charges are retained conservatively for the
-// load's lifetime. Accounting excludes Go object/allocation overhead.
+// its owned copy. External conversion also reserves its read buffer. Successful
+// staging charges remain reserved conservatively for the load's lifetime.
+// Accounting excludes Go object/allocation overhead.
 type TensorDecoder struct {
+	resolver         ExternalDataResolver
 	limits           TensorLimits
 	tensors          map[*onnxpb.TensorProto]bool
 	loadBytes        int64
 	initializerBytes int64
 }
 
-// Decode validates an inline tensor before allocating numerical storage.
+// Decode validates a dense tensor before allocating numerical storage.
 // Both wire parsing entry points and all tensor-bearing model fields share it.
 func (d *TensorDecoder) Decode(ctx context.Context, value *onnxpb.TensorProto) (out *tensor.Tensor, err error) {
 	if d == nil || d.tensors == nil || ctx == nil || value == nil || !d.tensors[value] {
@@ -73,32 +82,55 @@ func (d *TensorDecoder) Decode(ctx context.Context, value *onnxpb.TensorProto) (
 	var (
 		dataType                tensor.DataType
 		elements, bytes, charge int64
+		external                externalRange
+		copies                  int64 = 1
 	)
 
 	if dataType, elements, bytes, err = d.validate(value); err != nil {
 		return nil, fmt.Errorf("decode tensor %q: %w", value.GetName(), err)
 	}
 
+	if value.GetDataLocation() == onnxpb.TensorProto_EXTERNAL {
+		if external, err = newExternalRange(value, bytes); err != nil {
+			return nil, fmt.Errorf("decode tensor %q location %q: %w", value.GetName(), external.location, err)
+		}
+
+		if d.resolver == nil {
+			return nil, fmt.Errorf("decode tensor %q location %q: %w: explicit external-data resolver required", value.GetName(), external.location, ErrUnsupported)
+		}
+	}
+
 	if bytes > d.limits.MaxInitializerBytes-d.initializerBytes {
 		return nil, fmt.Errorf("decode tensor %q: %w: aggregate initializer bytes", value.GetName(), ErrLimit)
 	}
 
-	charge = bytes
+	// Every external range coexists with raw bytes, typed staging and ownership.
 	if value.RawData != nil {
-		// Reserve both allocations without multiplying or summing past int64.
-		if bytes > (d.limits.MaxLoadBytes-d.loadBytes)/2 {
-			return nil, fmt.Errorf("decode tensor %q: %w: raw staging and owned copy", value.GetName(), ErrLimit)
+		copies = 2
+	}
+
+	if value.GetDataLocation() == onnxpb.TensorProto_EXTERNAL {
+		copies = 3
+	}
+
+	if bytes > (d.limits.MaxLoadBytes-d.loadBytes)/copies {
+		return nil, fmt.Errorf("decode tensor %q location %q: %w: conversion buffers and owned copy", value.GetName(), external.location, ErrLimit)
+	}
+
+	charge = bytes * copies
+	conversion := value
+	if value.GetDataLocation() == onnxpb.TensorProto_EXTERNAL {
+		var raw []byte
+		if raw, err = external.read(ctx, d.resolver); err != nil {
+			return nil, fmt.Errorf("decode tensor %q location %q: %w", value.GetName(), external.location, err)
 		}
 
-		charge += bytes
+		// Construct only the conversion fields; generated messages contain locks.
+		conversion = &onnxpb.TensorProto{Dims: value.Dims, RawData: raw}
 	}
 
-	if charge > d.limits.MaxLoadBytes-d.loadBytes {
-		return nil, fmt.Errorf("decode tensor %q: %w: owned copy", value.GetName(), ErrLimit)
-	}
-
-	if out, err = convertTensor(ctx, value, dataType, elements); err != nil {
-		return nil, fmt.Errorf("decode tensor %q: %w", value.GetName(), err)
+	if out, err = convertTensor(ctx, conversion, dataType, elements); err != nil {
+		return nil, fmt.Errorf("decode tensor %q location %q: %w", value.GetName(), external.location, err)
 	}
 
 	d.loadBytes += charge
@@ -140,8 +172,12 @@ func (d *TensorDecoder) validate(value *onnxpb.TensorProto) (dataType tensor.Dat
 		return dataType, 0, 0, fmt.Errorf("%w: tensor segments", ErrUnsupported)
 	}
 
-	if value.GetDataLocation() != onnxpb.TensorProto_DEFAULT || len(value.ExternalData) != 0 {
-		return dataType, 0, 0, fmt.Errorf("%w: external tensor storage/data location %d requires a resolver (RT-14)", ErrUnsupported, value.GetDataLocation())
+	if value.GetDataLocation() != onnxpb.TensorProto_DEFAULT && value.GetDataLocation() != onnxpb.TensorProto_EXTERNAL {
+		return dataType, 0, 0, fmt.Errorf("%w: data location %d", ErrUnsupported, value.GetDataLocation())
+	}
+
+	if value.GetDataLocation() == onnxpb.TensorProto_DEFAULT && len(value.ExternalData) != 0 {
+		return dataType, 0, 0, fmt.Errorf("%w: external metadata requires EXTERNAL data location", ErrUnsupported)
 	}
 
 	switch value.GetDataType() {
@@ -173,6 +209,10 @@ func (d *TensorDecoder) validate(value *onnxpb.TensorProto) (dataType tensor.Dat
 
 	if bytes > d.limits.MaxTensorBytes {
 		return dataType, 0, 0, fmt.Errorf("%w: tensor bytes %d", ErrLimit, bytes)
+	}
+
+	if value.GetDataLocation() == onnxpb.TensorProto_EXTERNAL {
+		return dataType, elements, bytes, nil
 	}
 
 	if err = validateEncoding(value, dataType, elements, bytes); err != nil {

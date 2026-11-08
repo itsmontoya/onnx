@@ -13,10 +13,14 @@ func (r *testResolver) Resolve(ctx context.Context, location string, offset, len
 	return nil, ErrUnsupported
 }
 
-func TestResolverRejectedWithoutUse(t *testing.T) {
+func TestResolverUnusedForInlineModel(t *testing.T) {
 	resolver := &testResolver{}
 	model, err := LoadBytes(context.Background(), modelFixture(t, "profile/identity"), Options{ExternalData: resolver})
-	if model != nil || err == nil || resolver.called {
-		t.Fatalf("resolver was used or silently ignored: %v, %v, %v", model, err, resolver.called)
+	if model == nil || err != nil || resolver.called {
+		t.Fatalf("inline resolver use: %v, %v, %v", model, err, resolver.called)
+	}
+
+	if err = model.Close(); err != nil {
+		t.Fatal(err)
 	}
 }

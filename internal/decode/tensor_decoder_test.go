@@ -2,9 +2,11 @@ package decode
 
 import (
 	"context"
+	"encoding/binary"
 	"errors"
 	"math"
 	"reflect"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -200,7 +202,7 @@ func TestTensorDecoderInvalidValues(t *testing.T) {
 		{"double type", &onnxpb.TensorProto{DataType: proto.Int32(11)}, TensorLimits{}, ErrUnsupported, "type 11"},
 		{"unknown type", &onnxpb.TensorProto{DataType: proto.Int32(999)}, TensorLimits{}, ErrUnsupported, "type 999"},
 		{"segment", &onnxpb.TensorProto{Segment: &onnxpb.TensorProto_Segment{}}, TensorLimits{}, ErrUnsupported, "segments"},
-		{"external", &onnxpb.TensorProto{DataLocation: onnxpb.TensorProto_EXTERNAL.Enum()}, TensorLimits{}, ErrUnsupported, "resolver"},
+		{"external", &onnxpb.TensorProto{DataLocation: onnxpb.TensorProto_EXTERNAL.Enum()}, TensorLimits{}, ErrUnsupported, "data type"},
 		{"unknown location", &onnxpb.TensorProto{DataLocation: onnxpb.TensorProto_DataLocation(9).Enum()}, TensorLimits{}, ErrUnsupported, "location 9"},
 		{"external metadata", &onnxpb.TensorProto{ExternalData: []*onnxpb.StringStringEntryProto{{Key: proto.String("location"), Value: proto.String("weights.bin")}}}, TensorLimits{}, ErrUnsupported, "external"},
 		{"scalar missing value", &onnxpb.TensorProto{DataType: proto.Int32(1)}, TensorLimits{}, ErrInvalidTensor, "count 0, want 1"},
@@ -385,5 +387,165 @@ func TestTensorDecoderRejectedLiteralWire(t *testing.T) {
 				t.Fatalf("decode: %v, %v; want %v", value, decodeErr, testcase.want)
 			}
 		})
+	}
+}
+
+func TestTensorDecoderExternalValues(t *testing.T) {
+	tests := []struct {
+		name     string
+		dataType int32
+		shape    []int64
+		bits     []uint64
+	}{
+		{"float scalar", 1, nil, []uint64{0x80000000}},
+		{"float bits", 1, []int64{3}, []uint64{0x7fc00123, 0x3f800000, 0xff800000}},
+		{"int64 scalar", 7, nil, []uint64{1<<60 | 7}},
+		{"int64 exact", 7, []int64{3}, []uint64{math.MaxUint64, math.MaxInt64, 1 << 63}},
+		{"float empty", 1, []int64{0, 3}, nil},
+		{"int64 empty", 7, []int64{2, 0}, nil},
+	}
+	for _, testcase := range tests {
+		t.Run(testcase.name, func(t *testing.T) {
+			width := 4
+			if testcase.dataType == 7 {
+				width = 8
+			}
+
+			raw := make([]byte, len(testcase.bits)*width)
+			for index, bits := range testcase.bits {
+				if width == 4 {
+					binary.LittleEndian.PutUint32(raw[index*width:], uint32(bits))
+				} else {
+					binary.LittleEndian.PutUint64(raw[index*width:], bits)
+				}
+			}
+			wire := externalTensor(testcase.dataType, testcase.shape, "offset", "0007", "location", "weights", "length", strconv.Itoa(len(raw)))
+			reader := &rangeReader{data: append([]byte{}, raw...), step: 3}
+			resolver := &rangeResolver{reader: reader}
+			decoder, err := NewTensorDecoderWithResolver(context.Background(), wire, 0, TensorLimits{}, resolver)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			before, _ := decoder.Usage()
+			value, err := decoder.Decode(context.Background(), wire)
+			if err != nil || reader.closed != 1 || resolver.offset != 7 || resolver.length != int64(len(raw)) {
+				t.Fatalf("decode: %v, %v, %+v", value, err, resolver)
+			}
+
+			if load, owned := decoder.Usage(); load != before+3*int64(len(raw)) || owned != int64(len(raw)) {
+				t.Fatalf("external accounting: %d, %d", load, owned)
+			}
+
+			clear(raw)
+			if width == 4 {
+				values, valueErr := value.Float32Values()
+				if valueErr != nil || len(values) != len(testcase.bits) {
+					t.Fatalf("values: %v, %v", values, valueErr)
+				}
+
+				for index, bits := range testcase.bits {
+					if math.Float32bits(values[index]) != uint32(bits) {
+						t.Fatalf("float bits: %x, want %x", math.Float32bits(values[index]), bits)
+					}
+				}
+			} else {
+				values, valueErr := value.Int64Values()
+				if valueErr != nil || len(values) != len(testcase.bits) {
+					t.Fatalf("values: %v, %v", values, valueErr)
+				}
+
+				for index, bits := range testcase.bits {
+					if uint64(values[index]) != bits {
+						t.Fatalf("integer bits: %x, want %x", values[index], bits)
+					}
+				}
+			}
+		})
+	}
+}
+
+func TestTensorDecoderExternalAggregateBudgets(t *testing.T) {
+	first := externalTensor(1, nil, "location", "shared")
+	second := externalTensor(1, nil, "location", "shared")
+	wire := &onnxpb.GraphProto{Initializer: []*onnxpb.TensorProto{first, second}}
+	baseline, err := NewTensorDecoder(context.Background(), wire, 5, TensorLimits{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	base, _ := baseline.Usage()
+	tests := []struct {
+		name      string
+		limits    TensorLimits
+		firstErr  error
+		secondErr error
+	}{
+		{"exact", TensorLimits{MaxLoadBytes: base + 24, MaxInitializerBytes: 8}, nil, nil},
+		{"staging over", TensorLimits{MaxLoadBytes: base + 11}, ErrLimit, ErrLimit},
+		{"aggregate load over", TensorLimits{MaxLoadBytes: base + 23}, nil, ErrLimit},
+		{"aggregate owned over", TensorLimits{MaxInitializerBytes: 7}, nil, ErrLimit},
+		{"tensor over", TensorLimits{MaxTensorBytes: 3}, ErrLimit, ErrLimit},
+	}
+	for _, testcase := range tests {
+		t.Run(testcase.name, func(t *testing.T) {
+			resolver := &rangeResolver{}
+			decoder, createErr := NewTensorDecoderWithResolver(context.Background(), wire, 5, testcase.limits, resolver)
+			if createErr != nil {
+				t.Fatal(createErr)
+			}
+
+			for index, value := range []*onnxpb.TensorProto{first, second} {
+				beforeLoad, beforeOwned := decoder.Usage()
+				beforeCalls := resolver.calls
+				reader := &rangeReader{data: []byte{0, 0, 128, 63}}
+				resolver.reader = reader
+				result, decodeErr := decoder.Decode(context.Background(), value)
+				want := []error{testcase.firstErr, testcase.secondErr}[index]
+				if !errors.Is(decodeErr, want) || (decodeErr == nil && result == nil) {
+					t.Fatalf("decode %d: %v, %v", index, result, decodeErr)
+				}
+
+				load, owned := decoder.Usage()
+				if want != nil {
+					if load != beforeLoad || owned != beforeOwned || resolver.calls != beforeCalls || reader.closed != 0 {
+						t.Fatal("budget failure performed I/O or retained reservation")
+					}
+				} else if load != beforeLoad+12 || owned != beforeOwned+4 || reader.closed != 1 {
+					t.Fatalf("successful external usage: %d %d %+v", load, owned, reader)
+				}
+			}
+		})
+	}
+}
+
+func TestTensorDecoderExternalCancellation(t *testing.T) {
+	for _, dataType := range []int32{1, 7} {
+		wire := externalTensor(dataType, []int64{2048}, "location", "weights")
+		width := 4
+		if dataType == 7 {
+			width = 8
+		}
+
+		for boundary := 1; boundary <= 8; boundary++ {
+			reader := &rangeReader{data: make([]byte, 2048*width)}
+			resolver := &rangeResolver{reader: reader}
+			decoder, err := NewTensorDecoderWithResolver(context.Background(), wire, 0, TensorLimits{}, resolver)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			before, _ := decoder.Usage()
+			ctx := newCancelContext(boundary)
+			value, decodeErr := decoder.Decode(ctx, wire)
+			ctx.cancel()
+			if value != nil || !errors.Is(decodeErr, context.Canceled) || reader.closed != resolver.calls {
+				t.Fatalf("type %d boundary %d: result %t, %v; calls %d closes %d", dataType, boundary, value != nil, decodeErr, resolver.calls, reader.closed)
+			}
+
+			if load, owned := decoder.Usage(); load != before || owned != 0 {
+				t.Fatal("cancelled conversion retained reservation")
+			}
+		}
 	}
 }
