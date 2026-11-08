@@ -4,8 +4,8 @@ The library completion record and published handoffs live in [NEEDS.md](NEEDS.md
 runtime task definitions and completion checkboxes live in [ROADMAP.md](ROADMAP.md).
 Keep status there so this file does not become a second, conflicting backlog.
 The backend baseline is `neuralnetwork v0.7.0`: NN-01–NN-12 are complete and
-RT-01–RT-12 are complete. The [NN-13 runtime handoff](docs/handoff-nn13.md)
-supplies its baseline inputs. 2D CNN operators (RT-13) are next.
+RT-01–RT-13 are complete. The [NN-13 runtime handoff](docs/handoff-nn13.md)
+supplies its baseline inputs. M3 CNN adapters are implemented; explicit external data (RT-14) is next.
 
 ## Start here
 
@@ -23,14 +23,16 @@ supplies its baseline inputs. 2D CNN operators (RT-13) are next.
    and read the [integration report](docs/integration-rt11.md), including the
    four reference agreements at batches 1 and 3 and current M1 restrictions.
 5. **RT-12 is complete**: read the [M2 fixtures](testdata/m2/README.md) and
-   [NN-13 handoff](docs/handoff-nn13.md). Complete **RT-13** next.
+   [NN-13 handoff](docs/handoff-nn13.md).
+6. **RT-13 is complete**: read the [CNN fixtures](testdata/m3/README.md) and
+   [integration report](docs/integration-rt13.md). Complete **RT-14** next.
 
 ## Subsequent milestones
 
 | Milestone | Library work | Runtime work |
 | --- | --- | --- |
 | M2: shape processing | NN-07–NN-08 available in v0.7.0 | RT-12 complete |
-| M3: 2D CNNs | NN-09–NN-11 available in v0.7.0 | RT-13 |
+| M3: 2D CNNs | NN-09–NN-11 available in v0.7.0 | RT-13 complete |
 | M4: external weights and release readiness | Released copying backend | RT-14–RT-15, RT-18 |
 | Later: performance and broader coverage | NN-12 available; resume NN-13 after RT-12 | RT-16–RT-17, RT-19 |
 

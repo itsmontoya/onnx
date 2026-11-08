@@ -11,7 +11,8 @@ that subset. RT-09 implements M1 arithmetic, products and activations, plus
 float/int scalar/list Constant forms. RT-10 implements the offline conformance
 harness with typed fixtures and explicit reference exceptions. RT-11 adds public
 inference examples; RT-12 implements runtime int64 shape subgraphs and all M2
-transforms/indexing, with 20 implemented capability records.
+transforms/indexing. RT-13 implements the five bounded CNN adapters, with all
+25 capability records implemented.
 [capabilities.json](../capabilities.json)
 records the executable
 subset and planned operator coverage. The
@@ -390,7 +391,7 @@ metadata) are:
 | Add/Sub/Mul | 4 times output bytes for matching nonempty shapes (two copied inputs, matrix destination and copied values); zero numeric scratch for broadcasting or empties |
 | Div/Softmax | Zero numeric scratch; audited direct destination kernels |
 | Flatten/Transpose/Reshape/Squeeze/Unsqueeze/Concat/Gather | Zero additional numerical kernel scratch: audited copying Into destinations. Shape/axes input snapshots are charged separately before access; destination reservation includes the still-live staging charge. |
-| CNN | Future adapters must audit all numerical scratch |
+| Conv/MaxPool/AveragePool/GlobalAveragePool/BatchNormalization | Zero numerical scratch: audited direct v0.7.0 Into loops; reserve the entire destination before allocation. |
 
 Budget validation precedes allocation and arithmetic must not overflow. Planning
 never constructs numerical node outputs. RT-12 inspects immutable int64 constant
@@ -485,6 +486,16 @@ inputs. Runtime-dependent rank/axes/shape checks remain at Run. MaxPool indices
 and nonzero storage_order are explicitly unsupported. String/sparse Constants
 are unsupported even though schema-13 defines those attribute forms.
 
+CNN padding accepts NOTSET (including explicit nonnegative pads), VALID and
+SAME_UPPER/SAME_LOWER. Non-NOTSET auto_pad conflicts with any explicit pads.
+Resolve SAME using checked integer ceil(input/stride) and effective dilated
+kernels for each invocation. Conv kernel_shape, when present, must match actual
+weights. MaxPool permits a second empty output name, retained as slot -1; a named
+indices output fails. BatchNormalization supports exactly one output slot; even
+extra empty training slots fail the selected inference form. All input/statistic
+values remain unchanged. Momentum metadata is retained in the plan but ignored
+by inference kernels. Runtime shape failures are contextual and recoverable.
+
 ## Fixture and handoff obligations
 
 Every implemented operator needs isolated positive/negative fixtures and a
@@ -496,8 +507,8 @@ count as implemented support. BN-9, nonfinite and empty cases require the
 independent/reference distinctions above and in [NEEDS.md](../NEEDS.md).
 
 RT-10's [fixture manifest and comparison rules](../testdata/conformance/README.md)
-implement these obligations for current M1 operators: 86 reference agreements,
-one explicit extension, one executed Gather shape difference and eight
+implement these obligations for M1 and retained M2/M3 cases: 87 reference agreements,
+one explicit extension, four executed reference differences and four
 unsupported-model rejections. All model and
 TensorProto value hashes are verified offline. Unexpected NaNs/infinities fail
 finite expectations; infinity signs are exact; zero-sign policy is explicit per
@@ -507,9 +518,10 @@ and multidimensional mismatch position.
 The pinned suite's 1,422 backend models contain no exact IR-8/opset-13 envelope.
 Copied upstream models retain their IR-7 bytes as version rejection tests;
 independent original IR-8/opset-13 models provide numerical coverage. This does
-not broaden accepted versions. Deferred CNN/reduction observations remain retained reference records with
-explicit unsupported errors. RT-12 enables the Gather case with an independently
-expected shape while retaining the actual reference disagreement. Original fixture origin is distinct from licensing: this repository
+not broaden accepted versions. The reduction case remains an unsupported-version error. RT-12 enables Gather;
+RT-13 executes the retained CNN cases with independent expectations and actual
+oracle observations. The [87-case M3 set](../testdata/m3/README.md) adds isolated
+CNN cases and a composed model at batches 1 and 3. Original fixture origin is distinct from licensing: this repository
 has no LICENSE; copied ONNX artifacts retain the upstream Apache-2.0 attribution
 and included license.
 
