@@ -198,6 +198,10 @@ func (c *compiler) node(node graph.Node) (err error) {
 	}
 
 	for _, index := range step.Outputs {
+		if index < 0 {
+			continue
+		}
+
 		value := &c.plan.values[index]
 		inferred.Name = value.Name
 		if value.Info, err = c.merge(inferred, value.Info); err != nil {
@@ -220,7 +224,7 @@ func (c *compiler) node(node graph.Node) (err error) {
 }
 
 func (c *compiler) infer(node graph.Node, step *Step) (info graph.ValueInfo, constant *graph.Constant, err error) {
-	if len(step.Outputs) != 1 || step.Outputs[0] < 0 {
+	if (len(step.Outputs) != 1 && node.Operator != "MaxPool") || step.Outputs[0] < 0 {
 		return info, nil, fmt.Errorf("%w: planner requires one named output", graph.ErrUnsupported)
 	}
 
@@ -235,7 +239,7 @@ func (c *compiler) infer(node graph.Node, step *Step) (info graph.ValueInfo, con
 	}
 
 	if node.Operator != "Constant" {
-		if err = c.reserve(64); err != nil {
+		if err = c.reserve(256); err != nil {
 			return info, nil, err
 		}
 
@@ -257,7 +261,9 @@ func (c *compiler) infer(node graph.Node, step *Step) (info graph.ValueInfo, con
 				inputs[slot] = c.plan.values[index].Info
 			}
 		}
-		if IsShapeOperator(node.Operator) {
+		if IsCNNOperator(node.Operator) {
+			info, err = inferCNN(node, step, inputs)
+		} else if IsShapeOperator(node.Operator) {
 			info, err = c.inferShape(node, step, inputs)
 		} else {
 			info, err = inferNumerical(node, step, inputs)

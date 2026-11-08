@@ -176,7 +176,7 @@ def main():
     original("hand_special_identity", [node("Identity", ["special"])], {"special": special}, {"y": special})
     original("hand_scalar", [node("Identity", ["scalar"])], {"scalar": f(-0.0)}, {"y": f(-0.0)})
 
-    # Future adapters remain rejections. Preserve actual reference differences now.
+    # Retain original names and actual oracle differences as adapters are implemented.
     original("deferred_gather_empty", [node("Gather", ["data", "indices"], axis=1)],
              {"data": np.arange(6, dtype=np.float32).reshape(2, 3), "indices": np.empty((0, 2), np.int64)},
              {"y": np.empty((2, 0, 2), np.float32)}, status="difference",
@@ -184,22 +184,21 @@ def main():
     original("deferred_pool_ceil", [node("AveragePool", ["data"], kernel_shape=[2, 2], strides=[2, 2],
                                         ceil_mode=1, count_include_pad=1)],
              {"data": np.arange(1, 10, dtype=np.float32).reshape(1, 1, 3, 3)},
-             {"y": f([3, 2.25, 3.75, 2.25]).reshape(1, 1, 2, 2)}, status="unsupported",
-             reason="AveragePool-11 adapter is RT-13; full kernel divisors include partial ceil windows.", observations=True)
+             {"y": f([3, 2.25, 3.75, 2.25]).reshape(1, 1, 2, 2)}, observations=True)
     original("deferred_pool_nan", [node("MaxPool", ["data"], kernel_shape=[2, 2])],
              {"data": f([np.nan, 1, 2, 3]).reshape(1, 1, 2, 2)}, {"y": f([np.nan]).reshape(1, 1, 1, 1)},
-             status="unsupported", reason="MaxPool-12 adapter is RT-13; reference filters input NaNs.", observations=True)
+             status="difference", reason="RT-13 propagates input NaNs; evaluator filters them.", observations=True)
     normalization_feeds = {"data": f([[3], [5]]), "scale": f([2]), "bias": f([0.5]),
                            "mean": f([1]), "variance": f([4])}
     original("deferred_normalization", [node("BatchNormalization", list(normalization_feeds), epsilon=0.0)],
-             normalization_feeds, {"y": f([[2.5], [4.5]])}, status="unsupported",
-             reason="BatchNormalization-9 adapter is RT-13; stored-statistics formula and ORT agree; evaluator applies momentum.",
+             normalization_feeds, {"y": f([[2.5], [4.5]])}, status="difference",
+             reason="RT-13 preserves supplied inference statistics; independent stored-statistics formula and ORT agree; evaluator applies momentum.",
              observations=True)
     zero_feeds = {"data": f([[-1], [0], [1]]), "scale": f([1]), "bias": f([0]),
                   "mean": f([0]), "variance": f([0])}
     original("deferred_normalization_zero", [node("BatchNormalization", list(zero_feeds), epsilon=0.0)],
-             zero_feeds, {"y": f([[-np.inf], [np.nan], [np.inf]])}, status="unsupported",
-             reason="BatchNormalization-9 adapter is RT-13; zero variance/epsilon literal formula differs from ORT's three NaNs.",
+             zero_feeds, {"y": f([[-np.inf], [np.nan], [np.inf]])}, status="difference",
+             reason="RT-13 uses the literal stored-statistics formula; zero variance/epsilon differs from evaluator momentum and ORT's three NaNs.",
              observations=True)
     original("deferred_reduction18", [node("ReduceMean", ["data"], noop_with_empty_axes=1)],
              {"data": f([1, 2])}, {"y": f([1, 2])}, status="unsupported", opset=18,

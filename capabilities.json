@@ -657,7 +657,7 @@
       "schema_version": 11,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-13",
       "data_types": [
         "float32"
@@ -714,7 +714,7 @@
       "schema_version": 12,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-13",
       "data_types": [
         "float32"
@@ -776,7 +776,7 @@
       "schema_version": 11,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-13",
       "data_types": [
         "float32"
@@ -831,7 +831,7 @@
       "schema_version": 1,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-13",
       "data_types": [
         "float32"
@@ -857,7 +857,7 @@
       "schema_version": 9,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-13",
       "data_types": [
         "float32"

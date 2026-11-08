@@ -22,6 +22,7 @@ type Step struct {
 	Inputs         []int
 	Outputs        []int
 	Constant       *graph.Constant
+	CNN            CNNConfig
 	Gemm           tensor.GemmConfig
 	Axis           int64
 	Permutation    []int64

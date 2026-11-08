@@ -70,7 +70,7 @@ func (s *conformanceSuite) validate() (err error) {
 				return fmt.Errorf("case %q unrecognized runtime extension", fixture.Name)
 			}
 		case "difference":
-			if fixture.Name != "deferred_gather_empty" || fixture.Reason == "" || observation.Status != "returned" {
+			if fixture.Name != "deferred_gather_empty" && fixture.Name != "deferred_pool_nan" && fixture.Name != "deferred_normalization" && fixture.Name != "deferred_normalization_zero" || fixture.Reason == "" || observation.Status != "returned" {
 				return fmt.Errorf("case %q unrecognized reference difference", fixture.Name)
 			}
 
@@ -108,11 +108,11 @@ func TestConformanceSuite(t *testing.T) {
 			}
 		})
 	}
-	if !maps.Equal(counts, map[string]int{"agreement": 86, "extension": 1, "difference": 1, "unsupported": 8}) {
+	if !maps.Equal(counts, map[string]int{"agreement": 87, "extension": 1, "difference": 4, "unsupported": 4}) {
 		t.Fatalf("case classification counts changed: %v", counts)
 	}
 
-	t.Logf("%d reference agreements, %d documented extensions, %d reference shape differences, %d explicit rejections; no skips", counts["agreement"], counts["extension"], counts["difference"], counts["unsupported"])
+	t.Logf("%d reference agreements, %d documented extensions, %d reference differences, %d explicit rejections; no skips", counts["agreement"], counts["extension"], counts["difference"], counts["unsupported"])
 }
 
 func TestConformanceSuiteDetectsNumericError(t *testing.T) {

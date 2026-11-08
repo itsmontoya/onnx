@@ -73,7 +73,16 @@ func (r *Registry) Resolve(domain, operator string, imported int64) (record capa
 }
 
 func hasPlanner(record capability.Record) (supported bool) {
-	if record.Domain != "" || record.SchemaVersion != 13 {
+	if record.Domain != "" {
+		return false
+	}
+
+	if IsCNNOperator(record.Operator) {
+		versions := map[string]int64{"Conv": 11, "MaxPool": 12, "AveragePool": 11, "GlobalAveragePool": 1, "BatchNormalization": 9}
+		return record.SchemaVersion == versions[record.Operator]
+	}
+
+	if record.SchemaVersion != 13 {
 		return false
 	}
 
