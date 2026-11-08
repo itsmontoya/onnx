@@ -21,6 +21,8 @@ RT-11 demonstrates MLP/branching inference with multi-batch reference goldens,
 a runnable public example and the first integration report. RT-12 adds all M2
 shape operators, exact runtime shape subgraphs, and the NN-13 baseline handoff.
 RT-13 adds all five bounded M3 CNN adapters and a composed multi-batch CNN.
+RT-14 adds explicit external float32/int64 tensor ranges and a confined directory
+resolver, plus an externalized MLP with unchanged reference values.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -76,7 +78,7 @@ in RT-01. It is not a claim of general ONNX compatibility:
 | Model envelope | IR version 8, standard empty-string domain, imported opset exactly 13 |
 | Values | Dense `float32` computation and exact `int64` constants/shape values; reject other types |
 | Shapes | Concrete runtime shapes, including scalars/empty tensors; fixed dimensions plus symbolic or unknown leading batch metadata initially |
-| Weights | Inline TensorProto values initially; explicit external-data support in RT-14 |
+| Weights | Inline TensorProto or explicitly resolved external float32/int64 data |
 | Graph | A top-level DAG, multiple inputs/outputs, fan-out/joins, optional input/output placeholders where the selected schema allows them |
 | Operator coverage | Only the implemented schema/type/attribute/rank combinations listed below |
 | Unsupported features | Clear load-time errors where statically knowable, contextual run-time errors for data-dependent violations |
@@ -1407,7 +1409,7 @@ unmerged, based on RT-12 and green; no later task is started here.
 
 ## M4: loading, robustness, and a documented release
 
-### [ ] RT-14 — Add explicit external tensor-data resolution
+### [x] RT-14 — Add explicit external tensor-data resolution
 
 **Depends on:** RT-11, RT-05. **Deliverable:** bounded external-data support via
 an explicit loader resolver and an optional confined filesystem helper.
@@ -1428,6 +1430,95 @@ Owned bytes are valid after resolver resources close. Missing resolvers and
 storage failures report tensor/location context. Document the chosen checksum
 verification policy against the pinned
 [external-data specification](https://onnx.ai/onnx/repo-docs/ExternalData.html).
+
+
+**Handoff (RT-14):** Accessible implementation revision
+[`f02e7bace484ebc6cb8be67850ca9b85665c991d`](https://github.com/itsmontoya/onnx/tree/f02e7bace484ebc6cb8be67850ca9b85665c991d),
+from RT-13 base `00253078fd95fc0314cac252143a3c5efb8d4b6b`. Initial implementation
+`a60003498c18b6f479d2279f9981ffc0e1bd1597` and fixture/example
+`f8713414ccb9ec3d5480706d6d749fc9fd9206ba` are separate focused commits. The
+[integration report](docs/integration-rt14.md) records exact APIs, changed
+components, checks, platform limits and all artifact hashes. Backend remains
+neuralnetwork v0.7.0 (`6048452c57a0a293db4591cd2e2febd7d6b743a3`), protobuf
+v1.36.12, toolchain Go 1.27.2, language baseline Go 1.26.1 and ONNX v1.16.2
+source `3bf92c03a9f27eba3bda1e5b9e63ea20ec213557`. No backend/module/local
+replacement or operator/profile expansion is introduced.
+
+Changed public files are `external_data_resolver.go`, `options.go`, `model.go`,
+`directory_resolver.go`, `directory_source.go`, package/error GoDoc and matching
+unit/integration tests. `internal/decode` adds the minimal consumer resolver
+interface and external_range metadata/read logic; TensorDecoder validates and
+accounts all tensors in the complete model. `internal/graph` threads the resolver
+through BuildWithResolver and builder to that same decoder. The canonical
+capabilities.json records implemented weight storage plus exact restrictions;
+check_profile.py verifies it. `tools/check_external.py`, `testdata/external`,
+`examples/external`, README, getting-started, development/runtime-contract docs
+and the implementation queue complete the fixture and usage handoff. All
+constructors initialize local concrete values and explicitly return addresses;
+generated protobuf messages containing mutexes are never copied by value.
+
+The existing `ExternalDataResolver.Resolve(context.Context, string, int64, int64)
+(io.ReadCloser, error)` is now implemented via Options.ExternalData in every
+loader, including LoadFile. Directory helper APIs are
+`NewDirectoryResolver(string) (*DirectoryResolver, error)`,
+`(*DirectoryResolver).Resolve(context.Context, string, int64, int64)
+(io.ReadCloser, error)` and `(*DirectoryResolver).Close() error`. The helper uses
+os.OpenRoot/Root.Open confinement during open, independent bounded file ranges
+and concurrent Resolve/Close. Absolute/traversal/backslash/drive/URL paths and
+symlink escapes are rejected. Internal relative symlinks are accepted. Close is
+idempotent, later resolves return ErrClosed, and previously opened readers remain
+usable. Nil/zero helpers are invalid. js/plan9 require a caller resolver; os.Root
+cannot provide this helper's required symlink/rename guarantee there. Hard links,
+mounts, filesystem boundaries and changing file contents remain documented
+filesystem limitations, not a claimed sandbox. Darwin/arm64 is locally tested;
+the hosted Linux/amd64 workflow runs the same confinement tests. Hosts unable to
+create symlinks skip those tests explicitly; other platforms were not run locally.
+
+External metadata recognizes location/offset/length only, rejects duplicates,
+unknown keys, malformed/negative decimal int64 values, inconsistent exact length,
+range overflow and conflicting inline encodings before tensor numerical
+allocation/I/O. Dtype, segment, shape, tensor and aggregate budgets are checked
+before resolution. An omitted length still requests exactly the shape/type byte
+count. Zero-byte ranges resolve and close without reading. Read chunks are at
+most 32 KiB; exact reads, bounded no-progress handling, context checks and all
+reader closures preserve tensor/location diagnostics and error causes. Close
+failures prevent publication and joined causes remain discoverable. The resolver
+itself stays caller-owned. Each range costs raw read bytes, typed staging and
+an owned copy against MaxLoadBytes, plus owned bytes against aggregate
+MaxInitializerBytes. Successful staging charges stay conservative; failed or
+cancelled conversions retain no new reservation. Multiple/shared locations and
+reused ranges always materialize separate owned tensors. Shape/int64 values are
+never routed through float32, and values survive resolver/caller buffers closing
+or changing. Blocking custom resolver I/O and synchronous backend copies have
+the documented cancellation cooperation/bracketing limits.
+
+Checksum metadata is explicitly unsupported. The pinned ONNX v1.16.2 external
+specification defines optional whole-file SHA-1; no selected-range or silently
+unverified checksum claim is made. Development SHA-256 provenance is independent.
+The actual external MLP model hash is
+`2839759a10df8272f70ee1b633128804ce065187fe9e8fa3a55b286ff80e17ea`, shared
+weights hash `44cc639beb769ce884d9f807a3802bde3e0295138d31695d98d9d56943138925`,
+and provenance hash `d311eaceb990ff06dd1914063e08350a77d5171497ea29be00865c6024162d08`.
+Four float32 weights share a file with a 13-byte prefix and final omitted length.
+Pinned ONNX checker/load/evaluator match inherited batch 1/3 values exactly.
+All previous fixture/model/value/provenance bytes and numerical semantics remain
+unchanged. Ordinary Go tests are offline and Python-free; the portable memory
+resolver example explicitly permits one location. No repository LICENSE exists
+and none is invented.
+
+Formatting, tidy-diff, module verification, build, vet, normal, cgo-disabled,
+cgo-disabled purego and race tests pass. Batches 1/3 and purego batch 3 pass the
+new example; a clean implementation clone reproduces these and cgo-disabled
+tests from cached dependencies with a clean tree. All inherited protobuf,
+profile/default/schema, M1, M2, M3, conformance/upstream audit and inference/table
+checks plus the external generator pass. Unit/integration cases cover all
+metadata/range failures, aggregate limits, short/truncated/error/close reads,
+float-bit/int64/scalar/empty values, every conversion cancellation boundary,
+shared ranges/locations, owned values after Close, concurrent loads/sessions,
+traversal/symlink escape and racing replacement. Changed-file style, local
+Markdown target and diff checks pass. RT-15 is next; no later work or merge is
+performed. Keep this stacked PR based on RT-13 open and its final hosted checks
+green.
 
 ### [ ] RT-15 — Harden resource limits, errors, cancellation, and lifecycle
 

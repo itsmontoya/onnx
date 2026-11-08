@@ -5,8 +5,8 @@ A Go-native ONNX inference runtime built on
 Load an `.onnx` model, bind named immutable Go tensors, and evaluate named outputs
 on the CPU without cgo or an installed native inference runtime.
 
-RT-01–RT-13 implement the [runtime contract](docs/runtime-contract.md), bounded
-protobuf and inline tensor loading, named graph validation, versioned planning,
+RT-01–RT-14 implement the [runtime contract](docs/runtime-contract.md), bounded
+protobuf and dense tensor loading, named graph validation, versioned planning,
 and serial sessions. The executable subset is deliberately narrow: ONNX IR 8,
 standard-domain opset 13, float32 Add/Sub/Mul/Div, MatMul/Gemm,
 Relu/Sigmoid/Tanh/Softmax, and float32/int64 Identity/Constant. M2 adds Shape, Flatten, Transpose, Reshape,
@@ -23,8 +23,11 @@ Session with `NewSession`, then call `Run` with named inputs and optional reques
 outputs. Outputs own independent storage and survive later runs and Close.
 Overlapping calls on one session return `ErrBusy`; separate sessions can run
 concurrently. `Options.Limits` applies finite load, tensor, live, workspace and
-session bounds. External tensors and resolver options remain unsupported until
-RT-14. `Capabilities()` returns copied manifest records, covering all 25 implemented operators
+session bounds. External float32/int64 tensors require an explicit
+`Options.ExternalData` resolver for every loader, including `LoadFile`.
+`NewDirectoryResolver` provides confined regular-file ranges on supported Go
+platforms; the [portable resolver example](examples/external/main.go) explicitly
+permits an in-memory weight file. Checksum metadata is unsupported. `Capabilities()` returns copied manifest records, covering all 25 implemented operators
 and their exact restrictions.
 
 The module pins `neuralnetwork v0.7.0`, protobuf v1.36.12, and Go 1.27.2 with a
@@ -44,6 +47,7 @@ CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 3
 CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 3
+CGO_ENABLED=0 go run ./examples/external -batch 3
 CGO_ENABLED=0 go test ./...
 ```
 
@@ -88,8 +92,8 @@ float32/int64 values. Named graph inputs/outputs and branching are implemented.
 Broadcasting, matrix products, activations and the RT-10 fixture/conformance
 harness, user examples and runtime shape transformations are implemented.
 The [M2 fixtures](testdata/m2/README.md) retain exact reference differences. The [87 M3 cases](testdata/m3/README.md) execute with independently verified CNN
-outputs and retained evaluator/ORT differences. Later milestones add external
-weights and a documented release.
+outputs and retained evaluator/ORT differences. RT-14 adds [explicit external weights](docs/integration-rt14.md); further
+resource hardening and a documented release remain later work.
 
 The [roadmap's coverage tables](ROADMAP.md#milestones-and-coverage) specify
 operator schema versions, supported subsets, and milestone requirements. Newer

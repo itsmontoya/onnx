@@ -4,8 +4,9 @@ The library completion record and published handoffs live in [NEEDS.md](NEEDS.md
 runtime task definitions and completion checkboxes live in [ROADMAP.md](ROADMAP.md).
 Keep status there so this file does not become a second, conflicting backlog.
 The backend baseline is `neuralnetwork v0.7.0`: NN-01–NN-12 are complete and
-RT-01–RT-13 are complete. The [NN-13 runtime handoff](docs/handoff-nn13.md)
-supplies its baseline inputs. M3 CNN adapters are implemented; explicit external data (RT-14) is next.
+RT-01–RT-14 are complete. The [NN-13 runtime handoff](docs/handoff-nn13.md)
+supplies its baseline inputs. CNN adapters and explicit external weights are
+implemented; resource/lifecycle hardening (RT-15) is next.
 
 ## Start here
 
@@ -25,7 +26,9 @@ supplies its baseline inputs. M3 CNN adapters are implemented; explicit external
 5. **RT-12 is complete**: read the [M2 fixtures](testdata/m2/README.md) and
    [NN-13 handoff](docs/handoff-nn13.md).
 6. **RT-13 is complete**: read the [CNN fixtures](testdata/m3/README.md) and
-   [integration report](docs/integration-rt13.md). Complete **RT-14** next.
+   [integration report](docs/integration-rt13.md).
+7. **RT-14 is complete**: read the [external fixtures](testdata/external/README.md)
+   and [integration report](docs/integration-rt14.md). Complete **RT-15** next.
 
 ## Subsequent milestones
 
