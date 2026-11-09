@@ -10,7 +10,9 @@ initial [capability manifest](capabilities.json); every operator is still marked
 planned. This repository has no runnable inference implementation yet.
 RT-02 establishes the Go module, pinned `neuralnetwork v0.7.0` and protobuf
 dependencies, and a verification workflow. There is no model loader or inference
-implementation yet, and no model compatibility is claimed.
+implementation yet, and no model compatibility is claimed. RT-03 adds generated
+ONNX wire bindings and bounded internal decoding; ordinary builds and tests need
+neither protoc nor Python.
 
 ## Implementation plans
 

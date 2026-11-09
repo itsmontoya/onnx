@@ -9,8 +9,8 @@ Python reference tools may generate development fixtures; they are not runtime
 dependencies. A Go protobuf dependency is compatible with this goal.
 
 This document tracks the implementation plan. RT-01 has specified the contract;
-RT-02 provides the Go module and verification foundation. There is currently no
-runtime implementation or generated schema.
+RT-02 provides the Go module and verification foundation. RT-03 adds generated
+wire bindings and bounded internal decoding. There is no inference runtime yet.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -260,7 +260,7 @@ The inherited pinned profile checker still passes. Normal builds need neither
 Python/protoc nor native runtime libraries. RT-03 must add pinned, reproducible
 ONNX bindings and bounded decoding; all capability records remain planned.
 
-### [ ] RT-03 — Add reproducible ONNX protobuf bindings and bounded decoding
+### [x] RT-03 — Add reproducible ONNX protobuf bindings and bounded decoding
 
 **Depends on:** RT-02. **Likely files:** `internal/onnxpb/`, a generation tool,
 source/license notices, and decoder tests.
@@ -279,6 +279,56 @@ unchanged. Decode tests cover a valid ModelProto/TensorProto, typed repeated
 fields, packed fields, unknown fields, truncation, invalid wire data, recursion,
 and oversized input. Reader errors include context. The loader neither closes
 caller-owned readers nor reads unbounded bytes before applying a size limit.
+
+**Handoff (RT-03):** The task revision is the commit introducing
+`internal/decode/protobuf.go`; retrieve it with
+`git log -1 --format=%H -- internal/decode/protobuf.go`. Changed files include
+the unmodified pinned schema/license and attribution in `third_party/onnx/`,
+the scoped `.gitattributes` preserving its original trailing blank line,
+`tools/onnxgen/main.go`, 36 generated `internal/onnxpb/*.pb.go` files and package
+documentation, `internal/decode/` with its tests, and README/development/contract
+documentation. ONNX source is v1.16.2, commit
+`3bf92c03a9f27eba3bda1e5b9e63ea20ec213557`; this schema has no imports.
+The backend remains published `neuralnetwork v0.7.0`, commit
+`6048452c57a0a293db4591cd2e2febd7d6b743a3`, without replacements.
+
+Internal APIs are `ParseModel(ctx context.Context, data []byte, limits Limits)
+(*onnxpb.ModelProto, error)`, `ReadModel(ctx context.Context, source io.Reader,
+limits Limits) (*onnxpb.ModelProto, error)`, and corresponding ParseTensor/
+ReadTensor returning `*onnxpb.TensorProto`. `decode.Limits` has MaxBytes and
+MaxRecursion fields; zero selects 64 MiB and 64 known-message levels. Negative
+limits and byte-limit lookahead overflow are invalid arguments. Errors retain
+I/O/context/protobuf causes and expose internal ErrInvalidArgument, ErrLimit,
+and ErrInvalidWire categories. No public load/execution API is implemented.
+
+Byte inputs are bounded before unmarshalling; readers consume at most limit+1
+bytes in chunks no larger than 32 KiB, never close caller resources, reject
+invalid read counts/no progress, and check cancellation between reads and
+before/after synchronous protobuf decoding. Unknown fields/groups are retained.
+Official protobuf v1.36.12 applies configured recursion to known messages but
+uses a separate fixed 10,000-descent allowance for unknown groups (10,001 nested
+levels accepted, 10,002 rejected). Both behaviors are tested and documented;
+there is no second wire parser. Decoded wire objects still permit unsupported
+ONNX semantic features, for RT-05/RT-06 validation, and byte limits do not claim
+to bound protobuf object overhead or total process heap.
+
+Regeneration uses protoc 33.2 (generated version 6.33.2), the module-pinned
+protoc-gen-go v1.36.12, schema SHA-256 checking, and a deterministic AST split
+that keeps each generated type/method set together while retaining upstream
+generated implementation style. Ordinary builds/tests need no protoc or Python.
+Two generation passes reproduced all 36 files byte-for-byte.
+
+Validation on Go 1.27.2, Darwin/arm64: formatting, `go mod tidy -diff`,
+`go mod verify`, `go build ./...`, `go vet ./...`, `go test ./...`,
+`CGO_ENABLED=0 go test ./...`, `CGO_ENABLED=0 go test -tags=purego ./...`, and
+`go test -race ./...` passed with downloaded dependencies and networking
+disabled. Decoder statement coverage is 97.1%. Literal tests cover packed and
+unpacked float32/int64, exact large/negative integers, NaN payload/signed-zero
+bits, owned raw bytes, unknown preservation, truncation/invalid wire, both
+recursion limits, byte bounds, I/O causes, reader ownership, and cancellation.
+The inherited 25-schema/checker fixture, local Markdown paths, and
+`git diff --check` pass. RT-04 next implements public tensor values/metadata;
+RT-05 reuses TensorProto decoding for validated owned numerical payloads.
 
 ## M1: first working inference runtime
 

@@ -11,9 +11,10 @@ criteria. This project is an independent Go runtime, not Microsoft's ONNX Runtim
 The source of ONNX wire and operator definitions is **ONNX v1.16.2**, commit
 [`3bf92c03a9f27eba3bda1e5b9e63ea20ec213557`](https://github.com/onnx/onnx/tree/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557),
 licensed under [Apache-2.0](https://github.com/onnx/onnx/blob/v1.16.2/LICENSE).
-RT-03 must vendor `onnx/onnx.proto` and any imports from this revision, their
-license/notice, and checked-in reproducible Go bindings; schema generation is
-a development operation, not part of loading a model. No schema is vendored yet.
+RT-03 vendors [the unmodified schema and license](../third_party/onnx/README.md)
+and checked-in reproducible Go bindings. This schema has no imports and the
+upstream release has no root NOTICE. Schema generation is a development
+operation, not part of loading a model.
 The [IR](https://github.com/onnx/onnx/blob/v1.16.2/docs/IR.md) and
 [version rules](https://github.com/onnx/onnx/blob/v1.16.2/docs/Versioning.md)
 are separate from operator schema selection. This source also defines newer IR
@@ -288,7 +289,7 @@ and Constant payloads together count against MaxInitializerBytes.
 | MaxNameBytes | 4,096 | Each string described above |
 | MaxRank | 32 | Declared and concrete rank |
 | MaxDimension | 2^31 - 1 | Each fixed/concrete dimension |
-| MaxRecursion | 64 | Protobuf decoder recursion depth |
+| MaxRecursion | 64 | Known-message nesting in protobuf decoding |
 | MaxSessions | 16 | Live sessions sharing a compiled plan |
 
 These are logical tensor/payload accounting limits, not a promise to cap process
@@ -302,6 +303,14 @@ copies and raw-data staging must fit before allocation; sum using checked
 arithmetic. Release wire objects once the immutable plan is built. Many tiny
 wire objects can still have substantial allocator overhead; untrusted deployments
 may additionally enforce process/container limits.
+
+RT-03 confirms that protobuf v1.36.12's configurable recursion limit applies to
+known messages. Unknown groups use the official protowire decoder's independent
+fixed allowance of 10,000 recursive descents: it accepts 10,001 nested group
+levels and rejects 10,002. Unknown fields/groups remain preserved and subject
+to the serialized byte limit; MaxRecursion is not a uniform unknown-group depth
+limit. Executable tests retain this distinction without introducing a second
+wire parser.
 
 The first executor may conservatively retain all intermediates until Run ends.
 Charge shared model tensors once and each bound input reference conservatively;
