@@ -73,5 +73,13 @@ func (r *Registry) Resolve(domain, operator string, imported int64) (record capa
 }
 
 func hasPlanner(record capability.Record) (supported bool) {
-	return record.Domain == "" && record.SchemaVersion == 13 && (record.Operator == "Identity" || record.Operator == "Constant")
+	if record.Domain != "" || record.SchemaVersion != 13 {
+		return false
+	}
+
+	switch record.Operator {
+	case "Identity", "Constant", "Add", "Sub", "Mul", "Div", "MatMul", "Gemm", "Relu", "Sigmoid", "Tanh", "Softmax":
+		return true
+	}
+	return false
 }

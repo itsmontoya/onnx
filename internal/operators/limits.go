@@ -7,7 +7,7 @@ import (
 )
 
 // Limits continues graph load accounting and bounds known tensor metadata.
-// Zero fields select finite contract defaults. No numeric tensor is allocated.
+// Zero fields select finite contract defaults. Compilation allocates no numeric output tensors.
 type Limits struct {
 	MaxLoadBytes   int64
 	MaxTensorBytes int64

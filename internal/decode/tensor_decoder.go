@@ -264,3 +264,42 @@ func convertTensor(ctx context.Context, value *onnxpb.TensorProto, dataType tens
 
 	return out, nil
 }
+
+// Materialize converts a supported Constant scalar/list attribute through the
+// same aggregate limits as inline tensors. Values are borrowed only for this
+// synchronous call; the returned tensor owns its storage.
+func (d *TensorDecoder) Materialize(ctx context.Context, shape []int64, floats []float32, integers []int64, dataType tensor.DataType) (out *tensor.Tensor, err error) {
+	if d == nil || d.tensors == nil || ctx == nil {
+		return nil, fmt.Errorf("%w: materialization decoder/context", ErrInvalidArgument)
+	}
+
+	if err = ctx.Err(); err != nil {
+		return nil, err
+	}
+
+	wire := onnxpb.TensorProto{Dims: shape, FloatData: floats, Int64Data: integers}
+	if dataType == tensor.Float32 {
+		wire.DataType = proto.Int32(int32(onnxpb.TensorProto_FLOAT))
+	} else if dataType == tensor.Int64 {
+		wire.DataType = proto.Int32(int32(onnxpb.TensorProto_INT64))
+	} else {
+		return nil, fmt.Errorf("%w: Constant materialization type", ErrUnsupported)
+	}
+
+	var elements, bytes int64
+	if _, elements, bytes, err = d.validate(&wire); err != nil {
+		return nil, err
+	}
+
+	if bytes > d.limits.MaxInitializerBytes-d.initializerBytes || bytes > d.limits.MaxLoadBytes-d.loadBytes {
+		return nil, fmt.Errorf("%w: aggregate Constant materialization bytes", ErrLimit)
+	}
+
+	if out, err = convertTensor(ctx, &wire, dataType, elements); err != nil {
+		return nil, err
+	}
+
+	d.loadBytes += bytes
+	d.initializerBytes += bytes
+	return out, nil
+}

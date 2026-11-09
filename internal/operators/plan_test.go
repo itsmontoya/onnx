@@ -228,23 +228,23 @@ func TestPlanRejectsStaticCombinations(t *testing.T) {
 		{"contradictory dtype", func(model *onnxpb.ModelProto) { model.Graph.Output[0] = planInfo("y", 7, 2) }, graph.ErrInvalidModel, "inferred type", 0},
 		{"contradictory size", func(model *onnxpb.ModelProto) { model.Graph.Output[0] = planInfo("y", 1, 3) }, graph.ErrInvalidModel, "inferred axis", 0},
 		{"dead planned node", func(model *onnxpb.ModelProto) {
-			model.Graph.Node = append(model.Graph.Node, &onnxpb.NodeProto{Name: proto.String("dead"), OpType: proto.String("Add"), Input: []string{"x", "x"}, Output: []string{"unused"}})
-		}, graph.ErrUnsupported, "is planned for RT-09", 1},
+			model.Graph.Node = append(model.Graph.Node, &onnxpb.NodeProto{Name: proto.String("dead"), OpType: proto.String("Flatten"), Input: []string{"x"}, Output: []string{"unused"}})
+		}, graph.ErrUnsupported, "is planned for RT-12", 1},
 		{"unknown node", func(model *onnxpb.ModelProto) { model.Graph.Node[0].OpType = proto.String("Unimplemented") }, graph.ErrUnsupported, "no schema", 0},
 		{"missing constant value", func(model *onnxpb.ModelProto) {
 			model.Graph.Node[0].OpType = proto.String("Constant")
 			model.Graph.Node[0].Input = nil
-		}, graph.ErrInvalidModel, `required attribute "value"`, 0},
+		}, graph.ErrInvalidModel, "exactly one supported", 0},
 		{"wrong constant attribute type", func(model *onnxpb.ModelProto) {
 			model.Graph.Node[0].OpType = proto.String("Constant")
 			model.Graph.Node[0].Input = nil
 			model.Graph.Node[0].Attribute = []*onnxpb.AttributeProto{{Name: proto.String("value"), Type: onnxpb.AttributeProto_INT.Enum(), I: proto.Int64(2)}}
 		}, graph.ErrInvalidModel, "has type INT, require TENSOR", 0},
-		{"deferred scalar constant form", func(model *onnxpb.ModelProto) {
+		{"scalar constant declared vector", func(model *onnxpb.ModelProto) {
 			model.Graph.Node[0].OpType = proto.String("Constant")
 			model.Graph.Node[0].Input = nil
 			model.Graph.Node[0].Attribute = []*onnxpb.AttributeProto{{Name: proto.String("value_float"), Type: onnxpb.AttributeProto_FLOAT.Enum(), F: proto.Float32(1)}}
-		}, graph.ErrUnsupported, `attribute "value_float"`, 0},
+		}, graph.ErrInvalidModel, "inferred rank", 0},
 		{"string constant form", func(model *onnxpb.ModelProto) {
 			model.Graph.Node[0].OpType = proto.String("Constant")
 			model.Graph.Node[0].Input = nil
@@ -468,6 +468,7 @@ func TestPlanCapabilityTypeConstraints(t *testing.T) {
 	if registry, err = NewRegistry(records); err != nil {
 		t.Fatal(err)
 	}
+
 	model := planFixture()
 	model.Graph.Input[0] = planInfo("x", 7, 2)
 	model.Graph.Output[0] = planInfo("y", 7, 2)
@@ -543,5 +544,37 @@ func TestPlanSnapshotBytesWithoutNumericalCopies(t *testing.T) {
 		if _, err = plan.SnapshotBytes(ctx); !errors.Is(err, context.Canceled) {
 			t.Fatalf("cancelled snapshot: %v", err)
 		}
+	}
+}
+
+func TestPlanNumericalMetadataOnly(t *testing.T) {
+	registry := planRegistry(t)
+	for _, operator := range []string{"Add", "MatMul", "Relu"} {
+		t.Run(operator, func(t *testing.T) {
+			model := planFixture()
+			model.Graph.Input[0] = planInfo("x", 1, 4<<20, 1)
+			model.Graph.Output[0] = planInfo("y", 1, 4<<20, 1)
+			model.Graph.Node[0].OpType = proto.String(operator)
+			if operator == "Add" {
+				model.Graph.Node[0].Input = []string{"x", "x"}
+			}
+
+			if operator == "MatMul" {
+				model.Graph.Input = append(model.Graph.Input, planInfo("weight", 1, 1, 1))
+				model.Graph.Node[0].Input = []string{"x", "weight"}
+			}
+
+			source := builtGraph(t, model)
+			result := testing.Benchmark(func(b *testing.B) {
+				for iteration := 0; iteration < b.N; iteration++ {
+					if _, err := Compile(context.Background(), source, registry, Limits{}); err != nil {
+						b.Fatal(err)
+					}
+				}
+			})
+			if result.AllocedBytesPerOp() >= 1<<20 {
+				t.Fatalf("metadata inference allocated numeric storage: %d bytes", result.AllocedBytesPerOp())
+			}
+		})
 	}
 }

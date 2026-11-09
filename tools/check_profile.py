@@ -37,10 +37,10 @@ def main():
             raise SystemExit("unknown schema attribute: " + entry["operator"])
         if entry["min_opset"] != 13 or entry["max_opset"] != 13:
             raise SystemExit("initial import interval must be exactly 13")
-        implemented = entry["operator"] in {"Identity", "Constant"}
+        implemented = entry["operator"] in {"Identity", "Constant", "Add", "Sub", "Mul", "Div", "MatMul", "Gemm", "Relu", "Sigmoid", "Tanh", "Softmax"}
         if entry["status"] != ("implemented" if implemented else "planned"):
             raise SystemExit("unexpected implementation status: " + entry["operator"])
-        if implemented and entry["task"] != "RT-07":
+        if implemented and entry["task"] != ("RT-07" if entry["operator"] == "Identity" else "RT-09"):
             raise SystemExit("unexpected implementation task: " + entry["operator"])
         for name, attribute in entry["attributes"].items():
             selected = schema.attributes[name]
@@ -53,8 +53,8 @@ def main():
                 if actual_default != attribute["default"]:
                     raise SystemExit("attribute default mismatch: " + entry["operator"] + "." + name)
     constant = next(entry for entry in operators if entry["operator"] == "Constant")
-    if constant["attributes"] != {"value": {"type": "TENSOR", "required": True}}:
-        raise SystemExit("RT-07 Constant supports only the dense value tensor form")
+    if constant["attributes"] != {name: {"type": kind, "required": False} for name, kind in [("value", "TENSOR"), ("value_float", "FLOAT"), ("value_floats", "FLOATS"), ("value_int", "INT"), ("value_ints", "INTS")]}:
+        raise SystemExit("RT-09 Constant scalar/list/tensor forms differ")
     # The Go resolver tests use these real version changes in isolated profiles;
     # this does not broaden the model envelope beyond imported opset 13.
     if defs.get_schema("Softmax", 12).attributes["axis"].default_value.i != 1:
@@ -93,7 +93,7 @@ def main():
     if model_path.read_bytes() != payload or provenance_path.read_text() != provenance_text:
         raise SystemExit("profile fixture changed; inspect and regenerate deliberately")
     checker.check_model(str(model_path), full_check=True)
-    print("PASS: 25 schema selections/defaults, 2 implemented operator records, version differences, IR 8/opset 13 checker, deterministic fixture " + provenance["sha256"])
+    print("PASS: 25 schema selections/defaults, 12 implemented operator records, version differences, IR 8/opset 13 checker, deterministic fixture " + provenance["sha256"])
 
 
 if __name__ == "__main__":

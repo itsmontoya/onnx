@@ -183,7 +183,7 @@ func (c *compiler) node(node graph.Node) (err error) {
 	}
 
 	var inferred graph.ValueInfo
-	if inferred, step.Constant, err = c.infer(node, step); err != nil {
+	if inferred, step.Constant, err = c.infer(node, &step); err != nil {
 		return err
 	}
 
@@ -207,7 +207,7 @@ func (c *compiler) node(node graph.Node) (err error) {
 	return nil
 }
 
-func (c *compiler) infer(node graph.Node, step Step) (info graph.ValueInfo, constant *graph.Constant, err error) {
+func (c *compiler) infer(node graph.Node, step *Step) (info graph.ValueInfo, constant *graph.Constant, err error) {
 	if len(step.Outputs) != 1 || step.Outputs[0] < 0 {
 		return info, nil, fmt.Errorf("%w: planner requires one named output", graph.ErrUnsupported)
 	}
@@ -222,8 +222,35 @@ func (c *compiler) infer(node graph.Node, step Step) (info graph.ValueInfo, cons
 		return info, nil, nil
 	}
 
-	if len(step.Inputs) != 0 || len(node.Attributes) != 1 || node.Attributes[0].Name != "value" || node.Attributes[0].Tensor == nil {
-		return info, nil, fmt.Errorf("%w: Constant requires one dense value tensor attribute", graph.ErrUnsupported)
+	if node.Operator != "Constant" {
+		if err = c.reserve(64); err != nil {
+			return info, nil, err
+		}
+
+		for _, index := range step.Inputs {
+			if index < 0 {
+				continue
+			}
+
+			for range c.plan.values[index].Info.Dimensions {
+				if err = c.reserve(64); err != nil {
+					return info, nil, err
+				}
+			}
+		}
+
+		inputs := make([]graph.ValueInfo, len(step.Inputs))
+		for slot, index := range step.Inputs {
+			if index >= 0 {
+				inputs[slot] = c.plan.values[index].Info
+			}
+		}
+		info, err = inferNumerical(node, step, inputs)
+		return info, nil, err
+	}
+
+	if len(step.Inputs) != 0 || len(node.Attributes) != 1 || node.Attributes[0].Tensor == nil {
+		return info, nil, fmt.Errorf("%w: Constant requires exactly one supported dense tensor/scalar/list attribute", graph.ErrInvalidModel)
 	}
 
 	constant = node.Attributes[0].Tensor
@@ -306,6 +333,7 @@ func (c *compiler) nodeError(node graph.Node, cause error) (err error) {
 				}
 			}
 		}
+
 		diagnostic.Shapes = append(diagnostic.Shapes, shape)
 	}
 	return diagnostic

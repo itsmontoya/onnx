@@ -24,6 +24,32 @@ func newConstant(ctx context.Context, decoder *decode.TensorDecoder, wire *onnxp
 	return &c, nil
 }
 
+func newAttributeConstant(ctx context.Context, decoder *decode.TensorDecoder, attribute Attribute) (out *Constant, err error) {
+	var (
+		c        Constant
+		shape    []int64
+		floats   []float32
+		integers []int64
+		dataType tensor.DataType
+	)
+
+	switch attribute.Name {
+	case "value_float":
+		dataType, floats = tensor.Float32, []float32{attribute.Float}
+	case "value_floats":
+		dataType, floats, shape = tensor.Float32, attribute.Floats, []int64{int64(len(attribute.Floats))}
+	case "value_int":
+		dataType, integers = tensor.Int64, []int64{attribute.Int}
+	case "value_ints":
+		dataType, integers, shape = tensor.Int64, attribute.Ints, []int64{int64(len(attribute.Ints))}
+	}
+	if c.value, err = decoder.Materialize(ctx, shape, floats, integers, dataType); err != nil {
+		return nil, err
+	}
+
+	return &c, nil
+}
+
 // Constant owns a decoded tensor without exposing a writable backend pointer.
 // Clone allocates for a future consumer, which must reserve that copy in its own
 // budget before calling. Compilation uses no additional numerical copies.

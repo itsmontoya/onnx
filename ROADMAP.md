@@ -15,7 +15,7 @@ tensors and metadata records. RT-05 adds shared, budgeted inline tensor
 conversion. RT-06 adds immutable named graphs and whole-model structural checks.
 RT-07 adds versioned operator resolution and immutable Identity/Constant planning.
 RT-08 adds public loaders, model/session lifecycle and serial Identity/Constant
-execution. Numerical families remain RT-09 work.
+execution. RT-09 adds all M1 numerical handlers and scalar/list Constants.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -819,7 +819,7 @@ materialization against both load and initializer budgets; supply audited per-no
 destination/scratch reservations for copying backend adapters. No arithmetic,
 activation, shape or CNN execution was added by RT-08.
 
-### [ ] RT-09 — Integrate M1 arithmetic, activations, and constants
+### [x] RT-09 — Integrate M1 arithmetic, activations, and constants
 
 **Depends on:** RT-08, NN-04, NN-05, NN-06. **Deliverable:** all M1 operators in
 the coverage table, each with schema validation and shape planning.
@@ -843,6 +843,91 @@ bias shapes, scalar broadcasting, empty values, zero-denominator floats, and
 invalid combinations. Load-time known errors fail before execution; dynamic
 errors name the failing node. No operator invokes training or constructs an
 optimizer solely to perform inference.
+
+
+**Handoff (RT-09):** Implementation revision
+`4a618955d26dc588fe384b91355d13ca52a2be63`, based on RT-08
+`aca84a7bded56138243e59f8d30936b068861a54`, on `rt-09-m1-operators`.
+The final task revision is the commit introducing this handoff; retrieve it with
+`git log -1 --format=%H -- ROADMAP.md`. Backend remains published
+`neuralnetwork v0.7.0` (`6048452c57a0a293db4591cd2e2febd7d6b743a3`);
+protobuf v1.36.12, Go 1.26.1 baseline/Go 1.27.2 toolchain, no new dependencies.
+
+Changed implementation: [numerical_call.go](numerical_call.go),
+[evaluation.go](evaluation.go), operator compiler/registry/Step/Plan/limits and
+[shape_inference.go](internal/operators/shape_inference.go), TensorDecoder,
+graph builder/Constant. Changed verification: matching operator/registry tests,
+capability/model assertions, [numerical_call_test.go](numerical_call_test.go),
+[m1_integration_test.go](m1_integration_test.go),
+[check_m1.py](tools/check_m1.py), profile checker, and
+[M1 models/provenance](testdata/m1/provenance.json). Updated canonical manifest,
+README, TODO, NEEDS, package GoDoc, development and runtime contract.
+
+No public API signatures changed. Internal Step adds `Gemm tensor.GemmConfig`
+and `Axis int64`, storing resolved defaults. Its copying accessors remain
+immutable; Plan.SnapshotBytes includes these fixed fields without numerical
+clones. New internal decoder method:
+`Materialize(ctx context.Context, shape []int64, floats []float32, integers []int64, dataType tensor.DataType) (out *tensor.Tensor, err error)`.
+It validates scalar/list shapes, types and counts and reserves both aggregate
+load/initializer bytes before copying borrowed values into owned storage. Escape
+analysis confirms the graph adapter's single-element literals remain on stack.
+All methods remain with their primary types; numerical planning/execution use
+focused helpers and a call-local numericalCall.
+
+Implemented Add/Sub/Mul/Div with multidirectional broadcasting, scalar/empty
+values and IEEE float32 division; MatMul vector promotion/batch broadcasting and
+empty contractions; rank-two Gemm with all transpose flags, alpha/beta defaults
+1, omitted/empty C and scalar/vector/row/column/full unidirectional bias.
+Supplied C is validated even with beta zero; zero beta skips nonfinite bias
+arithmetic in agreement with the pinned reference. Relu/Sigmoid/Tanh preserve
+shape at every rank. Softmax-13 defaults axis -1 and normalizes only the chosen
+axis, including nonfinal axes. Constant accepts exactly one dense float32/int64
+value tensor, float/int scalar or float/int list; int64 never uses float storage.
+Known type/rank/dimension/attribute/arity errors fail at load; remaining concrete
+broadcast/contraction/bias errors identify the node at Run and allow recovery.
+Static inference only creates metadata, including partial symbolic dimensions;
+large-shape allocation regressions cover arithmetic, products and activations.
+
+Each numerical node reserves its full destination and complete audited scratch
+once before allocation/backend calls. Matching nonempty Add/Sub/Mul reserve
+4 output sizes, Sigmoid/Tanh 3, Relu 6 (bridge plus accounted NaN correction),
+Gemm copied A/B plus two product buffers and an extra B for both transposes;
+empty-contraction Gemm uses one output-sized temporary. MatMul reserves its full
+temporary output plus the sum of every batch's two copied inputs and two product
+buffers. Broadcast arithmetic, Div, Softmax and empty output paths use no numeric
+scratch. Checked sums/products reject overflow. Immutable inputs/constants remain
+disjoint from destinations; requested outputs are independent owned clones.
+Workspace releases on every exit; cancellation checks surround kernels and poll
+Relu correction every 1,024 values. No in-kernel interruption is promised.
+
+The 81 original IR 8/opset 13 checker-validated models cover every M1 operator,
+all 24 Gemm flag/bias combinations, dynamic graph weights, initializer-backed
+MLP, residual branches, scalars/empties/nonfinite values and exact int64 extremes.
+Eighty match ONNX 1.16.2 reference outputs; empty-axis Softmax retains its actual
+reference rejection and independently expected empty output as an explicit
+extension. Relu propagates NaN and maps either signed zero to positive zero as
+chosen in RT-01. Comparisons use finite atol/rtol 1e-5, NaN classification,
+infinity signs and specified zero signs. Provenance SHA-256:
+`19227f9920883b065788cc8d1a2acdfa803c632a8bc0b4bc24ff720157d315ce`.
+The original profile model remains
+`e7fed3b2d29d884d48c43427b69c08c6514ed6dcf0c7a2bdd002d5f46b0ad469`.
+
+Validation passed on Go 1.27.2 Darwin/arm64 using the writable temporary cache
+and offline dependencies: gofmt/go fmt, `go mod tidy -diff`, `go mod verify`,
+build, vet, normal tests, `CGO_ENABLED=0 go test ./...`,
+`CGO_ENABLED=0 go test -tags=purego ./...`, and `go test -race ./...`.
+Also passed pinned 25-schema/default/status audit, deterministic M1 regeneration,
+profile/fixture hashes, local Markdown targets, contract Go-block formatting,
+handwritten if/var spacing/type-method colocation, and diff whitespace checks.
+Tests include exact workspace/live boundaries for each kernel path, aggregate
+initializer/Constant/load boundaries, every observed numerical cancellation
+boundary, contextual dynamic failure/recovery and input/output ownership.
+Ordinary Go tests require no Python, network or native runtime.
+
+RT-10 is next: expand these focused M1 artifacts into the complete fixture and
+differential conformance harness. RT-11 adds runnable public examples and multiple
+batch sizes. Shape/CNN/external data, other versions/dtypes and optimization
+remain explicit gaps; no backend, training or optimizer changes were made.
 
 ### [ ] RT-10 — Build the fixture and differential conformance harness
 

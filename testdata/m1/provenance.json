@@ -1,0 +1,3964 @@
+{
+  "origin": "tools/check_m1.py; original repository graphs and values",
+  "license": "Original repository fixtures; no upstream model copied",
+  "onnx_source_revision": "3bf92c03a9f27eba3bda1e5b9e63ea20ec213557",
+  "reference_versions": {
+    "python": "3.9.6",
+    "onnx": "1.16.2",
+    "numpy": "1.26.4",
+    "protobuf": "4.25.3"
+  },
+  "ir_version": 8,
+  "opsets": {
+    "": 13
+  },
+  "comparison": "finite atol=1e-5 rtol=1e-5; NaN classification; infinity signs; signed zero for elementwise/empty contraction cases",
+  "cases": [
+    {
+      "name": "add_matching",
+      "model": "add_matching.onnx",
+      "sha256": "78afc11e73399ad0b8b63266c9ff272dfd87a56e6edb54750366a9c2c281030a",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1082130432,
+            1090519040
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1077936128,
+            1086324736,
+            1093664768
+          ]
+        }
+      ]
+    },
+    {
+      "name": "add_broadcast",
+      "model": "add_broadcast.onnx",
+      "sha256": "de9a029d7a5a87794aa22c0f11771c0154df2670084c66f7250fd5bb15205868",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            1,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1082130432,
+            1090519040
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1077936128,
+            1084227584,
+            1091567616,
+            1084227584,
+            1088421888,
+            1093664768
+          ]
+        }
+      ]
+    },
+    {
+      "name": "add_scalar",
+      "model": "add_scalar.onnx",
+      "sha256": "46a996c3c084750952f31da8d80de2649d89e7c9bc0283b4e5f510408846d65b",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1073741824
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1082130432
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1077936128,
+            1082130432,
+            1086324736
+          ]
+        }
+      ]
+    },
+    {
+      "name": "add_empty",
+      "model": "add_empty.onnx",
+      "sha256": "c2d80041190b9395bd20f7718561230f3ece5bd91c1dd368e38fadfc3b7e5d48",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        },
+        {
+          "name": "b",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1065353216
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ]
+    },
+    {
+      "name": "sub_matching",
+      "model": "sub_matching.onnx",
+      "sha256": "ebabeec628b2dbdc7d8dc665bc4b1b7acd2dc481085d935f71215189f98e15f1",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1082130432,
+            1090519040
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            3212836864,
+            3221225472,
+            3231711232
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sub_broadcast",
+      "model": "sub_broadcast.onnx",
+      "sha256": "eba4962091b8d415f1bbf53d49c2a369f75afb2591d9a26d499bfdfb72f9b279",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            1,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1082130432,
+            1090519040
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            3212836864,
+            3225419776,
+            3235905536,
+            1065353216,
+            3212836864,
+            3231711232
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sub_scalar",
+      "model": "sub_scalar.onnx",
+      "sha256": "97962c4517e25aa63f0ca1d5dbe3b3b2acd9863e45f0817a360ce9f25eb9bcc6",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1073741824
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1082130432
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            0,
+            3221225472
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sub_empty",
+      "model": "sub_empty.onnx",
+      "sha256": "b5e18c0bc248bcace06fe5dc13610f8f618e3dd33adde399dddc38456d91c134",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        },
+        {
+          "name": "b",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1065353216
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ]
+    },
+    {
+      "name": "mul_matching",
+      "model": "mul_matching.onnx",
+      "sha256": "3845d06500a3f7acbda301c7bc6e1e8f2cb950556ad03774cbf5b7cecb658602",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1082130432,
+            1090519040
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1090519040,
+            1103101952
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mul_broadcast",
+      "model": "mul_broadcast.onnx",
+      "sha256": "d2915dd16111718c17f92bb888a69c4cfae2a89f5c1f7f9df4749f56f8f66710",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            1,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1082130432,
+            1090519040
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1082130432,
+            1090519040,
+            1086324736,
+            1094713344,
+            1103101952
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mul_scalar",
+      "model": "mul_scalar.onnx",
+      "sha256": "da7e32789802542c868510573728e0744c60f796d6bd78ebf6deca672902be73",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1073741824
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1082130432
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1082130432,
+            1090519040
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mul_empty",
+      "model": "mul_empty.onnx",
+      "sha256": "329f54d88dd4d5c4fd4c1b1d8bb37cf9d03fbc95d1a97a95cf28b58eebc971a1",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        },
+        {
+          "name": "b",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1065353216
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ]
+    },
+    {
+      "name": "div_matching",
+      "model": "div_matching.onnx",
+      "sha256": "71efd4474372f97fefa9b59644de72fca4f5f25013c189bf35163a85ace6db76",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1082130432,
+            1090519040
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1056964608,
+            1056964608,
+            1052770304
+          ]
+        }
+      ]
+    },
+    {
+      "name": "div_broadcast",
+      "model": "div_broadcast.onnx",
+      "sha256": "0912263d8ea3fe02335ea938ba172ecbdd4c306e946b15731cfc1de6505480ad",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            1,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1082130432,
+            1090519040
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1056964608,
+            1048576000,
+            1040187392,
+            1069547520,
+            1061158912,
+            1052770304
+          ]
+        }
+      ]
+    },
+    {
+      "name": "div_scalar",
+      "model": "div_scalar.onnx",
+      "sha256": "3f96812029fe925d069bd51ae0c119913e4bc0ffd1214ea06ddd25fc3cceffb9",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1073741824
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1082130432
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1065353216,
+            1056964608
+          ]
+        }
+      ]
+    },
+    {
+      "name": "div_empty",
+      "model": "div_empty.onnx",
+      "sha256": "f3fddf183c137c6f16fdd36272241c3ffa18d1ae86dccdea11edb0cb73aa68d1",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        },
+        {
+          "name": "b",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1065353216
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ]
+    },
+    {
+      "name": "div_nonfinite",
+      "model": "div_nonfinite.onnx",
+      "sha256": "ddc385695d398663d9f449e3b2e33727fca06c059b1941d3fc6babc911ad297a",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            5
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            3212836864,
+            0,
+            2139095040,
+            1065353216
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            5
+          ],
+          "dtype": "float32",
+          "bits": [
+            0,
+            2147483648,
+            0,
+            2139095040,
+            4286578688
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            5
+          ],
+          "dtype": "float32",
+          "bits": [
+            2139095040,
+            2139095040,
+            2143289344,
+            2143289344,
+            2147483648
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matmul_dot",
+      "model": "matmul_dot.onnx",
+      "sha256": "24247f9aa7c600b4f85c0b893ab48a37e909dad6742b022de454b18b824cb32c",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1077936128,
+            1082130432
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1093664768
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matmul_vector_matrix",
+      "model": "matmul_vector_matrix.onnx",
+      "sha256": "068c8e20e71b1cd538f5eb6e7e0adb5cf4b657eaa98e2a2820dd35497bfb810d",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1091567616,
+            1094713344,
+            1097859072
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matmul_matrix_vector",
+      "model": "matmul_matrix_vector.onnx",
+      "sha256": "72e4fe58bf06babd6781d3a1e010a0a50dfd355fb68e1833edd0cd9a6a1cdaa7",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1077936128
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1090519040,
+            1099956224
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matmul_batch",
+      "model": "matmul_batch.onnx",
+      "sha256": "3398424e12511c1cd3b7eeba5f9a2924ee64a7f961a4aaf154224602942a5de8",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            1,
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            0,
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736,
+            1088421888,
+            1090519040,
+            1091567616,
+            1092616192,
+            1093664768
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            1,
+            2,
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            0,
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736,
+            1088421888,
+            1090519040,
+            1091567616,
+            1092616192,
+            1093664768
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1092616192,
+            1095761920,
+            1105199104,
+            1109393408,
+            1105199104,
+            1106771968,
+            1120403456,
+            1121976320,
+            1110966272,
+            1116078080,
+            1115684864,
+            1119617024,
+            1126957056,
+            1128333312,
+            1131675648,
+            1133051904
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matmul_empty_contraction",
+      "model": "matmul_empty_contraction.onnx",
+      "sha256": "2d4ae35b3b6c17abe205761c03cddefd7581c47f6357d37debeab7a5d8a695b8",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            0
+          ],
+          "dtype": "float32",
+          "bits": []
+        },
+        {
+          "name": "b",
+          "shape": [
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matmul_empty_output",
+      "model": "matmul_empty_output.onnx",
+      "sha256": "877e7bb63ca1f6f297c430d7caea68d5f301eda2fb0a179fbb8571e0b81d8eaf",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            0,
+            2
+          ],
+          "dtype": "float32",
+          "bits": []
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            0,
+            1
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ]
+    },
+    {
+      "name": "gemm_00_absent",
+      "model": "gemm_00_absent.onnx",
+      "sha256": "7a432851d343f05e188e30b6f496351654bca195d3fa99528e9f3cb407689163",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1083179008,
+            1086324736,
+            1089470464,
+            1092091904,
+            1095761920,
+            1099169792
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_00_scalar",
+      "model": "gemm_00_scalar.onnx",
+      "sha256": "d51e0143b8560cfaa7bb2ce277f7889d5273ca9c1dc0e26badb932bde1e89462",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1073741824
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1091043328,
+            1092616192,
+            1094189056,
+            1096286208,
+            1099431936,
+            1101266944
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_00_vector",
+      "model": "gemm_00_vector.onnx",
+      "sha256": "e967e9f91d7a74f29bf1929de7f4fd36ea2180a678df94ea6f30059a2c98b85c",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1092616192,
+            1096286208,
+            1094189056,
+            1099431936,
+            1102315520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_00_row",
+      "model": "gemm_00_row.onnx",
+      "sha256": "3dcb132b464c0bde9c06c963e8072cb7639fdd54b845b698fa7f735f47e834ba",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            1,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1092616192,
+            1096286208,
+            1094189056,
+            1099431936,
+            1102315520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_00_column",
+      "model": "gemm_00_column.onnx",
+      "sha256": "5eee3288f11f61b331156bd80858e35452f9e46da4d63886fbab3ef76dd9a072",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            2,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1090519040,
+            1092091904,
+            1096286208,
+            1099431936,
+            1101266944
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_00_full",
+      "model": "gemm_00_full.onnx",
+      "sha256": "4d7343d00d5721afc3dce212f3b07bd4ac927a28ce52794e7c5abe7a51b2bd40",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1092616192,
+            1096286208,
+            1099694080,
+            1102577664,
+            1105461248
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_01_absent",
+      "model": "gemm_01_absent.onnx",
+      "sha256": "c86ac793dd27e2229cb583985a7213ee9c2bd79e17e04d2dbfcae19b840a45ed",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1082130432,
+            1073741824,
+            1084227584,
+            1077936128,
+            1086324736
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1083179008,
+            1086324736,
+            1089470464,
+            1092091904,
+            1095761920,
+            1099169792
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_01_scalar",
+      "model": "gemm_01_scalar.onnx",
+      "sha256": "3f826809d064cfffc436de338561fe573659f169e36283f5811eeb27effde2b1",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1082130432,
+            1073741824,
+            1084227584,
+            1077936128,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1073741824
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1091043328,
+            1092616192,
+            1094189056,
+            1096286208,
+            1099431936,
+            1101266944
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_01_vector",
+      "model": "gemm_01_vector.onnx",
+      "sha256": "992880ca01824c0d990c935d83644ec48925237b779bbedae4102be3ab751526",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1082130432,
+            1073741824,
+            1084227584,
+            1077936128,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1092616192,
+            1096286208,
+            1094189056,
+            1099431936,
+            1102315520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_01_row",
+      "model": "gemm_01_row.onnx",
+      "sha256": "8d97a7f333f3f3c7e94376df76c8b15d7602c9225bd5f8762ede79dde7545fa3",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1082130432,
+            1073741824,
+            1084227584,
+            1077936128,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            1,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1092616192,
+            1096286208,
+            1094189056,
+            1099431936,
+            1102315520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_01_column",
+      "model": "gemm_01_column.onnx",
+      "sha256": "17ac57c689bdffed30c133ccda3f21aa3de6488347ec37a2e8550cf356629cb8",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1082130432,
+            1073741824,
+            1084227584,
+            1077936128,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            2,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1090519040,
+            1092091904,
+            1096286208,
+            1099431936,
+            1101266944
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_01_full",
+      "model": "gemm_01_full.onnx",
+      "sha256": "706e56d2c9fb33b3a0dcee79366b54c8248567d6846c5225b8cd9d7873f246f9",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1082130432,
+            1073741824,
+            1084227584,
+            1077936128,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1092616192,
+            1096286208,
+            1099694080,
+            1102577664,
+            1105461248
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_10_absent",
+      "model": "gemm_10_absent.onnx",
+      "sha256": "92de935cc6343222215af982658a95f3328fe27af04634864c7d067e477ce971",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128,
+            1073741824,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1083179008,
+            1086324736,
+            1089470464,
+            1092091904,
+            1095761920,
+            1099169792
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_10_scalar",
+      "model": "gemm_10_scalar.onnx",
+      "sha256": "513b3f2d2d0ef51a98cb807796795aa353dcda75c09b3a6e6483774d694c719b",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128,
+            1073741824,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1073741824
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1091043328,
+            1092616192,
+            1094189056,
+            1096286208,
+            1099431936,
+            1101266944
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_10_vector",
+      "model": "gemm_10_vector.onnx",
+      "sha256": "a278fd94c7e6cdee41e8787547d0d2b7f998e1d0cb63a8edfc2344a3fa706b3f",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128,
+            1073741824,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1092616192,
+            1096286208,
+            1094189056,
+            1099431936,
+            1102315520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_10_row",
+      "model": "gemm_10_row.onnx",
+      "sha256": "c0776cdb87c7208f05a1f1e26d3ca159dcf16e72c6ccb918c991f29d29366a4d",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128,
+            1073741824,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            1,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1092616192,
+            1096286208,
+            1094189056,
+            1099431936,
+            1102315520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_10_column",
+      "model": "gemm_10_column.onnx",
+      "sha256": "4bf5e1908ae30d749962bfa2e748b704bde8d2a6b6af12b130d7150cab71dd76",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128,
+            1073741824,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            2,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1090519040,
+            1092091904,
+            1096286208,
+            1099431936,
+            1101266944
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_10_full",
+      "model": "gemm_10_full.onnx",
+      "sha256": "4a6f05eae173ce40cba7db5cd65759ded77e6fbd61ce392801bd1bf197d637c6",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128,
+            1073741824,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1092616192,
+            1096286208,
+            1099694080,
+            1102577664,
+            1105461248
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_11_absent",
+      "model": "gemm_11_absent.onnx",
+      "sha256": "80dd78828afb9c6013721225e8dd98fab42bee9437950d5f98259b3cc6731f9f",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128,
+            1073741824,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1082130432,
+            1073741824,
+            1084227584,
+            1077936128,
+            1086324736
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1083179008,
+            1086324736,
+            1089470464,
+            1092091904,
+            1095761920,
+            1099169792
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_11_scalar",
+      "model": "gemm_11_scalar.onnx",
+      "sha256": "f825f42391906a1bd01e21e1294a4d8de2b1f7cdd5eb519ef8562f5eb22abf2c",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128,
+            1073741824,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1082130432,
+            1073741824,
+            1084227584,
+            1077936128,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1073741824
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1091043328,
+            1092616192,
+            1094189056,
+            1096286208,
+            1099431936,
+            1101266944
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_11_vector",
+      "model": "gemm_11_vector.onnx",
+      "sha256": "64b74bd22cb83c32f0ad711e63be921282bf3a8b2aa932a5ff89a777ac99a577",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128,
+            1073741824,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1082130432,
+            1073741824,
+            1084227584,
+            1077936128,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1092616192,
+            1096286208,
+            1094189056,
+            1099431936,
+            1102315520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_11_row",
+      "model": "gemm_11_row.onnx",
+      "sha256": "a7a8f55c09b3bd8e5f161df82d81a932b44af9aca71061aacbf8001d04975b8c",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128,
+            1073741824,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1082130432,
+            1073741824,
+            1084227584,
+            1077936128,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            1,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1092616192,
+            1096286208,
+            1094189056,
+            1099431936,
+            1102315520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_11_column",
+      "model": "gemm_11_column.onnx",
+      "sha256": "740a64882798350115e27204e40626fdb06cb2548f03240045716c571c813c84",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128,
+            1073741824,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1082130432,
+            1073741824,
+            1084227584,
+            1077936128,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            2,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1090519040,
+            1092091904,
+            1096286208,
+            1099431936,
+            1101266944
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_11_full",
+      "model": "gemm_11_full.onnx",
+      "sha256": "13a2bf5383e1bc316a6998bce5e6bb4f06187ac955bf386b8a48ea65ffad11d4",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1077936128,
+            1073741824,
+            1082130432
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1082130432,
+            1073741824,
+            1084227584,
+            1077936128,
+            1086324736
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1087373312,
+            1092616192,
+            1096286208,
+            1099694080,
+            1102577664,
+            1105461248
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_defaults",
+      "model": "gemm_defaults.onnx",
+      "sha256": "55407d2baef537b842b287c9dab1c10a2a9f7b481f6abc8a1d5f94bbb963d29a",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1077936128
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1086324736
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_beta_zero",
+      "model": "gemm_beta_zero.onnx",
+      "sha256": "c9c3584619f00dee18fe6a3f1cb34acc6004e4871eea5389d4098b916aa29320",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1077936128
+          ]
+        },
+        {
+          "name": "c",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            2143289344
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "bits": [
+            1086324736
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gemm_empty_contraction",
+      "model": "gemm_empty_contraction.onnx",
+      "sha256": "b4af22733cb4705a34b521a38c9f48e0874f09b9f7e5988ffe040cc959270761",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "a",
+          "shape": [
+            2,
+            0
+          ],
+          "dtype": "float32",
+          "bits": []
+        },
+        {
+          "name": "b",
+          "shape": [
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        },
+        {
+          "name": "c",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1073741824
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            1073741824,
+            1073741824,
+            1073741824,
+            1073741824,
+            1073741824
+          ]
+        }
+      ]
+    },
+    {
+      "name": "relu_finite",
+      "model": "relu_finite.onnx",
+      "sha256": "18343753e9b0aadf469d8d7517fb8fa3fe3ea337e15232800336627c33149f3f",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            5
+          ],
+          "dtype": "float32",
+          "bits": [
+            3221225472,
+            2147483648,
+            0,
+            1065353216,
+            1077936128
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            5
+          ],
+          "dtype": "float32",
+          "bits": [
+            0,
+            0,
+            0,
+            1065353216,
+            1077936128
+          ]
+        }
+      ]
+    },
+    {
+      "name": "relu_nonfinite",
+      "model": "relu_nonfinite.onnx",
+      "sha256": "73233e8ef6c7bedbd59931507ab2260e42095fe83a527a21d877a40fb68959d7",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            4286578688,
+            2139095040,
+            2143289344
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            0,
+            2139095040,
+            2143289344
+          ]
+        }
+      ]
+    },
+    {
+      "name": "relu_scalar",
+      "model": "relu_scalar.onnx",
+      "sha256": "e404e11c51cc059251e491951263e307a1912da2b02c0a0da03224b6fd771750",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            3212836864
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "name": "relu_empty",
+      "model": "relu_empty.onnx",
+      "sha256": "c0a4b7cb31509eac35c813dfc12566848283c99f3dc990d7268ce27079f7ce28",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ]
+    },
+    {
+      "name": "sigmoid_finite",
+      "model": "sigmoid_finite.onnx",
+      "sha256": "5af62d716c8a03b55c13374dcf9cc3d56f3327eea3211d5be30f9d61f759bcd1",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            5
+          ],
+          "dtype": "float32",
+          "bits": [
+            3221225472,
+            2147483648,
+            0,
+            1065353216,
+            1077936128
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            5
+          ],
+          "dtype": "float32",
+          "bits": [
+            1039409321,
+            1056964608,
+            1056964608,
+            1060841128,
+            1064557542
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sigmoid_nonfinite",
+      "model": "sigmoid_nonfinite.onnx",
+      "sha256": "2f32dcca8fc1e74ed50000e155b1b6da9db8d8b9844bd8a43d84dd516ee18fbf",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            4286578688,
+            2139095040,
+            2143289344
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            0,
+            1065353216,
+            2143289344
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sigmoid_scalar",
+      "model": "sigmoid_scalar.onnx",
+      "sha256": "c9ac694ca071143aace6e41641e6f74162c1e4be8c3afa2a51db712ad6b29fd3",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            3212836864
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1049211569
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sigmoid_empty",
+      "model": "sigmoid_empty.onnx",
+      "sha256": "80a020deccc48eabd99659fecb615f49bd3b72edd7dedd580e3059bc81408d9d",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ]
+    },
+    {
+      "name": "tanh_finite",
+      "model": "tanh_finite.onnx",
+      "sha256": "ecee6b31f1d2d8a8ecc305df0fbcd401b546b0d668ff072662d7e34cda463e34",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            5
+          ],
+          "dtype": "float32",
+          "bits": [
+            3221225472,
+            2147483648,
+            0,
+            1065353216,
+            1077936128
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            5
+          ],
+          "dtype": "float32",
+          "bits": [
+            3212233347,
+            2147483648,
+            0,
+            1061353430,
+            1065270249
+          ]
+        }
+      ]
+    },
+    {
+      "name": "tanh_nonfinite",
+      "model": "tanh_nonfinite.onnx",
+      "sha256": "ec56171db2389c582775d7468fdb130602f7338e4af910983eaabd3ad1ce84ac",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            4286578688,
+            2139095040,
+            2143289344
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            3212836864,
+            1065353216,
+            2143289344
+          ]
+        }
+      ]
+    },
+    {
+      "name": "tanh_scalar",
+      "model": "tanh_scalar.onnx",
+      "sha256": "eb315013b6b2087065dcaa7e11799bd93f50957887daf94180a9993e1c2e8f7a",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            3212836864
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            3208837078
+          ]
+        }
+      ]
+    },
+    {
+      "name": "tanh_empty",
+      "model": "tanh_empty.onnx",
+      "sha256": "2259162b7b13d18bce38ebebb60a10cde891e92f43dcc7306aafe860e25ba1ac",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ]
+    },
+    {
+      "name": "softmax_axis_-1",
+      "model": "softmax_axis_-1.onnx",
+      "sha256": "4eb059e9a8df43fd751113a7b6355e3f4f5087530b258146919b3b1934c2ead3",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            2,
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            0,
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736,
+            1088421888,
+            1090519040,
+            1091567616,
+            1092616192,
+            1093664768
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1049211569,
+            1060841128,
+            1049211569,
+            1060841128,
+            1049211569,
+            1060841128,
+            1049211569,
+            1060841128,
+            1049211569,
+            1060841128,
+            1049211569,
+            1060841128
+          ]
+        }
+      ]
+    },
+    {
+      "name": "softmax_axis_0",
+      "model": "softmax_axis_0.onnx",
+      "sha256": "f38310807553834596723a8a71b3b1d2c5e4607092563d445668dede64c1eddd",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            2,
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            0,
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736,
+            1088421888,
+            1090519040,
+            1091567616,
+            1092616192,
+            1093664768
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            992086972,
+            992086972,
+            992086972,
+            992086972,
+            992086972,
+            992086972,
+            1065311733,
+            1065311733,
+            1065311733,
+            1065311733,
+            1065311733,
+            1065311733
+          ]
+        }
+      ]
+    },
+    {
+      "name": "softmax_axis_1",
+      "model": "softmax_axis_1.onnx",
+      "sha256": "211bf3ac10f97276c99438a6111e88b84c05eb20e5bead43f2d08b76e8cc32ec",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            2,
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            0,
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736,
+            1088421888,
+            1090519040,
+            1091567616,
+            1092616192,
+            1093664768
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1015156452,
+            1015156452,
+            1039155315,
+            1039155315,
+            1063118715,
+            1063118715,
+            1015156452,
+            1015156452,
+            1039155315,
+            1039155315,
+            1063118715,
+            1063118715
+          ]
+        }
+      ]
+    },
+    {
+      "name": "softmax_axis_-2",
+      "model": "softmax_axis_-2.onnx",
+      "sha256": "ed125b067923b8099961ed77fe28c4bfb1f4d3b10139aac9ed3fe12b269fb500",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            2,
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            0,
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736,
+            1088421888,
+            1090519040,
+            1091567616,
+            1092616192,
+            1093664768
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1015156452,
+            1015156452,
+            1039155315,
+            1039155315,
+            1063118715,
+            1063118715,
+            1015156452,
+            1015156452,
+            1039155315,
+            1039155315,
+            1063118715,
+            1063118715
+          ]
+        }
+      ]
+    },
+    {
+      "name": "softmax_default",
+      "model": "softmax_default.onnx",
+      "sha256": "a4d3947719eab0960906bd75b02450bddcec579113756e1236c01cdc7396548d",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432,
+            1084227584,
+            1086324736
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            3
+          ],
+          "dtype": "float32",
+          "bits": [
+            1035493875,
+            1048222234,
+            1059736891,
+            1035493875,
+            1048222234,
+            1059736891
+          ]
+        }
+      ]
+    },
+    {
+      "name": "softmax_nonfinite",
+      "model": "softmax_nonfinite.onnx",
+      "sha256": "f5abd0757ce318ca56b521332d056b6833498f018fae8561a5c79f0a9912d442",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            4,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            2139095040,
+            0,
+            4286578688,
+            4286578688,
+            2143289344,
+            1065353216,
+            4286578688,
+            0
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            4,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            2143289344,
+            2143289344,
+            2143289344,
+            2143289344,
+            2143289344,
+            2143289344,
+            0,
+            1065353216
+          ]
+        }
+      ]
+    },
+    {
+      "name": "softmax_empty_axis",
+      "model": "softmax_empty_axis.onnx",
+      "sha256": "42cfc54e8b0a91332b3b6852bd3eda19197375a38fb407a78c8126685d0a8a87",
+      "reference_status": "extension_reference_rejected",
+      "reference_error": "zero-size array to reduction operation maximum which has no identity",
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            2,
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            0,
+            3
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ]
+    },
+    {
+      "name": "identity",
+      "model": "identity.onnx",
+      "sha256": "7e2c1780fd25155cb5ee2643c33a6505ccf9cb8481a201d42765cd205b9a416d",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            1,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            3225419776
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            1,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1073741824,
+            3225419776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "constant_float",
+      "model": "constant_float.onnx",
+      "sha256": "29d0b78424c167e90594808c63d681ccd9e2c6fa233337a84e1c9465623c94a5",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [],
+          "dtype": "float32",
+          "bits": [
+            1069547520
+          ]
+        }
+      ]
+    },
+    {
+      "name": "constant_floats",
+      "model": "constant_floats.onnx",
+      "sha256": "e3f6b280c2c751cc5e05d895ea7ca60d297f37fa310ef4360d22110ca7d1d41f",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            3221225472
+          ]
+        }
+      ]
+    },
+    {
+      "name": "constant_int",
+      "model": "constant_int.onnx",
+      "sha256": "987301041265109f068ec20e7b2b3e0966103b9be57770010c9d377a799b2fc8",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [],
+          "dtype": "int64",
+          "integers": [
+            9223372036854775807
+          ]
+        }
+      ]
+    },
+    {
+      "name": "constant_ints",
+      "model": "constant_ints.onnx",
+      "sha256": "20cc3943532d48e4c19c17471be036365f4dfdc20553799b880a1889c1f372c5",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2
+          ],
+          "dtype": "int64",
+          "integers": [
+            16777217,
+            -9223372036854775808
+          ]
+        }
+      ]
+    },
+    {
+      "name": "constant_floats_empty",
+      "model": "constant_floats_empty.onnx",
+      "sha256": "76d6b619a268d26b4c7a66515873423fd3ac8391fe2cde5c9fe3d5fd98f5c228",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            0
+          ],
+          "dtype": "float32",
+          "bits": []
+        }
+      ]
+    },
+    {
+      "name": "constant_ints_empty",
+      "model": "constant_ints_empty.onnx",
+      "sha256": "38de0a0cc2fe78e9dc5a19272d4d079e6b15d3901279219c6e65f7523e641bdb",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            0
+          ],
+          "dtype": "int64",
+          "integers": []
+        }
+      ]
+    },
+    {
+      "name": "constant_tensor",
+      "model": "constant_tensor.onnx",
+      "sha256": "4a145de198e0e89e320b29d4bd041443bfe715884693e54855ac821138d55eaf",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1077936128,
+            1082130432
+          ]
+        }
+      ]
+    },
+    {
+      "name": "constant_int_tensor",
+      "model": "constant_int_tensor.onnx",
+      "sha256": "4c275273e9cdb73ca4d6f48b5bfa354fc4c1be5334343348e58211ae1aa68136",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2
+          ],
+          "dtype": "int64",
+          "integers": [
+            16777217,
+            9223372036854775807
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mlp",
+      "model": "mlp.onnx",
+      "sha256": "f07fd068d930d506c54a08e065e18f0d82b3d9f30c6a036f11acde4f31007981",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "w",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            3212836864,
+            1073741824,
+            1065353216
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            3221225472
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065311733,
+            992086972,
+            1065353112,
+            919480846
+          ]
+        }
+      ]
+    },
+    {
+      "name": "residual",
+      "model": "residual.onnx",
+      "sha256": "942c0c711863819cbd85e794ecbc6a1f2c6b593d42545c0722899765089081a4",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        },
+        {
+          "name": "w",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            3212836864,
+            1073741824,
+            1065353216
+          ]
+        },
+        {
+          "name": "b",
+          "shape": [
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            3221225472
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1088421888,
+            1073741824,
+            1097859072,
+            1082130432
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mlp_initializers",
+      "model": "mlp_initializers.onnx",
+      "sha256": "fbcc32e09151a650e525e4d01be6425d6821ed3b28d099c0f007786d2505890f",
+      "reference_status": "agreement",
+      "reference_error": null,
+      "inputs": [
+        {
+          "name": "x",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065353216,
+            1073741824,
+            1077936128,
+            1082130432
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "shape": [
+            2,
+            2
+          ],
+          "dtype": "float32",
+          "bits": [
+            1065311733,
+            992086972,
+            1065353112,
+            919480846
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -104,7 +104,7 @@ func (p *Plan) SnapshotBytes(ctx context.Context) (bytes int64, err error) {
 		return 0, fmt.Errorf("%w: snapshot context or plan", graph.ErrInvalidArgument)
 	}
 
-	// Fixed numeric metadata fits in 32 logical bytes per record; dimension
+	// Fixed numeric metadata fits in 32 bytes per value and 64 per step; dimension
 	// records use a conservative 16 bytes for their kind and int64 size.
 	bytes = 32
 	for repeat := 0; repeat < 2; repeat++ {
@@ -140,11 +140,11 @@ func (p *Plan) SnapshotBytes(ctx context.Context) (bytes int64, err error) {
 			return 0, err
 		}
 
-		if bytes > math.MaxInt64-32 || int64(len(step.Inputs)) > (math.MaxInt64-bytes-32)/8 {
+		if bytes > math.MaxInt64-64 || int64(len(step.Inputs)) > (math.MaxInt64-bytes-64)/8 {
 			return 0, fmt.Errorf("%w: snapshot input indices", graph.ErrLimit)
 		}
 
-		bytes += 32 + int64(len(step.Inputs))*8
+		bytes += 64 + int64(len(step.Inputs))*8
 		if int64(len(step.Outputs)) > (math.MaxInt64-bytes)/8 {
 			return 0, fmt.Errorf("%w: snapshot output indices", graph.ErrLimit)
 		}

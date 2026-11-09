@@ -27,17 +27,17 @@ func TestCapabilitiesCanonicalManifest(t *testing.T) {
 
 		if record.Status == "implemented" {
 			implemented++
-			if record.Operator != "Identity" && record.Operator != "Constant" || record.Task != "RT-07" {
+			if record.Operator == "Identity" && record.Task != "RT-07" || record.Operator != "Identity" && record.Task != "RT-09" {
 				t.Fatalf("unexpected implemented operator: %+v", record)
 			}
 		}
 
-		if record.Operator == "Constant" && (len(record.Attributes) != 1 || !record.Attributes["value"].Required) {
-			t.Fatalf("Constant advertises more than tensor form: %+v", record)
+		if record.Operator == "Constant" && (len(record.Attributes) != 5 || record.Attributes["value"].Required) {
+			t.Fatalf("Constant forms differ: %+v", record)
 		}
 	}
 
-	if implemented != 2 {
+	if implemented != 12 {
 		t.Fatalf("implemented count = %d", implemented)
 	}
 

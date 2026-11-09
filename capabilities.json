@@ -72,7 +72,7 @@
       "min_opset": 13,
       "max_opset": 13,
       "status": "implemented",
-      "task": "RT-07",
+      "task": "RT-09",
       "data_types": [
         "float32",
         "int64"
@@ -90,13 +90,29 @@
       "attributes": {
         "value": {
           "type": "TENSOR",
-          "required": true
+          "required": false
+        },
+        "value_float": {
+          "type": "FLOAT",
+          "required": false
+        },
+        "value_floats": {
+          "type": "FLOATS",
+          "required": false
+        },
+        "value_int": {
+          "type": "INT",
+          "required": false
+        },
+        "value_ints": {
+          "type": "INTS",
+          "required": false
         }
       },
       "restrictions": [
-        "static planning and serial execution; session lifecycle implemented by RT-08",
-        "exactly one dense float32/int64 value tensor attribute; arbitrary rank including scalar/empty",
-        "scalar/vector attribute forms remain planned for RT-09; reject sparse/string/other forms"
+        "exactly one dense float32/int64 tensor, float/int scalar or float/int vector attribute; exact int64 storage",
+        "arbitrary tensor rank including scalar/empty; reject sparse/string/other forms",
+        "scalar/list materialization shares aggregate load and initializer budgets"
       ]
     },
     {
@@ -105,7 +121,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-09",
       "data_types": [
         "float32"
@@ -131,7 +147,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-09",
       "data_types": [
         "float32"
@@ -157,7 +173,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-09",
       "data_types": [
         "float32"
@@ -183,7 +199,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-09",
       "data_types": [
         "float32"
@@ -209,7 +225,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-09",
       "data_types": [
         "float32"
@@ -235,7 +251,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-09",
       "data_types": [
         "float32"
@@ -275,8 +291,8 @@
         }
       },
       "restrictions": [
-        "float32 rank-two A/B; optional C with unidirectional broadcast",
-        "transA/transB restricted to 0/1; alpha/beta default 1"
+        "float32 rank-two A/B; optional scalar/vector/row/column/full C with unidirectional broadcast",
+        "transA/transB restricted to 0/1; alpha/beta default 1, including nonfinite coefficients"
       ]
     },
     {
@@ -285,7 +301,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-09",
       "data_types": [
         "float32"
@@ -302,7 +318,7 @@
       },
       "attributes": {},
       "restrictions": [
-        "float32 arbitrary rank; adapter must propagate NaN; negative zero becomes positive zero"
+        "float32 arbitrary rank including scalar/empty; propagate NaN; negative zero becomes positive zero"
       ]
     },
     {
@@ -311,7 +327,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-09",
       "data_types": [
         "float32"
@@ -337,7 +353,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-09",
       "data_types": [
         "float32"
@@ -363,7 +379,7 @@
       "schema_version": 13,
       "min_opset": 13,
       "max_opset": 13,
-      "status": "planned",
+      "status": "implemented",
       "task": "RT-09",
       "data_types": [
         "float32"
@@ -387,7 +403,7 @@
       },
       "restrictions": [
         "float32 rank >= 1; axis default -1",
-        "empty tensor accepted as explicit reference extension"
+        "empty tensor accepted after axis validation as explicit reference extension; nonfinite slices preserve NaN behavior"
       ]
     },
     {
