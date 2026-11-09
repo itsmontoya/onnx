@@ -14,7 +14,8 @@ wire bindings and bounded internal decoding. RT-04 supplies immutable public
 tensors and metadata records. RT-05 adds shared, budgeted inline tensor
 conversion. RT-06 adds immutable named graphs and whole-model structural checks.
 RT-07 adds versioned operator resolution and immutable Identity/Constant planning.
-There is no inference runtime yet.
+RT-08 adds public loaders, model/session lifecycle and serial Identity/Constant
+execution. Numerical families remain RT-09 work.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -698,7 +699,7 @@ families and scalar/list Constant materialization; charge those new constant
 payloads against both initializer and load budgets. RT-17 owns production
 profile expansion; synthetic resolver tests do not broaden the accepted imports.
 
-### [ ] RT-08 — Implement sessions and serial graph execution
+### [x] RT-08 — Implement sessions and serial graph execution
 
 **Depends on:** RT-07. **Deliverable:** compiled-model/session/run lifecycle from
 RT-01, initially exercised with the minimal handlers.
@@ -718,6 +719,105 @@ scratch; overlapping calls on one session follow the documented busy contract.
 Returned outputs survive later runs and Close. Missing/unexpected inputs,
 cancelled calls, limits, and operator errors release temporary state and permit
 subsequent valid runs unless the contract explicitly defines a terminal failure.
+
+**Handoff (RT-08):** Implementation revision
+`f0ffed51f7f05db95a211b99ba5788008aa43940` introduces `model.go` and
+`session.go`; retrieve it with `git log -1 --format=%H -- model.go`.
+Changed files are root Model/Session/Options/Limits/RunOptions/NamedTensor/
+ExternalDataResolver types, private execution plan/evaluation/run budget, matching
+tests and context/reader fixtures; public metadata/error/capability GoDoc and
+manifest; internal ReadModelWithSize, Plan.SnapshotBytes, staged diagnostics and
+tests; three original `testdata/sessions/` models with provenance/README; the
+profile checker/provenance description; README, TODO, NEEDS, development/runtime
+contract documentation and this roadmap. Dependencies remain published
+`neuralnetwork v0.7.0` at `6048452c57a0a293db4591cd2e2febd7d6b743a3`, protobuf
+v1.36.12 and ONNX v1.16.2 at `3bf92c03a9f27eba3bda1e5b9e63ea20ec213557`.
+Go baseline/toolchain remain 1.26.1/1.27.2. No dependency, backend, native runtime
+or local replacement changed.
+
+Public APIs are `Load(context.Context, io.Reader, Options) (*Model, error)`,
+`LoadBytes(context.Context, []byte, Options) (*Model, error)`, and
+`LoadFile(context.Context, string, Options) (*Model, error)`; Model methods
+`Metadata() Metadata`, `NewSession() (*Session, error)`, and `Close() error`;
+Session methods `Run(context.Context, map[string]*Tensor, RunOptions)
+([]NamedTensor, error)` and `Close() error`. Options contains Limits and
+ExternalDataResolver; RunOptions has Outputs (`[]string`), NamedTensor has Name
+and Tensor (`*Tensor`). Limits implements all fourteen fields/defaults in the
+runtime contract; zero selects defaults and negative/host-invalid values fail
+before I/O. ExternalDataResolver reserves `Resolve(context.Context, string,
+int64, int64) (io.ReadCloser, error)`, but a nonnil option and all external tensors
+fail as unsupported until RT-14; no resolver is invoked. ErrBusy/ErrClosed are
+direct state sentinels. Error adds Stage (`load`, `run`, or default `compile`),
+maps wire/tensor/graph/planner classifications, and preserves causes/node/value/
+shape context through errors.Is/As, including joined operational failures.
+
+The loader checks options/context before I/O and publishes only a complete plan.
+Load never closes its reader; LoadFile owns/closes its file. The new internal
+`decode.ReadModelWithSize(context.Context, io.Reader, decode.Limits)
+(*onnxpb.ModelProto, int64, error)` reuses bounded reads and returns the actual
+encoded size, including noncanonical varints. Existing ReadModel still works.
+`Plan.SnapshotBytes(context.Context) (int64, error)` estimates copied record/index/
+dimension payload without allocations or numerical clones, with cancellation and
+checked sums. Executable preparation reserves this before deep plan accessors
+and the public metadata copy; it shares immutable constants/string data and
+retains no protobuf, decoder, source Graph or compiler Plan. RT-07's conservative
+compilation reservations remain; executable preparation adds metadata payload,
+without multiplying prior reservations by whole-plan snapshots.
+
+Every run creates private table/bindings/budget state and executes every node in
+declared order, including unused output paths. Identity aliases immutable values;
+Constant and initializer/default binding clone budgeted backend storage. All
+graph inputs, including weights, are ordinary eligible values. Supplied/defaulted
+inputs validate dtype/rank/fixed axes and shared symbols; each value also checks
+both inferred Info and every original Declaration. Symbols bind afresh each run,
+including zero batches; refinement must never erase an original symbol. Requested
+names must be unique declared outputs, with a constant-time membership lookup;
+empty requests use declaration order, otherwise request order. Scalar/empty,
+zero-node input/initializer passthroughs and graphs without outputs work. Every
+published output is independently cloned and survives later runs and any Close.
+
+Run/Close use a nonblocking session TryLock. Failed/cancelled calls discard local
+state and release the guard; successful Close is idempotent and later Run returns
+ErrClosed. Model.Close/NewSession linearize under a model lock; existing sessions
+retain their plan. A plan lock enforces MaxSessions and releases slots on successful
+Session.Close, including after Model.Close. Metadata returns independent snapshots
+and remains inspectable after model closure.
+
+Per-run live bytes include resident model tensors once, every bound/default source,
+every intermediate/alias retained through Run, and every output copy. All clones
+reserve destinations before allocation. Audited released tensor.go Clone copies
+directly into owned destination storage without numeric staging; current handlers
+therefore reserve zero numerical workspace. The budget checks tensor/workspace/
+live bounds and overlapping reservations with subtraction-based checked sums.
+RT-09 must reserve each node's complete audited scratch at once before calling a
+kernel and release workspace afterward; output destinations must remain disjoint
+from immutable sources/constants. Runtime shape metadata, Go headers/capacities,
+GC retention and earlier caller-retained outputs remain outside logical tensor
+limits. Context checks cover loading/planning/runtime loops, before/after each
+node/copy and final publication. Backend/protobuf calls remain synchronous with
+no in-kernel interruption or partial published results.
+
+Validation passed on Go 1.27.2, Darwin/arm64: gofmt, `go mod tidy -diff`,
+`go mod verify`, build, vet, normal tests, `CGO_ENABLED=0 go test ./...`,
+`CGO_ENABLED=0 go test -tags=purego ./...`, and `go test -race ./...`, with the
+writable cache and offline dependency mode. Explicit/table tests cover branching,
+multi-input/output, defaults/overrides/runtime weights, output order/subsets,
+passthrough/scalar/empty/unknown metadata, exact int64 and float bit preservation,
+original input declarations and refined output/intermediate constraints, fresh shared symbols,
+independent copies/constants, reader ownership/errors/limits/noncanonical lengths,
+session caps, busy/concurrent sessions, Close/NewSession races, operator failure,
+every observed load/run cancellation boundary, exact load/initializer/live/tensor/
+structural limits, workspace/overflow checks and recovery. The pinned 25-schema/
+default/checker audit, unchanged profile model hash, three pinned-checker session
+fixtures and provenance hashes, local Markdown targets, contract Go-block format,
+changed Go style checks and diff whitespace checks pass. Ordinary tests require
+only Go and checked-in artifacts.
+
+RT-09 is next: integrate M1 numerical handlers and scalar/list Constant forms,
+preserving all named graph inputs and lifecycle guarantees. Charge any new constant
+materialization against both load and initializer budgets; supply audited per-node
+destination/scratch reservations for copying backend adapters. No arithmetic,
+activation, shape or CNN execution was added by RT-08.
 
 ### [ ] RT-09 — Integrate M1 arithmetic, activations, and constants
 

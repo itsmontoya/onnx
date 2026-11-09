@@ -1,28 +1,30 @@
 # onnx
 
-A planned Go-native ONNX inference runtime built on
+A Go-native ONNX inference runtime built on
 [`github.com/itsmontoya/neuralnetwork`](https://github.com/itsmontoya/neuralnetwork).
-The goal is to load an `.onnx` model, bind named Go tensor inputs, and evaluate
-named outputs on the CPU without cgo or an installed native inference runtime.
+Load an `.onnx` model, bind named immutable Go tensors, and evaluate named outputs
+on the CPU without cgo or an installed native inference runtime.
 
-RT-01 now specifies the [runtime contract](docs/runtime-contract.md) and an
-initial [capability manifest](capabilities.json). This repository has no runnable
-inference implementation yet.
-RT-02 establishes the Go module, pinned `neuralnetwork v0.7.0` and protobuf
-dependencies, and a verification workflow. There is no model loader or inference
-implementation yet, and no model compatibility is claimed. RT-03 adds generated
-ONNX wire bindings and bounded internal decoding; ordinary builds and tests need
-neither protoc nor Python. RT-04 adds immutable float32/int64 tensors and model
-metadata records, with owned constructor/accessor copies and exact integer
-storage. RT-05 adds shared internal inline TensorProto conversion with checked
-payload budgets, exact typed/raw values, and owned backend copies. RT-06 adds
-whole-model version/structure checks and immutable internal named graph records,
-including branching, defaulted inputs, and positional empty slots. RT-07 adds
-versioned operator resolution and immutable execution plans for Identity and the
-dense `value` tensor form of Constant. `Capabilities()` returns independent
-manifest records, including planned entries and the exact implemented planning
-restrictions. Public loading and execution arrive at RT-08; numerical families
-and scalar/list Constant attributes arrive at RT-09.
+RT-01–RT-08 implement the [runtime contract](docs/runtime-contract.md), bounded
+protobuf and inline tensor loading, named graph validation, versioned planning,
+and serial sessions. The executable subset is deliberately narrow: ONNX IR 8,
+standard-domain opset 13, dense float32/int64 Identity and the dense `value` tensor
+form of Constant. Branching, multiple inputs/outputs, default overrides,
+passthroughs, scalar/empty tensors and symbolic leading batches are supported.
+Arithmetic, activations and scalar/list Constant forms arrive at RT-09.
+
+`Load`, `LoadBytes`, and `LoadFile` return an immutable shared Model. Create a
+Session with `NewSession`, then call `Run` with named inputs and optional requested
+outputs. Outputs own independent storage and survive later runs and Close.
+Overlapping calls on one session return `ErrBusy`; separate sessions can run
+concurrently. `Options.Limits` applies finite load, tensor, live, workspace and
+session bounds. External tensors and resolver options remain unsupported until
+RT-14. `Capabilities()` returns copied manifest records, including planned entries
+and the exact implemented restrictions.
+
+The module pins `neuralnetwork v0.7.0`, protobuf v1.36.12, and Go 1.27.2 with a
+Go 1.26.1 baseline. Ordinary builds/tests require neither protoc nor Python.
+No general ONNX compatibility is claimed beyond the documented subset.
 
 ## Implementation plans
 
@@ -42,13 +44,12 @@ Use the published v0.7.0 contract and source revision recorded in `NEEDS.md`.
 The copying backend is sufficient to begin runtime development; NN-13 does not
 block the first working runtime or release readiness.
 
-## Proposed scope
+## Scope and next milestones
 
-Begin with CPU inference for a deliberately narrow profile: ONNX IR 8,
-standard-domain opset 13, float32 computation, and int64 constants and shape
-values. Establish named graph inputs/outputs, branching, broadcasting, matrix
-products, and activations first. Then add tensor transformations, 2D CNN
-operators, external weights, and a documented release.
+The current CPU profile accepts ONNX IR 8, standard-domain opset 13, and dense
+float32/int64 values. Named graph inputs/outputs and branching are implemented.
+RT-09 adds broadcasting, matrix products and activations. Later milestones add
+tensor transformations, 2D CNN operators, external weights and a documented release.
 
 The [roadmap's coverage tables](ROADMAP.md#milestones-and-coverage) specify
 operator schema versions, supported subsets, and milestone requirements. Newer
@@ -57,14 +58,14 @@ control flow need additional tasks and reference fixtures.
 
 ## Architecture
 
-This module will own ONNX protobuf loading, compatibility checks, named graph
+This module owns ONNX protobuf loading, compatibility checks, named graph
 planning, sessions, diagnostics, and model execution. `neuralnetwork` provides
 concrete tensors and forward numerical kernels through additive APIs that preserve
 its existing matrix, training, and serialization behavior.
 
-The intended runtime works with `CGO_ENABLED=0`, with a portable `purego` path.
+The runtime works with `CGO_ENABLED=0`, with a portable `purego` path.
 Go dependencies such as protobuf bindings are allowed. Python reference tooling
-may generate development fixtures, while ordinary builds and tests will use
+may generate development fixtures, while ordinary builds and tests use
 checked-in artifacts without Python or network access.
 
 ## Contributing

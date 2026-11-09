@@ -39,7 +39,7 @@ def main():
             raise SystemExit("initial import interval must be exactly 13")
         implemented = entry["operator"] in {"Identity", "Constant"}
         if entry["status"] != ("implemented" if implemented else "planned"):
-            raise SystemExit("unexpected planning status: " + entry["operator"])
+            raise SystemExit("unexpected implementation status: " + entry["operator"])
         if implemented and entry["task"] != "RT-07":
             raise SystemExit("unexpected implementation task: " + entry["operator"])
         for name, attribute in entry["attributes"].items():
@@ -76,7 +76,7 @@ def main():
     checker.check_model(model, full_check=True)
     payload = model.SerializeToString(deterministic=True)
     provenance = {
-        "description": "Original deterministic Identity graph; ONNX checker acceptance only, runtime not implemented",
+        "description": "Original deterministic Identity graph; checker acceptance and hand-calculated identity values",
         "origin": "tools/check_profile.py", "license": "Original repository fixture; no upstream model copied",
         "onnx_source_revision": manifest["onnx_source"]["commit"], "reference_versions": VERSIONS,
         "model": "identity.onnx", "sha256": hashlib.sha256(payload).hexdigest(),
@@ -93,7 +93,7 @@ def main():
     if model_path.read_bytes() != payload or provenance_path.read_text() != provenance_text:
         raise SystemExit("profile fixture changed; inspect and regenerate deliberately")
     checker.check_model(str(model_path), full_check=True)
-    print("PASS: 25 schema selections/defaults, 2 implemented planners, version differences, IR 8/opset 13 checker, deterministic fixture " + provenance["sha256"])
+    print("PASS: 25 schema selections/defaults, 2 implemented operator records, version differences, IR 8/opset 13 checker, deterministic fixture " + provenance["sha256"])
 
 
 if __name__ == "__main__":

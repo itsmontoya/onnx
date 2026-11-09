@@ -28,7 +28,7 @@ func Capabilities() (capabilities []Capability) {
 	return manifest.Operators
 }
 
-// compileGraph is the facade boundary for the future loader. The registry and
+// compileGraph is the loader's facade boundary. The registry and
 // public query consume the same embedded records; no second support list exists.
 func compileGraph(ctx context.Context, source *graph.Graph, limits operators.Limits) (out *operators.Plan, err error) {
 	var registry *operators.Registry

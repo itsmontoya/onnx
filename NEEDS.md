@@ -16,7 +16,8 @@ Reviewed on 2026-11-06 against published [`v0.7.0`][backend-release], commit
 was verified, and all 87 published tensor, handoff, tensor-design, and module
 files matched the adjacent source checkout. NN-01–NN-12 are implemented.
 **NN-13 remains blocked on RT-12**, as recorded in [PR #114][nn13-pr] and
-[its tracked handoff][nn-13]. RT-01 now specifies the runtime contract; no runtime code is implemented yet.
+[its tracked handoff][nn-13]. RT-01–RT-08 now implement the runtime contract
+through serial Identity/Constant sessions; numerical families remain RT-09 work.
 
 The library's `NEEDS.md` is ignored and is not included in the release tree.
 Use the published [tensor contract][tensor-contract], source, tests, and tracked

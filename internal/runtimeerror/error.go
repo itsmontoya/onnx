@@ -6,6 +6,7 @@ import "fmt"
 // Error retains a classification and underlying cause with deterministic context.
 // Shapes uses nil for unknown shapes and a nonnil empty slice for scalar shapes.
 type Error struct {
+	Stage     string
 	Kind      error
 	NodeIndex int
 	NodeName  string
@@ -17,13 +18,18 @@ type Error struct {
 	Cause     error
 }
 
-// Error formats compilation context without iterating over unordered maps.
+// Error formats stage and node context without iterating over unordered maps.
 func (e *Error) Error() (message string) {
 	if e == nil {
 		return "onnx: <nil error>"
 	}
 
-	message = "onnx compile"
+	stage := e.Stage
+	if stage == "" {
+		stage = "compile"
+	}
+
+	message = "onnx " + stage
 	if e.NodeIndex >= 0 {
 		message += fmt.Sprintf(" node[%d] name %q domain %q operator %q opset %d", e.NodeIndex, e.NodeName, e.Domain, e.Operator, e.Opset)
 	}
