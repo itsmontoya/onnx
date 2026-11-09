@@ -1,6 +1,6 @@
-# RT-11 inference fixtures
+# RT-11/RT-12 inference fixtures
 
-Two original deterministic models use IR 8, the empty standard-domain opset 13,
+The two original RT-11 deterministic models use IR 8, the empty standard-domain opset 13,
 inline float32 initializers, and `["batch", 2]` named I/O. `mlp.onnx` is
 Gemm/Relu/Gemm/Softmax. `branch.onnx` extends its logits with Add/Softmax/Sub,
 accepts `features` and `residual`, and returns `probabilities` and `delta`.
@@ -27,8 +27,8 @@ python tools/check_inference.py
 
 Without `--write`, generation verifies existing bytes and the getting-started
 capability table without mutating them. `--write` deliberately regenerates
-both models, all goldens/provenance, and that table. The generator enforces its
-exact tool versions, validates both models with the full ONNX checker, records
+all three models, all goldens/provenance, and that table. The generator enforces its
+exact tool versions, validates all three models with the full ONNX checker, records
 actual `onnx.reference.ReferenceEvaluator` returns and independently checks
 their composition using NumPy affine/ReLU/stable-softmax expressions. It does
 not generate expected values through this Go runtime.
@@ -38,10 +38,19 @@ checks symbolic metadata, hashes/envelopes and golden outputs, reverses requeste
 output order by name, and rechecks retained outputs after later runs and closing
 both owners. Runtime and reference floats compare with
 `abs(got-want) <= 1e-5+1e-5*abs(want)`, exact types/shapes/names/counts,
-NaN classification, infinity signs and signed zeros. These four agreements are
-additional to RT-10's unchanged 86 agreements, one extension and nine rejections;
+NaN classification, infinity signs and signed zeros. RT-12 adds two exact shape-graph agreements for six total. The conformance suite
+now retains 86 agreements, one extension, one executed Gather shape difference
+and eight rejections;
 neither suite claims full ONNX profile coverage.
 
 See [the runnable command](../../examples/inference/main.go),
 [getting started](../../docs/getting-started.md) and
 [the integration report](../../docs/integration-rt11.md).
+
+RT-12 adds `shape.onnx` with float32 input `features:[batch,2,3]` and named
+outputs `reshaped:[batch,6]`, int64 `target:[2]`, and `flat:[1,6*batch]`. Its
+Shape/Gather/Unsqueeze/Concat/Reshape/Unsqueeze/Transpose/Squeeze/Flatten graph
+has no intermediate value_info. Inputs are row-major 1 through 6*batch; target
+is exactly `[batch,-1]`. NumPy checks the reshaped and transposed-flat order
+independently. Both batches execute through the same session and concurrently
+through separate sessions. See [the NN-13 handoff](../../docs/handoff-nn13.md).

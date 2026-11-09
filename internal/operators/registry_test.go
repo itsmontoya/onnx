@@ -128,7 +128,7 @@ func TestRegistryOwnershipAndInvalidArguments(t *testing.T) {
 		{Operator: "Identity", SchemaVersion: 14, MinOpset: 13, MaxOpset: 13, Status: "planned"},
 		{Operator: "Identity", SchemaVersion: 13, MinOpset: 14, MaxOpset: 13, Status: "planned"},
 		{Operator: "Identity", SchemaVersion: 13, MinOpset: 13, MaxOpset: 13, Status: "unknown"},
-		{Operator: "Flatten", SchemaVersion: 13, MinOpset: 13, MaxOpset: 13, Status: "implemented"},
+		{Operator: "Unknown", SchemaVersion: 13, MinOpset: 13, MaxOpset: 13, Status: "implemented"},
 	} {
 		if _, err = NewRegistry([]capability.Record{record}); !errors.Is(err, runtimeerror.ErrInvalidArgument) {
 			t.Fatalf("NewRegistry(%+v) = %v", record, err)

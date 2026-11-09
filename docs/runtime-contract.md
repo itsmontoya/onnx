@@ -9,7 +9,9 @@ Capabilities query, and structured compilation errors. RT-08 implements public
 loading, model/session lifecycle, finite run budgets, and serial execution for
 that subset. RT-09 implements M1 arithmetic, products and activations, plus
 float/int scalar/list Constant forms. RT-10 implements the offline conformance
-harness with typed fixtures and explicit reference exceptions.
+harness with typed fixtures and explicit reference exceptions. RT-11 adds public
+inference examples; RT-12 implements runtime int64 shape subgraphs and all M2
+transforms/indexing, with 20 implemented capability records.
 [capabilities.json](../capabilities.json)
 records the executable
 subset and planned operator coverage. The
@@ -387,10 +389,12 @@ metadata) are:
 | Shape/Constant/typed/raw conversion | Actual accessor/staging/copy buffers in addition to the owned destination |
 | Add/Sub/Mul | 4 times output bytes for matching nonempty shapes (two copied inputs, matrix destination and copied values); zero numeric scratch for broadcasting or empties |
 | Div/Softmax | Zero numeric scratch; audited direct destination kernels |
-| Shape transforms/CNN | Future adapters must audit all numerical scratch |
+| Flatten/Transpose/Reshape/Squeeze/Unsqueeze/Concat/Gather | Zero additional numerical kernel scratch: audited copying Into destinations. Shape/axes input snapshots are charged separately before access; destination reservation includes the still-live staging charge. |
+| CNN | Future adapters must audit all numerical scratch |
 
 Budget validation precedes allocation and arithmetic must not overflow. Planning
-performs only metadata allocations, never full numeric output tensors. Scratch
+never constructs numerical node outputs. RT-12 inspects immutable int64 constant
+values through copied accessors only after reserving their load payload. Scratch
 bounds must be updated if the pinned backend changes. Conservative rejection
 within configured budgets is preferable to an unaccounted large allocation.
 
@@ -493,7 +497,8 @@ independent/reference distinctions above and in [NEEDS.md](../NEEDS.md).
 
 RT-10's [fixture manifest and comparison rules](../testdata/conformance/README.md)
 implement these obligations for current M1 operators: 86 reference agreements,
-one explicit extension and nine unsupported-model rejections. All model and
+one explicit extension, one executed Gather shape difference and eight
+unsupported-model rejections. All model and
 TensorProto value hashes are verified offline. Unexpected NaNs/infinities fail
 finite expectations; infinity signs are exact; zero-sign policy is explicit per
 case. A wrong numerical result must identify named inputs/output and its flat
@@ -502,9 +507,9 @@ and multidimensional mismatch position.
 The pinned suite's 1,422 backend models contain no exact IR-8/opset-13 envelope.
 Copied upstream models retain their IR-7 bytes as version rejection tests;
 independent original IR-8/opset-13 models provide numerical coverage. This does
-not broaden accepted versions. Deferred Gather/CNN/reduction observations are
-retained reference records with explicit unsupported errors, never implemented
-coverage. Original fixture origin is distinct from licensing: this repository
+not broaden accepted versions. Deferred CNN/reduction observations remain retained reference records with
+explicit unsupported errors. RT-12 enables the Gather case with an independently
+expected shape while retaining the actual reference disagreement. Original fixture origin is distinct from licensing: this repository
 has no LICENSE; copied ONNX artifacts retain the upstream Apache-2.0 attribution
 and included license.
 

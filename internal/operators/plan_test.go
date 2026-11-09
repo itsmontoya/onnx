@@ -228,8 +228,8 @@ func TestPlanRejectsStaticCombinations(t *testing.T) {
 		{"contradictory dtype", func(model *onnxpb.ModelProto) { model.Graph.Output[0] = planInfo("y", 7, 2) }, graph.ErrInvalidModel, "inferred type", 0},
 		{"contradictory size", func(model *onnxpb.ModelProto) { model.Graph.Output[0] = planInfo("y", 1, 3) }, graph.ErrInvalidModel, "inferred axis", 0},
 		{"dead planned node", func(model *onnxpb.ModelProto) {
-			model.Graph.Node = append(model.Graph.Node, &onnxpb.NodeProto{Name: proto.String("dead"), OpType: proto.String("Flatten"), Input: []string{"x"}, Output: []string{"unused"}})
-		}, graph.ErrUnsupported, "is planned for RT-12", 1},
+			model.Graph.Node = append(model.Graph.Node, &onnxpb.NodeProto{Name: proto.String("dead"), OpType: proto.String("GlobalAveragePool"), Input: []string{"x"}, Output: []string{"unused"}})
+		}, graph.ErrUnsupported, "is planned for RT-13", 1},
 		{"unknown node", func(model *onnxpb.ModelProto) { model.Graph.Node[0].OpType = proto.String("Unimplemented") }, graph.ErrUnsupported, "no schema", 0},
 		{"missing constant value", func(model *onnxpb.ModelProto) {
 			model.Graph.Node[0].OpType = proto.String("Constant")
@@ -576,5 +576,26 @@ func TestPlanNumericalMetadataOnly(t *testing.T) {
 				t.Fatalf("metadata inference allocated numeric storage: %d bytes", result.AllocedBytesPerOp())
 			}
 		})
+	}
+}
+
+func TestPlanM2MetadataWithoutNumericalOutputs(t *testing.T) {
+	model := planFixture()
+	model.Graph.Input[0] = planInfo("x", 7, 1<<20, 2)
+	model.Graph.Output[0] = planInfo("y", 7, 2, 1<<20)
+	model.Graph.Node[0].OpType = proto.String("Transpose")
+	plan, err := Compile(context.Background(), builtGraph(t, model), planRegistry(t), Limits{MaxLoadBytes: 1 << 20})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	value, exists := plan.Value("y")
+	if !exists || value.Deferred || value.Info.DataType != tensor.Int64 || len(value.Info.Dimensions) != 2 || value.Info.Dimensions[0].Value != 2 || value.Info.Dimensions[1].Value != 1<<20 || value.Default != nil || plan.Steps()[0].Constant != nil {
+		t.Fatalf("M2 metadata: %+v", value)
+	}
+
+	_, resident := plan.Usage()
+	if resident != 0 {
+		t.Fatalf("planner allocated numerical output payload: %d", resident)
 	}
 }

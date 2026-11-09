@@ -5,11 +5,12 @@ A Go-native ONNX inference runtime built on
 Load an `.onnx` model, bind named immutable Go tensors, and evaluate named outputs
 on the CPU without cgo or an installed native inference runtime.
 
-RT-01–RT-09 implement the [runtime contract](docs/runtime-contract.md), bounded
+RT-01–RT-12 implement the [runtime contract](docs/runtime-contract.md), bounded
 protobuf and inline tensor loading, named graph validation, versioned planning,
 and serial sessions. The executable subset is deliberately narrow: ONNX IR 8,
 standard-domain opset 13, float32 Add/Sub/Mul/Div, MatMul/Gemm,
-Relu/Sigmoid/Tanh/Softmax, and float32/int64 Identity/Constant. Branching, multiple
+Relu/Sigmoid/Tanh/Softmax, and float32/int64 Identity/Constant. M2 adds Shape, Flatten, Transpose, Reshape,
+Squeeze/Unsqueeze, Gather and Concat, preserving exact int64 shape values. Branching, multiple
 inputs/outputs, default overrides,
 passthroughs, scalar/empty tensors and symbolic leading batches are supported.
 Constant accepts dense tensors and float/int scalar/list forms. Relu propagates
@@ -37,22 +38,24 @@ go mod download
 CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 3
 CGO_ENABLED=0 go run ./examples/inference -graph branch -batch 3
+CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 1
+CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 3
 CGO_ENABLED=0 go test ./...
 ```
 
 The [example](examples/inference/main.go) loads an original checked-in model,
 reads metadata, creates a session, supplies named tensors, reads named results
-and closes both owners. Both graphs accept symbolic leading batches and have
+and closes both owners. All three graphs accept symbolic leading batches and have
 actual reference goldens for batch sizes 1 and 3. The branching graph has two
 named inputs and two outputs. See [getting started](docs/getting-started.md)
-for clean-clone commands, the complete M1 restriction table and compatible export
+for clean-clone commands, the complete implemented restriction table and compatible export
 requirements, and [the RT-11 integration report](docs/integration-rt11.md) for
 results, provenance and hashes. Initial dependency download needs network;
 cached normal builds/tests need neither network nor reference tooling.
 
 RT-10's [offline conformance harness](testdata/conformance/README.md) verifies
-86 reference agreements, one documented empty-Softmax extension and nine explicit
-rejections, using hashed model/typed TensorProto fixtures. The pinned upstream
+86 reference agreements, one documented empty-Softmax extension, one executed empty-Gather shape
+difference and eight explicit rejections, using hashed model/typed TensorProto fixtures. The pinned upstream
 suite contains no exact IR 8/opset 13 model; selected original upstream bytes
 remain unsupported-version tests rather than numerical coverage claims.
 
@@ -60,8 +63,8 @@ remain unsupported-version tests rather than numerical coverage claims.
 
 - [NEEDS.md](NEEDS.md) records the verified `neuralnetwork` v0.7.0 baseline,
   completed NN-01–NN-12 tasks, published handoffs, and integration constraints.
-  NN-13 optimization remains blocked on this runtime's RT-12 milestone, as
-  documented in [neuralnetwork PR #114](https://github.com/itsmontoya/neuralnetwork/pull/114).
+  RT-12 supplies the [runtime inputs for NN-13](docs/handoff-nn13.md); optimization
+  remains backend work.
 - [ROADMAP.md](ROADMAP.md) defines 19 tasks for this runtime, including ONNX
   decoding, graph validation, versioned operators, execution, conformance,
   examples, and release preparation.
@@ -79,8 +82,9 @@ block the first working runtime or release readiness.
 The current CPU profile accepts ONNX IR 8, standard-domain opset 13, and dense
 float32/int64 values. Named graph inputs/outputs and branching are implemented.
 Broadcasting, matrix products, activations and the RT-10 fixture/conformance
-harness and RT-11 user examples are implemented. Later milestones add
-tensor transformations, 2D CNN operators, external weights and a documented release.
+harness, user examples and runtime shape transformations are implemented.
+The [M2 fixtures](testdata/m2/README.md) retain exact reference differences. Later milestones add
+2D CNN operators, external weights and a documented release.
 
 The [roadmap's coverage tables](ROADMAP.md#milestones-and-coverage) specify
 operator schema versions, supported subsets, and milestone requirements. Newer
@@ -110,6 +114,6 @@ in each completed task's handoff.
 
 Use Go 1.27.2 and the [development commands](docs/development.md) to build and
 verify this foundation, including cgo-disabled, `purego`, and race checks.
-The [inference guide](docs/getting-started.md) covers the working M1 examples.
+The [inference guide](docs/getting-started.md) covers the working MLP and shape examples.
 Pull request descriptions must preserve
 [the repository template](.github/PULL_REQUEST_TEMPLATE.md).

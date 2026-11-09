@@ -1,0 +1,3889 @@
+{
+  "format_version": 1,
+  "onnx_source_revision": "3bf92c03a9f27eba3bda1e5b9e63ea20ec213557",
+  "reference_versions": {
+    "python": "3.9.6",
+    "onnx": "1.16.2",
+    "numpy": "1.26.4",
+    "protobuf": "4.25.3"
+  },
+  "original_license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+  "cases": [
+    {
+      "name": "flatten_float32_0",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_float32_0.onnx",
+        "sha256": "8ef1d06a300c5c71defbc5db612e0362a717ecb30bfef51633405791052f13b4"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_float32_0/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_float32_0/output_y.pb",
+            "sha256": "bfef79c8fd6f4154865051beeb01baa4c0d621870bbe60adde1fdaacbd85d3e6"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            1,
+            24
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "flatten_float32_1",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_float32_1.onnx",
+        "sha256": "f6bff9ac47369efa45161b8eaeb0e353b4211ab6f707ed21fb27cae0bb1b5669"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_float32_1/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_float32_1/output_y.pb",
+            "sha256": "2afc1b7b0bf4614eba27f2d1d6c5c41ab300ddfa81e6a91539d988d119c947a0"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            12
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "flatten_float32_-1",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_float32_-1.onnx",
+        "sha256": "50f3374fe388f8fcb4c914540c7424d5e18f2ddea53edbd86c1bc88ca1fda00c"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_float32_-1/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_float32_-1/output_y.pb",
+            "sha256": "ac7a8e431a60494bdcc84aca71ce5fce4176682fd55cc4df36e9868f3ca6e854"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            6,
+            4
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "flatten_float32_3",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_float32_3.onnx",
+        "sha256": "b33b47f24895151d69e8f8b36772b7e9252fec13c742258b66ff3a64d2bd5216"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_float32_3/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_float32_3/output_y.pb",
+            "sha256": "445b990493a3b027c88a0f889a23390c6b1c336a6008994ca568234060d28a8e"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            24,
+            1
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "flatten_default_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_default_float32.onnx",
+        "sha256": "43f5df5d290f9cf10260411de2f58f881562d155951419ad40e1d3e480bfbee0"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_default_float32/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_default_float32/output_y.pb",
+            "sha256": "2afc1b7b0bf4614eba27f2d1d6c5c41ab300ddfa81e6a91539d988d119c947a0"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            12
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "flatten_scalar_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_scalar_float32.onnx",
+        "sha256": "c437c23ac8dc20d243f464027d472bd6e07a00e68c65b63612d2ba9ef7c3217f"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_scalar_float32/input_x.pb",
+            "sha256": "d1e6081a57c536cdeace5b9a43891360fbb9500b0798a6cabfe71846f81bfe49"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_scalar_float32/output_y.pb",
+            "sha256": "86ef4ec754adc7ef5037334c7494dcab31ea5a106e834301d81fa8d621ec3212"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            1,
+            1
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "flatten_empty_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "extension",
+      "reason": "Evaluator Flatten infers -1 through an empty prefix; explicit checked products remain defined.",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_empty_float32.onnx",
+        "sha256": "ac2e366b860295a4eebed97f9b739a8cf124fd7efccdbc8789971dec98457d7a"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_empty_float32/input_x.pb",
+            "sha256": "d235725dcae0e825b46c1757219356ff35532ee3eab6ee5b9b7f7cdfac31603e"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_empty_float32/output_y.pb",
+            "sha256": "50138008ac2b6f2416e7db0a015c3b15cece41419b667d525effaef33e49bb5f"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "rejected",
+          "error": "cannot reshape array of size 0 into shape (0,newaxis)"
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "transpose_default_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Transpose",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/transpose_default_float32.onnx",
+        "sha256": "da15801c3cd0ad921a9a7d048f87af0c973fac8fad8a32b447e9ed1ca89de232"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/transpose_default_float32/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/transpose_default_float32/output_y.pb",
+            "sha256": "e8134a4db95e0b9b285d6bda212e3feebfccf10556b4952acb11c8553891ee0f"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            4,
+            3,
+            2
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "transpose_explicit_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Transpose",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/transpose_explicit_float32.onnx",
+        "sha256": "a30f812ed172d3189a2948dd1a31b299821961a8215490dedf6dbe04421f1954"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/transpose_explicit_float32/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/transpose_explicit_float32/output_y.pb",
+            "sha256": "b51f0eb047b96bcd2c251a0bbbe6a5557e0c8a19736be0be71cd9462f1770b7b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            3,
+            4,
+            2
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "transpose_scalar_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Transpose",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/transpose_scalar_float32.onnx",
+        "sha256": "5e0ea4c1f176bc90bc7cd00aa0924c41b55840b573020c6f9cab2c655c13b465"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/transpose_scalar_float32/input_x.pb",
+            "sha256": "d1e6081a57c536cdeace5b9a43891360fbb9500b0798a6cabfe71846f81bfe49"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/transpose_scalar_float32/output_y.pb",
+            "sha256": "b90e50b152dc8e037be56827fb8062187b3e077fb44d13576b33219870f48294"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": []
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "transpose_empty_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Transpose",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/transpose_empty_float32.onnx",
+        "sha256": "cece7fa480fa6befbf686ef283e45439ebe71fc1e3277a202bdb3b049ea06a4c"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/transpose_empty_float32/input_x.pb",
+            "sha256": "d235725dcae0e825b46c1757219356ff35532ee3eab6ee5b9b7f7cdfac31603e"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/transpose_empty_float32/output_y.pb",
+            "sha256": "df60b6b420181853b13a07e7873d8bebb3c0cc533fe2d0aa4a58e804ba0925ab"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            3,
+            2,
+            0
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "reshape_zero_infer_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Reshape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/reshape_zero_infer_float32.onnx",
+        "sha256": "736f293d257b5d05b565e81b31ee5f9e923516389f8cf2249ec10d2b4e8edbac"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/reshape_zero_infer_float32/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        },
+        {
+          "name": "shape",
+          "tensor": {
+            "path": "m2/values/reshape_zero_infer_float32/input_shape.pb",
+            "sha256": "f56695894d7547bb3bbd57f11d0a3d5415a2140eb1b07e6d276aadc5ffa229e9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/reshape_zero_infer_float32/output_y.pb",
+            "sha256": "2afc1b7b0bf4614eba27f2d1d6c5c41ab300ddfa81e6a91539d988d119c947a0"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            12
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "reshape_scalar_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Reshape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/reshape_scalar_float32.onnx",
+        "sha256": "e047488bdd96451825ce9a4bcef77b74a9a2a0486a4b189789e8fc01954cb042"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/reshape_scalar_float32/input_x.pb",
+            "sha256": "5b6b370d880b29190dfcc3ab220ad36ad9b8df522ae4b13418fd5d162480f5bf"
+          }
+        },
+        {
+          "name": "shape",
+          "tensor": {
+            "path": "m2/values/reshape_scalar_float32/input_shape.pb",
+            "sha256": "ebbb38c76c6a31c1e58cad0cbf90a0e5833ec76a1918cf225a62844540dd79e2"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/reshape_scalar_float32/output_y.pb",
+            "sha256": "b90e50b152dc8e037be56827fb8062187b3e077fb44d13576b33219870f48294"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": []
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "reshape_empty_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Reshape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/reshape_empty_float32.onnx",
+        "sha256": "e60c3e4e770fac204b951f38d1e417347aa531ce05f5d45a325c8140dba77df0"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/reshape_empty_float32/input_x.pb",
+            "sha256": "d235725dcae0e825b46c1757219356ff35532ee3eab6ee5b9b7f7cdfac31603e"
+          }
+        },
+        {
+          "name": "shape",
+          "tensor": {
+            "path": "m2/values/reshape_empty_float32/input_shape.pb",
+            "sha256": "44ce148d4003a11f2690a3e16977d9252435ef7566cc0cc6bc1d2dcb6aa6c8a2"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/reshape_empty_float32/output_y.pb",
+            "sha256": "50138008ac2b6f2416e7db0a015c3b15cece41419b667d525effaef33e49bb5f"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0,
+            6
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "reshape_inferred_zero_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Reshape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/reshape_inferred_zero_float32.onnx",
+        "sha256": "f91da37d9c4455281b4610c1bbf5bb16cdf41825e609f269bb6807fcf7e263cd"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/reshape_inferred_zero_float32/input_x.pb",
+            "sha256": "d235725dcae0e825b46c1757219356ff35532ee3eab6ee5b9b7f7cdfac31603e"
+          }
+        },
+        {
+          "name": "shape",
+          "tensor": {
+            "path": "m2/values/reshape_inferred_zero_float32/input_shape.pb",
+            "sha256": "b3c2aa9e932e6dcfb81ba321a28c7792b781780240c0d6a8be4866c0a68ddcf1"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/reshape_inferred_zero_float32/output_y.pb",
+            "sha256": "50138008ac2b6f2416e7db0a015c3b15cece41419b667d525effaef33e49bb5f"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0,
+            6
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "squeeze_omitted_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Squeeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/squeeze_omitted_float32.onnx",
+        "sha256": "fd65d6151f371a507608e34cd2ab3d0278d7f7240ff8298dcfa85ff55ac21c45"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/squeeze_omitted_float32/input_x.pb",
+            "sha256": "67b736ebf97d6860dbddd4783bda44b854534353cc36c161d985a1444d1feaa6"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/squeeze_omitted_float32/output_y.pb",
+            "sha256": "a279f9af17ea9dc45b4cd47163f2d8c1f1c8c52259fcaed685649cedd5bd4994"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            3,
+            4
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "squeeze_negative_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Squeeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/squeeze_negative_float32.onnx",
+        "sha256": "95c8cd666ce64dbe170d3ead4846e42fc6f3d8effc8496518b57eac53a896c4f"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/squeeze_negative_float32/input_x.pb",
+            "sha256": "67b736ebf97d6860dbddd4783bda44b854534353cc36c161d985a1444d1feaa6"
+          }
+        },
+        {
+          "name": "axes",
+          "tensor": {
+            "path": "m2/values/squeeze_negative_float32/input_axes.pb",
+            "sha256": "7f1c44bc230dc5953f54d30fdde8303fb538eb58a263ce7cb8da69da47257dc9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/squeeze_negative_float32/output_y.pb",
+            "sha256": "109293051425a1f286b5755b90080f02af3b36b8dea8a1e2233cd91dfada8dcb"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            1,
+            3,
+            4
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "squeeze_empty_axes_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Squeeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/squeeze_empty_axes_float32.onnx",
+        "sha256": "375d452cacca290d546e8c4376342d36bea01a14e4ca1a2350269169de83445e"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/squeeze_empty_axes_float32/input_x.pb",
+            "sha256": "67b736ebf97d6860dbddd4783bda44b854534353cc36c161d985a1444d1feaa6"
+          }
+        },
+        {
+          "name": "axes",
+          "tensor": {
+            "path": "m2/values/squeeze_empty_axes_float32/input_axes.pb",
+            "sha256": "942debe772b9033ba42d0706ddf4f33bcef138281a5389ad5b9daa92d4543d49"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/squeeze_empty_axes_float32/output_y.pb",
+            "sha256": "4962e2ef7db9ad02c11b50ad3aa9805a842dcd01a829475c72b0149fb444c9d2"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            1,
+            2,
+            1,
+            3,
+            4,
+            1
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "squeeze_scalar_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Squeeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/squeeze_scalar_float32.onnx",
+        "sha256": "da86d70421906bcd51eb850ed7533530d51ea5886eb7d5d15769da473154a3b2"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/squeeze_scalar_float32/input_x.pb",
+            "sha256": "d1e6081a57c536cdeace5b9a43891360fbb9500b0798a6cabfe71846f81bfe49"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/squeeze_scalar_float32/output_y.pb",
+            "sha256": "b90e50b152dc8e037be56827fb8062187b3e077fb44d13576b33219870f48294"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": []
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "unsqueeze_output_rank_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Unsqueeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/unsqueeze_output_rank_float32.onnx",
+        "sha256": "81ea522444cfd2ad84163338ac0cb92acda6019c721096cbb3c447a5be7ee1c4"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/unsqueeze_output_rank_float32/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        },
+        {
+          "name": "axes",
+          "tensor": {
+            "path": "m2/values/unsqueeze_output_rank_float32/input_axes.pb",
+            "sha256": "7f1c44bc230dc5953f54d30fdde8303fb538eb58a263ce7cb8da69da47257dc9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/unsqueeze_output_rank_float32/output_y.pb",
+            "sha256": "8dca49c9d498a693e9289216b8db71bfc9686de35213f86ed559a5f3f805dd8e"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            1,
+            2,
+            3,
+            4,
+            1
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "unsqueeze_scalar_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Unsqueeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/unsqueeze_scalar_float32.onnx",
+        "sha256": "13182da228d29022f3db3964e429ab391118dbcc27afce2667866439bce1e759"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/unsqueeze_scalar_float32/input_x.pb",
+            "sha256": "d1e6081a57c536cdeace5b9a43891360fbb9500b0798a6cabfe71846f81bfe49"
+          }
+        },
+        {
+          "name": "axes",
+          "tensor": {
+            "path": "m2/values/unsqueeze_scalar_float32/input_axes.pb",
+            "sha256": "4d070c1b819632d5ea78b7c4fec5fb1914e90513ddecf36ad429945b8ae74e1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/unsqueeze_scalar_float32/output_y.pb",
+            "sha256": "caa7c4b1db9ba506bd23861e391eb78f8ad2b4426909f8250a9655caee76e7c4"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            1
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "unsqueeze_empty_axes_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Unsqueeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/unsqueeze_empty_axes_float32.onnx",
+        "sha256": "9026f9b8cc46b040bfba7588c172b63684a40833af648b41aa54a6ecd1d70464"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/unsqueeze_empty_axes_float32/input_x.pb",
+            "sha256": "d235725dcae0e825b46c1757219356ff35532ee3eab6ee5b9b7f7cdfac31603e"
+          }
+        },
+        {
+          "name": "axes",
+          "tensor": {
+            "path": "m2/values/unsqueeze_empty_axes_float32/input_axes.pb",
+            "sha256": "942debe772b9033ba42d0706ddf4f33bcef138281a5389ad5b9daa92d4543d49"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/unsqueeze_empty_axes_float32/output_y.pb",
+            "sha256": "47167d753bfb12a1c2b27bc2fba4ba0adcb70901327646203c8777eacc196d2b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0,
+            2,
+            3
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "gather_scalar_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/gather_scalar_float32.onnx",
+        "sha256": "3e4faf71abb30282d0c21fde591526fa2aa8a922dba40c3f6597601e924d46f2"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/gather_scalar_float32/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        },
+        {
+          "name": "indices",
+          "tensor": {
+            "path": "m2/values/gather_scalar_float32/input_indices.pb",
+            "sha256": "f7cc85a4d6ae5412e1fb4e2a86d06c9a6e882001dafb4ae5c8b7017100269dba"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/gather_scalar_float32/output_y.pb",
+            "sha256": "89428c7ec58a143f15b57de47ad5a5f5c959012c8d1d7fface63f11c2376897b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            4
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "gather_general_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/gather_general_float32.onnx",
+        "sha256": "055fab08c0f71cb14488e3a79c34183e0a426add6beb1c15979f312a065441b6"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/gather_general_float32/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        },
+        {
+          "name": "indices",
+          "tensor": {
+            "path": "m2/values/gather_general_float32/input_indices.pb",
+            "sha256": "11a7ab561c3babe2deddb56ade2be00e14dc7f82a91767d2aa768d5fa18c8771"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/gather_general_float32/output_y.pb",
+            "sha256": "9b22008e1dcbed2a1e72d4f8d28a1e47b1e28dddcfc9186373228a0c5a42287b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            2,
+            2,
+            4
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "gather_empty_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "difference",
+      "reason": "Evaluator empty Gather returns [0]; exact prefix/index/suffix shape confirmed by NumPy take.",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/gather_empty_float32.onnx",
+        "sha256": "1bebdc33cad79c4a8e436c0c8e54fd28e082056febd85c9a34308a2ee76b30b9"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/gather_empty_float32/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        },
+        {
+          "name": "indices",
+          "tensor": {
+            "path": "m2/values/gather_empty_float32/input_indices.pb",
+            "sha256": "6325c87645dac2497d14e74d65fe86d577f45e8072250eb16e2ed06e5db7d9cc"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/gather_empty_float32/output_y.pb",
+            "sha256": "efab568fa4a788ed015fb2eb73cd85175d2051f6c2f0a31cd79f380c4a635773"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "gather_empty_prefix_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/gather_empty_prefix_float32.onnx",
+        "sha256": "f22d898c9d9299191bac8d60fdf85516da4dc3f3e5f641ef69177c0bd4afe858"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/gather_empty_prefix_float32/input_x.pb",
+            "sha256": "7f50383464972580a739cbbb5f3a33627db15ba62c694288d424ec1e35d66b6d"
+          }
+        },
+        {
+          "name": "indices",
+          "tensor": {
+            "path": "m2/values/gather_empty_prefix_float32/input_indices.pb",
+            "sha256": "11a7ab561c3babe2deddb56ade2be00e14dc7f82a91767d2aa768d5fa18c8771"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/gather_empty_prefix_float32/output_y.pb",
+            "sha256": "3255a282df10dae174e16cab616c1e002f64a7b7f6ae4836e9c59217914d4016"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0,
+            2,
+            2,
+            4
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "gather_empty_suffix_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/gather_empty_suffix_float32.onnx",
+        "sha256": "a9d5c4fd78b0777d7f478607a2a7b015d778e373cf3e956cbcc0239b763b90f9"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/gather_empty_suffix_float32/input_x.pb",
+            "sha256": "4a4a192a373e2d007a2515690a2262c478cdfa29bc4ddeb5ca78049f094c8f84"
+          }
+        },
+        {
+          "name": "indices",
+          "tensor": {
+            "path": "m2/values/gather_empty_suffix_float32/input_indices.pb",
+            "sha256": "11a7ab561c3babe2deddb56ade2be00e14dc7f82a91767d2aa768d5fa18c8771"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/gather_empty_suffix_float32/output_y.pb",
+            "sha256": "5c4ea665afa112856c1f175cb6496a227e2e317de9fc138e0752c19e258cd8e6"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            2,
+            2,
+            0
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "gather_zero_axis_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "difference",
+      "reason": "Evaluator empty Gather returns [0]; exact prefix/index/suffix shape confirmed by NumPy take.",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/gather_zero_axis_float32.onnx",
+        "sha256": "989d2f50d82d2c152a6ff0b5ed923d81d7e56044e321ddb57dd25c47f687cdbf"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/gather_zero_axis_float32/input_x.pb",
+            "sha256": "1a80e33bc94de55d1f70b380b3768f88a85d0a5b8351974e5e0d587e47220cca"
+          }
+        },
+        {
+          "name": "indices",
+          "tensor": {
+            "path": "m2/values/gather_zero_axis_float32/input_indices.pb",
+            "sha256": "61e5d110a8cd9a947fb06a655dc7fd706f3d93d7f68cf83c5f1f3bf0e26d3e76"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/gather_zero_axis_float32/output_y.pb",
+            "sha256": "8b8d9320e814ffceeaf12a088ba5b684793a566c1806ba294fa99d9f36b462d6"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "concat_negative_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Concat",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/concat_negative_float32.onnx",
+        "sha256": "0479f65a3507c87459aaf881dcfd4b7020c7a63407b50eb8a35c8cf557e99be5"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/concat_negative_float32/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        },
+        {
+          "name": "other",
+          "tensor": {
+            "path": "m2/values/concat_negative_float32/input_other.pb",
+            "sha256": "1469fbe2a5c1e517d8c21d84908b03e65aed93bbc6f6c516ddad08a5f4eb3ed2"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/concat_negative_float32/output_y.pb",
+            "sha256": "e64291943adfb4cba10c0d9cc9c0c87a3eb8afb8e8eb8bef25944dfbb2fb6f6f"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            3,
+            8
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "concat_empty_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Concat",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/concat_empty_float32.onnx",
+        "sha256": "03d8a69fe49a72d468e9a7c72c0a936099d1c885f39444c16fd7c8bb44cbc2c2"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/concat_empty_float32/input_x.pb",
+            "sha256": "d235725dcae0e825b46c1757219356ff35532ee3eab6ee5b9b7f7cdfac31603e"
+          }
+        },
+        {
+          "name": "other",
+          "tensor": {
+            "path": "m2/values/concat_empty_float32/input_other.pb",
+            "sha256": "6cbcec5a64de5e72e75a12c04a38539b64fd0f396712cc6b01bc7d516c500dc6"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/concat_empty_float32/output_y.pb",
+            "sha256": "47167d753bfb12a1c2b27bc2fba4ba0adcb70901327646203c8777eacc196d2b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0,
+            2,
+            3
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "shape_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Shape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/shape_float32.onnx",
+        "sha256": "23d079997f6f3752953b8c0107247e5aae17c5ac0c33cc290344946b36508001"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/shape_float32/input_x.pb",
+            "sha256": "ca39224659b0cce6adaee190c55ce2f029ff5b69800e0dded55107f23497db74"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/shape_float32/output_y.pb",
+            "sha256": "82c0a81a93f434a094a645cfe1a29a92952e6fca38a883078f8a1753013195af"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            3
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "shape_scalar_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Shape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/shape_scalar_float32.onnx",
+        "sha256": "79a2628df422ec831b7863a01741bd4e7c89a6e55789babedfcca48aa0d9ef3f"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/shape_scalar_float32/input_x.pb",
+            "sha256": "d1e6081a57c536cdeace5b9a43891360fbb9500b0798a6cabfe71846f81bfe49"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/shape_scalar_float32/output_y.pb",
+            "sha256": "4adaf99a1788f5dbe40ae75302d67c18159b58d078be6d27bd4da51d05fbcf20"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "shape_empty_float32",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Shape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/shape_empty_float32.onnx",
+        "sha256": "1946945a558b8847edc498cf7dfd7f2565e683f88a45fec9f34820ff6c2c9909"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/shape_empty_float32/input_x.pb",
+            "sha256": "d235725dcae0e825b46c1757219356ff35532ee3eab6ee5b9b7f7cdfac31603e"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/shape_empty_float32/output_y.pb",
+            "sha256": "85c680186e8f5c00d9cad5e52e9f7fd2d66dbceafcf879298393b793cb5268eb"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            3
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "flatten_int64_0",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_int64_0.onnx",
+        "sha256": "a85746e5aef6ccc31de705eb3d7109a2f306202137cc389864c09f1c7f8da1fe"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_int64_0/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_int64_0/output_y.pb",
+            "sha256": "c16da1e38d4230d66f8c3565bb95514e25439bdea2b69c6eda024f2d792461da"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            1,
+            24
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "flatten_int64_1",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_int64_1.onnx",
+        "sha256": "ca7b2254a5a549280a78092ab361218f16fad6aa9ed7fe8f5c63f873b906ef23"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_int64_1/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_int64_1/output_y.pb",
+            "sha256": "fa07504d085364bd8321784c9f8b6902655867fd1e585669aeb032bbe3b927a8"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            12
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "flatten_int64_-1",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_int64_-1.onnx",
+        "sha256": "7ec2cd239f0b7582dbd735ba26e034e7fc68f6b0c8c34b23b53442afef7c63e0"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_int64_-1/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_int64_-1/output_y.pb",
+            "sha256": "5f4932b5892c2f74b42c28dc6d7a688917aa4c85936c188446f02aff0b776edf"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            6,
+            4
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "flatten_int64_3",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_int64_3.onnx",
+        "sha256": "5c8ec85c868a3babdeae09c6fc2e6d0a8c5301df1007e15b1a76d71929edf4f7"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_int64_3/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_int64_3/output_y.pb",
+            "sha256": "71b1402f9dad37ddf938d7f0e8c905f549d07c55ab099de9f10fb57fc5c5abb2"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            24,
+            1
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "flatten_default_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_default_int64.onnx",
+        "sha256": "f6a9e56a0f036de00768859dee2db0d1e81d3502820b7b6b33da9661aa1e11d3"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_default_int64/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_default_int64/output_y.pb",
+            "sha256": "fa07504d085364bd8321784c9f8b6902655867fd1e585669aeb032bbe3b927a8"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            12
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "flatten_scalar_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_scalar_int64.onnx",
+        "sha256": "b3111f8f03162b13fa068c8470fbf16e0a39b9176ef37042c4719b35445e003c"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_scalar_int64/input_x.pb",
+            "sha256": "11693b702dca510af7555c814cdd18b871874bb66293768ca50e52923ea9c667"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_scalar_int64/output_y.pb",
+            "sha256": "b49df56c79bd344dabc1bbf44c4e939a98cfc931de2cca06379af555e43b375e"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            1,
+            1
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "flatten_empty_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "extension",
+      "reason": "Evaluator Flatten infers -1 through an empty prefix; explicit checked products remain defined.",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/flatten_empty_int64.onnx",
+        "sha256": "5a5c6ec06a372a7521313c8a037985a35626000395c13b981677a8b49568f86f"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/flatten_empty_int64/input_x.pb",
+            "sha256": "c2444d7b97778d8a7da8c0804d74427c1af29c56e8d53f0c405abe704e9a9ecb"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/flatten_empty_int64/output_y.pb",
+            "sha256": "ba52f8cc492907e7a788fdc6b3308377d0096639dc5890de3a576b7462f73365"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "rejected",
+          "error": "cannot reshape array of size 0 into shape (0,newaxis)"
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "transpose_default_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Transpose",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/transpose_default_int64.onnx",
+        "sha256": "ef498a837108c1aa9408ca65a46dba85dcb55cd52c74fdae8379151abf17bf69"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/transpose_default_int64/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/transpose_default_int64/output_y.pb",
+            "sha256": "a42e69c060e6e4bf80c8aa4ef7602d21bdb928c857add514034a85e1ad285e39"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            4,
+            3,
+            2
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "transpose_explicit_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Transpose",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/transpose_explicit_int64.onnx",
+        "sha256": "6fb66afa41d683025fd69290f9471f35414d6ebd1fe21c9d64489ed77569d539"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/transpose_explicit_int64/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/transpose_explicit_int64/output_y.pb",
+            "sha256": "690f07f82ffb2d4a4588fa436582bace9b634471ac1aad8c3a20379e8a529aac"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            3,
+            4,
+            2
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "transpose_scalar_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Transpose",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/transpose_scalar_int64.onnx",
+        "sha256": "efe848ae57618f305a6fbd1e74841c65fd28c661def2da963b4c4ee324cb70e3"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/transpose_scalar_int64/input_x.pb",
+            "sha256": "11693b702dca510af7555c814cdd18b871874bb66293768ca50e52923ea9c667"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/transpose_scalar_int64/output_y.pb",
+            "sha256": "bff0ecb201f2435cef50973e81ba46b5fed9fc9768f7ae2b8f5ecfe961cdb2ac"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": []
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "transpose_empty_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Transpose",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/transpose_empty_int64.onnx",
+        "sha256": "8ff9e7c03c7d02111e48adf132ec02ce2147b62b27703c931d36168eb842bcbe"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/transpose_empty_int64/input_x.pb",
+            "sha256": "c2444d7b97778d8a7da8c0804d74427c1af29c56e8d53f0c405abe704e9a9ecb"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/transpose_empty_int64/output_y.pb",
+            "sha256": "6541b15695016231bcd8bebb4ba67dfb800cbb43135e7d823f79a6cae138e8bc"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            3,
+            2,
+            0
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "reshape_zero_infer_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Reshape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/reshape_zero_infer_int64.onnx",
+        "sha256": "e576adc6c446e5fe35eec4576aba022d3f08ca60d0b772f78eea2de5426ce774"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/reshape_zero_infer_int64/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        },
+        {
+          "name": "shape",
+          "tensor": {
+            "path": "m2/values/reshape_zero_infer_int64/input_shape.pb",
+            "sha256": "f56695894d7547bb3bbd57f11d0a3d5415a2140eb1b07e6d276aadc5ffa229e9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/reshape_zero_infer_int64/output_y.pb",
+            "sha256": "fa07504d085364bd8321784c9f8b6902655867fd1e585669aeb032bbe3b927a8"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            12
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "reshape_scalar_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Reshape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/reshape_scalar_int64.onnx",
+        "sha256": "007465d790285877db5164bfd09b0752ca0931003d4bbc8e502e93da826301e8"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/reshape_scalar_int64/input_x.pb",
+            "sha256": "dcd04bccf532f07dd9813d5ae842f3f98f812293fa72d0d07c8aea4c100e93a3"
+          }
+        },
+        {
+          "name": "shape",
+          "tensor": {
+            "path": "m2/values/reshape_scalar_int64/input_shape.pb",
+            "sha256": "ebbb38c76c6a31c1e58cad0cbf90a0e5833ec76a1918cf225a62844540dd79e2"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/reshape_scalar_int64/output_y.pb",
+            "sha256": "bff0ecb201f2435cef50973e81ba46b5fed9fc9768f7ae2b8f5ecfe961cdb2ac"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": []
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "reshape_empty_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Reshape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/reshape_empty_int64.onnx",
+        "sha256": "439bcbb7d02bd3aa4ac3bbda047a86c2c59763ef807ddb995ac9b4ac58f65900"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/reshape_empty_int64/input_x.pb",
+            "sha256": "c2444d7b97778d8a7da8c0804d74427c1af29c56e8d53f0c405abe704e9a9ecb"
+          }
+        },
+        {
+          "name": "shape",
+          "tensor": {
+            "path": "m2/values/reshape_empty_int64/input_shape.pb",
+            "sha256": "44ce148d4003a11f2690a3e16977d9252435ef7566cc0cc6bc1d2dcb6aa6c8a2"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/reshape_empty_int64/output_y.pb",
+            "sha256": "ba52f8cc492907e7a788fdc6b3308377d0096639dc5890de3a576b7462f73365"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0,
+            6
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "reshape_inferred_zero_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Reshape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/reshape_inferred_zero_int64.onnx",
+        "sha256": "eadbab2527fe9c7f6d709794c3ca0c26dddadab7e414801ca74d0083f97102d3"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/reshape_inferred_zero_int64/input_x.pb",
+            "sha256": "c2444d7b97778d8a7da8c0804d74427c1af29c56e8d53f0c405abe704e9a9ecb"
+          }
+        },
+        {
+          "name": "shape",
+          "tensor": {
+            "path": "m2/values/reshape_inferred_zero_int64/input_shape.pb",
+            "sha256": "b3c2aa9e932e6dcfb81ba321a28c7792b781780240c0d6a8be4866c0a68ddcf1"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/reshape_inferred_zero_int64/output_y.pb",
+            "sha256": "ba52f8cc492907e7a788fdc6b3308377d0096639dc5890de3a576b7462f73365"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0,
+            6
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "squeeze_omitted_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Squeeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/squeeze_omitted_int64.onnx",
+        "sha256": "78ce5f1cc608bfa6e9b3829abd124e5d50f89c7758fc169cf7f3564c02d0eb87"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/squeeze_omitted_int64/input_x.pb",
+            "sha256": "54f985d160e58404fd455f4b4d4fee242cecf1d2777818cbf78f5d03176176fd"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/squeeze_omitted_int64/output_y.pb",
+            "sha256": "7dfca4dd52dcdce090251a0c90fbcf5e0d0891db25cced2add59604cb5de3f24"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            3,
+            4
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "squeeze_negative_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Squeeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/squeeze_negative_int64.onnx",
+        "sha256": "a33e1af777fc29becac012caa45603059f87cffda654f7a72c1b259e71987697"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/squeeze_negative_int64/input_x.pb",
+            "sha256": "54f985d160e58404fd455f4b4d4fee242cecf1d2777818cbf78f5d03176176fd"
+          }
+        },
+        {
+          "name": "axes",
+          "tensor": {
+            "path": "m2/values/squeeze_negative_int64/input_axes.pb",
+            "sha256": "7f1c44bc230dc5953f54d30fdde8303fb538eb58a263ce7cb8da69da47257dc9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/squeeze_negative_int64/output_y.pb",
+            "sha256": "93976094f5384101cc3140a7f9a3909b5d79ef946eab3351c0e40f1ae5f9fe1b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            1,
+            3,
+            4
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "squeeze_empty_axes_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Squeeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/squeeze_empty_axes_int64.onnx",
+        "sha256": "fb792fdb36274cdac96106f6f14218e88e931413690fbc30511db5d2fa42643f"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/squeeze_empty_axes_int64/input_x.pb",
+            "sha256": "54f985d160e58404fd455f4b4d4fee242cecf1d2777818cbf78f5d03176176fd"
+          }
+        },
+        {
+          "name": "axes",
+          "tensor": {
+            "path": "m2/values/squeeze_empty_axes_int64/input_axes.pb",
+            "sha256": "942debe772b9033ba42d0706ddf4f33bcef138281a5389ad5b9daa92d4543d49"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/squeeze_empty_axes_int64/output_y.pb",
+            "sha256": "825d2ccf6eafaa9760c73223fc759e9597299c3e4c5c70871f0b7c7a95b3f78c"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            1,
+            2,
+            1,
+            3,
+            4,
+            1
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "squeeze_scalar_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Squeeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/squeeze_scalar_int64.onnx",
+        "sha256": "c03b361869d28862e3f2ecefc2de4f250a9f730af3eee1b55bc6d4a8f909a28a"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/squeeze_scalar_int64/input_x.pb",
+            "sha256": "11693b702dca510af7555c814cdd18b871874bb66293768ca50e52923ea9c667"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/squeeze_scalar_int64/output_y.pb",
+            "sha256": "bff0ecb201f2435cef50973e81ba46b5fed9fc9768f7ae2b8f5ecfe961cdb2ac"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": []
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "unsqueeze_output_rank_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Unsqueeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/unsqueeze_output_rank_int64.onnx",
+        "sha256": "cac9c14b27c5183b5b7d28acaec6e7b66f3d6d37527a3ad8a72dee062e7f8b47"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/unsqueeze_output_rank_int64/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        },
+        {
+          "name": "axes",
+          "tensor": {
+            "path": "m2/values/unsqueeze_output_rank_int64/input_axes.pb",
+            "sha256": "7f1c44bc230dc5953f54d30fdde8303fb538eb58a263ce7cb8da69da47257dc9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/unsqueeze_output_rank_int64/output_y.pb",
+            "sha256": "bd67725c8383825551f22de6408dfe9690e412a3b2278d5dbe96df26a2e1becb"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            1,
+            2,
+            3,
+            4,
+            1
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "unsqueeze_scalar_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Unsqueeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/unsqueeze_scalar_int64.onnx",
+        "sha256": "028b62ab004d814c79c729cbfd19be34d2300545b919a5012411b6df855e2f1f"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/unsqueeze_scalar_int64/input_x.pb",
+            "sha256": "11693b702dca510af7555c814cdd18b871874bb66293768ca50e52923ea9c667"
+          }
+        },
+        {
+          "name": "axes",
+          "tensor": {
+            "path": "m2/values/unsqueeze_scalar_int64/input_axes.pb",
+            "sha256": "4d070c1b819632d5ea78b7c4fec5fb1914e90513ddecf36ad429945b8ae74e1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/unsqueeze_scalar_int64/output_y.pb",
+            "sha256": "8b542f42d59f602aef19d0682df3382d28bd369eb430cd0ec851701b89008c11"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            1
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "unsqueeze_empty_axes_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Unsqueeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/unsqueeze_empty_axes_int64.onnx",
+        "sha256": "9594dafeb6580dc23410af6437fab64a8abab6f55f03b54669289cf87ae2365c"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/unsqueeze_empty_axes_int64/input_x.pb",
+            "sha256": "c2444d7b97778d8a7da8c0804d74427c1af29c56e8d53f0c405abe704e9a9ecb"
+          }
+        },
+        {
+          "name": "axes",
+          "tensor": {
+            "path": "m2/values/unsqueeze_empty_axes_int64/input_axes.pb",
+            "sha256": "942debe772b9033ba42d0706ddf4f33bcef138281a5389ad5b9daa92d4543d49"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/unsqueeze_empty_axes_int64/output_y.pb",
+            "sha256": "b82e735c4d15341c25e381206f6f2a8116c4f14a291beb96c4b88c2c46adf3f7"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0,
+            2,
+            3
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "gather_scalar_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/gather_scalar_int64.onnx",
+        "sha256": "7c760b14da4900f85be82060dfb2cc5b2d71c151574668396fb59df3d85a81b4"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/gather_scalar_int64/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        },
+        {
+          "name": "indices",
+          "tensor": {
+            "path": "m2/values/gather_scalar_int64/input_indices.pb",
+            "sha256": "f7cc85a4d6ae5412e1fb4e2a86d06c9a6e882001dafb4ae5c8b7017100269dba"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/gather_scalar_int64/output_y.pb",
+            "sha256": "eaca16f301e69e1a8035b6c6bb036e54999b6b01f515056ea8f5b8ef18d139a0"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            4
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "gather_general_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/gather_general_int64.onnx",
+        "sha256": "7f5ebe25fb6fda2940eaaac46c3b7ed203ee8c009014406691c2d68f17693fd9"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/gather_general_int64/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        },
+        {
+          "name": "indices",
+          "tensor": {
+            "path": "m2/values/gather_general_int64/input_indices.pb",
+            "sha256": "11a7ab561c3babe2deddb56ade2be00e14dc7f82a91767d2aa768d5fa18c8771"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/gather_general_int64/output_y.pb",
+            "sha256": "a1171faa7ddee4c1c16b38f716f91e1d6cf2ded960781df334f29a0dc0badcd1"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            2,
+            2,
+            4
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "gather_empty_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "difference",
+      "reason": "Evaluator empty Gather returns [0]; exact prefix/index/suffix shape confirmed by NumPy take.",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/gather_empty_int64.onnx",
+        "sha256": "5b744d9873c7b8fc89dff62d9743c778b6d6d09d82c6a264ca1e5ea314958066"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/gather_empty_int64/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        },
+        {
+          "name": "indices",
+          "tensor": {
+            "path": "m2/values/gather_empty_int64/input_indices.pb",
+            "sha256": "6325c87645dac2497d14e74d65fe86d577f45e8072250eb16e2ed06e5db7d9cc"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/gather_empty_int64/output_y.pb",
+            "sha256": "014a7e2e690653c79b4bf539f4a44d72108ad5c815fbec09bebb480e152ba2cb"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "gather_empty_prefix_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/gather_empty_prefix_int64.onnx",
+        "sha256": "fcc6fd700f6c3b908459154d910b69d36a20dc0f07f04c9b08169f761fe26608"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/gather_empty_prefix_int64/input_x.pb",
+            "sha256": "ac1031bed54cd5a9d976092f814414186109116ba121c882c47b1d0605f69a67"
+          }
+        },
+        {
+          "name": "indices",
+          "tensor": {
+            "path": "m2/values/gather_empty_prefix_int64/input_indices.pb",
+            "sha256": "11a7ab561c3babe2deddb56ade2be00e14dc7f82a91767d2aa768d5fa18c8771"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/gather_empty_prefix_int64/output_y.pb",
+            "sha256": "d4179b4b374dc8d67d1b022c31d4bff802b6ed00efcee91bd02c57c188f141d9"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0,
+            2,
+            2,
+            4
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "gather_empty_suffix_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/gather_empty_suffix_int64.onnx",
+        "sha256": "3c67cbffda61b1c7ef44bb97fae04e832191778f4af2e5430fb4e2576db48653"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/gather_empty_suffix_int64/input_x.pb",
+            "sha256": "595aa824f9cba6796dab794269443950a485091148019e275078db00a6f58f68"
+          }
+        },
+        {
+          "name": "indices",
+          "tensor": {
+            "path": "m2/values/gather_empty_suffix_int64/input_indices.pb",
+            "sha256": "11a7ab561c3babe2deddb56ade2be00e14dc7f82a91767d2aa768d5fa18c8771"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/gather_empty_suffix_int64/output_y.pb",
+            "sha256": "a8bbbec2102274fdf3b7b12e6b0f58915ed5dbc1e7da0c873fd4a94a0603f5f5"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            2,
+            2,
+            0
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "gather_zero_axis_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "difference",
+      "reason": "Evaluator empty Gather returns [0]; exact prefix/index/suffix shape confirmed by NumPy take.",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/gather_zero_axis_int64.onnx",
+        "sha256": "e6447f6f3552866616cba0bd09bcd916a561f59fdc31e6a6d4488f85b312ac73"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/gather_zero_axis_int64/input_x.pb",
+            "sha256": "4ce89acaf94ef1871d9261d4ef702bf7f35748eb6b4891291dd5ad283c89a4f7"
+          }
+        },
+        {
+          "name": "indices",
+          "tensor": {
+            "path": "m2/values/gather_zero_axis_int64/input_indices.pb",
+            "sha256": "61e5d110a8cd9a947fb06a655dc7fd706f3d93d7f68cf83c5f1f3bf0e26d3e76"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/gather_zero_axis_int64/output_y.pb",
+            "sha256": "615c586f5902fb87c3ae950b5469e955714dc13d058604ae7792734124903c35"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "concat_negative_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Concat",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/concat_negative_int64.onnx",
+        "sha256": "bc5a41382b1f8e0808fab88dd85c5eaa4b57a6bbcc4da77d4efcad37b293278a"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/concat_negative_int64/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        },
+        {
+          "name": "other",
+          "tensor": {
+            "path": "m2/values/concat_negative_int64/input_other.pb",
+            "sha256": "ecb1377d9063b6a315b469baaac4a0960c0dcd6b2cf34c9848456cb9ca73fe53"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/concat_negative_int64/output_y.pb",
+            "sha256": "0868c8039b9c149f70e2c4917990176d7aeccd43eb36d6b650add4ad9074c63d"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            2,
+            3,
+            8
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "concat_empty_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Concat",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/concat_empty_int64.onnx",
+        "sha256": "3d71fbd38419204bd58babc0658e73c99165156d31b83a819b4f52aaa65f6597"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/concat_empty_int64/input_x.pb",
+            "sha256": "c2444d7b97778d8a7da8c0804d74427c1af29c56e8d53f0c405abe704e9a9ecb"
+          }
+        },
+        {
+          "name": "other",
+          "tensor": {
+            "path": "m2/values/concat_empty_int64/input_other.pb",
+            "sha256": "72f0a1c54ad36709e86fa5dcdfa9bafc4fdbb593989779e8cb1f8d0f12845318"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/concat_empty_int64/output_y.pb",
+            "sha256": "b82e735c4d15341c25e381206f6f2a8116c4f14a291beb96c4b88c2c46adf3f7"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0,
+            2,
+            3
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "shape_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Shape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/shape_int64.onnx",
+        "sha256": "a8ca1f4ed67ba54ba2f37b701f64c90b923ab37266543438fc933796809e2fa8"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/shape_int64/input_x.pb",
+            "sha256": "9c88bd4f9397295485c03a973af2cd6eb00145dd16b36816f7f11a811d41881c"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/shape_int64/output_y.pb",
+            "sha256": "82c0a81a93f434a094a645cfe1a29a92952e6fca38a883078f8a1753013195af"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            3
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "shape_scalar_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Shape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/shape_scalar_int64.onnx",
+        "sha256": "8c5bbd1051ffd13326c2b52fad3c212e27a6a796d5d609360aaa13747c0657b0"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/shape_scalar_int64/input_x.pb",
+            "sha256": "11693b702dca510af7555c814cdd18b871874bb66293768ca50e52923ea9c667"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/shape_scalar_int64/output_y.pb",
+            "sha256": "4adaf99a1788f5dbe40ae75302d67c18159b58d078be6d27bd4da51d05fbcf20"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            0
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    },
+    {
+      "name": "shape_empty_int64",
+      "origin": "tools/check_m2.py; original graph and independent NumPy expectation",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Shape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "m2/models/shape_empty_int64.onnx",
+        "sha256": "d59abb4bdc56803795e67a36b565571b0ced0c49bbc7e286e4a02bd2fc808554"
+      },
+      "comparison": {
+        "absolute": 0,
+        "relative": 0,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "m2/values/shape_empty_int64/input_x.pb",
+            "sha256": "c2444d7b97778d8a7da8c0804d74427c1af29c56e8d53f0c405abe704e9a9ecb"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "m2/values/shape_empty_int64/output_y.pb",
+            "sha256": "85c680186e8f5c00d9cad5e52e9f7fd2d66dbceafcf879298393b793cb5268eb"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "shape": [
+            3
+          ]
+        },
+        "independent": "NumPy concrete shape, reshape, transpose, squeeze, expand_dims, take or concatenate"
+      }
+    }
+  ]
+}

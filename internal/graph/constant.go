@@ -52,7 +52,8 @@ func newAttributeConstant(ctx context.Context, decoder *decode.TensorDecoder, at
 
 // Constant owns a decoded tensor without exposing a writable backend pointer.
 // Clone allocates for a future consumer, which must reserve that copy in its own
-// budget before calling. Compilation uses no additional numerical copies.
+// budget before calling. Typed accessors also copy; consumers reserve those
+// snapshots before inspecting immutable payloads.
 type Constant struct {
 	name      string
 	docString string

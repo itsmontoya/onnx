@@ -1,22 +1,24 @@
 # Run inference in Go
 
-The first working milestone runs MLPs and named branching graphs on the CPU
+The first working milestone runs MLPs, named branching graphs and runtime shape subgraphs on the CPU
 entirely in Go. It accepts **ONNX IR 8, empty standard domain, imported opset 13**
 and the implemented operator subsets below. Python, protoc, a C/C++ inference
 runtime and a shared library are unnecessary for normal use.
 
 ## Try the checked-in examples
 
-Install Go 1.27.2. For the reviewable RT-11 checkout, run:
+Install Go 1.27.2. For the reviewable RT-12 checkout, run:
 
 ```sh
-git clone --branch rt-11-inference-examples https://github.com/itsmontoya/onnx.git
+git clone --branch rt-12-shape-operators https://github.com/itsmontoya/onnx.git
 cd onnx
 go mod download
 CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 3
 CGO_ENABLED=0 go run ./examples/inference -graph branch -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph branch -batch 3
+CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 1
+CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 3
 CGO_ENABLED=0 go test ./...
 ```
 
@@ -83,8 +85,9 @@ Choose an exporter that can emit opset 13 with dense float32 numerical tensors,
 inline weights, a known input rank, fixed nonleading input dimensions, and only
 the implemented operators/attributes below. Declare a symbolic or unknown
 leading axis for variable batch sizes. Repeated nonempty symbols bind to one
-concrete size per run. Use dense int64 only for Identity/Constant in M1; shape
-operators are deferred to RT-12.
+concrete size per run. Dense int64 shape/index tensors and type-preserving M2 transforms are supported.
+Squeeze/Unsqueeze-13 use axes inputs, and Reshape-13 uses zero-copy-dimension
+and single inferred -1 rules; it rejects later allowzero metadata.
 
 Check the resulting `ir_version`, every `opset_import`, every node and all value
 types. An opset-13 request alone does not guarantee IR 8 or eliminate custom
@@ -111,7 +114,7 @@ are validated at Run. `ErrLimit` identifies a configured budget failure;
 node index/name, domain, operator, imported opset, value and relevant shapes
 when available. Envelope errors have no invented node context.
 
-## M1 capability table
+## Implemented capability table
 
 This table is generated and checked against [capabilities.json](../capabilities.json)
 by `tools/check_inference.py`. Every row uses the empty domain/imported opset 13;
@@ -120,7 +123,7 @@ the recorded types/defaults; required inputs/outputs cannot have empty names.
 Each operator has exactly one nonempty output. Gemm C may be omitted or have an
 empty slot. A supplied C must still be compatible when beta is zero.
 
-<!-- M1 capabilities start -->
+<!-- Implemented capabilities start -->
 
 | Operator (schema) | Types | Inputs → outputs | Attributes | Restrictions |
 | --- | --- | --- | --- | --- |
@@ -136,8 +139,16 @@ empty slot. A supplied C must still be compatible when beta is zero.
 | Sigmoid (13) | float32 | 1 → 1 | None | float32 arbitrary rank including scalar/empty |
 | Tanh (13) | float32 | 1 → 1 | None | float32 arbitrary rank including scalar/empty |
 | Softmax (13) | float32 | 1 → 1 | `axis:INT=-1` | float32 rank >= 1; axis default -1; empty tensor accepted after axis validation as explicit reference extension; nonfinite slices preserve NaN behavior |
+| Flatten (13) | float32, int64 | 1 → 1 | `axis:INT=1` | type preserving; split axis in [-rank,rank], default 1; explicit concrete products for empty prefixes; documented evaluator rejection difference |
+| Reshape (13) | float32, int64 | 2 → 1 | None | int64 rank-one shape input; schema-13 zero/-1 policy; reject allowzero and ambiguous zero-product inference |
+| Transpose (13) | float32, int64 | 1 → 1 | `perm:INTS` | type preserving; perm defaults to reverse; complete unique nonnegative permutation |
+| Squeeze (13) | float32, int64 | 1–2; optional slots [1] → 1 | None | optional int64 rank-one axes input; omitted axes remove all unit dimensions; explicit axes must be unique and name unit dimensions; explicit empty axes are identity |
+| Unsqueeze (13) | float32, int64 | 2 → 1 | None | required int64 rank-one axes input; unique axes normalized in output rank |
+| Shape (13) | float32, int64 | 1 → 1 | None | int64 vector output from concrete runtime shape; no start/end attributes |
+| Gather (13) | float32, int64 | 2 → 1 | `axis:INT=0` | float32/int64 rank >= 1 data; arbitrary-rank int64 indices; negative indices supported; exact prefix/indices/suffix shape including empties |
+| Concat (13) | float32, int64 | 1–2147483647 → 1 | `axis:INT` | float32/int64 inputs of one type with equal rank >= 1 and equal non-axis dimensions; checked axis sum; required axis; nonempty variadic input list |
 
-<!-- M1 capabilities end -->
+<!-- Implemented capabilities end -->
 
 All graphs must be named, acyclic and in topological order, with unique value
 producers and resolvable named edges. Input ranks must be known; only a leading
@@ -150,7 +161,6 @@ cannot be overridden. Inline constants and all outputs obey the finite limits.
 Other IR/opsets/domains, unsupported dtypes, sparse tensors, local functions,
 training information, tensor segments, subgraphs/control flow and
 sequence/map/optional values are rejected. External data and resolver options
-are unsupported until RT-14. Shape/transform operators (RT-12), CNN operators
-(RT-13), reductions and optimization are future work. `Capabilities()` includes
+are unsupported until RT-14. CNN operators (RT-13), reductions and optimization are future work. `Capabilities()` includes
 planned entries, whose presence does not establish execution support. The
-current M1 examples work without these future milestones.
+current examples work without these future milestones.

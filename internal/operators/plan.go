@@ -150,6 +150,11 @@ func (p *Plan) SnapshotBytes(ctx context.Context) (bytes int64, err error) {
 		}
 
 		bytes += int64(len(step.Outputs)) * 8
+		if int64(len(step.Permutation)) > (math.MaxInt64-bytes)/8 {
+			return 0, fmt.Errorf("%w: snapshot permutation", graph.ErrLimit)
+		}
+
+		bytes += int64(len(step.Permutation)) * 8
 	}
 
 	if err = ctx.Err(); err != nil {

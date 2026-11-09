@@ -67,7 +67,7 @@ The [RT-11 fixture guide](../testdata/inference/README.md) documents optional
 tests load checked-in bytes, validate hashes/metadata, compare golden named
 outputs for batches 1 and 3, retain outputs across runs/Close and exercise two
 sessions concurrently on each shared numerical plan. The generator also checks
-that the getting-started M1 table exactly reflects `capabilities.json`.
+that the getting-started implemented table exactly reflects `capabilities.json`.
 
 ## Package boundaries
 
@@ -418,8 +418,8 @@ coverage. RT-10 reuses these unchanged models in the broader harness below.
 [Fixture documentation](../testdata/conformance/README.md) describes the 96
 classified cases, all model/value hashes, names, IR/import/schema provenance,
 actual license status, comparison rules and pinned reference observations.
-Ordinary Go tests execute 86 reference agreements and one documented extension;
-nine models must fail with ErrUnsupported. No skips count as support.
+Ordinary Go tests execute 86 reference agreements, one documented extension and
+one independent empty-Gather shape difference; eight models must fail with ErrUnsupported. No skips count as support.
 
 The test-only `conformanceSuite`, `conformanceCase`, `conformanceValue`,
 `conformanceArtifact` and `conformanceComparison` types keep metadata, execution,
@@ -440,6 +440,26 @@ exactly IR 8/opset 13; the three copied upstream cases retain their original IR 
 and bytes as explicit version rejections. Generated original IR 8/opset 13
 models supply positive cases without rewriting upstream version numbers.
 
-Future Gather/pooling/BatchNormalization and opset-18 reduction observations
-preserve the released backend differences while all remain explicit runtime
-rejections. No production API, capability record or numerical adapter changes.
+Pooling/BatchNormalization and opset-18 reduction observations remain explicit
+runtime rejections. RT-12 enables Gather while preserving the evaluator's wrong
+empty output shape as an executed difference.
+
+## M2 shape adapters
+
+`shapeCall` checks vector types/ranks/lengths before accessor copies, reserves
+Shape output staging or int64 shape/axes snapshots, plans concrete metadata,
+then adds the destination reservation while the staging charge remains live.
+The v0.7.0 transform/Concat/Gather Into kernels copy directly into destinations;
+no other numerical scratch is allocated. Shape uses its input-shape snapshot
+as int64 staging for FromInt64. These charges are tested exactly, including
+combined live reservation failures at the node before destination allocation.
+
+The compiler's focused shapePlanner inspects immutable initializer/Constant/
+Identity int64 values only after reserving their copied accessor payload. It
+performs metadata inference without allocating numerical node outputs. Input
+defaults remain runtime values because callers may override them. Dynamic
+shape/axes violations stay contextual Run errors and leave the session reusable.
+
+`tools/check_m2.py` verifies 66 exact typed fixtures using the pinned environment.
+See [their guide](../testdata/m2/README.md) and [the NN-13 handoff](handoff-nn13.md)
+for graph fixtures, reproducible commands and measurement boundaries.

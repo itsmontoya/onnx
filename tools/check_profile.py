@@ -37,10 +37,10 @@ def main():
             raise SystemExit("unknown schema attribute: " + entry["operator"])
         if entry["min_opset"] != 13 or entry["max_opset"] != 13:
             raise SystemExit("initial import interval must be exactly 13")
-        implemented = entry["operator"] in {"Identity", "Constant", "Add", "Sub", "Mul", "Div", "MatMul", "Gemm", "Relu", "Sigmoid", "Tanh", "Softmax"}
+        implemented = entry["operator"] in {"Identity", "Constant", "Add", "Sub", "Mul", "Div", "MatMul", "Gemm", "Relu", "Sigmoid", "Tanh", "Softmax", "Shape", "Flatten", "Reshape", "Transpose", "Squeeze", "Unsqueeze", "Gather", "Concat"}
         if entry["status"] != ("implemented" if implemented else "planned"):
             raise SystemExit("unexpected implementation status: " + entry["operator"])
-        if implemented and entry["task"] != ("RT-07" if entry["operator"] == "Identity" else "RT-09"):
+        if implemented and entry["task"] != ("RT-07" if entry["operator"] == "Identity" else "RT-12" if entry["operator"] in {"Shape", "Flatten", "Reshape", "Transpose", "Squeeze", "Unsqueeze", "Gather", "Concat"} else "RT-09"):
             raise SystemExit("unexpected implementation task: " + entry["operator"])
         for name, attribute in entry["attributes"].items():
             selected = schema.attributes[name]
@@ -93,7 +93,7 @@ def main():
     if model_path.read_bytes() != payload or provenance_path.read_text() != provenance_text:
         raise SystemExit("profile fixture changed; inspect and regenerate deliberately")
     checker.check_model(str(model_path), full_check=True)
-    print("PASS: 25 schema selections/defaults, 12 implemented operator records, version differences, IR 8/opset 13 checker, deterministic fixture " + provenance["sha256"])
+    print("PASS: 25 schema selections/defaults, 20 implemented operator records, version differences, IR 8/opset 13 checker, deterministic fixture " + provenance["sha256"])
 
 
 if __name__ == "__main__":
