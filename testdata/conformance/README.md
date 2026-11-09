@@ -1,9 +1,11 @@
 # Offline conformance fixtures
 
-RT-10 runs 96 classified cases in ordinary Go tests: **86 reference agreements**,
-**one documented extension**, **one executed reference shape difference**, and
-**eight explicit unsupported-model rejections**. RT-12 enables the empty Gather
-case with its independently expected shape.
+RT-10 runs 96 classified cases in ordinary Go tests: **87 reference agreements**,
+**one documented extension**, **four executed reference differences**, and
+**four explicit unsupported-model rejections**. RT-12 enables the empty Gather
+case with its independently expected shape. RT-13 executes the four retained CNN
+cases: ceil averaging agrees with both oracles, while max NaN and normalization
+retain actual differences.
 No test skips contribute to coverage. The accepted IR 8/standard-domain opset 13 envelope remains unchanged.
 
 [The provenance manifest](provenance.json) records each case's origin, actual
@@ -70,20 +72,19 @@ tolerances. `TestConformanceSuiteDetectsNumericError` injects `[4,7]` into the
 real addition fixture expecting `[4,6]` and requires a diagnostic identifying
 `inputs [left right]`, `output "y"`, `flat[1]` and `index [1]`.
 
-## Deferred reference differences
+## Executed reference differences and remaining reduction boundary
 
-The empty Gather model now executes and compares its exact shape with the
-independent expected output. The five remaining future-milestone models require
-`ErrUnsupported`; their expected values and actual observations remain retained
-and do not count as runtime numerical coverage:
+Gather and all four CNN models execute against independent expectations. Only
+the reduction model in this table remains unsupported; the three upstream
+IR-7 models above remain version rejections.
 
 | Case | Independent expectation and retained reference behavior | Owner |
 | --- | --- | --- |
 | Empty Gather indices | Shape `[2,0,2]`; evaluator returns `[0]` | RT-12 implemented difference |
-| AveragePool ceil window | Including padding uses full-kernel divisors; `[3,2.25,3.75,2.25]`; actual evaluator and ORT outputs retained | RT-13 |
-| MaxPool NaN | Independent output propagates NaN; evaluator filters it; ORT output retained | RT-13 |
-| BatchNormalization-9 | Stored statistics give `[2.5,4.5]`, agreeing with ORT; evaluator applies momentum and differs | RT-13 |
-| BatchNormalization zero domain | Literal formula gives `[-Inf,NaN,+Inf]`; ORT gives three NaNs; evaluator also retained | RT-13 |
+| AveragePool ceil window | Including padding uses full-kernel divisors; `[3,2.25,3.75,2.25]`; actual evaluator and ORT outputs retained | RT-13 executed agreement |
+| MaxPool NaN | Independent output propagates NaN; evaluator filters it; ORT output retained | RT-13 implemented difference |
+| BatchNormalization-9 | Stored statistics give `[2.5,4.5]`, agreeing with ORT; evaluator applies momentum and differs | RT-13 implemented difference |
+| BatchNormalization zero domain | Literal formula gives `[-Inf,NaN,+Inf]`; ORT gives three NaNs; evaluator also retained | RT-13 implemented difference |
 | NN-12 reduction boundary | Omitted ReduceMean axes express identity with opset 18 and `noop_with_empty_axes=1`, matching NN-12; no opset-13 reduction support implied | Later profile/operator task |
 
 BN expectations follow `scale*(x-mean)/sqrt(variance+epsilon)+bias`, with the

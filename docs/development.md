@@ -418,8 +418,8 @@ coverage. RT-10 reuses these unchanged models in the broader harness below.
 [Fixture documentation](../testdata/conformance/README.md) describes the 96
 classified cases, all model/value hashes, names, IR/import/schema provenance,
 actual license status, comparison rules and pinned reference observations.
-Ordinary Go tests execute 86 reference agreements, one documented extension and
-one independent empty-Gather shape difference; eight models must fail with ErrUnsupported. No skips count as support.
+Ordinary Go tests execute 87 reference agreements, one documented extension and
+four independent reference differences; four models must fail with ErrUnsupported. No skips count as support.
 
 The test-only `conformanceSuite`, `conformanceCase`, `conformanceValue`,
 `conformanceArtifact` and `conformanceComparison` types keep metadata, execution,
@@ -440,9 +440,10 @@ exactly IR 8/opset 13; the three copied upstream cases retain their original IR 
 and bytes as explicit version rejections. Generated original IR 8/opset 13
 models supply positive cases without rewriting upstream version numbers.
 
-Pooling/BatchNormalization and opset-18 reduction observations remain explicit
-runtime rejections. RT-12 enables Gather while preserving the evaluator's wrong
-empty output shape as an executed difference.
+RT-12 enables Gather while preserving the evaluator's wrong empty shape. RT-13
+executes the retained pooling/BatchNormalization cases with independent expected
+outputs; the ceil-average case is an actual agreement. The opset-18 reduction
+and three unmodified IR-7 upstream models remain explicit rejections.
 
 ## M2 shape adapters
 
@@ -463,3 +464,26 @@ shape/axes violations stay contextual Run errors and leave the session reusable.
 `tools/check_m2.py` verifies 66 exact typed fixtures using the pinned environment.
 See [their guide](../testdata/m2/README.md) and [the NN-13 handoff](handoff-nn13.md)
 for graph fixtures, reproducible commands and measurement boundaries.
+
+
+## M3 CNN adapters
+
+`CNNConfig` resolves actual schema-11/12/1/9 defaults into fixed-size configs.
+The compiler validates known ranks/channels/kernel/bias/statistics and infers
+spatial dimensions separately; unknown intermediate ranks/shapes defer to Run.
+No numerical output is allocated during planning. Fixed step metadata, including
+the embedded CNN config, reserves 256 bytes during numerical planning and deep
+executable snapshot accounting. Shape metadata remains separately bounded.
+
+`cnnCall` computes checked concrete shapes and SAME padding before reserving the
+complete destination. Published v0.7.0 Conv2DInto, MaxPool2DInto,
+AveragePool2DInto, GlobalAveragePoolInto and BatchNormalizationInto use direct
+loops without numerical scratch/accessor copies. Zero scratch is tested alongside
+exact live destination/publication bounds and recovery. Cancellation brackets
+each synchronous kernel; no in-kernel cancellation is claimed.
+
+`tools/check_m3.py` reproduces [87 offline cases](../testdata/m3/README.md),
+including one composed CNN at batches 1 and 3. It preserves actual results/errors
+from ONNX 1.16.2 and ORT 1.19.2 separately from independent formulas. Ordinary
+Go tests require no reference tooling. The [integration report](integration-rt13.md)
+records current limits and validation.

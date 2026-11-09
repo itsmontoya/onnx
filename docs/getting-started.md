@@ -1,16 +1,16 @@
 # Run inference in Go
 
-The first working milestone runs MLPs, named branching graphs and runtime shape subgraphs on the CPU
+The first working milestone runs MLPs, named branching graphs, runtime shape subgraphs and 2D CNNs on the CPU
 entirely in Go. It accepts **ONNX IR 8, empty standard domain, imported opset 13**
 and the implemented operator subsets below. Python, protoc, a C/C++ inference
 runtime and a shared library are unnecessary for normal use.
 
 ## Try the checked-in examples
 
-Install Go 1.27.2. For the reviewable RT-12 checkout, run:
+Install Go 1.27.2. For the reviewable RT-13 checkout, run:
 
 ```sh
-git clone --branch rt-12-shape-operators https://github.com/itsmontoya/onnx.git
+git clone --branch rt-13-cnn-operators https://github.com/itsmontoya/onnx.git
 cd onnx
 go mod download
 CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 1
@@ -19,13 +19,16 @@ CGO_ENABLED=0 go run ./examples/inference -graph branch -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph branch -batch 3
 CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 3
+CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 1
+CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 3
 CGO_ENABLED=0 go test ./...
 ```
 
 The initial clone and Go dependency download need network access. With the
 module cache populated, these commands use checked-in models and values; they
 need no network or reference tools. Run from the repository root because the
-example resolves `testdata/inference/models/` relative to the working directory.
+example resolves `testdata/inference/models/` and `testdata/m3/models/` relative
+to the working directory.
 For the portable backend path, add `-tags=purego` to `go run` or `go test`.
 
 The MLP is `Gemm → Relu → Gemm → Softmax`. Its sole named input is `features`;
@@ -49,6 +52,12 @@ delta [3 2] = [0.250000 -0.500000 1.000000 0.000000 -0.250000 0.750000]
 These are rounded display values. Tests compare the original typed goldens with
 `atol=rtol=1e-5`; `delta` includes ordinary float32 subtraction rounding.
 See [the integration report](integration-rt11.md) for hashes and actual results.
+
+The CNN is `Conv → BatchNormalization → Relu → MaxPool → Flatten → Gemm`.
+Input `features` is float32 `[batch,1,4,4]`; outputs `logits` and `pooled`
+are `[batch,3]` and `[batch,2,2,2]`. Its independently calculated results match
+ORT for both batches; the pinned ONNX evaluator differs. See the
+[CNN integration report](integration-rt13.md) and [edge-case record](../testdata/m3/README.md).
 
 ## Use the public API
 
@@ -147,6 +156,11 @@ empty slot. A supplied C must still be compatible when beta is zero.
 | Shape (13) | float32, int64 | 1 → 1 | None | int64 vector output from concrete runtime shape; no start/end attributes |
 | Gather (13) | float32, int64 | 2 → 1 | `axis:INT=0` | float32/int64 rank >= 1 data; arbitrary-rank int64 indices; negative indices supported; exact prefix/indices/suffix shape including empties |
 | Concat (13) | float32, int64 | 1–2147483647 → 1 | `axis:INT` | float32/int64 inputs of one type with equal rank >= 1 and equal non-axis dimensions; checked axis sum; required axis; nonempty variadic input list |
+| Conv (11) | float32 | 2–3; optional slots [2] → 1 | `auto_pad:STRING=NOTSET`, `dilations:INTS`, `group:INT=1`, `kernel_shape:INTS`, `pads:INTS`, `strides:INTS` | float32 NCHW rank four; ONNX [M,C/group,kH,kW] weights; positive channels/filters/kernels/strides/dilations; group divides input/output channels; optional [M] bias; auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; kernel_shape must match weights when present; dynamic weights/bias; nonpositive floor spatial extents clamp to zero |
+| MaxPool (12) | float32 | 1 → 1–2; optional slots [1] | `auto_pad:STRING=NOTSET`, `ceil_mode:INT=0`, `dilations:INTS`, `kernel_shape:INTS`, `pads:INTS`, `storage_order:INT=0`, `strides:INTS` | float32 NCHW rank four; positive 2D kernel/strides/dilations; nonnegative pads; values output only; second empty slot allowed, nonempty indices unsupported; storage_order must be 0; ceil_mode must be 0/1; documented empty/nonfinite differences; auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; ceil mode trims starts in right padded region |
+| AveragePool (11) | float32 | 1 → 1 | `auto_pad:STRING=NOTSET`, `ceil_mode:INT=0`, `count_include_pad:INT=0`, `kernel_shape:INTS`, `pads:INTS`, `strides:INTS` | float32 NCHW rank four; positive 2D kernel/strides; nonnegative pads; no dilation attribute; ceil_mode/count_include_pad must be 0/1; full-kernel divisor when including pad; auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; ceil mode trims starts in right padded region |
+| GlobalAveragePool (1) | float32 | 1 → 1 | None | float32 NCHW rank four; output [N,C,1,1]; empty spatial reduction NaN |
+| BatchNormalization (9) | float32 | 5 → 1 | `epsilon:FLOAT=9.999999747378752e-06`, `momentum:FLOAT=0.8999999761581421` | float32 rank-two or NCHW rank-four input and [C] parameters; exactly one inference output slot; reject all additional output slots and training_mode; finite nonnegative epsilon; finite momentum in [0,1] accepted but no statistics update; independent stored-statistics reference; documented evaluator/ORT differences |
 
 <!-- Implemented capabilities end -->
 
@@ -161,6 +175,6 @@ cannot be overridden. Inline constants and all outputs obey the finite limits.
 Other IR/opsets/domains, unsupported dtypes, sparse tensors, local functions,
 training information, tensor segments, subgraphs/control flow and
 sequence/map/optional values are rejected. External data and resolver options
-are unsupported until RT-14. CNN operators (RT-13), reductions and optimization are future work. `Capabilities()` includes
+are unsupported until RT-14. Reductions and optimization are future work. `Capabilities()` includes
 planned entries, whose presence does not establish execution support. The
 current examples work without these future milestones.

@@ -39,8 +39,8 @@ output order by name, and rechecks retained outputs after later runs and closing
 both owners. Runtime and reference floats compare with
 `abs(got-want) <= 1e-5+1e-5*abs(want)`, exact types/shapes/names/counts,
 NaN classification, infinity signs and signed zeros. RT-12 adds two exact shape-graph agreements for six total. The conformance suite
-now retains 86 agreements, one extension, one executed Gather shape difference
-and eight rejections;
+now retains 87 agreements, one extension, four executed reference differences
+and four rejections;
 neither suite claims full ONNX profile coverage.
 
 See [the runnable command](../../examples/inference/main.go),
@@ -54,3 +54,7 @@ has no intermediate value_info. Inputs are row-major 1 through 6*batch; target
 is exactly `[batch,-1]`. NumPy checks the reshaped and transposed-flat order
 independently. Both batches execute through the same session and concurrently
 through separate sessions. See [the NN-13 handoff](../../docs/handoff-nn13.md).
+
+RT-13 adds a separate [CNN fixture set](../m3/README.md) with composed batches
+1 and 3 and a public `-graph cnn` example. The MLP/branch/shape bytes here remain
+unchanged.

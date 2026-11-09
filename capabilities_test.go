@@ -27,7 +27,7 @@ func TestCapabilitiesCanonicalManifest(t *testing.T) {
 
 		if record.Status == "implemented" {
 			implemented++
-			if record.Operator == "Identity" && record.Task != "RT-07" || record.Operator != "Identity" && record.Task != "RT-09" && record.Task != "RT-12" {
+			if record.Operator == "Identity" && record.Task != "RT-07" || record.Operator != "Identity" && record.Task != "RT-09" && record.Task != "RT-12" && record.Task != "RT-13" {
 				t.Fatalf("unexpected implemented operator: %+v", record)
 			}
 		}
@@ -37,7 +37,7 @@ func TestCapabilitiesCanonicalManifest(t *testing.T) {
 		}
 	}
 
-	if implemented != 20 {
+	if implemented != 25 {
 		t.Fatalf("implemented count = %d", implemented)
 	}
 

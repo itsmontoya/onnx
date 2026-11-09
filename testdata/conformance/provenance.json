@@ -6239,8 +6239,8 @@
       "name": "deferred_pool_ceil",
       "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
       "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
-      "status": "unsupported",
-      "reason": "AveragePool-11 adapter is RT-13; full kernel divisors include partial ceil windows.",
+      "status": "agreement",
+      "reason": "",
       "ir_version": 8,
       "opsets": {
         "": 13
@@ -6327,8 +6327,8 @@
       "name": "deferred_pool_nan",
       "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
       "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
-      "status": "unsupported",
-      "reason": "MaxPool-12 adapter is RT-13; reference filters input NaNs.",
+      "status": "difference",
+      "reason": "RT-13 propagates input NaNs; evaluator filters them.",
       "ir_version": 8,
       "opsets": {
         "": 13
@@ -6409,8 +6409,8 @@
       "name": "deferred_normalization",
       "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
       "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
-      "status": "unsupported",
-      "reason": "BatchNormalization-9 adapter is RT-13; stored-statistics formula and ORT agree; evaluator applies momentum.",
+      "status": "difference",
+      "reason": "RT-13 preserves supplied inference statistics; independent stored-statistics formula and ORT agree; evaluator applies momentum.",
       "ir_version": 8,
       "opsets": {
         "": 13
@@ -6517,8 +6517,8 @@
       "name": "deferred_normalization_zero",
       "origin": "tools/check_conformance.py; original graph and independently calculated expectations",
       "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
-      "status": "unsupported",
-      "reason": "BatchNormalization-9 adapter is RT-13; zero variance/epsilon literal formula differs from ORT's three NaNs.",
+      "status": "difference",
+      "reason": "RT-13 uses the literal stored-statistics formula; zero variance/epsilon differs from evaluator momentum and ORT's three NaNs.",
       "ir_version": 8,
       "opsets": {
         "": 13

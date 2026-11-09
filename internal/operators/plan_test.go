@@ -227,9 +227,9 @@ func TestPlanRejectsStaticCombinations(t *testing.T) {
 		{"contradictory rank", func(model *onnxpb.ModelProto) { model.Graph.Output[0] = planInfo("y", 1) }, graph.ErrInvalidModel, "inferred rank", 0},
 		{"contradictory dtype", func(model *onnxpb.ModelProto) { model.Graph.Output[0] = planInfo("y", 7, 2) }, graph.ErrInvalidModel, "inferred type", 0},
 		{"contradictory size", func(model *onnxpb.ModelProto) { model.Graph.Output[0] = planInfo("y", 1, 3) }, graph.ErrInvalidModel, "inferred axis", 0},
-		{"dead planned node", func(model *onnxpb.ModelProto) {
+		{"dead unsupported node", func(model *onnxpb.ModelProto) {
 			model.Graph.Node = append(model.Graph.Node, &onnxpb.NodeProto{Name: proto.String("dead"), OpType: proto.String("GlobalAveragePool"), Input: []string{"x"}, Output: []string{"unused"}})
-		}, graph.ErrUnsupported, "is planned for RT-13", 1},
+		}, graph.ErrUnsupported, "GlobalAveragePool input rank 1", 1},
 		{"unknown node", func(model *onnxpb.ModelProto) { model.Graph.Node[0].OpType = proto.String("Unimplemented") }, graph.ErrUnsupported, "no schema", 0},
 		{"missing constant value", func(model *onnxpb.ModelProto) {
 			model.Graph.Node[0].OpType = proto.String("Constant")
@@ -597,5 +597,55 @@ func TestPlanM2MetadataWithoutNumericalOutputs(t *testing.T) {
 	_, resident := plan.Usage()
 	if resident != 0 {
 		t.Fatalf("planner allocated numerical output payload: %d", resident)
+	}
+}
+
+func TestPlanCNNMetadataWithoutNumericalOutputs(t *testing.T) {
+	for _, operator := range []string{"Conv", "MaxPool", "AveragePool", "GlobalAveragePool", "BatchNormalization"} {
+		t.Run(operator, func(t *testing.T) {
+			model := planFixture()
+			model.Graph.Input[0] = planInfo("x", 1, 1<<20, 1, 2, 2)
+			model.Graph.Output[0] = planInfo("y", 1, 1<<20, 1, 2, 2)
+			model.Graph.Node[0].OpType = proto.String(operator)
+			if operator == "GlobalAveragePool" {
+				model.Graph.Output[0] = planInfo("y", 1, 1<<20, 1, 1, 1)
+			}
+
+			if operator == "MaxPool" || operator == "AveragePool" {
+				model.Graph.Node[0].Attribute = []*onnxpb.AttributeProto{{Name: proto.String("kernel_shape"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{1, 1}}}
+			}
+
+			if operator == "Conv" {
+				model.Graph.Input = append(model.Graph.Input, planInfo("weight", 1, 1, 1, 1, 1))
+				model.Graph.Node[0].Input = []string{"x", "weight"}
+			}
+
+			if operator == "BatchNormalization" {
+				for _, name := range []string{"scale", "bias", "mean", "variance"} {
+					model.Graph.Input = append(model.Graph.Input, planInfo(name, 1, 1))
+					model.Graph.Node[0].Input = append(model.Graph.Node[0].Input, name)
+				}
+			}
+
+			plan, err := Compile(context.Background(), builtGraph(t, model), planRegistry(t), Limits{MaxLoadBytes: 1 << 20})
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			value, exists := plan.Value("y")
+			_, resident := plan.Usage()
+			if !exists || value.Deferred || value.Default != nil || plan.Steps()[0].Constant != nil || resident != 0 {
+				t.Fatalf("CNN planner constructed numerical values: %+v, resident %d", value, resident)
+			}
+		})
+	}
+}
+
+func TestPlanSnapshotCountsCNNFixedMetadata(t *testing.T) {
+	var plan Plan
+	plan.steps = []Step{{Inputs: []int{0, 1, -1}, Outputs: []int{2, -1}}}
+	bytes, err := plan.SnapshotBytes(context.Background())
+	if err != nil || bytes != 32+256+5*8 {
+		t.Fatalf("CNN fixed config/index snapshot = %d, %v", bytes, err)
 	}
 }

@@ -169,6 +169,23 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 				inputs[slot] = e.values[valueIndex]
 			}
 		}
+		if operators.IsCNNOperator(step.Operator) {
+			var cnn *cnnCall
+			if cnn, err = newCNNCall(step, inputs, e.plan.limits); err != nil {
+				return err
+			}
+
+			if err = e.budget.reserve(cnn.bytes, 0); err != nil {
+				return err
+			}
+
+			if backend, err = cnn.run(e.ctx); err != nil {
+				return err
+			}
+
+			break
+		}
+
 		if operators.IsShapeOperator(step.Operator) {
 			var shape *shapeCall
 			if shape, err = newShapeCall(step, inputs, e.plan.limits); err != nil {
