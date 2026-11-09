@@ -2,7 +2,7 @@
 
 RT-02 establishes module `github.com/itsmontoya/onnx`, package `onnx`, with a
 Go 1.26.1 language baseline and the selected Go 1.27.2 toolchain. The pinned
-`neuralnetwork v0.7.0` module requires Go 1.26.1; its SIMD and `x/sys`
+pinned NN-13 `neuralnetwork` module requires Go 1.26.1; its SIMD and `x/sys`
 dependencies require Go 1.25.0. The pure-Go protobuf dependency is
 `google.golang.org/protobuf v1.36.12` (Go 1.23). No local path replacements
 or workspace are required.
@@ -384,17 +384,20 @@ Every node executes even when its output is unrequested. Requested outputs are
 unique declared names returned in request order; empty requests use declaration
 order. Zero-node/input/initializer passthroughs and graphs without outputs work.
 
-The first evaluator retains all table entries and charges aliases conservatively.
-It counts resident model tensor bytes once, every bound/default source, each node
-result and all requested output copies. It reserves before every constant/output
-clone. Backend v0.7.0 tensor.go Clone directly copies into owned destination storage
-without numeric staging, so Identity/Constant/copies use zero numeric scratch.
-The workspace accounting path separately enforces workspace and combined live
-reservations, including checked sums. RT-09 numericalCall reserves each complete
-node destination/workspace before allocation, using the audited bounds in the
-[runtime contract](runtime-contract.md#limits-and-cancellation).
-Runtime metadata/Go headers/capacity/GC retention and earlier caller-retained
-outputs are outside these logical tensor budgets.
+RT-16 replaces full-table retention with static consumer/Identity ownership
+groups and one call-local reusable destination. All sources, constants and
+declared output groups stay pinned; other groups retire after their last
+consumer and clear every alias slot. Cached storage stays charged until borrowed
+or dropped, and never survives Run. Exact shape/type checks and separate owned
+output clones preserve public lifetime rules. Workspace/live limits still check
+sums before allocation and trim an unused candidate before rejection.
+
+The [runtime contract](runtime-contract.md#limits-and-cancellation) records
+NN-13's CPU staging and retained Metal copying bounds. The
+[RT-16 report](performance/rt16/README.md) separates copied bytes, numeric payload
+bounds and actual reservation high-water marks. Runtime shape metadata, Go
+headers/GC retention and earlier caller-retained outputs remain outside these
+logical tensor budgets; load lifetime-metadata payload is reserved explicitly.
 
 A session's TryLock makes overlapping Run/Close return ErrBusy immediately. Failure
 or cancellation drops local state and releases the guard. Successful Close is

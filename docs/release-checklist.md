@@ -3,7 +3,9 @@
 RT-18 prepares documentation and a reviewable checklist for the implemented
 subset. Publishing a tag, merging the stacked PRs and deciding the project's
 license are separate maintainer actions. No tag is published by this task.
-The [RT-18 handoff](handoff-rt18.md) records exact revisions and validation.
+The [RT-18 handoff](handoff-rt18.md) records its original revisions and validation.
+The original 19 PRs are now merged at `4d5a000c20ff`; NN-13 and RT-16 are
+separate optimization follow-ups with [measured evidence](performance/rt16/README.md).
 
 ## Scope and known gaps
 
@@ -27,8 +29,10 @@ The [RT-18 handoff](handoff-rt18.md) records exact revisions and validation.
   MaxPool indices, attributes outside the selected schemas and external checksum metadata are
   unsupported. See the [generated operator restrictions](getting-started.md#implemented-capability-table).
 
-All nodes execute even when requesting fewer outputs. The executor retains all
-intermediates for a run, uses conservative copying-backend charges and offers no
+All nodes execute even when requesting fewer outputs. The executor groups
+Identity aliases and reuses one retired private destination within each Run,
+with pinned sources/constants/declared outputs and conservative scratch charges.
+It offers no
 cross-model memory governor, borrowed mutable tensors, optimizer, GPU, native
 ONNX Runtime bridge or broad exporter/corpus compatibility guarantee. Those
 boundaries are part of this release profile, rather than skipped acceptance
@@ -37,10 +41,11 @@ checks. Empty and nonfinite numerical edge policies are explicit in the
 
 ## Go verification
 
-The RT-18 checks use **Go 1.27.2**, module language baseline **Go 1.26.1**,
+The original RT-18 checks used **Go 1.27.2**, module language baseline **Go 1.26.1**,
 **neuralnetwork v0.7.0** at
 `6048452c57a0a293db4591cd2e2febd7d6b743a3` and **protobuf v1.36.12**.
-Versions/checksums remain in go.mod/go.sum; no dependency changed. Local checks
+RT-18 changed no dependency. RT-16 now pins the public NN-13 source/pseudo-version
+recorded in go.mod/go.sum and its [handoff](handoff-rt16.md). Local checks
 run on **Darwin/arm64**. The GitHub **Linux/amd64** workflow runs the full Go
 suite including bounded fuzzing and the new generated-table check. Hosted
 results and exact head revision are recorded on the stacked PR before handoff.
@@ -103,11 +108,11 @@ rather than evidence that Python/native libraries are needed.
 The race detector is a development check requiring a supported host/cgo compiler;
 that requirement is separate from cgo-disabled runtime use. CI's fuzz smoke
 runs are robustness checks. A one-iteration benchmark smoke is not a performance
-measurement. No credible repeatable benchmark measurements have been recorded
-for this task, so no latency/throughput or improvement figures are published.
-[The NN-13 handoff](handoff-nn13.md#reproduce-and-establish-a-baseline) gives
-reproducible batch-1/batch-3 Load/First/Warm commands and measurement boundaries;
-RT-16 consumes measured results later.
+measurement. RT-18 did not publish a performance report. The later
+[RT-16 measurements](performance/rt16/README.md) now record repeated MLP/CNN/shape
+Parse/Load/First/Warm results, actual payload copies/allocations, conservative
+storage bounds, reservation peaks and latency tradeoffs. They do not establish
+a universal speed or memory guarantee.
 
 ## Reference evidence
 
@@ -163,7 +168,7 @@ reproduction of those observations, never new agreement claims.
 - [ ] Review [third-party notices](../third_party/README.md) and include the
   identified ONNX Apache-2.0, backend/SIMD MIT, protobuf/x/sys/Go BSD texts and
   applicable source headers in the actual distribution.
-- [ ] Review and merge the stacked task PRs through the normal maintainer process.
+- [x] Merge the original 19 stacked PRs after maintainer authorization; baseline `4d5a000c20ff` passed main CI. Optimization follow-up PRs remain separately reviewable.
 - [ ] Select a release commit after review, rerun checks for that revision, review
   release notes against the documented subset and publish a tag separately.
 
@@ -171,4 +176,4 @@ RT-18's documentation work is complete when its checked technical items pass;
 the unchecked maintainer actions remain visible before any public release.
 RT-17 adds the independently audited second profile; see its [handoff](handoff-rt17.md).
 RT-19 adds the [audited corpus and selected float32 normalization set](handoff-rt19.md);
-NN-13/RT-16 optimization remains blocked on its separate published results.
+NN-13 and RT-16 now have separate [published optimization evidence](performance/rt16/README.md).
