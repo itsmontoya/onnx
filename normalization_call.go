@@ -62,7 +62,7 @@ func newNormalizationCall(step operators.Step, inputs []*tensor.Tensor, limits L
 		return nil, err
 	}
 
-	if c.workspace, err = sumScratch(dataScratch, statisticScratch, 8); err != nil {
+	if c.workspace, err = sumScratch(dataScratch, statisticScratch, 16); err != nil {
 		return nil, err
 	}
 
@@ -71,7 +71,8 @@ func newNormalizationCall(step operators.Step, inputs []*tensor.Tensor, limits L
 
 // normalizationCall composes published NN-12 kernels; no input is mutated.
 // Workspace sums retained temporaries and every copying arithmetic path, even
-// though their individual scratch buffers do not all coexist.
+// though their individual scratch buffers do not all coexist. The scalar tail
+// also includes both FromFloat32 staging payloads and their owned copies.
 type normalizationCall struct {
 	step       operators.Step
 	inputs     []*tensor.Tensor

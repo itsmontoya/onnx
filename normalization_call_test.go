@@ -23,7 +23,7 @@ func TestNormalizationCallReservations(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if call.workspace != 616 || len(call.bytes) != 3 || call.bytes[0] != 24 || call.bytes[1] != 8 || call.bytes[2] != 8 {
+	if call.workspace != 624 || len(call.bytes) != 3 || call.bytes[0] != 24 || call.bytes[1] != 8 || call.bytes[2] != 8 {
 		t.Fatalf("normalization reservations: %+v", call)
 	}
 
@@ -32,9 +32,9 @@ func TestNormalizationCallReservations(t *testing.T) {
 		workspace, live int64
 		want            error
 	}{
-		{name: "exact", workspace: 616, live: 692},
-		{name: "workspace_short", workspace: 615, live: 692, want: ErrLimit},
-		{name: "combined_live_short", workspace: 616, live: 691, want: ErrLimit},
+		{name: "exact", workspace: 624, live: 700},
+		{name: "workspace_short", workspace: 623, live: 700, want: ErrLimit},
+		{name: "combined_live_short", workspace: 624, live: 699, want: ErrLimit},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			bounded := limits
@@ -55,6 +55,12 @@ func TestNormalizationCallReservations(t *testing.T) {
 			}
 		})
 	}
+	empty := []*tensor.Tensor{floatTensor(t, []int64{0, 3}, nil).value, inputs[1]}
+	emptyCall, emptyErr := newNormalizationCall(operators.Step{Axis: -1, Epsilon: 1e-5}, empty, limits)
+	if emptyErr != nil || emptyCall.workspace != 16 {
+		t.Fatalf("empty-prefix scalar staging reservation = %v, %v", emptyCall, emptyErr)
+	}
+
 	if _, err = checkedScratch(math.MaxInt64, 20); !errors.Is(err, ErrLimit) {
 		t.Fatalf("scratch overflow = %v", err)
 	}
