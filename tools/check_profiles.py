@@ -116,7 +116,7 @@ def main():
     torch.set_num_threads(1)
     torch.manual_seed(0)
     manifest = json.loads((ROOT / "capabilities.json").read_text())
-    if manifest["onnx_source"]["commit"] != REVISION or len(manifest["operators"]) != 50:
+    if manifest["onnx_source"]["commit"] != REVISION or len(manifest["operators"]) != 51:
         raise SystemExit("manifest source or record count differs")
     records = manifest["operators"]
     audit = []

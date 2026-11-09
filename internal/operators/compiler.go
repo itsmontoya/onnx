@@ -198,14 +198,23 @@ func (c *compiler) node(node graph.Node) (err error) {
 		return fmt.Errorf("%w: output type %v", graph.ErrUnsupported, inferred.DataType)
 	}
 
-	for _, index := range step.Outputs {
+	for slot, index := range step.Outputs {
 		if index < 0 {
 			continue
 		}
 
+		outputInfo := inferred
+		if step.Operator == "LayerNormalization" && slot > 0 {
+			if err = c.reserve(int64(len(inferred.Dimensions)) * 64); err != nil {
+				return err
+			}
+
+			outputInfo = normalizationStatistics(inferred, step.Axis)
+		}
+
 		value := &c.plan.values[index]
-		inferred.Name = value.Name
-		if value.Info, err = c.merge(inferred, value.Info); err != nil {
+		outputInfo.Name = value.Name
+		if value.Info, err = c.merge(outputInfo, value.Info); err != nil {
 			return fmt.Errorf("output value %q: %w", value.Name, err)
 		}
 
@@ -225,7 +234,7 @@ func (c *compiler) node(node graph.Node) (err error) {
 }
 
 func (c *compiler) infer(node graph.Node, step *Step) (info graph.ValueInfo, constant *graph.Constant, err error) {
-	if (len(step.Outputs) != 1 && node.Operator != "MaxPool") || step.Outputs[0] < 0 {
+	if (len(step.Outputs) != 1 && node.Operator != "MaxPool" && node.Operator != "LayerNormalization") || step.Outputs[0] < 0 {
 		return info, nil, fmt.Errorf("%w: planner requires one named output", graph.ErrUnsupported)
 	}
 
@@ -262,7 +271,9 @@ func (c *compiler) infer(node graph.Node, step *Step) (info graph.ValueInfo, con
 				inputs[slot] = c.plan.values[index].Info
 			}
 		}
-		if IsCNNOperator(node.Operator) {
+		if node.Operator == "LayerNormalization" {
+			info, err = inferNormalization(node, step, inputs)
+		} else if IsCNNOperator(node.Operator) {
 			info, err = inferCNN(node, step, inputs)
 		} else if IsShapeOperator(node.Operator) {
 			info, err = c.inferShape(node, step, inputs)

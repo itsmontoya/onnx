@@ -1,6 +1,6 @@
 # Run inference in Go
 
-The M1–M4 runtime runs MLPs, named branching graphs, runtime shape subgraphs and 2D CNNs on the CPU
+The M1–M4 runtime runs MLPs, named branching graphs, runtime shape subgraphs, 2D CNNs and float32 LayerNormalization on the CPU
 entirely in Go. It accepts **ONNX IR 8, empty standard domain, imported opset exactly 13 or 17**
 and the implemented operator subsets below. Python, protoc, a C/C++ inference
 runtime and a shared library are unnecessary for normal use.
@@ -265,6 +265,7 @@ empty slot. A supplied C must still be compatible when beta is zero.
 | AveragePool (11) | 17–17 | float32 | 1 → 1 | `auto_pad:STRING=NOTSET`, `ceil_mode:INT=0`, `count_include_pad:INT=0`, `kernel_shape:INTS`, `pads:INTS`, `strides:INTS` | float32 NCHW rank four; positive 2D kernel/strides; nonnegative pads; no dilation attribute; ceil_mode/count_include_pad must be 0/1; full-kernel divisor when including pad; auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; ceil mode trims starts in right padded region |
 | GlobalAveragePool (1) | 17–17 | float32 | 1 → 1 | None | float32 NCHW rank four; output [N,C,1,1]; empty spatial reduction NaN |
 | BatchNormalization (15) | 17–17 | float32 | 5 → 1 | `epsilon:FLOAT=9.999999747378752e-06`, `momentum:FLOAT=0.8999999761581421`, `training_mode:INT=0` | float32 rank-two or NCHW rank-four input and [C] parameters; exactly one inference output slot; reject all additional output slots and nonzero training_mode; finite nonnegative epsilon; finite momentum in [0,1] accepted but no statistics update; independent stored-statistics reference; documented evaluator/ORT differences; schema-15 inference only: training_mode=0, all five inputs float32, exactly one output slot |
+| LayerNormalization (17) | 17–17 | float32 | 2–3; optional slots [2] → 1–3; optional slots [1 2] | `axis:INT=-1`, `epsilon:FLOAT=9.999999747378752e-06`, `stash_type:INT=1` | IR 8/import 17 only; schema 17; dense float32 inputs and all outputs; stash_type=1 only; rank >=1; axis defaults to -1 and selects the trailing normalized dimensions; nonempty normalized dimensions required; epsilon defaults to float32 1e-5; finite nonnegative values only; Scale and optional B must be unidirectionally broadcastable to X; Y preserves X shape; optional Mean/InvStdDev slots preserve position; reduced dimensions retained as 1; NN-12 ReduceMean/Sqrt/arithmetic composition; synchronous cancellation between kernels; conservative workspace reservations |
 
 <!-- Implemented capabilities end -->
 
@@ -463,3 +464,19 @@ See [existing validation and recovery tests](../session_test.go) and
 dynamic shape and resolver/read/close failures. The
 [release checklist](release-checklist.md) records tested platforms, actual
 reference disagreements, licensing status and remaining gaps.
+
+
+## Audited normalization model
+
+RT-19 runs an unchanged Apache-2.0 normalization export with Y, Mean and
+InvStdDev named outputs:
+
+```sh
+CGO_ENABLED=0 go run ./examples/normalization
+CGO_ENABLED=0 go run -tags=purego ./examples/normalization
+```
+
+The [corpus report](model-compatibility.md) records all33 preserved models,
+source hashes/licenses, metadata and unsupported nodes. Nineteen normalization
+exports are enabled; fourteen remain required negative tests. This bounded
+float32 schema17 set does not establish general transformer compatibility.

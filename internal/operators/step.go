@@ -32,6 +32,7 @@ type Step struct {
 	ShapeEnd       int64
 	ShapeEndSet    bool
 	Axis           int64
+	Epsilon        float32
 	Permutation    []int64
 	PermutationSet bool
 }

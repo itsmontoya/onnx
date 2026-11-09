@@ -17,7 +17,7 @@ import (
 
 func TestCapabilitiesCanonicalManifest(t *testing.T) {
 	records := Capabilities()
-	if len(records) != 50 {
+	if len(records) != 51 {
 		t.Fatalf("capability count = %d", len(records))
 	}
 
@@ -29,7 +29,7 @@ func TestCapabilitiesCanonicalManifest(t *testing.T) {
 
 		if record.Status == "implemented" {
 			implemented++
-			if record.MinOpset == 17 && record.Task != "RT-17" {
+			if record.MinOpset == 17 && record.Task != "RT-17" && !(record.Operator == "LayerNormalization" && record.Task == "RT-19") {
 				t.Fatalf("unexpected profile task: %+v", record)
 			}
 
@@ -43,7 +43,7 @@ func TestCapabilitiesCanonicalManifest(t *testing.T) {
 		}
 	}
 
-	if implemented != 50 {
+	if implemented != 51 {
 		t.Fatalf("implemented count = %d", implemented)
 	}
 

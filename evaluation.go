@@ -150,6 +150,10 @@ func (e *evaluation) bind(inputs map[string]*Tensor) (err error) {
 }
 
 func (e *evaluation) execute(step operators.Step) (err error) {
+	if step.Operator == "LayerNormalization" {
+		return e.normalize(step)
+	}
+
 	var backend *tensor.Tensor
 	switch step.Operator {
 	case "Identity":
@@ -236,6 +240,47 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 	}
 
 	e.values[index] = backend
+	return nil
+}
+
+func (e *evaluation) normalize(step operators.Step) (err error) {
+	inputs := make([]*tensor.Tensor, len(step.Inputs))
+	for slot, index := range step.Inputs {
+		if index >= 0 {
+			inputs[slot] = e.values[index]
+		}
+	}
+	var call *normalizationCall
+	if call, err = newNormalizationCall(step, inputs, e.plan.limits); err != nil {
+		return err
+	}
+
+	if err = e.budget.reserve(0, call.workspace); err != nil {
+		return err
+	}
+
+	defer e.budget.releaseWorkspace()
+	for _, bytes := range call.bytes {
+		if err = e.budget.reserve(bytes, 0); err != nil {
+			return err
+		}
+	}
+	var outputs []*tensor.Tensor
+	if outputs, err = call.run(e.ctx); err != nil {
+		return err
+	}
+
+	for slot, index := range step.Outputs {
+		if index < 0 {
+			continue
+		}
+
+		if err = e.checkValue(e.plan.values[index], outputs[slot], ErrInvalidModel); err != nil {
+			return operationError("run", err, e.plan.values[index].Name)
+		}
+
+		e.values[index] = outputs[slot]
+	}
 	return nil
 }
 
