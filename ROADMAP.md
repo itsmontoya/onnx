@@ -10,7 +10,8 @@ dependencies. A Go protobuf dependency is compatible with this goal.
 
 This document tracks the implementation plan. RT-01 has specified the contract;
 RT-02 provides the Go module and verification foundation. RT-03 adds generated
-wire bindings and bounded internal decoding. There is no inference runtime yet.
+wire bindings and bounded internal decoding. RT-04 supplies immutable public
+tensors and metadata records. There is no inference runtime yet.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -332,7 +333,7 @@ RT-05 reuses TensorProto decoding for validated owned numerical payloads.
 
 ## M1: first working inference runtime
 
-### [ ] RT-04 — Expose runtime tensor values and metadata
+### [x] RT-04 — Expose runtime tensor values and metadata
 
 **Depends on:** RT-02, NN-02, NN-03. **Likely files:** public tensor/value metadata
 types and conversion helpers in their own files.
@@ -349,6 +350,49 @@ the chosen input immutability contract during a run.
 shape tensors, copied accessors, invalid dtype/storage, and metadata distinctions.
 There is no cast of int64 shape data through float32. GoDoc explains which
 objects may be shared across sessions and how long outputs remain valid.
+
+**Handoff (RT-04):** The task revision is the commit introducing `tensor.go`;
+obtain its exact hash with `git log -1 --format=%H -- tensor.go`. Changed files
+are `tensor.go`, `data_type.go`, `errors.go`, `dimension_kind.go`, `dimension.go`,
+`value_info.go`, `metadata.go`, matching tensor tests/metadata example, package
+documentation, README, development/contract status, and this handoff.
+
+The implemented constructors are `NewTensor(DataType, []int64) (*Tensor, error)`,
+`NewFloat32([]int64, []float32) (*Tensor, error)`, and
+`NewInt64([]int64, []int64) (*Tensor, error)`. Tensor methods are
+`Validate() error`, `DataType() DataType`, `Shape() []int64`, `Rank() int`,
+`Len() int64`, `ByteSize() int64`, `Float32Values() ([]float32, error)`,
+`Int64Values() ([]int64, error)`, and `Clone() (*Tensor, error)`, all with named
+results and explicit returns. `DataType` aliases the released backend type;
+`Invalid`, `Float32`, and `Int64` are its public constants. ErrInvalidArgument
+classifies invalid constructors, receivers, and typed access through errors.Is;
+contextual backend causes remain wrapped.
+
+Storage delegates to `neuralnetwork v0.7.0`, published commit
+`6048452c57a0a293db4591cd2e2febd7d6b743a3`, without replacements or duplicated
+numeric storage. The facade retains a private backend pointer and exposes no
+destination/mutation API. Constructors/accessors/Clone own copies; immutable
+values may be shared by concurrent readers and future sessions. Scalars, empty
+values, rank-two/rank-four data, exact int64 extrema, and special float bit
+patterns are covered. Invalid types/shapes/counts and nil/zero receivers fail;
+typed access rejects the other dtype even for empty tensors. Constructor size
+checks establish representability; load/run quotas remain the executor's work.
+
+DimensionKind/Dimension/ValueInfo/Metadata implement the contract's plain
+metadata records. Known zero, symbolic, and unknown dimensions remain distinct;
+ShapeKnown distinguishes unknown rank from a known scalar. Metadata parsing,
+validation, and copied model accessors arrive with graph/model tasks.
+
+Validation on Go 1.27.2, Darwin/arm64 passed: `go fmt ./...`, `go mod tidy -diff`,
+`go mod verify`, `go build ./...`, `go vet ./...`, `go test ./...`,
+`CGO_ENABLED=0 go test ./...`, `CGO_ENABLED=0 go test -tags=purego ./...`, and
+`go test -race ./...`, using a writable build cache and offline dependency mode.
+The pinned profile checker, local Markdown paths, Go contract-block formatting,
+and diff whitespace checks also passed. No separate linter is configured.
+RT-05 should decode into owned backend values through the shared internal
+TensorProto decoder; facade wrapping must remain private to package onnx.
+Future execution must allocate disjoint destinations and clone published outputs
+so constants and previously returned tensors remain immutable.
 
 ### [ ] RT-05 — Decode inline initializers and tensor attributes
 

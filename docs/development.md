@@ -7,12 +7,21 @@ dependencies require Go 1.25.0. The pure-Go protobuf dependency is
 `google.golang.org/protobuf v1.36.12` (Go 1.23). No local path replacements
 or workspace are required.
 
-The root package currently contains documentation and a dependency smoke test.
-That test exercises exact int64 tensor storage and known protobuf wire bytes;
-it verifies the dependency/toolchain foundation, not ONNX model execution.
+The root package provides RT-04's immutable typed Tensor facade and metadata
+records, along with a dependency smoke test. The smoke test exercises exact
+int64 tensor storage and known protobuf wire bytes; tensor tests verify copied
+ownership, exact values, invalid arguments, and concurrent readers.
 RT-03 adds checked-in ONNX wire bindings and bounded internal protobuf decoding.
 There is no public model loader or execution API yet.
 Every operator in [the capability manifest](../capabilities.json) remains planned.
+
+Public `NewTensor`, `NewFloat32`, and `NewInt64` delegate storage validation and
+allocation to the pinned backend. They copy caller shapes/payloads; shape and
+typed value accessors also copy. No public method exposes a writable backend
+pointer. Scalar shapes have one element, while a concrete zero dimension has
+zero elements. Constructors check representability rather than a load/run
+memory quota. See [the runtime contract](runtime-contract.md) for the intended
+loader/session budgets and ownership boundaries.
 
 ## Ordinary builds and tests
 

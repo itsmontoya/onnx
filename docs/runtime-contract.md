@@ -1,7 +1,8 @@
 # Runtime contract and initial compatibility profile
 
-Status: RT-01 specifies the contract. No Go runtime API or operator is implemented
-by this task. [capabilities.json](../capabilities.json) records planned coverage;
+Status: RT-01 specifies the contract. RT-04 implements its Tensor constructors,
+accessors and metadata records; loading, sessions and operators are still planned.
+[capabilities.json](../capabilities.json) records planned operator coverage;
 only records marked `implemented` may later be advertised as support. The
 [roadmap](../ROADMAP.md) identifies the implementation tasks and their acceptance
 criteria. This project is an independent Go runtime, not Microsoft's ONNX Runtime.
@@ -99,7 +100,10 @@ Internal packages accept backend tensors and internal metadata records without
 importing the public facade, avoiding import cycles. Public metadata can be
 converted at the facade boundary; it is not a second tensor storage engine.
 
-These are intended signatures, not declarations of already available APIs:
+The Tensor/DataType/DimensionKind/Dimension/ValueInfo/Metadata declarations below
+are implemented by RT-04, along with ErrInvalidArgument. Loader, model, session,
+limits, capability-query and other error APIs remain intended signatures until
+their implementation tasks are checked:
 
 ```go
 // Tensor is an immutable facade containing one private backend *tensor.Tensor.
@@ -108,6 +112,7 @@ type Tensor struct { /* private backend value */
 }
 type DataType = tensor.DataType
 
+const Invalid = tensor.Invalid
 const Float32 = tensor.Float32
 const Int64 = tensor.Int64
 
