@@ -27,7 +27,9 @@ RT-15 audits finite limits and lifecycle/cancellation behavior, preflights named
 value counts before tensor conversion, stabilizes payload diagnostics and adds
 bounded native Go fuzz targets. RT-18 documents the implemented M1–M4 subset,
 generates its support table from the validation manifest, and records release
-checks, actual reference outcomes and third-party notices.
+checks, actual reference outcomes and third-party notices. RT-17 adds the audited
+IR-8/opset-17 profile alongside the original 13 profile, with a real unmodified
+PyTorch export and version-specific adapters.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -1676,7 +1678,7 @@ until the report's published-NN-13 resume conditions and full RT-16 acceptance
 checks are met. Independent RT-17 then RT-19 may proceed in separate sequential
 tasks; no backend implementation, later task or merge is included here.
 
-### [ ] RT-17 — Add explicit IR/opset profiles beyond the first target
+### [x] RT-17 — Add explicit IR/opset profiles beyond the first target
 
 **Depends on:** RT-11, RT-12, RT-13, RT-10. **Deliverable:** one additional tested
 profile per change, with version-specific schema adapters and fixtures.
@@ -1694,6 +1696,31 @@ runtime support. Preserve explicit rejection of unsupported training modes.
 graphs whose semantics differ by version. Version rejection remains deterministic,
 and the machine-readable manifest lists tested intervals/restrictions. The
 runtime never silently converts opsets or invokes an external converter.
+
+**Handoff (2026-11-08):** [The RT-17 handoff](docs/handoff-rt17.md) records
+implementation `5840f3ed99e43d04bbfef36a890d7e44862c5c30`, stacked on RT-16
+blocker revision `e801cf3cdc1d75d0f82319da03fa229147d208fb`. Exactly one new
+profile is implemented: IR 8, empty domain, import 17. The audit compares all 25
+applicable ONNX 1.16.2 schemas; nine selections change. The manifest has separate
+[13,13] and [17,17] records, including repeated schema versions, and the Go-only
+generated table displays their tested imports. No gap, other IR/dtype/operator
+family or runtime converter is introduced.
+
+The actual unmodified PyTorch 2.2.2 MLP export emits IR 8/opset 17 directly;
+its source/license/hash and dynamic batches 1/3 are recorded. Sixty-seven new
+cases execute: 66 ONNX-evaluator agreements plus the preserved BN-9 momentum
+difference, with all 67 agreeing with ORT. Reshape-14 allowzero, Shape-15 slicing
+and BN-15 inference-only training metadata have exact adapters and positive/
+negative/dynamic tests; profile 13 still rejects the later attributes even at
+default values. Metadata/diagnostics retain the actual import. All 996 inherited
+testdata files remain byte-identical; backend/module/source pins are unchanged.
+
+Full fmt/tidy/verify/build/vet, normal/cgo-disabled/purego/race tests, all old/new
+reference generators, wire regeneration, four bounded fuzz targets, table drift,
+style/links/diff checks and 28 fresh cleared-environment Go commands pass. The
+final stacked PR's hosted Linux checks must also pass before handoff. RT-16
+remains unchecked on its external NN-13 blocker. RT-19 is the next independent
+task, in a separate sequential branch/PR; no later task or merge is included.
 
 ### [ ] RT-19 — Extend coverage from an audited model corpus
 
