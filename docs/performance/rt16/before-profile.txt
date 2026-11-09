@@ -1,0 +1,7 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkInference/cnn_batch_3/Warm    	    8107	    147945 ns/op	   11880 B/op	     130 allocs/op
+PASS
+ok  	github.com/itsmontoya/onnx	1.563s

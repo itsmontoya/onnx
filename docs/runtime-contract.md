@@ -39,10 +39,10 @@ The [IR](https://github.com/onnx/onnx/blob/v1.16.2/docs/IR.md) and
 are separate from operator schema selection. This source also defines newer IR
 and opsets, which this profile does not thereby accept.
 
-The numerical backend is **github.com/itsmontoya/neuralnetwork v0.7.0**, commit
-[`6048452c57a0a293db4591cd2e2febd7d6b743a3`](https://github.com/itsmontoya/neuralnetwork/tree/6048452c57a0a293db4591cd2e2febd7d6b743a3)
+The numerical backend is **github.com/itsmontoya/neuralnetwork v0.7.1-0.20261109154142-a64fa687e269**, commit
+[`a64fa687e269c3a1bf3ac345434b46c8ed4a59fc`](https://github.com/itsmontoya/neuralnetwork/tree/a64fa687e269c3a1bf3ac345434b46c8ed4a59fc)
 (MIT). Its published [tensor contract](https://github.com/itsmontoya/neuralnetwork/blob/v0.7.0/docs/tensor-design.md)
-and [handoffs](../NEEDS.md#v070-status) are normative for backend ownership;
+and [NN-13 integration](../NEEDS.md#nn-13-integration-2026-11-09) are normative for backend ownership;
 ONNX policies remain here. Do not use unpublished changes, a committed local
 `replace`, or another module's `internal` packages.
 
@@ -401,33 +401,42 @@ to the serialized byte limit; MaxRecursion is not a uniform unknown-group depth
 limit. Executable tests retain this distinction without introducing a second
 wire parser.
 
-The first executor conservatively retains all intermediates until Run ends.
-Charge shared model tensors once and each bound input reference conservatively;
-never hide memory by exempting defaults or aliases. Reserve outputs and node
-workspace before calling any allocating backend helper; release reservations
-on every exit. An immutable facade avoids snapshot copies, but owned final
-output cloning temporarily coexists with its source. Caller accessors allocate
-outside Run and its budget. Independently running sessions have separate budgets;
-MaxSessions bounds their count, so a configured deployment can bound aggregate
-logical reservations by resident model storage plus at most MaxSessions times
-the per-run allowance. No global cross-model memory governor is promised.
+RT-16's immutable plan counts consumer occurrences and groups Identity aliases.
+Source inputs, initializer/default clones, Constant nodes and every declared
+output group stay pinned, even for output subsets. Other groups retire after
+their final consumer completes validation and its context check. Every alias
+slot is cleared together. One private destination may be cached within that Run;
+exact type/shape matching permits reuse only while current inputs are disjoint.
+Replacing an unused candidate, requesting a different shape/type, or trimming
+before a failed scratch reservation releases its charge. Free cached storage
+stays charged until actually dropped or transferred, and none survives Run.
 
-Backend v0.7.0 has copying bridges and no public workspace. The implementation
-must inspect its released allocation paths and use checked conservative charges,
-not only output bytes. Minimum reservation rules (numeric bytes, excluding shape
-metadata) are:
+Shared model tensors count once, each bound input reference conservatively, and
+static Identity aliases share their owner's charge. All output copies are owned
+and coexist temporarily with their source. Caller accessors and outputs retained
+from prior runs are outside the current budget. Independent sessions have
+separate budgets; MaxSessions bounds their count. No global cross-model memory
+governor or hard RSS cap is promised. MaxLoadBytes also reserves exact-capacity
+lifetime metadata and construction work (at most 41 bytes/value + 8 bytes/step),
+excluding Go headers/objects. The [measurement report](performance/rt16/README.md)
+distinguishes actual numeric allocations, conservative payload bounds and
+reservation high-water marks, including measured latency tradeoffs.
+
+The pinned NN-13 CPU product adapter has one call-owned staging buffer; other
+copying paths remain. The opt-in Metal build retains its Matrix-copy fallback.
+Minimum checked reservations (numeric bytes, excluding shape metadata) are:
 
 | Path | Scratch charge in addition to live inputs/destination |
 | --- | --- |
 | Relu | 6 times input bytes: three backend bridge buffers plus original destination, input snapshot and output snapshot while constructing the corrected owned result |
 | Sigmoid/Tanh | 3 times input bytes: input matrix, output matrix, copied values |
-| MatMul | Full temporary output plus, for each batch block, copied left/right matrices and two product-block buffers; conservatively sum per-block temporaries over all batches when GC retention matters |
-| Gemm | Copied A/B, product matrix and copied product values, plus transposed B when both transpose flags are set |
+| MatMul | CPU: one output-sized staging buffer, zero for an empty contraction. Metal fallback: full temporary output plus copied left/right matrices and two product-block buffers per batch, conservatively summed across batches. |
+| Gemm | CPU: one output-sized staging buffer, including empty contractions. Metal fallback: copied A/B, product matrix and copied values, plus transposed B when both transpose flags are set. |
 | Shape/Constant/typed/raw conversion | Actual accessor/staging/copy buffers in addition to the owned destination |
 | Add/Sub/Mul | 4 times output bytes for matching nonempty shapes (two copied inputs, matrix destination and copied values); zero numeric scratch for broadcasting or empties |
 | Div/Softmax | Zero numeric scratch; audited direct destination kernels |
 | Flatten/Transpose/Reshape/Squeeze/Unsqueeze/Concat/Gather | Zero additional numerical kernel scratch: audited copying Into destinations. Shape/axes input snapshots are charged separately before access; destination reservation includes the still-live staging charge. |
-| Conv/MaxPool/AveragePool/GlobalAveragePool/BatchNormalization | Zero numerical scratch: audited direct v0.7.0 Into loops; reserve the entire destination before allocation. |
+| Conv/MaxPool/AveragePool/GlobalAveragePool/BatchNormalization | Zero numerical scratch: audited direct Into loops, unchanged by NN-13; reserve the entire destination before allocation. |
 
 Budget validation precedes allocation and arithmetic must not overflow. Planning
 never constructs numerical node outputs. RT-12 inspects immutable int64 constant
@@ -435,22 +444,22 @@ values through copied accessors only after reserving their load payload. Scratch
 bounds must be updated if the pinned backend changes. Conservative rejection
 within configured budgets is preferable to an unaccounted large allocation.
 
-RT-08's Identity handler uses an immutable alias in its private value table and
-charges each alias conservatively. Initializers/defaults and Constant nodes use
+RT-08 originally charged each Identity table alias conservatively. RT-16 groups
+those immutable aliases and charges their storage once. Initializers/defaults and Constant nodes use
 budgeted `Constant.Clone`; final outputs use a separate backend Clone. The
 released `tensor.Clone` directly allocates/copies into its destination, with no
 numeric accessor or staging buffer, so these handlers reserve zero numeric
 workspace. MaxWorkspaceBytes remains finite and the shared budget rejects scratch
 or combined live/workspace overflow before allocation. Later adapters must supply
 their audited scratch bounds. RT-09 reserves the complete destination plus
-workspace once before allocating or calling each numerical handler, including
-cumulative MatMul batch copies. Empty output paths use no numeric scratch;
-Gemm with an empty contraction uses one output-sized temporary. Run counts
-resident constants once even when a
-default is overridden, plus every bound/defaulted source, table alias and output
-copy. Failed runs drop their private tables and reservations.
+workspace before allocating or calling each numerical handler; RT-16 audits
+NN-13's CPU path and preserves copying-fallback bounds. Empty output paths use
+no numeric scratch; Gemm with an empty contraction uses one output-sized
+temporary. Run counts resident constants even when a default is overridden,
+every bound/defaulted source, live/cached private storage and requested output
+copy. Failed runs drop their private tables, cache and reservations.
 
-Kernels are synchronous and accept no context/check callback in v0.7.0.
+The pinned kernels are synchronous and accept no context/check callback.
 Cancellation is observed before/after each node and during runtime-owned bounded
 I/O/planning loops, never promised inside a running numerical kernel or protobuf
 unmarshal. If cancellation arrives during the final node/output copying, check

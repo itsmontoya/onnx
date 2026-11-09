@@ -6,29 +6,14 @@ import (
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/itsmontoya/onnx/internal/decode"
 )
 
-// BenchmarkInference supplies an unchanged copying baseline for NN-13. Timings
-// exclude fixture decoding. They do not measure copied bytes or peak live bytes.
+// BenchmarkInference separates wire parsing, loading and execution on the fixed
+// MLP, CNN and shape fixtures. Fixture decoding and comparisons are not timed.
 func BenchmarkInference(parent *testing.B) {
-	data, err := os.ReadFile("testdata/inference/provenance.json")
-	if err != nil {
-		parent.Fatal(err)
-	}
-
-	var suite struct {
-		Cases []conformanceCase `json:"cases"`
-	}
-
-	if err = json.Unmarshal(data, &suite); err != nil {
-		parent.Fatal(err)
-	}
-
-	for _, fixture := range suite.Cases {
-		if !strings.HasPrefix(fixture.Name, "mlp_") && !strings.HasPrefix(fixture.Name, "shape_") {
-			continue
-		}
-
+	for _, fixture := range inferenceFixtures(parent) {
 		parent.Run(fixture.Name, func(group *testing.B) {
 			modelData, readErr := fixture.Model.read()
 			if readErr != nil {
@@ -41,6 +26,19 @@ func BenchmarkInference(parent *testing.B) {
 			}
 
 			ctx := context.Background()
+			limits, limitErr := (Limits{}).normalized()
+			if limitErr != nil {
+				group.Fatal(limitErr)
+			}
+
+			group.Run("Parse", func(parse *testing.B) {
+				parse.ReportAllocs()
+				for parse.Loop() {
+					if _, parseErr := decode.ParseModel(ctx, modelData, limits.wire()); parseErr != nil {
+						parse.Fatal(parseErr)
+					}
+				}
+			})
 			group.Run("Load", func(load *testing.B) {
 				load.ReportAllocs()
 				for load.Loop() {
@@ -111,4 +109,29 @@ func BenchmarkInference(parent *testing.B) {
 			})
 		})
 	}
+}
+
+func inferenceFixtures(tb testing.TB) (cases []conformanceCase) {
+	tb.Helper()
+	for _, path := range []string{"testdata/inference/provenance.json", "testdata/m3/provenance.json"} {
+		data, err := os.ReadFile(path)
+		if err != nil {
+			tb.Fatal(err)
+		}
+
+		var suite struct {
+			Cases []conformanceCase `json:"cases"`
+		}
+
+		if err = json.Unmarshal(data, &suite); err != nil {
+			tb.Fatal(err)
+		}
+
+		for _, fixture := range suite.Cases {
+			if strings.HasPrefix(fixture.Name, "mlp_batch_") || strings.HasPrefix(fixture.Name, "shape_batch_") || strings.HasPrefix(fixture.Name, "cnn_batch_") {
+				cases = append(cases, fixture)
+			}
+		}
+	}
+	return cases
 }

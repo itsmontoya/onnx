@@ -61,20 +61,31 @@ func TestNumericalCallExactWorkspaceAndLiveBounds(t *testing.T) {
 			for _, input := range inputs {
 				inputBytes += input.ByteSize()
 			}
+			workspace := tt.workspace
+			if !copyingProductWorkspace {
+				switch tt.fixture {
+				case "matmul_batch":
+					workspace = 64
+				case "matmul_dot":
+					workspace = 4
+				case "gemm_00_vector", "gemm_11_full":
+					workspace = 24
+				}
+			}
 			call, err := newNumericalCall(step, arguments, session.plan.limits)
-			if err != nil || call.workspace != tt.workspace {
-				t.Fatalf("workspace = %v, want %d: %v", call, tt.workspace, err)
+			if err != nil || call.workspace != workspace {
+				t.Fatalf("workspace = %v, want %d: %v", call, workspace, err)
 			}
 
 			original := session.plan.limits
-			session.plan.limits.MaxWorkspaceBytes = tt.workspace
-			peak := max(inputBytes+call.bytes+tt.workspace, inputBytes+2*call.bytes)
+			session.plan.limits.MaxWorkspaceBytes = workspace
+			peak := max(inputBytes+call.bytes+workspace, inputBytes+2*call.bytes)
 			session.plan.limits.MaxLiveBytes = peak
 			if _, err = session.Run(context.Background(), inputs, RunOptions{}); err != nil {
 				t.Fatalf("exact budget: %v", err)
 			}
 
-			if tt.workspace > 0 {
+			if workspace > 0 {
 				session.plan.limits.MaxWorkspaceBytes--
 				outputs, runErr := session.Run(context.Background(), inputs, RunOptions{})
 				var diagnostic *Error
@@ -83,7 +94,7 @@ func TestNumericalCallExactWorkspaceAndLiveBounds(t *testing.T) {
 				}
 			}
 
-			session.plan.limits.MaxWorkspaceBytes = tt.workspace
+			session.plan.limits.MaxWorkspaceBytes = workspace
 			if peak > 0 {
 				session.plan.limits.MaxLiveBytes = peak - 1
 				if outputs, runErr := session.Run(context.Background(), inputs, RunOptions{}); outputs != nil || !errors.Is(runErr, ErrLimit) {

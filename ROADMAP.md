@@ -30,27 +30,29 @@ generates its support table from the validation manifest, and records release
 checks, actual reference outcomes and third-party notices. RT-17 adds the audited
 IR-8/opset-17 profile alongside the original 13 profile, with a real unmodified
 PyTorch export and version-specific adapters. RT-19 adds the audited redistributable corpus
-and its first selected float32 LayerNormalization set.
+and its first selected float32 LayerNormalization set. RT-16 consumes the
+published NN-13 optimization, measures MLP/CNN/shape execution and implements
+conservative call-local destination reuse with explicit ownership and budgets.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
 ## Backend baseline and handoff
 
-Use `github.com/itsmontoya/neuralnetwork v0.7.0`, published at commit
-[`6048452c57a0a293db4591cd2e2febd7d6b743a3`](https://github.com/itsmontoya/neuralnetwork/tree/6048452c57a0a293db4591cd2e2febd7d6b743a3).
-NN-01–NN-12 are complete. [NEEDS.md](NEEDS.md) records the verified release,
-links the tracked API handoffs, and summarizes integration constraints. Its
-original pre-release review is retained as history. The library's `NEEDS.md`
-is ignored and absent from the release; use the published handoffs instead.
+Use `github.com/itsmontoya/neuralnetwork v0.7.1-0.20261109154142-a64fa687e269`, public source
+[`a64fa687e269c3a1bf3ac345434b46c8ed4a59fc`](https://github.com/itsmontoya/neuralnetwork/commit/a64fa687e269c3a1bf3ac345434b46c8ed4a59fc).
+[NN-13 PR #115](https://github.com/itsmontoya/neuralnetwork/pull/115) publishes
+its measured compatible CPU product bridge/workspace and ownership contract.
+[NEEDS.md](NEEDS.md) records this pin and the original v0.7.0 release audit.
+NN-01–NN-13 are implemented; the ignored library backlog is not a release API.
 
-[PR #114](https://github.com/itsmontoya/neuralnetwork/pull/114) leaves NN-13
-optimization blocked on a working RT-12 runtime and graph benchmarks. The
-released copying backend is sufficient for M1–M4. RT-11/RT-12 now provide an [accessible runtime revision and handoff](docs/handoff-nn13.md)
-with reproducible MLP/shape-heavy fixtures and baseline commands at batches 1
-and 3. NN-13 can measure that unchanged copying baseline; RT-16 consumes its
-results later and is not an NN-13 prerequisite. The existing
-NN dependencies below identify released contracts to consume, not missing work
-to repeat. Backend kernel tests do not establish runtime ONNX compatibility.
+RT-11/RT-12 supplied the [runtime inputs](docs/handoff-nn13.md) that resolved
+NN-13's original blocker. [RT-16](docs/handoff-rt16.md) consumes its public
+source/report without local replacements and records before/after measurements
+and conservative storage reuse. The November 8
+[blocker assessment](docs/blocker-rt16.md) remains historical evidence with a
+resolution note. No optimization tag or PR merge is implied. Existing NN
+dependencies identify implemented contracts, and backend kernel tests alone do
+not establish ONNX runtime compatibility.
 
 ## Architecture and initial scope
 
@@ -1641,7 +1643,7 @@ later task, merge or publication is part of this handoff.
 
 ## Later: performance and compatibility expansion
 
-### [ ] RT-16 — Measure inference and optimize live tensor storage
+### [x] RT-16 — Measure inference and optimize live tensor storage
 
 **Depends on:** RT-12, RT-13, RT-15, NN-13. **Deliverable:** reproducible
 benchmarks and measured compatible optimization.
@@ -1661,7 +1663,22 @@ aliases, changing batch sizes, cancellation, and concurrent sessions still pass
 golden/race tests. Memory reuse never changes previously returned outputs. Keep
 optimizations only with demonstrated benefit or a documented memory objective.
 
-**Handoff (2026-11-08): blocked, not complete.** The
+**Completion (2026-11-09):** The [RT-16 handoff](docs/handoff-rt16.md) and
+[measurement report](docs/performance/rt16/README.md) consume public NN-13 source
+`a64fa687e269c3a1bf3ac345434b46c8ed4a59fc` and record repeated default/purego
+MLP/CNN/shape Parse/Load/First/Warm samples, actual numeric copies/allocations,
+conservative payload bounds, reservation high-water and profile cross-checks.
+Static consumer/Identity groups and one call-local candidate preserve pinned
+sources/constants/declared outputs, disjoint destinations, subsets, changing
+batches and retained outputs. CNN saves four allocations and 128/384 newly
+allocated numeric bytes at batches 1/3; latency and +32-byte bookkeeping
+tradeoffs remain explicit. No public API or numerical semantic change, global
+cache, parallel scheduling, packing or constant folding is introduced. Full
+normal/cgo-disabled/purego/race/Metal checks and new lifetime/budget/recovery
+coverage pass; hosted checks are recorded on the follow-up PR. The original
+working stack is merged; this optimization remains separately reviewable.
+
+**Historical handoff (2026-11-08): blocked, not complete at that time.** The
 [RT-16 dependency assessment](docs/blocker-rt16.md) rechecked live backend
 releases, tags, main, PR #114 and its tracked handoff. All published backend
 paths still resolve to pinned v0.7.0

@@ -1,11 +1,11 @@
 # onnx
 
 A Go-native ONNX inference runtime built on
-[`neuralnetwork v0.7.0`](https://github.com/itsmontoya/neuralnetwork/tree/6048452c57a0a293db4591cd2e2febd7d6b743a3).
+[`neuralnetwork` NN-13](https://github.com/itsmontoya/neuralnetwork/tree/a64fa687e269c3a1bf3ac345434b46c8ed4a59fc).
 Load an `.onnx` model, bind named immutable tensors, and evaluate named outputs
 on the CPU with `CGO_ENABLED=0`, without Python or native runtime libraries.
 
-RT-01–RT-15 and RT-17–RT-19 implement the documented subset: **IR 8, exactly one
+RT-01–RT-19 implement the documented subset: **IR 8, exactly one
 empty standard-domain import at exactly opset 13 or 17, dense float32/int64, serial CPU execution**.
 The [generated support table](docs/getting-started.md#implemented-capability-table)
 records 25 operators at import 13 and 26 at import 17, including float32
@@ -37,7 +37,7 @@ The initial clone/module download needs network. Cached builds and tests use
 checked-in models and typed reference values without network, protoc, Python,
 C/C++ inference libraries or an external service. The `purego` tag selects the
 portable backend CPU path. The module has a Go 1.26.1 language baseline and pins
-Go 1.27.2, neuralnetwork v0.7.0 and protobuf v1.36.12.
+Go 1.27.2, the published NN-13 backend revision in [go.mod](go.mod), and protobuf v1.36.12.
 
 [Getting started](docs/getting-started.md) covers the public APIs, named I/O,
 compatible model authoring/export checks, external weights and reproducible
@@ -72,9 +72,9 @@ for defaults, accounting, platform restrictions and exact numerical policies.
 reference comparisons and exceptions. M1–M4 examples, offline comparisons,
 resource/lifecycle tests and bounded fuzz targets pass. Empty-value, pooling
 and BatchNormalization evaluator/ORT differences remain explicit; skipped tests
-never count as support. No performance improvement or general numerical error
-bound is claimed. [NN-13's baseline commands](docs/handoff-nn13.md) support later
-measurements; RT-16 optimization remains separate.
+never count as support. The [RT-16 report](docs/performance/rt16/README.md)
+records fixed-graph storage savings and latency tradeoffs. No general performance
+or numerical error bound is claimed.
 
 The [release checklist](docs/release-checklist.md) records checks and known gaps.
 **There is no project LICENSE.** Maintainers must decide and document licensing
@@ -89,9 +89,9 @@ Read [AGENTS.md](AGENTS.md), [STYLEGUIDE.md](STYLEGUIDE.md) and
 [ROADMAP.md](ROADMAP.md). [TODO.md](TODO.md) gives the sequential task order;
 [NEEDS.md](NEEDS.md) records the pinned backend and published handoffs.
 The [RT-17 handoff](docs/handoff-rt17.md) records the schema audit, actual
-unmodified PyTorch 2.2.2 IR-8/opset-17 MLP export and validation. Later tasks
-cover measured optimization (RT-16, after NN-13) and audited model-selected
-coverage beyond [RT-19’s audited corpus and first normalization set](docs/handoff-rt19.md).
+unmodified PyTorch 2.2.2 IR-8/opset-17 MLP export and validation.
+[RT-16](docs/handoff-rt16.md) records measured call-local storage reuse. Future
+model-selected work extends coverage beyond [RT-19’s audited corpus and first normalization set](docs/handoff-rt19.md).
 The [compatibility report](docs/model-compatibility.md) and independent task files
 keep unselected families explicit. Backend kernel availability does not broaden runtime compatibility.
 

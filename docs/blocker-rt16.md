@@ -1,5 +1,21 @@
 # RT-16 dependency assessment
 
+## Resolution (2026-11-09)
+
+NN-13 is now implemented and measured in [backend PR #115](https://github.com/itsmontoya/neuralnetwork/pull/115).
+The runtime pins public source `a64fa687e269c3a1bf3ac345434b46c8ed4a59fc` as
+`v0.7.1-0.20261109154142-a64fa687e269`, without a local replacement. Its
+[ownership/report contract](https://github.com/itsmontoya/neuralnetwork/blob/458b64d18a2e974a1bd51313d040060a85f1f70a/docs/performance/nn13/README.md)
+and runtime compatibility/race evidence satisfy the dependency resume conditions.
+[RT-16](handoff-rt16.md) now implements and measures conservative call-local
+storage reuse; its [report](performance/rt16/README.md) records results and limits.
+No newer tag or merge of either optimization PR is required or claimed.
+
+## Historical assessment (2026-11-08)
+
+The assessment below records the evidence available at that time. Its blocked
+status and resume instructions are preserved as history, superseded above.
+
 **Status on 2026-11-08: blocked on unpublished NN-13 results.** RT-16 remains
 unchecked. This is a dependency report, not an optimization or an acceptance
 report. RT-12, RT-13 and RT-15 are complete; NN-13 is the remaining prerequisite.

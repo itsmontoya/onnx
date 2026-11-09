@@ -445,15 +445,15 @@ func TestSessionLiveAndTensorBudgetsRecover(t *testing.T) {
 		largeBatch int64
 		validBatch int64
 	}{
-		// x and the Identity alias each charge 8 bytes, followed by an owned
-		// 8-byte requested output. Earlier outputs are outside the next run.
-		{"live output copy", "profile/identity", Limits{MaxLiveBytes: 24}, 2, 1},
+		// x and its Identity alias share one 8-byte reservation, followed by
+		// an owned 8-byte output. Earlier outputs are outside the next run.
+		{"live output copy", "profile/identity", Limits{MaxLiveBytes: 16}, 2, 1},
 		{"runtime tensor", "profile/identity", Limits{MaxTensorBytes: 8}, 2, 1},
 		// Empty tensors still validate every dimension against its limit.
 		{"runtime dimension", "profile/identity", Limits{MaxDimension: 2}, 3, 0},
-		// Resident weights+Constant=24, bound x/default=16, four float table
-		// aliases=32, Constant and integer alias=32, requested b=8: 112.
-		{"resident constants and aliases", "sessions/branch_defaults", Limits{MaxLiveBytes: 112}, 2, 1},
+		// Resident weights/Constant=24, bound x/default=16, private Constant
+		// clone=16, requested b=8: 64. Identity slots add no payload.
+		{"resident constants and aliases", "sessions/branch_defaults", Limits{MaxLiveBytes: 64}, 2, 1},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -477,9 +477,9 @@ func TestSessionLiveAndTensorBudgetsRecover(t *testing.T) {
 		})
 	}
 
-	// All node outputs remain live even when only b is requested; a one-byte
-	// lower bound fails after nodes, rather than hiding unused intermediates.
-	session := modelSession(t, loadedModel(t, modelFixture(t, "sessions/branch_defaults"), Options{Limits: Limits{MaxLiveBytes: 111}}))
+	// All declared outputs remain pinned, even for a subset. A one-byte lower
+	// reservation than the shared-storage bound must still fail.
+	session := modelSession(t, loadedModel(t, modelFixture(t, "sessions/branch_defaults"), Options{Limits: Limits{MaxLiveBytes: 63}}))
 	input := floatTensor(t, []int64{1, 2}, []float32{1, 2})
 	if outputs, err := session.Run(context.Background(), map[string]*Tensor{"x": input}, RunOptions{Outputs: []string{"b"}}); outputs != nil || !errors.Is(err, ErrLimit) {
 		t.Fatalf("resident/intermediate/output budget one below: %v, %v", outputs, err)
@@ -564,7 +564,7 @@ func TestSessionBudgetRejectionBeforeNumericAllocation(t *testing.T) {
 	}{
 		{"scratch", "Relu", Limits{MaxWorkspaceBytes: 1024}, 0},
 		{"intermediate", "Relu", Limits{MaxLiveBytes: payloadBytes + 1024}, 0},
-		{"output clone", "Identity", Limits{MaxLiveBytes: 2*payloadBytes + 1024}, -1},
+		{"output clone", "Identity", Limits{MaxLiveBytes: payloadBytes + 1024}, -1},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -601,5 +601,163 @@ func TestSessionBudgetRejectionBeforeNumericAllocation(t *testing.T) {
 
 			assertFloats(t, retained[0].Tensor, []int64{1, 2}, []float32{3, 4})
 		})
+	}
+}
+
+func TestSessionReuseAliasesDefaultsOverridesAndRetainedOutputs(t *testing.T) {
+	wire := reuseWire(t)
+	defaults := modelWire(t, "sessions/branch_defaults")
+	wire.Graph.Input = append(wire.Graph.Input, defaults.Graph.Input[1])
+	wire.Graph.Initializer = defaults.Graph.Initializer
+	wire.Graph.Node[0].Input[1] = "weight"
+	for _, name := range []string{"alias", "a"} {
+		info := proto.Clone(wire.Graph.Output[0]).(*onnxpb.ValueInfoProto)
+		info.Name = proto.String(name)
+		wire.Graph.Output = append(wire.Graph.Output, info)
+	}
+	session := modelSession(t, loadedModel(t, modelBytes(t, wire), Options{}))
+	tests := []struct {
+		name     string
+		batch    int64
+		weight   []float32
+		outputs  []string
+		expected [][]float32
+	}{
+		{"default aliases", 1, nil, []string{"alias", "a", "y"}, [][]float32{{8, 13}, {8, 13}, {12, 21}}},
+		{"override larger batch", 3, []float32{10, 11, 12, 13, 14, 15}, []string{"y", "alias"}, [][]float32{{15, 21, 27, 33, 39, 45}, {11, 13, 15, 17, 19, 21}}},
+		{"empty batch", 0, nil, []string{"y"}, [][]float32{{}}},
+		{"default larger batch", 3, nil, []string{"y"}, [][]float32{{12, 21, 22, 31, 32, 41}}},
+	}
+	retained := make([][]NamedTensor, len(tests))
+	for index, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			values := make([]float32, tt.batch*2)
+			for element := range values {
+				values[element] = float32(element + 1)
+			}
+			input := floatTensor(t, []int64{tt.batch, 2}, values)
+			inputs := map[string]*Tensor{"x": input}
+			if tt.weight != nil {
+				inputs["weight"] = floatTensor(t, []int64{tt.batch, 2}, tt.weight)
+			}
+
+			outputs, err := session.Run(context.Background(), inputs, RunOptions{Outputs: tt.outputs})
+			if err != nil || len(outputs) != len(tt.outputs) {
+				t.Fatalf("run: %v, %v", outputs, err)
+			}
+
+			for slot, output := range outputs {
+				if output.Name != tt.outputs[slot] {
+					t.Fatal("requested output order changed")
+				}
+
+				assertFloats(t, output.Tensor, []int64{tt.batch, 2}, tt.expected[slot])
+				for previous := 0; previous < slot; previous++ {
+					if output.Tensor.value == outputs[previous].Tensor.value {
+						t.Fatal("published aliases share writable backing identity")
+					}
+				}
+			}
+			assertFloats(t, input, []int64{tt.batch, 2}, values)
+			if tt.weight != nil {
+				assertFloats(t, inputs["weight"], []int64{tt.batch, 2}, tt.weight)
+			}
+
+			retained[index] = outputs
+		})
+	}
+	stored, err := session.plan.values[session.plan.indices["weight"]].Default.Clone()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assertFloats(t, &Tensor{value: stored}, []int64{1, 2}, []float32{7, 11})
+	if err = session.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	for index, tt := range tests {
+		for slot, output := range retained[index] {
+			assertFloats(t, output.Tensor, []int64{tt.batch, 2}, tt.expected[slot])
+		}
+	}
+}
+
+func TestSessionReuseCancellationAndLateFailureRecover(t *testing.T) {
+	session := modelSession(t, loadedModel(t, modelBytes(t, reuseWire(t)), Options{}))
+	inputs := map[string]*Tensor{"x": floatTensor(t, []int64{1, 2}, []float32{1, 2})}
+	baseline := newCancelContext(0)
+	retained, err := session.Run(baseline, inputs, RunOptions{})
+	baseline.cancel()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for boundary := 1; boundary <= baseline.checks; boundary++ {
+		ctx := newCancelContext(boundary)
+		outputs, runErr := session.Run(ctx, inputs, RunOptions{})
+		ctx.cancel()
+		if outputs != nil || !errors.Is(runErr, context.Canceled) {
+			t.Fatalf("cancel boundary %d: %v, %v", boundary, outputs, runErr)
+		}
+
+		if _, runErr = session.Run(context.Background(), inputs, RunOptions{}); runErr != nil {
+			t.Fatalf("recovery at boundary %d: %v", boundary, runErr)
+		}
+	}
+	// Inject a missing final handler after earlier nodes have reused storage.
+	// The immutable public plan cannot be modified this way by callers.
+	last := len(session.plan.steps) - 1
+	session.plan.steps[last].Operator = "missing"
+	if outputs, runErr := session.Run(context.Background(), inputs, RunOptions{}); outputs != nil || !errors.Is(runErr, ErrUnsupported) {
+		t.Fatalf("late failure: %v, %v", outputs, runErr)
+	}
+
+	session.plan.steps[last].Operator = "Add"
+	if _, err = session.Run(context.Background(), inputs, RunOptions{}); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFloats(t, retained[0].Tensor, []int64{1, 2}, []float32{6, 12})
+}
+
+func TestSessionReuseIndependentConcurrentRuns(t *testing.T) {
+	model := loadedModel(t, modelBytes(t, reuseWire(t)), Options{})
+	finished := make(chan error, 2)
+	for _, batch := range []int64{1, 3} {
+		session := modelSession(t, model)
+		values := make([]float32, batch*2)
+		for index := range values {
+			values[index] = float32(index + 1)
+		}
+		inputs := map[string]*Tensor{"x": floatTensor(t, []int64{batch, 2}, values)}
+		go func() {
+			for repeat := 0; repeat < 20; repeat++ {
+				outputs, err := session.Run(context.Background(), inputs, RunOptions{})
+				if err != nil {
+					finished <- err
+					return
+				}
+
+				actual, valueErr := outputs[0].Tensor.Float32Values()
+				if valueErr != nil {
+					finished <- valueErr
+					return
+				}
+
+				for index, value := range actual {
+					if value != 6*values[index] {
+						finished <- fmt.Errorf("concurrent batch %d output %d: %g", batch, index, value)
+						return
+					}
+				}
+			}
+			finished <- nil
+		}()
+	}
+	for repeat := 0; repeat < 2; repeat++ {
+		if err := <-finished; err != nil {
+			t.Fatal(err)
+		}
 	}
 }

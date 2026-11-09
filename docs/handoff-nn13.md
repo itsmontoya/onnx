@@ -1,5 +1,9 @@
 # RT-12 runtime inputs for NN-13
 
+NN-13 subsequently completed in [backend PR #115](https://github.com/itsmontoya/neuralnetwork/pull/115);
+[RT-16](handoff-rt16.md) now consumes its published revision and measurements.
+The original RT-12 copying baseline below remains reproducible history.
+
 RT-12 implements a working M2 runtime against the unchanged copying backend
 `github.com/itsmontoya/neuralnetwork v0.7.0`, published commit
 [`6048452c57a0a293db4591cd2e2febd7d6b743a3`](https://github.com/itsmontoya/neuralnetwork/tree/6048452c57a0a293db4591cd2e2febd7d6b743a3).

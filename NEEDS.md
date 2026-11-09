@@ -9,6 +9,19 @@ library. Runtime tasks live in [ROADMAP.md][onnx-roadmap] in the separate
 The original task definitions are retained below; current status and published
 handoffs take precedence over their original proposed API names.
 
+## NN-13 integration (2026-11-09)
+
+NN-01–NN-13 are implemented. [Backend PR #115](https://github.com/itsmontoya/neuralnetwork/pull/115)
+publishes NN-13's measured CPU product bridge/workspace; the runtime pins source
+`a64fa687e269c3a1bf3ac345434b46c8ed4a59fc` as
+`v0.7.1-0.20261109154142-a64fa687e269`, without a replacement. Its
+[report and ownership contract](https://github.com/itsmontoya/neuralnetwork/blob/458b64d18a2e974a1bd51313d040060a85f1f70a/docs/performance/nn13/README.md)
+record actual copy/allocation measurements, conservative numeric-payload bounds,
+normal/purego/cgo-disabled/race compatibility and Metal coherence checks.
+The [RT-16 handoff](docs/handoff-rt16.md) consumes that revision and completes
+runtime storage measurement/reuse. No newer release tag or optimization merge
+is claimed. The v0.7.0 assessment below is historical release evidence.
+
 ## v0.7.0 status
 
 Reviewed on 2026-11-06 against published [`v0.7.0`][backend-release], commit
@@ -451,7 +464,7 @@ domains/nonfinite values according to the documented contract. Fixtures compare
 values as well as shapes. Only kernels selected by the runtime's next coverage
 task need integration; this task does not imply transformer support.
 
-### [ ] NN-13 — Optimize tensor/matrix interoperability and workspaces
+### [x] NN-13 — Optimize tensor/matrix interoperability and workspaces
 
 **Context:** Copying adapters are acceptable for correctness, but copying each
 matrix product's inputs, weights, and outputs may dominate inference costs.
@@ -473,6 +486,12 @@ weights, cross-session independence, and race safety. Normal, `purego`, and
 cgo-disabled paths agree numerically; exercise Metal coherence only if this
 change touches that path. Publish improvements without setting an invented
 universal zero-allocation or speedup requirement.
+
+**Completion (2026-11-09):** [PR #115](https://github.com/itsmontoya/neuralnetwork/pull/115)
+implements the measured internal CPU product bridge and one call-owned staging
+workspace with the copying Metal fallback and unchanged public ownership API.
+The exact source/pseudo-version and report are recorded in the current
+integration section above; RT-16 consumes them in its separate follow-up.
 
 ## Explicitly outside this library backlog
 

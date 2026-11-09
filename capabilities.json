@@ -8,8 +8,8 @@
   },
   "backend": {
     "module": "github.com/itsmontoya/neuralnetwork",
-    "version": "v0.7.0",
-    "commit": "6048452c57a0a293db4591cd2e2febd7d6b743a3",
+    "version": "v0.7.1-0.20261109154142-a64fa687e269",
+    "commit": "a64fa687e269c3a1bf3ac345434b46c8ed4a59fc",
     "license": "MIT"
   },
   "profiles": [

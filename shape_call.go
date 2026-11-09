@@ -135,7 +135,7 @@ func (c *shapeCall) plan(ctx context.Context) (err error) {
 	return ctx.Err()
 }
 
-func (c *shapeCall) run(ctx context.Context) (out *tensor.Tensor, err error) {
+func (c *shapeCall) run(ctx context.Context, destination *tensor.Tensor) (out *tensor.Tensor, err error) {
 	if err = ctx.Err(); err != nil {
 		return nil, err
 	}
@@ -148,8 +148,11 @@ func (c *shapeCall) run(ctx context.Context) (out *tensor.Tensor, err error) {
 		return out, ctx.Err()
 	}
 
-	if out, err = tensor.New(c.dataType, c.shape); err != nil {
-		return nil, fmt.Errorf("allocate shape destination: %w", err)
+	out = destination
+	if out == nil {
+		if out, err = tensor.New(c.dataType, c.shape); err != nil {
+			return nil, fmt.Errorf("allocate shape destination: %w", err)
+		}
 	}
 
 	switch c.step.Operator {
