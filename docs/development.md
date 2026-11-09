@@ -20,7 +20,9 @@ RT-08 adds public Load/LoadBytes/LoadFile, shared Models and private serial
 Sessions with cancellation, finite budgets, defaults and owned requested outputs.
 RT-09 adds M1 float32 arithmetic/products/activations and exact float/int
 Constant scalar/list forms. [The capability manifest](../capabilities.json)
-records all 12 implemented operators and their restrictions.
+records all 12 implemented operators and their restrictions. RT-10 adds a reusable
+offline fixture runner and differential comparison with typed TensorProto values,
+explicit exception classifications and a complete pinned upstream-envelope audit.
 
 Public `NewTensor`, `NewFloat32`, and `NewInt64` delegate storage validation and
 allocation to the pinned backend. They copy caller shapes/payloads; shape and
@@ -400,4 +402,35 @@ match ONNX 1.16.2 reference results; the empty-axis Softmax case retains its
 reference rejection and independently expected empty output. Ordinary Go tests
 verify hashes and outputs offline, with finite tolerance 1e-5 + 1e-5*abs(expected),
 NaN classification, infinity signs and specified zero signs. This is focused M1
-coverage; RT-10 remains responsible for the broader conformance harness.
+coverage. RT-10 reuses these unchanged models in the broader harness below.
+
+## Offline conformance harness
+
+[Fixture documentation](../testdata/conformance/README.md) describes the 96
+classified cases, all model/value hashes, names, IR/import/schema provenance,
+actual license status, comparison rules and pinned reference observations.
+Ordinary Go tests execute 86 reference agreements and one documented extension;
+nine models must fail with ErrUnsupported. No skips count as support.
+
+The test-only `conformanceSuite`, `conformanceCase`, `conformanceValue`,
+`conformanceArtifact` and `conformanceComparison` types keep metadata, execution,
+shared TensorProto decoding, hashing and comparisons separate. Methods remain
+with their types. The runner exercises public loading/session APIs and retained
+outputs after closure. Exact dtype/shape/int64 comparison is distinct from
+finite float tolerances and explicit NaN/infinity/zero-sign rules. A deliberate
+wrong numerical result verifies the same comparator used by fixture execution
+reports input/output names and both flat and multidimensional positions.
+
+`tools/check_conformance.py` optionally regenerates with the pinned development
+environment and a separately downloaded official ONNX source archive; it never
+downloads dependencies itself. The fixture README gives complete commands and
+archive hashes. Its no-write mode reproduces every artifact and rejects drift,
+including extra artifacts. It also checks the original RT-09 numerical results
+and all 1,422 upstream backend model envelopes. No pinned upstream model uses
+exactly IR 8/opset 13; the three copied upstream cases retain their original IR 7
+and bytes as explicit version rejections. Generated original IR 8/opset 13
+models supply positive cases without rewriting upstream version numbers.
+
+Future Gather/pooling/BatchNormalization and opset-18 reduction observations
+preserve the released backend differences while all remain explicit runtime
+rejections. No production API, capability record or numerical adapter changes.
