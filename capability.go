@@ -3,5 +3,5 @@ package onnx
 import "github.com/itsmontoya/onnx/internal/capability"
 
 // Capability describes an implemented subset or explicitly planned operator.
-// Implemented records currently describe static planning, not an execution API.
+// Implemented records describe the restrictions enforced by loading and execution.
 type Capability = capability.Record

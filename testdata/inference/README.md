@@ -26,7 +26,10 @@ python tools/check_inference.py
 ```
 
 Without `--write`, generation verifies existing bytes and the getting-started
-capability table without mutating them. `--write` deliberately regenerates
+capability table without mutating them. Table checking/updating delegates to
+the Go-only `tools/capabilitiesgen` command, which uses the same embedded
+manifest records as validation and runs separately in CI. Go must be available
+for this optional reference generator too. `--write` deliberately regenerates
 all three models, all goldens/provenance, and that table. The generator enforces its
 exact tool versions, validates all three models with the full ONNX checker, records
 actual `onnx.reference.ReferenceEvaluator` returns and independently checks

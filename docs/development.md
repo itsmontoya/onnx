@@ -27,6 +27,9 @@ RT-11 adds the [runnable MLP/branch examples](getting-started.md), four dynamic-
 batch reference agreements and [their integration report](integration-rt11.md).
 RT-12 adds exact shape transforms and RT-13 adds the CNN adapters. RT-14 adds
 explicit external tensor ranges and [their integration report](integration-rt14.md).
+RT-15 supplies the [hardening audit](hardening-rt15.md); RT-18 completes the
+[usage guide](getting-started.md), [notices](../third_party/README.md) and
+[release checklist](release-checklist.md).
 
 Public `NewTensor`, `NewFloat32`, and `NewInt64` delegate storage validation and
 allocation to the pinned backend. They copy caller shapes/payloads; shape and
@@ -42,6 +45,9 @@ Install Go 1.27.2, then run these commands from the repository root:
 
 ```sh
 go mod download
+go mod verify
+go mod tidy -diff
+CGO_ENABLED=0 go run ./tools/capabilitiesgen
 go build ./...
 go fmt ./...
 go vet ./...
@@ -68,8 +74,12 @@ The [RT-11 fixture guide](../testdata/inference/README.md) documents optional
 `tools/check_inference.py` regeneration with pinned reference tools. Normal Go
 tests load checked-in bytes, validate hashes/metadata, compare golden named
 outputs for batches 1 and 3, retain outputs across runs/Close and exercise two
-sessions concurrently on each shared numerical plan. The generator also checks
-that the getting-started implemented table exactly reflects `capabilities.json`.
+sessions concurrently on each shared numerical plan. The reference generator delegates support-table checking to
+`go run ./tools/capabilitiesgen`. That Go command uses `Capabilities()`, the same
+embedded canonical records consumed by validation. It requires no Python and
+also runs in CI; `-write` updates only the marked guide table. Attribute names
+are sorted and JSON defaults retain their exact text. A changed manifest without
+a regenerated guide fails the no-write command.
 
 ## Package boundaries
 

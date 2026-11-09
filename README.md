@@ -1,133 +1,94 @@
 # onnx
 
 A Go-native ONNX inference runtime built on
-[`github.com/itsmontoya/neuralnetwork`](https://github.com/itsmontoya/neuralnetwork).
-Load an `.onnx` model, bind named immutable Go tensors, and evaluate named outputs
-on the CPU without cgo or an installed native inference runtime.
+[`neuralnetwork v0.7.0`](https://github.com/itsmontoya/neuralnetwork/tree/6048452c57a0a293db4591cd2e2febd7d6b743a3).
+Load an `.onnx` model, bind named immutable tensors, and evaluate named outputs
+on the CPU with `CGO_ENABLED=0`, without Python or native runtime libraries.
 
-RT-01–RT-15 implement the [runtime contract](docs/runtime-contract.md), bounded
-protobuf and dense tensor loading, named graph validation, versioned planning,
-and serial sessions. The executable subset is deliberately narrow: ONNX IR 8,
-standard-domain opset 13, float32 Add/Sub/Mul/Div, MatMul/Gemm,
-Relu/Sigmoid/Tanh/Softmax, and float32/int64 Identity/Constant. M2 adds Shape, Flatten, Transpose, Reshape,
-Squeeze/Unsqueeze, Gather and Concat, preserving exact int64 shape values. M3 adds
-float32 NCHW 2D Conv, MaxPool, AveragePool, GlobalAveragePool and stored-statistics
-BatchNormalization (rank 2/4). Branching, multiple
-inputs/outputs, default overrides,
-passthroughs, scalar/empty tensors and symbolic leading batches are supported.
-Constant accepts dense tensors and float/int scalar/list forms. Relu propagates
-NaN; empty-axis Softmax is an explicit extension of the pinned evaluator.
+RT-01–RT-15 and RT-18 complete the documented M1–M4 subset: **IR 8, exactly one
+empty standard-domain opset-13 import, dense float32/int64, serial CPU execution**.
+The [generated support table](docs/getting-started.md#implemented-capability-table)
+records the 25 operators and their dtype, rank, attribute and optional-slot
+restrictions. Branching, multiple named inputs/outputs, defaulted initializers,
+symbolic leading input batches, scalar/empty tensors, runtime shape subgraphs,
+NCHW 2D CNNs and explicitly resolved external weights are implemented.
+Compatibility with arbitrary ONNX models is not claimed.
 
-`Load`, `LoadBytes`, and `LoadFile` return an immutable shared Model. Create a
-Session with `NewSession`, then call `Run` with named inputs and optional requested
-outputs. Outputs own independent storage and survive later runs and Close.
-Overlapping calls on one session return `ErrBusy`; separate sessions can run
-concurrently. `Options.Limits` applies finite load, tensor, live, workspace and
-session bounds. External float32/int64 tensors require an explicit
-`Options.ExternalData` resolver for every loader, including `LoadFile`.
-`NewDirectoryResolver` provides confined regular-file ranges on supported Go
-platforms; the [portable resolver example](examples/external/main.go) explicitly
-permits an in-memory weight file. Checksum metadata is unsupported. `Capabilities()` returns copied manifest records, covering all 25 implemented operators
-and their exact restrictions.
+## Run inference
 
-The [RT-15 audit](docs/hardening-rt15.md) maps these limits to regression tests
-and bounded fuzz targets. Limits account logical payloads rather than process
-RSS. Cancellation is checked around synchronous backend calls and before output
-publication; a running kernel has no cancellation-latency guarantee.
-
-The module pins `neuralnetwork v0.7.0`, protobuf v1.36.12, and Go 1.27.2 with a
-Go 1.26.1 baseline. Ordinary builds/tests require neither protoc nor Python.
-No general ONNX compatibility is claimed beyond the documented subset.
-
-## Run an example
-
-From the repository root with Go 1.27.2 installed:
+Install Go 1.27.2, then run from the repository root:
 
 ```sh
 go mod download
 CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 3
-CGO_ENABLED=0 go run ./examples/inference -graph branch -batch 3
-CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 1
-CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 3
 CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 3
 CGO_ENABLED=0 go run ./examples/external -batch 3
 CGO_ENABLED=0 go test ./...
+CGO_ENABLED=0 go test -tags=purego ./...
+go run ./tools/capabilitiesgen
 ```
 
-The [example](examples/inference/main.go) loads an original checked-in model,
-reads metadata, creates a session, supplies named tensors, reads named results
-and closes both owners. All four graphs accept symbolic leading batches and have
-independent expected outputs for batch sizes 1 and 3. The branching graph has two
-named inputs and two outputs. See [getting started](docs/getting-started.md)
-for clean-clone commands, the complete implemented restriction table and compatible export
-requirements, and [the RT-11 integration report](docs/integration-rt11.md) for
-results, provenance and hashes. Initial dependency download needs network;
-cached normal builds/tests need neither network nor reference tooling.
+The initial clone/module download needs network. Cached builds and tests use
+checked-in models and typed reference values without network, protoc, Python,
+C/C++ inference libraries or an external service. The `purego` tag selects the
+portable backend CPU path. The module has a Go 1.26.1 language baseline and pins
+Go 1.27.2, neuralnetwork v0.7.0 and protobuf v1.36.12.
 
-RT-10's [offline conformance harness](testdata/conformance/README.md) verifies
-87 reference agreements, one documented empty-Softmax extension, four executed reference
-differences and four explicit rejections, using hashed model/typed TensorProto fixtures. The pinned upstream
-suite contains no exact IR 8/opset 13 model; selected original upstream bytes
-remain unsupported-version tests rather than numerical coverage claims.
+[Getting started](docs/getting-started.md) covers the public APIs, named I/O,
+compatible model authoring/export checks, external weights and reproducible
+failure cases. [Development](docs/development.md) gives full verification and
+optional regeneration commands.
 
-## Implementation plans
+## Runtime contract
 
-- [NEEDS.md](NEEDS.md) records the verified `neuralnetwork` v0.7.0 baseline,
-  completed NN-01–NN-12 tasks, published handoffs, and integration constraints.
-  RT-12 supplies the [runtime inputs for NN-13](docs/handoff-nn13.md); optimization
-  remains backend work.
-- [ROADMAP.md](ROADMAP.md) defines 19 tasks for this runtime, including ONNX
-  decoding, graph validation, versioned operators, execution, conformance,
-  examples, and release preparation.
-- [TODO.md](TODO.md) provides the starting order and points to the authoritative
-  task checklists.
+`Load`, `LoadBytes` and `LoadFile` publish immutable shared Models. Create a
+Session with `Model.NewSession`, then call `Session.Run` with named tensors.
+Requested outputs own independent storage and survive later runs and Close;
+constructors and typed accessors copy. Input/initializer overlap supplies an
+overridable default within the declared input type/shape contract.
 
-Each task includes its dependencies, implementation scope, acceptance criteria,
-and handoff requirements so a separate agent can complete it without this chat.
-Use the published v0.7.0 contract and source revision recorded in `NEEDS.md`.
-The copying backend is sufficient to begin runtime development; NN-13 does not
-block the first working runtime or release readiness.
+One session permits one active run; overlapping Run/Close returns `ErrBusy`.
+Separate sessions can run concurrently. `Model.Close` prevents new sessions;
+existing sessions remain usable. All nodes execute even when requesting fewer
+outputs. Failed/cancelled runs publish no partial outputs and leave the session
+reusable. Errors preserve classifications, structured diagnostics and causes.
 
-## Scope and next milestones
+`Options.Limits` supplies finite logical load/tensor/live/workspace/session
+budgets, rather than a process RSS cap. Cancellation brackets synchronous
+backend/protobuf operations; a running kernel has no interruption or latency
+guarantee. External tensors require `Options.ExternalData` even for LoadFile.
+`DirectoryResolver` confines regular-file ranges on supported Go platforms;
+checksum metadata is unsupported. See the [runtime contract](docs/runtime-contract.md)
+for defaults, accounting, platform restrictions and exact numerical policies.
 
-The current CPU profile accepts ONNX IR 8, standard-domain opset 13, and dense
-float32/int64 values. Named graph inputs/outputs and branching are implemented.
-Broadcasting, matrix products, activations and the RT-10 fixture/conformance
-harness, user examples and runtime shape transformations are implemented.
-The [M2 fixtures](testdata/m2/README.md) retain exact reference differences. The [87 M3 cases](testdata/m3/README.md) execute with independently verified CNN
-outputs and retained evaluator/ORT differences. RT-14 adds [explicit external weights](docs/integration-rt14.md); further
-resource hardening and a documented release remain later work.
+## Compatibility evidence and release status
 
-The [roadmap's coverage tables](ROADMAP.md#milestones-and-coverage) specify
-operator schema versions, supported subsets, and milestone requirements. Newer
-IR/opsets, other data types, recurrent models, transformers, quantization, and
-control flow need additional tasks and reference fixtures.
+[Fixture provenance](docs/release-checklist.md#reference-evidence) records actual
+reference comparisons and exceptions. M1–M4 examples, offline comparisons,
+resource/lifecycle tests and bounded fuzz targets pass. Empty-value, pooling
+and BatchNormalization evaluator/ORT differences remain explicit; skipped tests
+never count as support. No performance improvement or general numerical error
+bound is claimed. [NN-13's baseline commands](docs/handoff-nn13.md) support later
+measurements; RT-16 optimization remains separate.
 
-## Architecture
+The [release checklist](docs/release-checklist.md) records checks and known gaps.
+**There is no project LICENSE.** Maintainers must decide and document licensing
+for runtime source and original fixtures before public release. The included
+[third-party notices](third_party/README.md) cover their identified upstream
+artifacts and dependencies; fixture origin alone is not a license. Publishing a
+tag is a separate maintainer action; RT-18 does not publish one.
 
-This module owns ONNX protobuf loading, compatibility checks, named graph
-planning, sessions, diagnostics, and model execution. `neuralnetwork` provides
-concrete tensors and forward numerical kernels through additive APIs that preserve
-its existing matrix, training, and serialization behavior.
+## Contributing and next work
 
-The runtime works with `CGO_ENABLED=0`, with a portable `purego` path.
-Go dependencies such as protobuf bindings are allowed. Python reference tooling
-may generate development fixtures, while ordinary builds and tests use
-checked-in artifacts without Python or network access.
+Read [AGENTS.md](AGENTS.md), [STYLEGUIDE.md](STYLEGUIDE.md) and
+[ROADMAP.md](ROADMAP.md). [TODO.md](TODO.md) gives the sequential task order;
+[NEEDS.md](NEEDS.md) records the pinned backend and published handoffs.
+The [RT-18 handoff](docs/handoff-rt18.md) describes the current documentation
+and validation. Later tasks cover measured optimization (RT-16, after NN-13),
+additional explicit version profiles (RT-17), and audited model-selected coverage
+(RT-19). Backend kernel availability does not broaden runtime compatibility.
 
-## Contributing
-
-Read [AGENTS.md](AGENTS.md) and [STYLEGUIDE.md](STYLEGUIDE.md), then the next
-unchecked task and its dependency handoffs in `ROADMAP.md`, using the released
-backend contract linked from `NEEDS.md`. Implement runtime tasks here and
-coordinate later library changes in `neuralnetwork`. Record exact
-APIs, dependency revisions, ownership rules, validation results, and limitations
-in each completed task's handoff.
-
-Use Go 1.27.2 and the [development commands](docs/development.md) to build and
-verify this foundation, including cgo-disabled, `purego`, and race checks.
-The [inference guide](docs/getting-started.md) covers the working MLP, shape and CNN examples.
-Pull request descriptions must preserve
-[the repository template](.github/PULL_REQUEST_TEMPLATE.md).
+Preserve [the PR template](.github/PULL_REQUEST_TEMPLATE.md) and record exact
+revisions, APIs, checks and limitations in task handoffs.

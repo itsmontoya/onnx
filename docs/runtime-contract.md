@@ -13,10 +13,14 @@ harness with typed fixtures and explicit reference exceptions. RT-11 adds public
 inference examples; RT-12 implements runtime int64 shape subgraphs and all M2
 transforms/indexing. RT-13 implements the five bounded CNN adapters, with all
 25 capability records implemented. RT-14 adds explicit external float32/int64
-tensor resolution and a confined directory helper.
+tensor resolution and a confined directory helper. RT-15 audits finite resource,
+lifecycle and cancellation behavior. RT-18 provides the
+[usage guide](getting-started.md), [release checklist](release-checklist.md) and
+[third-party notices](../third_party/README.md).
 [capabilities.json](../capabilities.json)
 records the executable
-subset and planned operator coverage. The
+subset; all 25 current operator records are implemented. Future planned records
+would not establish execution support. The
 [roadmap](../ROADMAP.md) identifies the implementation tasks and their acceptance
 criteria. This project is an independent Go runtime, not Microsoft's ONNX Runtime.
 
