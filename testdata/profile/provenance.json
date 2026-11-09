@@ -1,0 +1,52 @@
+{
+  "description": "Original deterministic Identity graph; ONNX checker acceptance only, runtime not implemented",
+  "origin": "tools/check_profile.py",
+  "license": "Original repository fixture; no upstream model copied",
+  "onnx_source_revision": "3bf92c03a9f27eba3bda1e5b9e63ea20ec213557",
+  "reference_versions": {
+    "python": "3.9.6",
+    "onnx": "1.16.2",
+    "numpy": "1.26.4",
+    "protobuf": "4.25.3"
+  },
+  "model": "identity.onnx",
+  "sha256": "e7fed3b2d29d884d48c43427b69c08c6514ed6dcf0c7a2bdd002d5f46b0ad469",
+  "ir_version": 8,
+  "opsets": {
+    "": 13
+  },
+  "operators": {
+    "Identity": 13
+  },
+  "inputs": [
+    {
+      "name": "x",
+      "dtype": "float32",
+      "shape": [
+        "batch",
+        2
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "y",
+      "dtype": "float32",
+      "shape": [
+        "batch",
+        2
+      ]
+    }
+  ],
+  "hand_calculated_case": {
+    "batch": 1,
+    "x": [
+      1.0,
+      -2.0
+    ],
+    "y": [
+      1.0,
+      -2.0
+    ]
+  }
+}

@@ -5,7 +5,10 @@ A planned Go-native ONNX inference runtime built on
 The goal is to load an `.onnx` model, bind named Go tensor inputs, and evaluate
 named outputs on the CPU without cgo or an installed native inference runtime.
 
-This repository is currently in the planning stage. The tensor storage and
+RT-01 now specifies the [runtime contract](docs/runtime-contract.md) and an
+initial [capability manifest](capabilities.json); every operator is still marked
+planned. This repository has no runnable inference implementation yet.
+The tensor storage and
 numerical kernels are available in `neuralnetwork` v0.7.0, but there is no Go
 module or runtime implementation here yet, and no model compatibility is claimed.
 
