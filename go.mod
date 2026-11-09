@@ -5,7 +5,7 @@ go 1.26.1
 toolchain go1.27.2
 
 require (
-	github.com/itsmontoya/neuralnetwork v0.7.0
+	github.com/itsmontoya/neuralnetwork v0.7.1-0.20261109154142-a64fa687e269
 	google.golang.org/protobuf v1.36.12
 )
 
