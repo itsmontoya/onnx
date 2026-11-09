@@ -476,7 +476,7 @@ CGO_ENABLED=0 go run ./examples/normalization
 CGO_ENABLED=0 go run -tags=purego ./examples/normalization
 ```
 
-The [corpus report](model-compatibility.md) records all33 preserved models,
+The [corpus report](model-compatibility.md) records all 33 preserved models,
 source hashes/licenses, metadata and unsupported nodes. Nineteen normalization
 exports are enabled; fourteen remain required negative tests. This bounded
-float32 schema17 set does not establish general transformer compatibility.
+float32 schema 17 set does not establish general transformer compatibility.

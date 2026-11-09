@@ -131,6 +131,7 @@ for each model/named TensorProto value plus actual reference returns/errors.
 | [M3](../testdata/m3/README.md) | All 87 execute against independent expectations; ONNX evaluator: 49 agreements, 26 differences, 12 rejections; ORT: 66 agreements, six differences, 15 rejections. Composed CNN batches 1/3 agree with ORT and differ from the evaluator |
 | [External](../testdata/external/README.md) | Externalized original MLP is checker/loader-valid and matches inherited batch-1/3 outputs; explicit ranges and shared-file hashes are recorded |
 | [Sessions](../testdata/sessions/README.md) | Original helper-authored Identity/Constant/default/passthrough graphs have independently specified values; not advertised as evaluator-generated goldens |
+| [Audited corpus/normalization](../testdata/corpus/README.md) | 33 byte-original Apache-2.0 models: 19 enabled normalization exports and 14 required rejections; 28 executed normalization cases agree with the evaluator, 27 with ORT and one actual ORT scalar-broadcast rejection |
 
 Gather empty indices retain the schema-derived full prefix/indices/suffix shape
 where the pinned evaluator returns `[0]`. Pooling records SAME/dilation, ceil
@@ -169,4 +170,5 @@ reproduction of those observations, never new agreement claims.
 RT-18's documentation work is complete when its checked technical items pass;
 the unchecked maintainer actions remain visible before any public release.
 RT-17 adds the independently audited second profile; see its [handoff](handoff-rt17.md).
-NN-13/RT-16 optimization and RT-19 audited-corpus expansion remain separate tasks.
+RT-19 adds the [audited corpus and selected float32 normalization set](handoff-rt19.md);
+NN-13/RT-16 optimization remains blocked on its separate published results.

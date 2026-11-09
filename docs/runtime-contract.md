@@ -19,7 +19,8 @@ lifecycle and cancellation behavior. RT-18 provides the
 [third-party notices](../third_party/README.md).
 [capabilities.json](../capabilities.json)
 records the executable
-subset; all 50 records (25 operators at each import) are implemented. Future planned records
+subset; all 51 records (25 operators at import 13, 26 at import 17) are implemented.
+RT-19 adds float32 LayerNormalization-17 from an audited redistributable corpus. Future planned records
 would not establish execution support. The
 [roadmap](../ROADMAP.md) identifies the implementation tasks and their acceptance
 criteria. This project is an independent Go runtime, not Microsoft's ONNX Runtime.
@@ -66,6 +67,21 @@ compare all 25 applicable schemas at both imports and retain an actual unmodifie
 PyTorch 2.2.2 export. No new IR, dtype or operator family is accepted. The shared
 internal profile policy is checked against the manifest; metadata, diagnostics
 and plans retain the actual accepted import. No runtime conversion occurs.
+
+RT-19 selects fused LayerNormalization-17 at import 17 only: float32 X/Scale/optional
+B and all three outputs, stash_type=1, rank >=1, trailing axis normalization,
+finite nonnegative epsilon, nonempty normalized dimensions and unidirectional
+affine broadcasting to X. Mean/InvStdDev retain unit reduced dimensions and
+optional output slots remain positional. The published NN-12 ReduceMean/Sqrt
+and arithmetic kernels implement centered population variance; no ONNX
+primitive reduction adapter or arbitrary function execution is added. See the
+[selected contract](tasks/layer-normalization.md) and
+[actual reference evidence](../testdata/normalization/README.md). The workspace
+reservation is conservatively `20*X_bytes + 16*statistics_bytes + 16`, in addition
+to each independently reserved destination and public output copy. Cancellation
+brackets each synchronous subkernel. Scalar affine broadcasting agrees with the
+schema/evaluator and is an explicit ORT 1.19.2 rejection. Signed-zero equality is
+not promised for this composite reduction.
 
 ## Accepted model envelope
 

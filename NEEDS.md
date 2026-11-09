@@ -22,7 +22,7 @@ and exact float/int Constant forms.
 RT-10 adds offline typed conformance fixtures and retains the backend reference
 differences as documented extensions or explicit future-adapter rejections;
 see [the fixture guide](testdata/conformance/README.md). RT-13 implements the
-bounded M3 CNN subset; reduction runtime support remains deferred. RT-12 implements the M2
+bounded M3 CNN subset; primitive ONNX reduction adapters remain deferred. RT-12 implements the M2
 shape adapters with the reference exceptions below.
 RT-11 demonstrates this working M1 runtime with original MLP and two-input/
 two-output branching models at batches 1 and 3. The [integration report](docs/integration-rt11.md)
@@ -32,7 +32,9 @@ checks and exact supported restrictions. RT-12 adds a shape-heavy graph at both 
 resource/lifecycle behavior, and RT-18 documents the M1–M4 subset and
 [release checks](docs/release-checklist.md). RT-17 adds exactly IR 8/opset 17
 with [audited schema adapters and a real PyTorch export](docs/handoff-rt17.md);
-the original opset-13 profile is preserved. Backend revisions remain unchanged.
+the original opset-13 profile is preserved. RT-19 consumes published NN-12
+ReduceMean/Sqrt/arithmetic internally for [fused float32 LayerNormalization-17](docs/tasks/layer-normalization.md).
+No primitive ONNX reduction/math adapters or backend revisions are introduced.
 
 The library's `NEEDS.md` is ignored and is not included in the release tree.
 Use the published [tensor contract][tensor-contract], source, tests, and tracked
@@ -51,7 +53,7 @@ handoffs below rather than a link to `neuralnetwork/blob/main/NEEDS.md`.
 | NN-09 | [Complete: NCHW convolution][nn-09] | RT-13 |
 | NN-10 | [Complete: pooling][nn-10] | RT-13 |
 | NN-11 | [Complete: stateless batch normalization][nn-11] | RT-13 |
-| NN-12 | [Complete: reductions and math][nn-12] | RT-19, when selected |
+| NN-12 | [Complete: reductions and math][nn-12] | RT-19 fused LayerNormalization-17 |
 | NN-13 | [Blocked: runtime measurements and optimization][nn-13] | After RT-12; before RT-16 |
 
 The module declares Go 1.26.1 and depends on `github.com/tphakala/simd v1.3.0`

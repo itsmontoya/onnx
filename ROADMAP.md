@@ -29,7 +29,8 @@ bounded native Go fuzz targets. RT-18 documents the implemented M1–M4 subset,
 generates its support table from the validation manifest, and records release
 checks, actual reference outcomes and third-party notices. RT-17 adds the audited
 IR-8/opset-17 profile alongside the original 13 profile, with a real unmodified
-PyTorch export and version-specific adapters.
+PyTorch export and version-specific adapters. RT-19 adds the audited redistributable corpus
+and its first selected float32 LayerNormalization set.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -1722,7 +1723,7 @@ final stacked PR's hosted Linux checks must also pass before handoff. RT-16
 remains unchecked on its external NN-13 blocker. RT-19 is the next independent
 task, in a separate sequential branch/PR; no later task or merge is included.
 
-### [ ] RT-19 — Extend coverage from an audited model corpus
+### [x] RT-19 — Extend coverage from an audited model corpus
 
 **Depends on:** RT-18; NN-12 when integrating the reduction/math family.
 **Deliverable:** a model compatibility report and bounded implementation tasks
@@ -1749,6 +1750,33 @@ fixture, exact schema/type scope, the required library task, and an independent
 handoff-ready implementation task. The first implemented set passes isolated
 and model-level reference checks. Unselected features remain explicit gaps,
 and adding coverage does not weaken existing validation.
+
+**Handoff (2026-11-08):** [The RT-19 handoff](docs/handoff-rt19.md) records
+implementation `1744afa991a88468aeff708c8b0a12e19a9df405` and final scalar-staging
+reservation `a1b83943dae6fe38b2435a6f4ab73fb792961422`, stacked on RT-17
+`4ded3992742ff4dfa33f12c3c7122544e1f6d503`. The audited corpus preserves 33
+Apache-2.0 source models and all version/hash/license metadata. One selected
+float32 LayerNormalization-17 operator enables 19 unchanged IR-8/import-17
+normalization models and all three named outputs; 14 negative workloads remain
+required rejections. Deterministic findings change from 63 to 44 without silently
+converting profiles. The unchanged enabling model actually fails at node 0 on
+the exact base. All 1,211 inherited testdata artifacts retain identical blobs.
+
+The first set composes published NN-12 kernels with centered population variance,
+full-X affine broadcasting, positional optional outputs, static/runtime checks,
+conservative destination/staging/workspace/snapshot bounds and owned results.
+All 28 isolated/model cases agree with the evaluator; 27 agree with ORT and one
+actual ORT scalar-broadcast rejection remains explicit. Residual DAG batches 1/3,
+cancellation/recovery/concurrency and exact memory-boundary tests pass. No new
+backend, dtype, IR, primitive ONNX reduction adapter or public signature is added.
+Twelve independent future task files scope every listed larger initiative;
+none of those unselected production features is implemented.
+
+Full Go checks in all four configurations, nine reference generators, wire/table
+regeneration, bounded fuzzing and 30 fresh Go-only commands pass. Hosted Linux
+checks must pass on the final dedicated PR head before handoff. The report keeps
+all unselected gaps and license decisions explicit. RT-16 remains unchecked on
+published NN-13 results; no later task, merge or publication is included.
 
 ## Suggested first assignments
 

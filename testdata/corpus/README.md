@@ -14,8 +14,8 @@ actual IR/imports, ordered nodes and applicable schemas, named types/shapes,
 attributes, initializers, external requirements, and deterministic before/after
 unsupported-feature findings with counts and node indices. The source archive
 SHA-256 is `d32b94c9c6feda1403d340813b8926d5825082f497e1a65285b50faa31aad3c5`.
-Its 1,422 backend models contain zero exact IR8/import13 and 65 exact
-IR8/import17 exports. This is a selected small corpus, not an industry coverage
+Its 1,422 backend models contain zero exact IR 8/import 13 and 65 exact
+IR 8/import 17 exports. This is a selected small corpus, not an industry coverage
 percentage. All original model bytes and version metadata are preserved.
 
 RT-19 enables 19 normalization exports with one float32 LayerNormalization-17
@@ -51,7 +51,7 @@ CGO_ENABLED=0 go test . -run 'TestAuditedCorpus|TestNormalization' -count=1
 CGO_ENABLED=0 go run ./examples/normalization
 ```
 
-The generator checks Python3.9.6/ONNX1.16.2/NumPy1.26.4/protobuf4.25.3/ORT1.19.2,
+The generator checks Python 3.9.6/ONNX 1.16.2/NumPy 1.26.4/protobuf 4.25.3/ORT 1.19.2,
 source hashes, exact LayerNormalization schema/defaults and all artifacts. It
 never downloads or installs anything. `--write` deliberately regenerates only
 new corpus/normalization artifacts; no-write rejects missing/extra/drifted files.

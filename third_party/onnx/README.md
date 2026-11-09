@@ -31,3 +31,12 @@ protoc-gen-go **v1.36.12**. The Go package mapping is supplied as a compiler
 option so this vendored source remains byte-identical to upstream. Generated
 declarations retain upstream/generated implementation style, with an automatic
 AST split placing each type and its methods in one file.
+
+
+RT-19 adds the [audited corpus](../../testdata/corpus/README.md):33 unchanged
+Apache-2.0 model exports, enabled models' input/output values and their original
+normalization source export. Exact upstream paths/SHA-256 and preserved versions
+are in the corpus index. The same unmodified LICENSE above applies; the archive
+has no root NOTICE. Nineteen LayerNormalization models execute and fourteen
+other cases remain explicit rejections. Original helper graphs live separately
+and do not inherit ONNX's license.
