@@ -1804,6 +1804,58 @@
         "independent stored-statistics reference; documented evaluator/ORT differences",
         "schema-15 inference only: training_mode=0, all five inputs float32, exactly one output slot"
       ]
+    },
+    {
+      "domain": "",
+      "operator": "LayerNormalization",
+      "schema_version": 17,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-19",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 2,
+        "max": 3,
+        "optional_slots": [
+          2
+        ]
+      },
+      "outputs": {
+        "min": 1,
+        "max": 3,
+        "optional_slots": [
+          1,
+          2
+        ]
+      },
+      "attributes": {
+        "axis": {
+          "type": "INT",
+          "required": false,
+          "default": -1
+        },
+        "epsilon": {
+          "type": "FLOAT",
+          "required": false,
+          "default": 9.999999747378752e-06
+        },
+        "stash_type": {
+          "type": "INT",
+          "required": false,
+          "default": 1
+        }
+      },
+      "restrictions": [
+        "IR 8/import 17 only; schema 17; dense float32 inputs and all outputs; stash_type=1 only",
+        "rank >=1; axis defaults to -1 and selects the trailing normalized dimensions; nonempty normalized dimensions required",
+        "epsilon defaults to float32 1e-5; finite nonnegative values only",
+        "Scale and optional B must be unidirectionally broadcastable to X; Y preserves X shape",
+        "optional Mean/InvStdDev slots preserve position; reduced dimensions retained as 1",
+        "NN-12 ReduceMean/Sqrt/arithmetic composition; synchronous cancellation between kernels; conservative workspace reservations"
+      ]
     }
   ]
 }

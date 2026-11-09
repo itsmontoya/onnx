@@ -78,6 +78,10 @@ func hasPlanner(record capability.Record) (supported bool) {
 		return false
 	}
 
+	if record.Operator == "LayerNormalization" {
+		return record.SchemaVersion == 17 && record.MinOpset == 17 && record.MaxOpset == 17
+	}
+
 	if IsCNNOperator(record.Operator) {
 		versions := map[string]int64{"Conv": 11, "MaxPool": 12, "AveragePool": 11, "GlobalAveragePool": 1, "BatchNormalization": 9}
 		return record.SchemaVersion == versions[record.Operator] || record.Operator == "BatchNormalization" && record.SchemaVersion == 15

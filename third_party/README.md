@@ -10,7 +10,7 @@ source notices when packaging a source archive or a binary distribution.
 ## Included ONNX artifacts
 
 The unmodified `onnx.proto`, its Apache-2.0 LICENSE, and three unmodified upstream
-backend model/value cases come from **ONNX v1.16.2**, commit
+backend model/value cases, plus the RT-19 audited corpus, come from **ONNX v1.16.2**, commit
 [`3bf92c03a9f27eba3bda1e5b9e63ea20ec213557`](https://github.com/onnx/onnx/tree/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557).
 [The schema attribution](onnx/README.md) records original paths, hashes, generator
 versions and the absence of a root NOTICE in the pinned release archive.
@@ -23,6 +23,13 @@ records each copied upstream model/value path and SHA-256. These unchanged IR-7
 models are rejection tests, not numerical support claims. Original M1/M2/M3,
 inference, session and external fixtures have no separately declared license;
 their provenance records this gap explicitly.
+
+RT-19 additionally includes [33 byte-original models and the enabled models’
+values/source export](../testdata/corpus/README.md) under this same Apache-2.0
+license. The pinned archive has no NOTICE; exact source paths/hashes and notices
+are in [the corpus index](../testdata/corpus/index.json). Nineteen normalization
+models execute; fourteen remain negative fixtures. The separate original
+normalization helper graphs have no redistribution grant or project license.
 
 ## Go runtime dependencies
 

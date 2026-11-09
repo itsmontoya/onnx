@@ -577,10 +577,40 @@ required/default values, arities and standard-function flags. The generator
 compares exact int64/type/shape values, float32 tolerance and signed zeros;
 actual oracle results/errors are retained separately. Normal tests use only Go.
 
-`Capabilities()` returns 50 records for 25 operators, each with a single tested
+RT-17 introduced 50 records for 25 operators, each with a single tested
 import. The Go-only table generator displays those intervals. Conformance
 provenance validation checks each accepted node's actual selected schema against
 the registry, while preserving all existing fixture bytes/hashes and exception
 classifications. Step's scalar metadata remains within 256 bytes, checked by
 `TestStepFixedMetadataReservation`; dynamic Shape/Reshape staging/destination
 reservations follow the original budget rules.
+
+
+## Audited corpus and fused normalization
+
+RT-19 adds one exact LayerNormalization-17 record: current Capabilities() returns
+51 records, with 25 operators at import 13 and 26 at import 17. The Go-only table
+checker uses the canonical manifest. The additional float32 `Step.Epsilon`
+remains inside the existing 256-byte scalar metadata reservation; per-output
+statistics shape snapshots are reserved before copying.
+
+The [corpus guide](../testdata/corpus/README.md),
+[compatibility report](model-compatibility.md) and
+[selected task](tasks/layer-normalization.md) record source/license decisions,
+exact schema/type scope, findings and the backend allocation audit. Runtime
+integration uses the unchanged published NN-12 ReduceMean/Sqrt/arithmetic
+kernels; primitive reduction/math ONNX operators remain unsupported.
+
+```sh
+/private/tmp/neuralnetwork-onnx-reference/bin/python tools/check_corpus.py --source-archive /private/tmp/rt10-onnx-source.tar.gz
+CGO_ENABLED=0 go test . -run 'TestAuditedCorpus|TestNormalization' -count=1
+CGO_ENABLED=0 go run ./examples/normalization
+CGO_ENABLED=0 go run -tags=purego ./examples/normalization
+```
+
+The generator reproduces byte-original upstream model/value/source artifacts and
+separately labeled original test graphs. It checks pinned tools, archive hash,
+schema/defaults and actual oracle outputs. All 28 evaluator cases agree; ORT
+agrees 27 and actually rejects scalar affine broadcasting. Normal Go tests hash,
+decode and execute fixtures without Python or network. Future task files are
+contracts for independent work and do not add runtime support.

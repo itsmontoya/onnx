@@ -1,0 +1,35 @@
+{
+  "operator": "LayerNormalization",
+  "schema_version": 17,
+  "attributes": {
+    "axis": {
+      "type": "INT",
+      "required": false,
+      "default": -1
+    },
+    "epsilon": {
+      "type": "FLOAT",
+      "required": false,
+      "default": 9.999999747378752e-06
+    },
+    "stash_type": {
+      "type": "INT",
+      "required": false,
+      "default": 1
+    }
+  },
+  "type_constraints": {
+    "T": [
+      "tensor(float16)",
+      "tensor(float)",
+      "tensor(double)",
+      "tensor(bfloat16)"
+    ],
+    "U": [
+      "tensor(float)",
+      "tensor(bfloat16)"
+    ]
+  },
+  "documentation_sha256": "722cc27af8993a5fd104687f4f1532a582568246237f8165c8c28d734c7dbce5",
+  "decision": "float32 T/U and stash_type=1 only; centered population variance; fused backend composition; no primitive reduction ONNX adapters"
+}

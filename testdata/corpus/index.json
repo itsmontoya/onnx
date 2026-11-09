@@ -1,0 +1,4944 @@
+{
+  "format_version": 1,
+  "source_revision": "3bf92c03a9f27eba3bda1e5b9e63ea20ec213557",
+  "archive_sha256": "d32b94c9c6feda1403d340813b8926d5825082f497e1a65285b50faa31aad3c5",
+  "license": "Apache-2.0",
+  "notice": "Upstream archive has LICENSE and no NOTICE file; copied unmodified LICENSE retained.",
+  "source_export": {
+    "path": "corpus/source/layernormalization.py",
+    "sha256": "50667265a536c7f94bd91c7845ef5cb32e02e80522fd84c49df5b279761e7261"
+  },
+  "upstream_model_count": 1422,
+  "upstream_exact_ir8_opset13": 0,
+  "upstream_exact_ir8_opset17": 65,
+  "report_scope": "Static envelope/value/operator/attribute/output-slot audit of selected corpus; not a universal validator. Go tests assert actual runtime loading and first diagnostics.",
+  "before_rt19": {
+    "models": 33,
+    "enabled": 0,
+    "unsupported": 33,
+    "findings": 63,
+    "features": {
+      "dtype": 5,
+      "operator": 43,
+      "profile": 12,
+      "value_kind": 3
+    }
+  },
+  "after_rt19": {
+    "models": 33,
+    "enabled": 19,
+    "unsupported": 14,
+    "findings": 44,
+    "features": {
+      "dtype": 5,
+      "operator": 24,
+      "profile": 12,
+      "value_kind": 3
+    }
+  },
+  "models": [
+    {
+      "name": "test_layer_normalization_2d_axis0",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_2d_axis0/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_2d_axis0/model.onnx",
+      "source_sha256": "42ed024f76c6daf3faa2ed28caad057884945f53c1681191dceeb216952ffcfe",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_2d_axis0.onnx",
+        "sha256": "42ed024f76c6daf3faa2ed28caad057884945f53c1681191dceeb216952ffcfe"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": 0
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_2d_axis1",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_2d_axis1/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_2d_axis1/model.onnx",
+      "source_sha256": "b1f6b773af3e3bf19c9817b82494c5faf53563b2139e02144751b9b8fc329df9",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_2d_axis1.onnx",
+        "sha256": "b1f6b773af3e3bf19c9817b82494c5faf53563b2139e02144751b9b8fc329df9"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": 1
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            4
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            4
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_2d_axis_negative_1",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_2d_axis_negative_1/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_2d_axis_negative_1/model.onnx",
+      "source_sha256": "a5994f9d7886b9763b654921f25816069924b4f57f3b363a79fcc6dca7d0a68a",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_2d_axis_negative_1.onnx",
+        "sha256": "a5994f9d7886b9763b654921f25816069924b4f57f3b363a79fcc6dca7d0a68a"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": -1
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            4
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            4
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_2d_axis_negative_2",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_2d_axis_negative_2/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_2d_axis_negative_2/model.onnx",
+      "source_sha256": "9450a27e95ec1fcd302caa358ba92a54b2fd6cbea76550ba778128469e850b2c",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_2d_axis_negative_2.onnx",
+        "sha256": "9450a27e95ec1fcd302caa358ba92a54b2fd6cbea76550ba778128469e850b2c"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": -2
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_3d_axis0_epsilon",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_3d_axis0_epsilon/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_3d_axis0_epsilon/model.onnx",
+      "source_sha256": "9d6bb477c98fba8feafba11bc4d95d0603b00072c8eabf36a1fa7030e798dd51",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_3d_axis0_epsilon.onnx",
+        "sha256": "9d6bb477c98fba8feafba11bc4d95d0603b00072c8eabf36a1fa7030e798dd51"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": 0
+            },
+            "epsilon": {
+              "type": "FLOAT",
+              "value": 0.10000000149011612
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_3d_axis1_epsilon",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_3d_axis1_epsilon/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_3d_axis1_epsilon/model.onnx",
+      "source_sha256": "2f59f7709e45611db4c3e34bfd2dcdaa57d28daf179e51046460d45c5e7f2e9e",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_3d_axis1_epsilon.onnx",
+        "sha256": "2f59f7709e45611db4c3e34bfd2dcdaa57d28daf179e51046460d45c5e7f2e9e"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": 1
+            },
+            "epsilon": {
+              "type": "FLOAT",
+              "value": 0.10000000149011612
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_3d_axis2_epsilon",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_3d_axis2_epsilon/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_3d_axis2_epsilon/model.onnx",
+      "source_sha256": "0a97b28420785208ed1a556ec3e04c244ad34780f7cc51c32191a38dc0c19731",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_3d_axis2_epsilon.onnx",
+        "sha256": "0a97b28420785208ed1a556ec3e04c244ad34780f7cc51c32191a38dc0c19731"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": 2
+            },
+            "epsilon": {
+              "type": "FLOAT",
+              "value": 0.10000000149011612
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_3d_axis_negative_1_epsilon",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_3d_axis_negative_1_epsilon/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_3d_axis_negative_1_epsilon/model.onnx",
+      "source_sha256": "320ca3e6fd3e14e75d1e53cad9be3dcd29d3ccf84bc843391621c8e51eb7eee4",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_3d_axis_negative_1_epsilon.onnx",
+        "sha256": "320ca3e6fd3e14e75d1e53cad9be3dcd29d3ccf84bc843391621c8e51eb7eee4"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": -1
+            },
+            "epsilon": {
+              "type": "FLOAT",
+              "value": 0.10000000149011612
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_3d_axis_negative_2_epsilon",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_3d_axis_negative_2_epsilon/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_3d_axis_negative_2_epsilon/model.onnx",
+      "source_sha256": "b5f62e4f4c78f293b7cce74fbdbd9a7feb20ad65c602d0e08a006563f7f603c1",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_3d_axis_negative_2_epsilon.onnx",
+        "sha256": "b5f62e4f4c78f293b7cce74fbdbd9a7feb20ad65c602d0e08a006563f7f603c1"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": -2
+            },
+            "epsilon": {
+              "type": "FLOAT",
+              "value": 0.10000000149011612
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_3d_axis_negative_3_epsilon",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_3d_axis_negative_3_epsilon/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_3d_axis_negative_3_epsilon/model.onnx",
+      "source_sha256": "12c69e232bbb1d7c6fbd62816c4e0cb5508056d65273c74b9fec442ffaf55844",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_3d_axis_negative_3_epsilon.onnx",
+        "sha256": "12c69e232bbb1d7c6fbd62816c4e0cb5508056d65273c74b9fec442ffaf55844"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": -3
+            },
+            "epsilon": {
+              "type": "FLOAT",
+              "value": 0.10000000149011612
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_4d_axis0",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_4d_axis0/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_4d_axis0/model.onnx",
+      "source_sha256": "e854f299207b55461c3d9280a776f991843ced26999df83e1506688447e5cf77",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_4d_axis0.onnx",
+        "sha256": "e854f299207b55461c3d9280a776f991843ced26999df83e1506688447e5cf77"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": 0
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_4d_axis1",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_4d_axis1/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_4d_axis1/model.onnx",
+      "source_sha256": "86740aadd93be0cb8cb384e0de058bdb09e7e852263f539faae897bc0756eb68",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_4d_axis1.onnx",
+        "sha256": "86740aadd93be0cb8cb384e0de058bdb09e7e852263f539faae897bc0756eb68"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": 1
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4,
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_4d_axis2",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_4d_axis2/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_4d_axis2/model.onnx",
+      "source_sha256": "b0544a79a9d34399433f507cd8ffa6de8b59df064bcb76c58f1d940129d8fb26",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_4d_axis2.onnx",
+        "sha256": "b0544a79a9d34399433f507cd8ffa6de8b59df064bcb76c58f1d940129d8fb26"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": 2
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            4,
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            4,
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            1,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_4d_axis3",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_4d_axis3/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_4d_axis3/model.onnx",
+      "source_sha256": "7f7bc1f7d18728b9f367a54c89488b0181a1b144bfa7daefe6aef12cbf5aae28",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_4d_axis3.onnx",
+        "sha256": "7f7bc1f7d18728b9f367a54c89488b0181a1b144bfa7daefe6aef12cbf5aae28"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": 3
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_4d_axis_negative_1",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_4d_axis_negative_1/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_4d_axis_negative_1/model.onnx",
+      "source_sha256": "ef75217c58fa86a2397fb9115a8aee10371f6ee11a4b1d71be2c3971816c451e",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_4d_axis_negative_1.onnx",
+        "sha256": "ef75217c58fa86a2397fb9115a8aee10371f6ee11a4b1d71be2c3971816c451e"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": -1
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_4d_axis_negative_2",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_4d_axis_negative_2/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_4d_axis_negative_2/model.onnx",
+      "source_sha256": "03686d638d5e95774a257fd3da63df4c5c92d06a905a2b79d017bc1d3cccedae",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_4d_axis_negative_2.onnx",
+        "sha256": "03686d638d5e95774a257fd3da63df4c5c92d06a905a2b79d017bc1d3cccedae"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": -2
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            4,
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            4,
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            1,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_4d_axis_negative_3",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_4d_axis_negative_3/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_4d_axis_negative_3/model.onnx",
+      "source_sha256": "54d0aa159a0db091530749e012652b247d71581433fcd82648fbd3122af95b4c",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_4d_axis_negative_3.onnx",
+        "sha256": "54d0aa159a0db091530749e012652b247d71581433fcd82648fbd3122af95b4c"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": -3
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4,
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_4d_axis_negative_4",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_4d_axis_negative_4/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_4d_axis_negative_4/model.onnx",
+      "source_sha256": "ef493bcb50f0d6366cf5526e4297b599a1a8cbd4fc6411af54517bb9f545e4d5",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_4d_axis_negative_4.onnx",
+        "sha256": "ef493bcb50f0d6366cf5526e4297b599a1a8cbd4fc6411af54517bb9f545e4d5"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": -4
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_default_axis",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_default_axis/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_default_axis/model.onnx",
+      "source_sha256": "6ffda4124f40caae970531bea123ab7c915efc52acfd9c98996914f4ec433925",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_default_axis.onnx",
+        "sha256": "6ffda4124f40caae970531bea123ab7c915efc52acfd9c98996914f4ec433925"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LayerNormalization",
+          "schema_version": 17,
+          "inputs": [
+            "X",
+            "W",
+            "B"
+          ],
+          "outputs": [
+            "Y",
+            "Mean",
+            "InvStdDev"
+          ],
+          "attributes": {}
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 1,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LayerNormalization"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 0,
+        "failing_nodes": [],
+        "features": []
+      },
+      "status": "enabled"
+    },
+    {
+      "name": "test_layer_normalization_default_axis_expanded",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_layer_normalization_default_axis_expanded/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_layer_normalization_default_axis_expanded/model.onnx",
+      "source_sha256": "4c3b76fc9739b425c78f69793bb418f7e22d645869dab520d9737cf275f38017",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_layer_normalization_default_axis_expanded.onnx",
+        "sha256": "4c3b76fc9739b425c78f69793bb418f7e22d645869dab520d9737cf275f38017"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "Constant",
+          "schema_version": 13,
+          "inputs": [],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_FloatEpsilon"
+          ],
+          "attributes": {
+            "value": {
+              "type": "TENSOR",
+              "sha256": "57c7f0951219eaec07298cfdeaa710e5f3b69fcff712fff0d657fa9e31a8e001"
+            }
+          }
+        },
+        {
+          "index": 1,
+          "name": "",
+          "domain": "",
+          "operator": "Cast",
+          "schema_version": 13,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_FloatEpsilon"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Epsilon"
+          ],
+          "attributes": {
+            "to": {
+              "type": "INT",
+              "value": 1
+            }
+          }
+        },
+        {
+          "index": 2,
+          "name": "",
+          "domain": "",
+          "operator": "Shape",
+          "schema_version": 15,
+          "inputs": [
+            "X"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_XShape"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 3,
+          "name": "",
+          "domain": "",
+          "operator": "Size",
+          "schema_version": 13,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_XShape"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Rank"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 4,
+          "name": "",
+          "domain": "",
+          "operator": "Constant",
+          "schema_version": 13,
+          "inputs": [],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Zero1D"
+          ],
+          "attributes": {
+            "value": {
+              "type": "TENSOR",
+              "sha256": "8a527362c70cee0f9ac0dc37f3d200dab8abf692bcf38a71b39481880800d7d1"
+            }
+          }
+        },
+        {
+          "index": 5,
+          "name": "",
+          "domain": "",
+          "operator": "Constant",
+          "schema_version": 13,
+          "inputs": [],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Axis1D"
+          ],
+          "attributes": {
+            "value": {
+              "type": "TENSOR",
+              "sha256": "d735b7ae8fce365e668b98d2e0de8bb95065eb36a1707308ca1153d528c896f9"
+            }
+          }
+        },
+        {
+          "index": 6,
+          "name": "",
+          "domain": "",
+          "operator": "Slice",
+          "schema_version": 13,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_XShape",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Zero1D",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Axis1D"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_PrefixShape"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 7,
+          "name": "",
+          "domain": "",
+          "operator": "Neg",
+          "schema_version": 13,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Axis1D"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_NumReducedAxes"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 8,
+          "name": "",
+          "domain": "",
+          "operator": "ConstantOfShape",
+          "schema_version": 9,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_NumReducedAxes"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_SuffixShape"
+          ],
+          "attributes": {
+            "value": {
+              "type": "TENSOR",
+              "sha256": "960f241576bc11b5951aff757d78babc9eb4657df7ab4a06392d8b6cf2e4e4d1"
+            }
+          }
+        },
+        {
+          "index": 9,
+          "name": "",
+          "domain": "",
+          "operator": "Concat",
+          "schema_version": 13,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_PrefixShape",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_SuffixShape"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_ReducedShape"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": 0
+            }
+          }
+        },
+        {
+          "index": 10,
+          "name": "",
+          "domain": "",
+          "operator": "Flatten",
+          "schema_version": 13,
+          "inputs": [
+            "X"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_X2D"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": -1
+            }
+          }
+        },
+        {
+          "index": 11,
+          "name": "",
+          "domain": "",
+          "operator": "Cast",
+          "schema_version": 13,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_X2D"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_XU"
+          ],
+          "attributes": {
+            "to": {
+              "type": "INT",
+              "value": 1
+            }
+          }
+        },
+        {
+          "index": 12,
+          "name": "",
+          "domain": "",
+          "operator": "ReduceMean",
+          "schema_version": 13,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_XU"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Mean2D"
+          ],
+          "attributes": {
+            "axes": {
+              "type": "INTS",
+              "value": [
+                1
+              ]
+            }
+          }
+        },
+        {
+          "index": 13,
+          "name": "",
+          "domain": "",
+          "operator": "Mul",
+          "schema_version": 14,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_XU",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_XU"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Square"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 14,
+          "name": "",
+          "domain": "",
+          "operator": "ReduceMean",
+          "schema_version": 13,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Square"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_MeanOfSquare"
+          ],
+          "attributes": {
+            "axes": {
+              "type": "INTS",
+              "value": [
+                1
+              ]
+            }
+          }
+        },
+        {
+          "index": 15,
+          "name": "",
+          "domain": "",
+          "operator": "Mul",
+          "schema_version": 14,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Mean2D",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Mean2D"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_SquareOfMean"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 16,
+          "name": "",
+          "domain": "",
+          "operator": "Sub",
+          "schema_version": 14,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_MeanOfSquare",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_SquareOfMean"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Var"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 17,
+          "name": "",
+          "domain": "",
+          "operator": "Add",
+          "schema_version": 14,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Var",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Epsilon"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_VarPlusEpsilon"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 18,
+          "name": "",
+          "domain": "",
+          "operator": "Sqrt",
+          "schema_version": 13,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_VarPlusEpsilon"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_StdDev"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 19,
+          "name": "",
+          "domain": "",
+          "operator": "Sub",
+          "schema_version": 14,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_XU",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Mean2D"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Deviation"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 20,
+          "name": "",
+          "domain": "",
+          "operator": "Div",
+          "schema_version": 14,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Deviation",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_StdDev"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Normalized"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 21,
+          "name": "",
+          "domain": "",
+          "operator": "Cast",
+          "schema_version": 13,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Normalized"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_NormalizedT"
+          ],
+          "attributes": {
+            "to": {
+              "type": "INT",
+              "value": 1
+            }
+          }
+        },
+        {
+          "index": 22,
+          "name": "",
+          "domain": "",
+          "operator": "Flatten",
+          "schema_version": 13,
+          "inputs": [
+            "W"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Scale2D"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": 0
+            }
+          }
+        },
+        {
+          "index": 23,
+          "name": "",
+          "domain": "",
+          "operator": "Mul",
+          "schema_version": 14,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_NormalizedT",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Scale2D"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Scaled"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 24,
+          "name": "",
+          "domain": "",
+          "operator": "Flatten",
+          "schema_version": 13,
+          "inputs": [
+            "B"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_B2D"
+          ],
+          "attributes": {
+            "axis": {
+              "type": "INT",
+              "value": 0
+            }
+          }
+        },
+        {
+          "index": 25,
+          "name": "",
+          "domain": "",
+          "operator": "Add",
+          "schema_version": 14,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Scaled",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_B2D"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Biased"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 26,
+          "name": "",
+          "domain": "",
+          "operator": "Reshape",
+          "schema_version": 14,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Biased",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_XShape"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 27,
+          "name": "",
+          "domain": "",
+          "operator": "Reciprocal",
+          "schema_version": 13,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_StdDev"
+          ],
+          "outputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_InvStdDev2D"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 28,
+          "name": "",
+          "domain": "",
+          "operator": "Reshape",
+          "schema_version": 14,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_Mean2D",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_ReducedShape"
+          ],
+          "outputs": [
+            "Mean"
+          ],
+          "attributes": {}
+        },
+        {
+          "index": 29,
+          "name": "",
+          "domain": "",
+          "operator": "Reshape",
+          "schema_version": 14,
+          "inputs": [
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_InvStdDev2D",
+            "LayerNormalization_test_layer_normalization_default_axis_expanded_function_ReducedShape"
+          ],
+          "outputs": [
+            "InvStdDev"
+          ],
+          "attributes": {}
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            5
+          ]
+        },
+        {
+          "name": "B",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "Mean",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            1
+          ]
+        },
+        {
+          "name": "InvStdDev",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            4,
+            1
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 11,
+        "failing_nodes": [
+          1,
+          3,
+          6,
+          7,
+          8,
+          11,
+          12,
+          14,
+          18,
+          21,
+          27
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 1,
+            "detail": "Cast"
+          },
+          {
+            "feature": "operator",
+            "node": 3,
+            "detail": "Size"
+          },
+          {
+            "feature": "operator",
+            "node": 6,
+            "detail": "Slice"
+          },
+          {
+            "feature": "operator",
+            "node": 7,
+            "detail": "Neg"
+          },
+          {
+            "feature": "operator",
+            "node": 8,
+            "detail": "ConstantOfShape"
+          },
+          {
+            "feature": "operator",
+            "node": 11,
+            "detail": "Cast"
+          },
+          {
+            "feature": "operator",
+            "node": 12,
+            "detail": "ReduceMean"
+          },
+          {
+            "feature": "operator",
+            "node": 14,
+            "detail": "ReduceMean"
+          },
+          {
+            "feature": "operator",
+            "node": 18,
+            "detail": "Sqrt"
+          },
+          {
+            "feature": "operator",
+            "node": 21,
+            "detail": "Cast"
+          },
+          {
+            "feature": "operator",
+            "node": 27,
+            "detail": "Reciprocal"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 11,
+        "failing_nodes": [
+          1,
+          3,
+          6,
+          7,
+          8,
+          11,
+          12,
+          14,
+          18,
+          21,
+          27
+        ],
+        "features": [
+          {
+            "feature": "operator",
+            "node": 1,
+            "detail": "Cast"
+          },
+          {
+            "feature": "operator",
+            "node": 3,
+            "detail": "Size"
+          },
+          {
+            "feature": "operator",
+            "node": 6,
+            "detail": "Slice"
+          },
+          {
+            "feature": "operator",
+            "node": 7,
+            "detail": "Neg"
+          },
+          {
+            "feature": "operator",
+            "node": 8,
+            "detail": "ConstantOfShape"
+          },
+          {
+            "feature": "operator",
+            "node": 11,
+            "detail": "Cast"
+          },
+          {
+            "feature": "operator",
+            "node": 12,
+            "detail": "ReduceMean"
+          },
+          {
+            "feature": "operator",
+            "node": 14,
+            "detail": "ReduceMean"
+          },
+          {
+            "feature": "operator",
+            "node": 18,
+            "detail": "Sqrt"
+          },
+          {
+            "feature": "operator",
+            "node": 21,
+            "detail": "Cast"
+          },
+          {
+            "feature": "operator",
+            "node": 27,
+            "detail": "Reciprocal"
+          }
+        ]
+      },
+      "status": "unsupported"
+    },
+    {
+      "name": "test_slice",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_slice/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_slice/model.onnx",
+      "source_sha256": "f98fa78da13481c0521dbe1a5d600b2aa65f3d00802c4ec1bccf8cbd1993131b",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_slice.onnx",
+        "sha256": "f98fa78da13481c0521dbe1a5d600b2aa65f3d00802c4ec1bccf8cbd1993131b"
+      },
+      "ir_version": 7,
+      "opsets": {
+        "": 13
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "Slice",
+          "schema_version": 13,
+          "inputs": [
+            "x",
+            "starts",
+            "ends",
+            "axes",
+            "steps"
+          ],
+          "outputs": [
+            "y"
+          ],
+          "attributes": {}
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            20,
+            10,
+            5
+          ]
+        },
+        {
+          "name": "starts",
+          "kind": "tensor_type",
+          "dtype": "INT64",
+          "shape": [
+            2
+          ]
+        },
+        {
+          "name": "ends",
+          "kind": "tensor_type",
+          "dtype": "INT64",
+          "shape": [
+            2
+          ]
+        },
+        {
+          "name": "axes",
+          "kind": "tensor_type",
+          "dtype": "INT64",
+          "shape": [
+            2
+          ]
+        },
+        {
+          "name": "steps",
+          "kind": "tensor_type",
+          "dtype": "INT64",
+          "shape": [
+            2
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            10,
+            5
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 7,
+              "opsets": {
+                "": 13
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "Slice"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 7,
+              "opsets": {
+                "": 13
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "Slice"
+          }
+        ]
+      },
+      "status": "unsupported"
+    },
+    {
+      "name": "test_expand_dim_changed",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_expand_dim_changed/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_expand_dim_changed/model.onnx",
+      "source_sha256": "738fef12a29470404fb3855df65f8e03a87918de7fad30459dceb391c3857bfb",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_expand_dim_changed.onnx",
+        "sha256": "738fef12a29470404fb3855df65f8e03a87918de7fad30459dceb391c3857bfb"
+      },
+      "ir_version": 7,
+      "opsets": {
+        "": 13
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "Expand",
+          "schema_version": 13,
+          "inputs": [
+            "data",
+            "new_shape"
+          ],
+          "outputs": [
+            "expanded"
+          ],
+          "attributes": {}
+        }
+      ],
+      "inputs": [
+        {
+          "name": "data",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            1
+          ]
+        },
+        {
+          "name": "new_shape",
+          "kind": "tensor_type",
+          "dtype": "INT64",
+          "shape": [
+            3
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "expanded",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            3,
+            6
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 7,
+              "opsets": {
+                "": 13
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "Expand"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 7,
+              "opsets": {
+                "": 13
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "Expand"
+          }
+        ]
+      },
+      "status": "unsupported"
+    },
+    {
+      "name": "test_constant_pad",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_constant_pad/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_constant_pad/model.onnx",
+      "source_sha256": "473216d5076148bf3cd0dc37eceb93a2af4b502397ab16b921a1376064afaffc",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_constant_pad.onnx",
+        "sha256": "473216d5076148bf3cd0dc37eceb93a2af4b502397ab16b921a1376064afaffc"
+      },
+      "ir_version": 10,
+      "opsets": {
+        "": 21
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "Pad",
+          "schema_version": 21,
+          "inputs": [
+            "x",
+            "pads",
+            "value"
+          ],
+          "outputs": [
+            "y"
+          ],
+          "attributes": {
+            "mode": {
+              "type": "STRING",
+              "value": "constant"
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "name": "pads",
+          "kind": "tensor_type",
+          "dtype": "INT64",
+          "shape": [
+            8
+          ]
+        },
+        {
+          "name": "value",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            3,
+            7,
+            12
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 10,
+              "opsets": {
+                "": 21
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "Pad"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 10,
+              "opsets": {
+                "": 21
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "Pad"
+          }
+        ]
+      },
+      "status": "unsupported"
+    },
+    {
+      "name": "test_resize_downsample_scales_nearest",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_resize_downsample_scales_nearest/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_resize_downsample_scales_nearest/model.onnx",
+      "source_sha256": "d54f6eaf12cb44836037020cd34bde30ff5f12b398e50446e475ba829f7e9329",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_resize_downsample_scales_nearest.onnx",
+        "sha256": "d54f6eaf12cb44836037020cd34bde30ff5f12b398e50446e475ba829f7e9329"
+      },
+      "ir_version": 9,
+      "opsets": {
+        "": 19
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "Resize",
+          "schema_version": 19,
+          "inputs": [
+            "X",
+            "",
+            "scales"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "attributes": {
+            "mode": {
+              "type": "STRING",
+              "value": "nearest"
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "scales",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            4
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            1,
+            1,
+            2
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 9,
+              "opsets": {
+                "": 19
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "Resize"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 9,
+              "opsets": {
+                "": 19
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "Resize"
+          }
+        ]
+      },
+      "status": "unsupported"
+    },
+    {
+      "name": "test_where_example",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_where_example/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_where_example/model.onnx",
+      "source_sha256": "e185fd4fcb32a20a15a5343b2a25ae9c12066064862803a494987db8476310ff",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_where_example.onnx",
+        "sha256": "e185fd4fcb32a20a15a5343b2a25ae9c12066064862803a494987db8476310ff"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 16
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "Where",
+          "schema_version": 16,
+          "inputs": [
+            "condition",
+            "x",
+            "y"
+          ],
+          "outputs": [
+            "z"
+          ],
+          "attributes": {}
+        }
+      ],
+      "inputs": [
+        {
+          "name": "condition",
+          "kind": "tensor_type",
+          "dtype": "BOOL",
+          "shape": [
+            2,
+            2
+          ]
+        },
+        {
+          "name": "x",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            2
+          ]
+        },
+        {
+          "name": "y",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            2
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "z",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            2,
+            2
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 3,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 8,
+              "opsets": {
+                "": 16
+              }
+            }
+          },
+          {
+            "feature": "dtype",
+            "node": null,
+            "detail": {
+              "role": "inputs",
+              "name": "condition",
+              "kind": "tensor_type",
+              "dtype": "BOOL",
+              "shape": [
+                2,
+                2
+              ]
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "Where"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 3,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 8,
+              "opsets": {
+                "": 16
+              }
+            }
+          },
+          {
+            "feature": "dtype",
+            "node": null,
+            "detail": {
+              "role": "inputs",
+              "name": "condition",
+              "kind": "tensor_type",
+              "dtype": "BOOL",
+              "shape": [
+                2,
+                2
+              ]
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "Where"
+          }
+        ]
+      },
+      "status": "unsupported"
+    },
+    {
+      "name": "test_cast_FLOAT_to_FLOAT16",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_cast_FLOAT_to_FLOAT16/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_cast_FLOAT_to_FLOAT16/model.onnx",
+      "source_sha256": "628f75ed747f5922cc73ab206c31df3e72e9f5fbda2054ffcee2b597851b6970",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_cast_FLOAT_to_FLOAT16.onnx",
+        "sha256": "628f75ed747f5922cc73ab206c31df3e72e9f5fbda2054ffcee2b597851b6970"
+      },
+      "ir_version": 10,
+      "opsets": {
+        "": 21
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "Cast",
+          "schema_version": 21,
+          "inputs": [
+            "input"
+          ],
+          "outputs": [
+            "output"
+          ],
+          "attributes": {
+            "to": {
+              "type": "INT",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "input",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            3,
+            4
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "kind": "tensor_type",
+          "dtype": "FLOAT16",
+          "shape": [
+            3,
+            4
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 3,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 10,
+              "opsets": {
+                "": 21
+              }
+            }
+          },
+          {
+            "feature": "dtype",
+            "node": null,
+            "detail": {
+              "role": "outputs",
+              "name": "output",
+              "kind": "tensor_type",
+              "dtype": "FLOAT16",
+              "shape": [
+                3,
+                4
+              ]
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "Cast"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 3,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 10,
+              "opsets": {
+                "": 21
+              }
+            }
+          },
+          {
+            "feature": "dtype",
+            "node": null,
+            "detail": {
+              "role": "outputs",
+              "name": "output",
+              "kind": "tensor_type",
+              "dtype": "FLOAT16",
+              "shape": [
+                3,
+                4
+              ]
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "Cast"
+          }
+        ]
+      },
+      "status": "unsupported"
+    },
+    {
+      "name": "test_simple_rnn_defaults",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_simple_rnn_defaults/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_simple_rnn_defaults/model.onnx",
+      "source_sha256": "f4506fdd9c205154320bf6b2912ef21b05d5bfb0464c0145c93f06ae5886a2e7",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_simple_rnn_defaults.onnx",
+        "sha256": "f4506fdd9c205154320bf6b2912ef21b05d5bfb0464c0145c93f06ae5886a2e7"
+      },
+      "ir_version": 7,
+      "opsets": {
+        "": 14
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "RNN",
+          "schema_version": 14,
+          "inputs": [
+            "X",
+            "W",
+            "R"
+          ],
+          "outputs": [
+            "",
+            "Y_h"
+          ],
+          "attributes": {
+            "hidden_size": {
+              "type": "INT",
+              "value": 4
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            3,
+            2
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            4,
+            2
+          ]
+        },
+        {
+          "name": "R",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            4,
+            4
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y_h",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            3,
+            4
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 7,
+              "opsets": {
+                "": 14
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "RNN"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 7,
+              "opsets": {
+                "": 14
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "RNN"
+          }
+        ]
+      },
+      "status": "unsupported"
+    },
+    {
+      "name": "test_gru_defaults",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_gru_defaults/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_gru_defaults/model.onnx",
+      "source_sha256": "a43ca38b32af79cd0d0661a5426fe655e28a6d57c466ab1bd34ee166ae41a3c0",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_gru_defaults.onnx",
+        "sha256": "a43ca38b32af79cd0d0661a5426fe655e28a6d57c466ab1bd34ee166ae41a3c0"
+      },
+      "ir_version": 7,
+      "opsets": {
+        "": 14
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "GRU",
+          "schema_version": 14,
+          "inputs": [
+            "X",
+            "W",
+            "R"
+          ],
+          "outputs": [
+            "",
+            "Y_h"
+          ],
+          "attributes": {
+            "hidden_size": {
+              "type": "INT",
+              "value": 5
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            3,
+            2
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            15,
+            2
+          ]
+        },
+        {
+          "name": "R",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            15,
+            5
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y_h",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            3,
+            5
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 7,
+              "opsets": {
+                "": 14
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "GRU"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 7,
+              "opsets": {
+                "": 14
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "GRU"
+          }
+        ]
+      },
+      "status": "unsupported"
+    },
+    {
+      "name": "test_lstm_defaults",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_lstm_defaults/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_lstm_defaults/model.onnx",
+      "source_sha256": "618ada130b343c632f5f0c9cea3c8636ee06271a58eec3afa39011732819d9d1",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_lstm_defaults.onnx",
+        "sha256": "618ada130b343c632f5f0c9cea3c8636ee06271a58eec3afa39011732819d9d1"
+      },
+      "ir_version": 7,
+      "opsets": {
+        "": 14
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "LSTM",
+          "schema_version": 14,
+          "inputs": [
+            "X",
+            "W",
+            "R"
+          ],
+          "outputs": [
+            "",
+            "Y_h"
+          ],
+          "attributes": {
+            "hidden_size": {
+              "type": "INT",
+              "value": 3
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            3,
+            2
+          ]
+        },
+        {
+          "name": "W",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            12,
+            2
+          ]
+        },
+        {
+          "name": "R",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            12,
+            3
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y_h",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            1,
+            3,
+            3
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 7,
+              "opsets": {
+                "": 14
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LSTM"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 2,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 7,
+              "opsets": {
+                "": 14
+              }
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "LSTM"
+          }
+        ]
+      },
+      "status": "unsupported"
+    },
+    {
+      "name": "test_quantizelinear",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_quantizelinear/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_quantizelinear/model.onnx",
+      "source_sha256": "7fce5ae2f9a9290225d3df128dc8012f18e4d06c94f1a3ce85f11be7a3688ebe",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_quantizelinear.onnx",
+        "sha256": "7fce5ae2f9a9290225d3df128dc8012f18e4d06c94f1a3ce85f11be7a3688ebe"
+      },
+      "ir_version": 10,
+      "opsets": {
+        "": 21
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "QuantizeLinear",
+          "schema_version": 21,
+          "inputs": [
+            "x",
+            "y_scale",
+            "y_zero_point"
+          ],
+          "outputs": [
+            "y"
+          ],
+          "attributes": {}
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            6
+          ]
+        },
+        {
+          "name": "y_scale",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": []
+        },
+        {
+          "name": "y_zero_point",
+          "kind": "tensor_type",
+          "dtype": "UINT8",
+          "shape": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "kind": "tensor_type",
+          "dtype": "UINT8",
+          "shape": [
+            6
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 4,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 10,
+              "opsets": {
+                "": 21
+              }
+            }
+          },
+          {
+            "feature": "dtype",
+            "node": null,
+            "detail": {
+              "role": "inputs",
+              "name": "y_zero_point",
+              "kind": "tensor_type",
+              "dtype": "UINT8",
+              "shape": []
+            }
+          },
+          {
+            "feature": "dtype",
+            "node": null,
+            "detail": {
+              "role": "outputs",
+              "name": "y",
+              "kind": "tensor_type",
+              "dtype": "UINT8",
+              "shape": [
+                6
+              ]
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "QuantizeLinear"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 4,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 10,
+              "opsets": {
+                "": 21
+              }
+            }
+          },
+          {
+            "feature": "dtype",
+            "node": null,
+            "detail": {
+              "role": "inputs",
+              "name": "y_zero_point",
+              "kind": "tensor_type",
+              "dtype": "UINT8",
+              "shape": []
+            }
+          },
+          {
+            "feature": "dtype",
+            "node": null,
+            "detail": {
+              "role": "outputs",
+              "name": "y",
+              "kind": "tensor_type",
+              "dtype": "UINT8",
+              "shape": [
+                6
+              ]
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "QuantizeLinear"
+          }
+        ]
+      },
+      "status": "unsupported"
+    },
+    {
+      "name": "test_if",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_if/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_if/model.onnx",
+      "source_sha256": "2a96ecc25e3329bf3b4d2017bf090aad767ea73e7f16268ff3fabd0814f8abf8",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_if.onnx",
+        "sha256": "2a96ecc25e3329bf3b4d2017bf090aad767ea73e7f16268ff3fabd0814f8abf8"
+      },
+      "ir_version": 6,
+      "opsets": {
+        "": 11
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "If",
+          "schema_version": 11,
+          "inputs": [
+            "cond"
+          ],
+          "outputs": [
+            "res"
+          ],
+          "attributes": {
+            "else_branch": {
+              "type": "GRAPH",
+              "sha256": "044ca0050c6bf51444b2659a61c03117585cec78ebab760cc032402c6f485155"
+            },
+            "then_branch": {
+              "type": "GRAPH",
+              "sha256": "194b308e33886cbac06e31d8e987faedbafbef359f0ec10ede88d6cf24db24f9"
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "cond",
+          "kind": "tensor_type",
+          "dtype": "BOOL",
+          "shape": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "res",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            5
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 3,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 6,
+              "opsets": {
+                "": 11
+              }
+            }
+          },
+          {
+            "feature": "dtype",
+            "node": null,
+            "detail": {
+              "role": "inputs",
+              "name": "cond",
+              "kind": "tensor_type",
+              "dtype": "BOOL",
+              "shape": []
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "If"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 3,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 6,
+              "opsets": {
+                "": 11
+              }
+            }
+          },
+          {
+            "feature": "dtype",
+            "node": null,
+            "detail": {
+              "role": "inputs",
+              "name": "cond",
+              "kind": "tensor_type",
+              "dtype": "BOOL",
+              "shape": []
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "If"
+          }
+        ]
+      },
+      "status": "unsupported"
+    },
+    {
+      "name": "test_sequence_map_identity_1_sequence",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_sequence_map_identity_1_sequence/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_sequence_map_identity_1_sequence/model.onnx",
+      "source_sha256": "3847883f7de12d6a1fe9f10587f85a3fccabc54621ef0d5378f93ce97149ac5b",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_sequence_map_identity_1_sequence.onnx",
+        "sha256": "3847883f7de12d6a1fe9f10587f85a3fccabc54621ef0d5378f93ce97149ac5b"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "SequenceMap",
+          "schema_version": 17,
+          "inputs": [
+            "x"
+          ],
+          "outputs": [
+            "y"
+          ],
+          "attributes": {
+            "body": {
+              "type": "GRAPH",
+              "sha256": "195fff5de9d14bc0fe1e81bbfd17b6ec66e851cb775bbe7072475b0cd38ffc60"
+            }
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "kind": "sequence_type"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "kind": "sequence_type"
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 3,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "value_kind",
+            "node": null,
+            "detail": {
+              "role": "inputs",
+              "name": "x",
+              "kind": "sequence_type"
+            }
+          },
+          {
+            "feature": "value_kind",
+            "node": null,
+            "detail": {
+              "role": "outputs",
+              "name": "y",
+              "kind": "sequence_type"
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "SequenceMap"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 3,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "value_kind",
+            "node": null,
+            "detail": {
+              "role": "inputs",
+              "name": "x",
+              "kind": "sequence_type"
+            }
+          },
+          {
+            "feature": "value_kind",
+            "node": null,
+            "detail": {
+              "role": "outputs",
+              "name": "y",
+              "kind": "sequence_type"
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "SequenceMap"
+          }
+        ]
+      },
+      "status": "unsupported"
+    },
+    {
+      "name": "test_optional_get_element_optional_tensor",
+      "origin": "https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/onnx/backend/test/data/node/test_optional_get_element_optional_tensor/model.onnx",
+      "source_path": "onnx/backend/test/data/node/test_optional_get_element_optional_tensor/model.onnx",
+      "source_sha256": "29ce0fdee4ca16bdf9133b79ce69040eef0a147c63de2a68bd1a5f07b13c391e",
+      "license": "Apache-2.0",
+      "license_notice": "../../third_party/onnx/LICENSE",
+      "model": {
+        "path": "corpus/models/test_optional_get_element_optional_tensor.onnx",
+        "sha256": "29ce0fdee4ca16bdf9133b79ce69040eef0a147c63de2a68bd1a5f07b13c391e"
+      },
+      "ir_version": 8,
+      "opsets": {
+        "": 18
+      },
+      "nodes": [
+        {
+          "index": 0,
+          "name": "",
+          "domain": "",
+          "operator": "OptionalGetElement",
+          "schema_version": 18,
+          "inputs": [
+            "optional_input"
+          ],
+          "outputs": [
+            "output"
+          ],
+          "attributes": {}
+        }
+      ],
+      "inputs": [
+        {
+          "name": "optional_input",
+          "kind": "optional_type"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "kind": "tensor_type",
+          "dtype": "FLOAT",
+          "shape": [
+            4
+          ]
+        }
+      ],
+      "initializers": [],
+      "external_data": [],
+      "functions": 0,
+      "training_info": 0,
+      "before_rt19": {
+        "count": 3,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 8,
+              "opsets": {
+                "": 18
+              }
+            }
+          },
+          {
+            "feature": "value_kind",
+            "node": null,
+            "detail": {
+              "role": "inputs",
+              "name": "optional_input",
+              "kind": "optional_type"
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "OptionalGetElement"
+          }
+        ]
+      },
+      "after_rt19": {
+        "count": 3,
+        "failing_nodes": [
+          0
+        ],
+        "features": [
+          {
+            "feature": "profile",
+            "node": null,
+            "detail": {
+              "ir_version": 8,
+              "opsets": {
+                "": 18
+              }
+            }
+          },
+          {
+            "feature": "value_kind",
+            "node": null,
+            "detail": {
+              "role": "inputs",
+              "name": "optional_input",
+              "kind": "optional_type"
+            }
+          },
+          {
+            "feature": "operator",
+            "node": 0,
+            "detail": "OptionalGetElement"
+          }
+        ]
+      },
+      "status": "unsupported"
+    }
+  ]
+}

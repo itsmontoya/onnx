@@ -34,8 +34,8 @@ def main():
     profiles = manifest["profiles"]
     if profiles != [{"ir_version": 8, "domain": "", "min_opset": version, "max_opset": version, "status": "partial_runtime"} for version in [13, 17]]:
         raise SystemExit("tested model profiles differ")
-    if len(manifest["operators"]) != 50:
-        raise SystemExit("exactly two 25-operator profiles are required")
+    if len(manifest["operators"]) != 51:
+        raise SystemExit("25 baseline operator pairs plus LayerNormalization-17 required")
     operators = [entry for entry in manifest["operators"] if entry["min_opset"] == 13]
     if len(operators) != 25 or len({entry["operator"] for entry in operators}) != 25:
         raise SystemExit("initial profile must contain 25 distinct operators")
