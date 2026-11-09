@@ -6,8 +6,10 @@ Keep status there so this file does not become a second, conflicting backlog.
 The backend baseline is `neuralnetwork v0.7.0`: NN-01–NN-12 are complete and
 RT-01–RT-15 and RT-18 are complete. The [NN-13 runtime handoff](docs/handoff-nn13.md)
 supplies its baseline inputs. CNN adapters and explicit external weights are
-implemented and hardened. RT-18 documents the M1–M4 subset; the next task in
-document order is RT-16, after NN-13 provides its measurements.
+implemented and hardened. RT-18 documents the M1–M4 subset. The
+[2026-11-08 RT-16 assessment](docs/blocker-rt16.md) confirms that RT-16 remains
+blocked on unpublished NN-13 results; its working RT-12 inputs are available.
+Independent RT-17 then RT-19 may proceed as separate sequential tasks.
 
 ## Start here
 
@@ -33,8 +35,10 @@ document order is RT-16, after NN-13 provides its measurements.
 8. **RT-15 is complete**: read the [resource/lifecycle audit](docs/hardening-rt15.md).
 9. **RT-18 is complete**: read [usage](docs/getting-started.md), the
    [release checklist](docs/release-checklist.md), [notices](third_party/README.md)
-   and [handoff](docs/handoff-rt18.md). Complete **RT-16** next when NN-13
-   measurements are available, then RT-17 and RT-19. Publishing a tag and
+   and [handoff](docs/handoff-rt18.md). **RT-16 is assessed and blocked**;
+   follow its [resume conditions](docs/blocker-rt16.md#resume-conditions-and-task-ordering)
+   when NN-13 results are published. RT-17 and RT-19 are independent later
+   tasks and may proceed in that order. Publishing a tag and
    deciding the absent project license remain maintainer actions.
 
 ## Subsequent milestones

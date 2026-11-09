@@ -1658,6 +1658,24 @@ aliases, changing batch sizes, cancellation, and concurrent sessions still pass
 golden/race tests. Memory reuse never changes previously returned outputs. Keep
 optimizations only with demonstrated benefit or a documented memory objective.
 
+**Handoff (2026-11-08): blocked, not complete.** The
+[RT-16 dependency assessment](docs/blocker-rt16.md) rechecked live backend
+releases, tags, main, PR #114 and its tracked handoff. All published backend
+paths still resolve to pinned v0.7.0
+`6048452c57a0a293db4591cd2e2febd7d6b743a3`; NN-13 has no published
+optimization or measurement report. Its original RT-12 input blocker is now
+resolved by implementation `3b2895ab233b28c0c7fc731e5927e82c99416fcf` and final
+handoff `007b8abe53b63f35ae4d09abaed93015b7256b4d`. NN-13 can resume without
+waiting for RT-16. Runtime source remains RT-18
+`68df79fe28e7e1c1b55bba0963de7565059f02fd`, on which this dedicated branch
+is stacked. Existing MLP/shape batch-1/3 Load/First/Warm single-iteration smokes
+pass on Go 1.27.2 Darwin/arm64 Apple M3 with GOMAXPROCS=1 and CGO_ENABLED=0,
+under default and purego tags; they are not performance results. No production,
+benchmark, dependency or ownership change is introduced. Keep RT-16 unchecked
+until the report's published-NN-13 resume conditions and full RT-16 acceptance
+checks are met. Independent RT-17 then RT-19 may proceed in separate sequential
+tasks; no backend implementation, later task or merge is included here.
+
 ### [ ] RT-17 — Add explicit IR/opset profiles beyond the first target
 
 **Depends on:** RT-11, RT-12, RT-13, RT-10. **Deliverable:** one additional tested
