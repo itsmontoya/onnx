@@ -62,13 +62,18 @@ func NormalizeAxes(axes []int64, rank int) (normalized []int, err error) {
 	return normalized, nil
 }
 
-// ResolveReshape applies schema-13 zero-copy and inferred-dimension rules.
+// ResolveReshape applies the original zero-copy and inferred-dimension rules.
 func ResolveReshape(input, target []int64) (shape []int64, err error) {
+	return ResolveReshapeMode(input, target, false)
+}
+
+// ResolveReshapeMode also applies the schema-14 literal-zero mode.
+func ResolveReshapeMode(input, target []int64, allowZero bool) (shape []int64, err error) {
 	inputs := []graph.ValueInfo{{ShapeKnown: true, Dimensions: make([]graph.Dimension, len(input))}, {}}
 	for axis, value := range input {
 		inputs[0].Dimensions[axis] = fixed(value)
 	}
-	step := Step{Operator: "Reshape"}
+	step := Step{Operator: "Reshape", AllowZero: allowZero}
 	planner := newShapePlanner(context.Background(), &step, inputs, target, true)
 	var info graph.ValueInfo
 	if info, err = planner.reshape(graph.ValueInfo{}); err != nil {
@@ -118,4 +123,24 @@ func validateRawAxes(axes []int64) (err error) {
 		seen[axis] = true
 	}
 	return nil
+}
+
+// ShapeRange resolves schema-15 slicing with clamping and overflow-safe indexing.
+func ShapeRange(step Step, rank int) (start, end int) {
+	limit := int64(rank)
+	left, right := step.ShapeStart, step.ShapeEnd
+	if !step.ShapeEndSet {
+		right = limit
+	}
+
+	if left < 0 {
+		left += limit
+	}
+
+	if right < 0 {
+		right += limit
+	}
+
+	left, right = min(max(left, 0), limit), min(max(right, 0), limit)
+	return int(left), int(max(left, right))
 }

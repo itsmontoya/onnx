@@ -9,6 +9,7 @@ import (
 	"github.com/itsmontoya/neuralnetwork/tensor"
 	"github.com/itsmontoya/onnx/internal/capability"
 	"github.com/itsmontoya/onnx/internal/graph"
+	"github.com/itsmontoya/onnx/internal/profile"
 	"github.com/itsmontoya/onnx/internal/runtimeerror"
 )
 
@@ -55,8 +56,8 @@ func (c *compiler) compile(source *graph.Graph) (err error) {
 	}
 
 	c.plan.metadata = source.Metadata()
-	if c.plan.metadata.IRVersion != 8 || c.plan.metadata.Opset != 13 {
-		return wrapError(fmt.Errorf("%w: graph must be a successful IR 8/opset 13 build", runtimeerror.ErrInvalidArgument))
+	if !profile.Accepts(c.plan.metadata.IRVersion, "", c.plan.metadata.Opset) {
+		return wrapError(fmt.Errorf("%w: graph must be a successful tested-profile build", runtimeerror.ErrInvalidArgument))
 	}
 
 	c.plan.inputs = source.Inputs()
@@ -239,7 +240,7 @@ func (c *compiler) infer(node graph.Node, step *Step) (info graph.ValueInfo, con
 	}
 
 	if node.Operator != "Constant" {
-		if err = c.reserve(256); err != nil {
+		if err = c.reserve(fixedStepBytes); err != nil {
 			return info, nil, err
 		}
 

@@ -7,6 +7,8 @@ import (
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/itsmontoya/onnx/internal/profile"
 )
 
 func readConformanceSuite() (out *conformanceSuite, err error) {
@@ -62,7 +64,7 @@ func (s *conformanceSuite) validate() (err error) {
 
 		switch fixture.Status {
 		case "agreement":
-			if fixture.Reason != "" || fixture.IRVersion != 8 || !maps.Equal(fixture.Opsets, map[string]int64{"": 13}) || observation.Status != "returned" {
+			if fixture.Reason != "" || len(fixture.Opsets) != 1 || !profile.Accepts(fixture.IRVersion, "", fixture.Opsets[""]) || observation.Status != "returned" {
 				return fmt.Errorf("case %q cannot claim profile agreement", fixture.Name)
 			}
 		case "extension":

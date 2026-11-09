@@ -4,12 +4,12 @@ The library completion record and published handoffs live in [NEEDS.md](NEEDS.md
 runtime task definitions and completion checkboxes live in [ROADMAP.md](ROADMAP.md).
 Keep status there so this file does not become a second, conflicting backlog.
 The backend baseline is `neuralnetwork v0.7.0`: NN-01–NN-12 are complete and
-RT-01–RT-15 and RT-18 are complete. The [NN-13 runtime handoff](docs/handoff-nn13.md)
+RT-01–RT-15, RT-17 and RT-18 are complete. The [NN-13 runtime handoff](docs/handoff-nn13.md)
 supplies its baseline inputs. CNN adapters and explicit external weights are
 implemented and hardened. RT-18 documents the M1–M4 subset. The
 [2026-11-08 RT-16 assessment](docs/blocker-rt16.md) confirms that RT-16 remains
 blocked on unpublished NN-13 results; its working RT-12 inputs are available.
-Independent RT-17 then RT-19 may proceed as separate sequential tasks.
+RT-17 adds the tested IR-8/opset-17 profile; RT-19 may proceed as a separate task.
 
 ## Start here
 
@@ -37,8 +37,8 @@ Independent RT-17 then RT-19 may proceed as separate sequential tasks.
    [release checklist](docs/release-checklist.md), [notices](third_party/README.md)
    and [handoff](docs/handoff-rt18.md). **RT-16 is assessed and blocked**;
    follow its [resume conditions](docs/blocker-rt16.md#resume-conditions-and-task-ordering)
-   when NN-13 results are published. RT-17 and RT-19 are independent later
-   tasks and may proceed in that order. Publishing a tag and
+   when NN-13 results are published. RT-17 is complete; read its [profile handoff](docs/handoff-rt17.md). RT-19 is
+   the next independent task. Publishing a tag and
    deciding the absent project license remain maintainer actions.
 
 ## Subsequent milestones
@@ -48,7 +48,7 @@ Independent RT-17 then RT-19 may proceed as separate sequential tasks.
 | M2: shape processing | NN-07–NN-08 available in v0.7.0 | RT-12 complete |
 | M3: 2D CNNs | NN-09–NN-11 available in v0.7.0 | RT-13 complete |
 | M4: external weights and release readiness | Released copying backend | RT-14–RT-15, RT-18 complete |
-| Later: performance and broader coverage | NN-12 available; resume NN-13 after RT-12 | RT-16–RT-17, RT-19 |
+| Later: performance and broader coverage | NN-12 available; resume NN-13 after RT-12 | RT-17 complete; RT-16 blocked; RT-19 next |
 
 The detailed tasks define the actual dependency edges. Optional performance and
 version expansion do not block the first working runtime or M4 release readiness.

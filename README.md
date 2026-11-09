@@ -5,10 +5,10 @@ A Go-native ONNX inference runtime built on
 Load an `.onnx` model, bind named immutable tensors, and evaluate named outputs
 on the CPU with `CGO_ENABLED=0`, without Python or native runtime libraries.
 
-RT-01–RT-15 and RT-18 complete the documented M1–M4 subset: **IR 8, exactly one
-empty standard-domain opset-13 import, dense float32/int64, serial CPU execution**.
+RT-01–RT-15, RT-17 and RT-18 complete the documented M1–M4 subset: **IR 8, exactly one
+empty standard-domain import at exactly opset 13 or 17, dense float32/int64, serial CPU execution**.
 The [generated support table](docs/getting-started.md#implemented-capability-table)
-records the 25 operators and their dtype, rank, attribute and optional-slot
+records the 25 operators under each tested import and their dtype, rank, attribute and optional-slot
 restrictions. Branching, multiple named inputs/outputs, defaulted initializers,
 symbolic leading input batches, scalar/empty tensors, runtime shape subgraphs,
 NCHW 2D CNNs and explicitly resolved external weights are implemented.
@@ -24,6 +24,7 @@ CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 3
 CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 3
+CGO_ENABLED=0 go run ./examples/inference -graph exported -batch 3
 CGO_ENABLED=0 go run ./examples/external -batch 3
 CGO_ENABLED=0 go test ./...
 CGO_ENABLED=0 go test -tags=purego ./...
@@ -85,10 +86,10 @@ tag is a separate maintainer action; RT-18 does not publish one.
 Read [AGENTS.md](AGENTS.md), [STYLEGUIDE.md](STYLEGUIDE.md) and
 [ROADMAP.md](ROADMAP.md). [TODO.md](TODO.md) gives the sequential task order;
 [NEEDS.md](NEEDS.md) records the pinned backend and published handoffs.
-The [RT-18 handoff](docs/handoff-rt18.md) describes the current documentation
-and validation. Later tasks cover measured optimization (RT-16, after NN-13),
-additional explicit version profiles (RT-17), and audited model-selected coverage
-(RT-19). Backend kernel availability does not broaden runtime compatibility.
+The [RT-17 handoff](docs/handoff-rt17.md) records the schema audit, actual
+unmodified PyTorch 2.2.2 IR-8/opset-17 MLP export and validation. Later tasks
+cover measured optimization (RT-16, after NN-13) and audited model-selected
+coverage (RT-19). Backend kernel availability does not broaden runtime compatibility.
 
 Preserve [the PR template](.github/PULL_REQUEST_TEMPLATE.md) and record exact
 revisions, APIs, checks and limitations in task handoffs.

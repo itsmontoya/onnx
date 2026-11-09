@@ -105,7 +105,7 @@ func (p *Plan) SnapshotBytes(ctx context.Context) (bytes int64, err error) {
 	}
 
 	// Fixed numeric metadata fits in 32 bytes per value and 256 per step,
-	// including CNN configs. Dimension records allow 16 bytes for kind/size.
+	// including CNN configs and version flags. Dimension records allow 16 bytes for kind/size.
 	bytes = 32
 	for repeat := 0; repeat < 2; repeat++ {
 		for _, infos := range [][]graph.ValueInfo{p.inputs, p.outputs} {
@@ -140,11 +140,11 @@ func (p *Plan) SnapshotBytes(ctx context.Context) (bytes int64, err error) {
 			return 0, err
 		}
 
-		if bytes > math.MaxInt64-256 || int64(len(step.Inputs)) > (math.MaxInt64-bytes-256)/8 {
+		if bytes > math.MaxInt64-fixedStepBytes || int64(len(step.Inputs)) > (math.MaxInt64-bytes-fixedStepBytes)/8 {
 			return 0, fmt.Errorf("%w: snapshot input indices", graph.ErrLimit)
 		}
 
-		bytes += 256 + int64(len(step.Inputs))*8
+		bytes += fixedStepBytes + int64(len(step.Inputs))*8
 		if int64(len(step.Outputs)) > (math.MaxInt64-bytes)/8 {
 			return 0, fmt.Errorf("%w: snapshot output indices", graph.ErrLimit)
 		}

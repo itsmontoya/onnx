@@ -1,16 +1,16 @@
 # Run inference in Go
 
 The M1–M4 runtime runs MLPs, named branching graphs, runtime shape subgraphs and 2D CNNs on the CPU
-entirely in Go. It accepts **ONNX IR 8, empty standard domain, imported opset 13**
+entirely in Go. It accepts **ONNX IR 8, empty standard domain, imported opset exactly 13 or 17**
 and the implemented operator subsets below. Python, protoc, a C/C++ inference
 runtime and a shared library are unnecessary for normal use.
 
 ## Try the checked-in examples
 
-Install Go 1.27.2. For the reviewable RT-18 checkout, run:
+Install Go 1.27.2. For the reviewable RT-17 checkout, run:
 
 ```sh
-git clone --branch rt-18-usage-compatibility https://github.com/itsmontoya/onnx.git
+git clone --branch rt-17-version-profiles https://github.com/itsmontoya/onnx.git
 cd onnx
 go mod download
 CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 1
@@ -21,6 +21,8 @@ CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 3
 CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 3
+CGO_ENABLED=0 go run ./examples/inference -graph exported -batch 1
+CGO_ENABLED=0 go run ./examples/inference -graph exported -batch 3
 CGO_ENABLED=0 go run ./examples/external -batch 1
 CGO_ENABLED=0 go run ./examples/external -batch 3
 CGO_ENABLED=0 go test ./...
@@ -148,18 +150,23 @@ own blocked Resolve/Read. There is no single-kernel cancellation-latency promise
 
 ## Prepare a compatible model
 
-Choose an exporter that can emit opset 13 with dense float32 numerical tensors,
+Choose an exporter that can emit IR 8 and opset 13 or 17 with dense float32 numerical tensors,
 inline or explicitly resolved external weights, a known input rank, fixed nonleading input dimensions, and only
 the implemented operators/attributes below. Declare a symbolic or unknown
 leading axis for variable batch sizes. Repeated nonempty symbols bind to one
 concrete size per run. Dense int64 shape/index tensors and type-preserving M2 transforms are supported.
 Squeeze/Unsqueeze-13 use axes inputs, and Reshape-13 uses zero-copy-dimension
-and single inferred -1 rules; it rejects later allowzero metadata.
+and single inferred -1 rules; it rejects allowzero even when zero. At import 17,
+Reshape-14 accepts allowzero=0 (the same dimension-copy default) or 1 (literal
+zeros); a literal zero and -1 together are invalid. Shape-15 accepts start/end
+slices with negative indexing and rank clamping. BatchNormalization-15 requires
+training_mode=0 and exactly one output; schema-9 at import 13 rejects that
+attribute entirely. Float32 CNN/arithmetic restrictions remain unchanged.
 
 Check the resulting `ir_version`, every `opset_import`, every node and all value
-types. An opset-13 request alone does not guarantee IR 8 or eliminate custom
+types. An opset request alone does not guarantee IR 8 or eliminate custom
 domains, shape nodes or external weights. Exporter defaults are not universally
-compatible. Do not relabel an arbitrary newer model as IR 8/opset 13: conversion
+compatible. Do not relabel an arbitrary newer model as an accepted profile: conversion
 must preserve its operator and representation semantics, pass the ONNX checker,
 and be compared with a reference before use. A checker-valid model can still
 exceed this runtime's supported subset or resource limits.
@@ -170,6 +177,15 @@ sets `model.ir_version = 8` on its original graphs, declares `["batch", 2]`
 I/O, stores inline float32 initializers and runs `checker.check_model(...,
 full_check=True)` plus the reference evaluator. These development tools are
 optional; ordinary users consume the checked-in model directly.
+
+The [actual PyTorch export](../testdata/profiles/exports/pytorch_mlp.onnx) was
+emitted by `torch.onnx.export` 2.2.2 at requested opset 17, with IR 8 and dynamic
+leading batches already present. Its bytes are stored unchanged. Run
+`CGO_ENABLED=0 go run ./examples/inference -graph exported -batch 3` without
+installing PyTorch. [Profile provenance](../testdata/profiles/README.md) records
+its source, absent original-fixture license, exact schema selections and
+PyTorch/evaluator/ORT comparisons. This one tested module does not establish
+compatibility with arbitrary PyTorch exports.
 
 `errors.Is(err, onnx.ErrUnsupported)` identifies unsupported IR/imports,
 operators or supported-schema features outside the subset. Missing or duplicate
@@ -187,7 +203,9 @@ This table is generated and checked against [capabilities.json](../capabilities.
 by `go run ./tools/capabilitiesgen`, using the same embedded records as
 `Capabilities()` and the compiler registry. Run `go run ./tools/capabilitiesgen -write`
 to update it deliberately; the no-write command fails on drift and runs in CI.
-The optional `tools/check_inference.py` reference check verifies it too. Every row uses the empty domain/imported opset 13;
+The optional `tools/check_inference.py` reference check verifies it too. Every row
+uses the empty domain and its exact tested-import interval. Separate 13 and 17
+rows do not claim support for imports 14–16;
 optional input slots are zero-based. Only listed attributes are accepted, with
 the recorded types/defaults; required inputs/outputs cannot have empty names.
 Each operator has exactly one nonempty output. Gemm C may be omitted or have an
@@ -195,33 +213,58 @@ empty slot. A supplied C must still be compatible when beta is zero.
 
 <!-- Implemented capabilities start -->
 
-| Operator (schema) | Types | Inputs → outputs | Attributes | Restrictions |
-| --- | --- | --- | --- | --- |
-| Identity (13) | float32, int64 | 1 → 1 | None | static planning and serial execution; session lifecycle implemented by RT-08; dense float32/int64; arbitrary rank including scalar/empty; output shape/type preserved; requested outputs own independent copies, including Identity aliases |
-| Constant (13) | float32, int64 | 0 → 1 | `value:TENSOR`, `value_float:FLOAT`, `value_floats:FLOATS`, `value_int:INT`, `value_ints:INTS` | exactly one dense float32/int64 tensor, float/int scalar or float/int vector attribute; exact int64 storage; arbitrary tensor rank including scalar/empty; reject sparse/string/other forms; scalar/list materialization shares aggregate load and initializer budgets |
-| Add (13) | float32 | 2 → 1 | None | float32 multidirectional broadcasting, including scalars/empty dimensions |
-| Sub (13) | float32 | 2 → 1 | None | float32 multidirectional broadcasting, including scalars/empty dimensions |
-| Mul (13) | float32 | 2 → 1 | None | float32 multidirectional broadcasting, including scalars/empty dimensions |
-| Div (13) | float32 | 2 → 1 | None | float32 multidirectional broadcasting; IEEE division by zero |
-| MatMul (13) | float32 | 2 → 1 | None | float32 rank >= 1; vector promotion and batch broadcasting; empty contractions |
-| Gemm (13) | float32 | 2–3; optional slots [2] → 1 | `alpha:FLOAT=1.0`, `beta:FLOAT=1.0`, `transA:INT=0`, `transB:INT=0` | float32 rank-two A/B; optional scalar/vector/row/column/full C with unidirectional broadcast; transA/transB restricted to 0/1; alpha/beta default 1, including nonfinite coefficients |
-| Relu (13) | float32 | 1 → 1 | None | float32 arbitrary rank including scalar/empty; propagate NaN; negative zero becomes positive zero |
-| Sigmoid (13) | float32 | 1 → 1 | None | float32 arbitrary rank including scalar/empty |
-| Tanh (13) | float32 | 1 → 1 | None | float32 arbitrary rank including scalar/empty |
-| Softmax (13) | float32 | 1 → 1 | `axis:INT=-1` | float32 rank >= 1; axis default -1; empty tensor accepted after axis validation as explicit reference extension; nonfinite slices preserve NaN behavior |
-| Flatten (13) | float32, int64 | 1 → 1 | `axis:INT=1` | type preserving; split axis in [-rank,rank], default 1; explicit concrete products for empty prefixes; documented evaluator rejection difference |
-| Reshape (13) | float32, int64 | 2 → 1 | None | int64 rank-one shape input; schema-13 zero/-1 policy; reject allowzero and ambiguous zero-product inference |
-| Transpose (13) | float32, int64 | 1 → 1 | `perm:INTS` | type preserving; perm defaults to reverse; complete unique nonnegative permutation |
-| Squeeze (13) | float32, int64 | 1–2; optional slots [1] → 1 | None | optional int64 rank-one axes input; omitted axes remove all unit dimensions; explicit axes must be unique and name unit dimensions; explicit empty axes are identity |
-| Unsqueeze (13) | float32, int64 | 2 → 1 | None | required int64 rank-one axes input; unique axes normalized in output rank |
-| Shape (13) | float32, int64 | 1 → 1 | None | int64 vector output from concrete runtime shape; no start/end attributes |
-| Gather (13) | float32, int64 | 2 → 1 | `axis:INT=0` | float32/int64 rank >= 1 data; arbitrary-rank int64 indices; negative indices supported; exact prefix/indices/suffix shape including empties |
-| Concat (13) | float32, int64 | 1–2147483647 → 1 | `axis:INT` | float32/int64 inputs of one type with equal rank >= 1 and equal non-axis dimensions; checked axis sum; required axis; nonempty variadic input list |
-| Conv (11) | float32 | 2–3; optional slots [2] → 1 | `auto_pad:STRING=NOTSET`, `dilations:INTS`, `group:INT=1`, `kernel_shape:INTS`, `pads:INTS`, `strides:INTS` | float32 NCHW rank four; ONNX [M,C/group,kH,kW] weights; positive channels/filters/kernels/strides/dilations; group divides input/output channels; optional [M] bias; auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; kernel_shape must match weights when present; dynamic weights/bias; nonpositive floor spatial extents clamp to zero |
-| MaxPool (12) | float32 | 1 → 1–2; optional slots [1] | `auto_pad:STRING=NOTSET`, `ceil_mode:INT=0`, `dilations:INTS`, `kernel_shape:INTS`, `pads:INTS`, `storage_order:INT=0`, `strides:INTS` | float32 NCHW rank four; positive 2D kernel/strides/dilations; nonnegative pads; values output only; second empty slot allowed, nonempty indices unsupported; storage_order must be 0; ceil_mode must be 0/1; documented empty/nonfinite differences; auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; ceil mode trims starts in right padded region |
-| AveragePool (11) | float32 | 1 → 1 | `auto_pad:STRING=NOTSET`, `ceil_mode:INT=0`, `count_include_pad:INT=0`, `kernel_shape:INTS`, `pads:INTS`, `strides:INTS` | float32 NCHW rank four; positive 2D kernel/strides; nonnegative pads; no dilation attribute; ceil_mode/count_include_pad must be 0/1; full-kernel divisor when including pad; auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; ceil mode trims starts in right padded region |
-| GlobalAveragePool (1) | float32 | 1 → 1 | None | float32 NCHW rank four; output [N,C,1,1]; empty spatial reduction NaN |
-| BatchNormalization (9) | float32 | 5 → 1 | `epsilon:FLOAT=9.999999747378752e-06`, `momentum:FLOAT=0.8999999761581421` | float32 rank-two or NCHW rank-four input and [C] parameters; exactly one inference output slot; reject all additional output slots and training_mode; finite nonnegative epsilon; finite momentum in [0,1] accepted but no statistics update; independent stored-statistics reference; documented evaluator/ORT differences |
+| Operator (schema) | Tested imports | Types | Inputs → outputs | Attributes | Restrictions |
+| --- | --- | --- | --- | --- | --- |
+| Identity (13) | 13–13 | float32, int64 | 1 → 1 | None | static planning and serial execution; session lifecycle implemented by RT-08; dense float32/int64; arbitrary rank including scalar/empty; output shape/type preserved; requested outputs own independent copies, including Identity aliases |
+| Constant (13) | 13–13 | float32, int64 | 0 → 1 | `value:TENSOR`, `value_float:FLOAT`, `value_floats:FLOATS`, `value_int:INT`, `value_ints:INTS` | exactly one dense float32/int64 tensor, float/int scalar or float/int vector attribute; exact int64 storage; arbitrary tensor rank including scalar/empty; reject sparse/string/other forms; scalar/list materialization shares aggregate load and initializer budgets |
+| Add (13) | 13–13 | float32 | 2 → 1 | None | float32 multidirectional broadcasting, including scalars/empty dimensions |
+| Sub (13) | 13–13 | float32 | 2 → 1 | None | float32 multidirectional broadcasting, including scalars/empty dimensions |
+| Mul (13) | 13–13 | float32 | 2 → 1 | None | float32 multidirectional broadcasting, including scalars/empty dimensions |
+| Div (13) | 13–13 | float32 | 2 → 1 | None | float32 multidirectional broadcasting; IEEE division by zero |
+| MatMul (13) | 13–13 | float32 | 2 → 1 | None | float32 rank >= 1; vector promotion and batch broadcasting; empty contractions |
+| Gemm (13) | 13–13 | float32 | 2–3; optional slots [2] → 1 | `alpha:FLOAT=1.0`, `beta:FLOAT=1.0`, `transA:INT=0`, `transB:INT=0` | float32 rank-two A/B; optional scalar/vector/row/column/full C with unidirectional broadcast; transA/transB restricted to 0/1; alpha/beta default 1, including nonfinite coefficients |
+| Relu (13) | 13–13 | float32 | 1 → 1 | None | float32 arbitrary rank including scalar/empty; propagate NaN; negative zero becomes positive zero |
+| Sigmoid (13) | 13–13 | float32 | 1 → 1 | None | float32 arbitrary rank including scalar/empty |
+| Tanh (13) | 13–13 | float32 | 1 → 1 | None | float32 arbitrary rank including scalar/empty |
+| Softmax (13) | 13–13 | float32 | 1 → 1 | `axis:INT=-1` | float32 rank >= 1; axis default -1; empty tensor accepted after axis validation as explicit reference extension; nonfinite slices preserve NaN behavior |
+| Flatten (13) | 13–13 | float32, int64 | 1 → 1 | `axis:INT=1` | type preserving; split axis in [-rank,rank], default 1; explicit concrete products for empty prefixes; documented evaluator rejection difference |
+| Reshape (13) | 13–13 | float32, int64 | 2 → 1 | None | int64 rank-one shape input; schema-13 zero/-1 policy; reject allowzero and ambiguous zero-product inference |
+| Transpose (13) | 13–13 | float32, int64 | 1 → 1 | `perm:INTS` | type preserving; perm defaults to reverse; complete unique nonnegative permutation |
+| Squeeze (13) | 13–13 | float32, int64 | 1–2; optional slots [1] → 1 | None | optional int64 rank-one axes input; omitted axes remove all unit dimensions; explicit axes must be unique and name unit dimensions; explicit empty axes are identity |
+| Unsqueeze (13) | 13–13 | float32, int64 | 2 → 1 | None | required int64 rank-one axes input; unique axes normalized in output rank |
+| Shape (13) | 13–13 | float32, int64 | 1 → 1 | None | int64 vector output from concrete runtime shape; no start/end attributes |
+| Gather (13) | 13–13 | float32, int64 | 2 → 1 | `axis:INT=0` | float32/int64 rank >= 1 data; arbitrary-rank int64 indices; negative indices supported; exact prefix/indices/suffix shape including empties |
+| Concat (13) | 13–13 | float32, int64 | 1–2147483647 → 1 | `axis:INT` | float32/int64 inputs of one type with equal rank >= 1 and equal non-axis dimensions; checked axis sum; required axis; nonempty variadic input list |
+| Conv (11) | 13–13 | float32 | 2–3; optional slots [2] → 1 | `auto_pad:STRING=NOTSET`, `dilations:INTS`, `group:INT=1`, `kernel_shape:INTS`, `pads:INTS`, `strides:INTS` | float32 NCHW rank four; ONNX [M,C/group,kH,kW] weights; positive channels/filters/kernels/strides/dilations; group divides input/output channels; optional [M] bias; auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; kernel_shape must match weights when present; dynamic weights/bias; nonpositive floor spatial extents clamp to zero |
+| MaxPool (12) | 13–13 | float32 | 1 → 1–2; optional slots [1] | `auto_pad:STRING=NOTSET`, `ceil_mode:INT=0`, `dilations:INTS`, `kernel_shape:INTS`, `pads:INTS`, `storage_order:INT=0`, `strides:INTS` | float32 NCHW rank four; positive 2D kernel/strides/dilations; nonnegative pads; values output only; second empty slot allowed, nonempty indices unsupported; storage_order must be 0; ceil_mode must be 0/1; documented empty/nonfinite differences; auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; ceil mode trims starts in right padded region |
+| AveragePool (11) | 13–13 | float32 | 1 → 1 | `auto_pad:STRING=NOTSET`, `ceil_mode:INT=0`, `count_include_pad:INT=0`, `kernel_shape:INTS`, `pads:INTS`, `strides:INTS` | float32 NCHW rank four; positive 2D kernel/strides; nonnegative pads; no dilation attribute; ceil_mode/count_include_pad must be 0/1; full-kernel divisor when including pad; auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; ceil mode trims starts in right padded region |
+| GlobalAveragePool (1) | 13–13 | float32 | 1 → 1 | None | float32 NCHW rank four; output [N,C,1,1]; empty spatial reduction NaN |
+| BatchNormalization (9) | 13–13 | float32 | 5 → 1 | `epsilon:FLOAT=9.999999747378752e-06`, `momentum:FLOAT=0.8999999761581421` | float32 rank-two or NCHW rank-four input and [C] parameters; exactly one inference output slot; reject all additional output slots and training_mode; finite nonnegative epsilon; finite momentum in [0,1] accepted but no statistics update; independent stored-statistics reference; documented evaluator/ORT differences |
+| Identity (16) | 17–17 | float32, int64 | 1 → 1 | None | static planning and serial execution; session lifecycle implemented by RT-08; dense float32/int64; arbitrary rank including scalar/empty; output shape/type preserved; requested outputs own independent copies, including Identity aliases |
+| Constant (13) | 17–17 | float32, int64 | 0 → 1 | `value:TENSOR`, `value_float:FLOAT`, `value_floats:FLOATS`, `value_int:INT`, `value_ints:INTS` | exactly one dense float32/int64 tensor, float/int scalar or float/int vector attribute; exact int64 storage; arbitrary tensor rank including scalar/empty; reject sparse/string/other forms; scalar/list materialization shares aggregate load and initializer budgets |
+| Add (14) | 17–17 | float32 | 2 → 1 | None | float32 multidirectional broadcasting, including scalars/empty dimensions |
+| Sub (14) | 17–17 | float32 | 2 → 1 | None | float32 multidirectional broadcasting, including scalars/empty dimensions |
+| Mul (14) | 17–17 | float32 | 2 → 1 | None | float32 multidirectional broadcasting, including scalars/empty dimensions |
+| Div (14) | 17–17 | float32 | 2 → 1 | None | float32 multidirectional broadcasting; IEEE division by zero |
+| MatMul (13) | 17–17 | float32 | 2 → 1 | None | float32 rank >= 1; vector promotion and batch broadcasting; empty contractions |
+| Gemm (13) | 17–17 | float32 | 2–3; optional slots [2] → 1 | `alpha:FLOAT=1.0`, `beta:FLOAT=1.0`, `transA:INT=0`, `transB:INT=0` | float32 rank-two A/B; optional scalar/vector/row/column/full C with unidirectional broadcast; transA/transB restricted to 0/1; alpha/beta default 1, including nonfinite coefficients |
+| Relu (14) | 17–17 | float32 | 1 → 1 | None | float32 arbitrary rank including scalar/empty; propagate NaN; negative zero becomes positive zero |
+| Sigmoid (13) | 17–17 | float32 | 1 → 1 | None | float32 arbitrary rank including scalar/empty |
+| Tanh (13) | 17–17 | float32 | 1 → 1 | None | float32 arbitrary rank including scalar/empty |
+| Softmax (13) | 17–17 | float32 | 1 → 1 | `axis:INT=-1` | float32 rank >= 1; axis default -1; empty tensor accepted after axis validation as explicit reference extension; nonfinite slices preserve NaN behavior |
+| Flatten (13) | 17–17 | float32, int64 | 1 → 1 | `axis:INT=1` | type preserving; split axis in [-rank,rank], default 1; explicit concrete products for empty prefixes; documented evaluator rejection difference |
+| Reshape (14) | 17–17 | float32, int64 | 2 → 1 | `allowzero:INT=0` | int64 rank-one shape input; at most one inferred -1; equal element counts; allowzero=0 copies input dimensions; allowzero=1 uses literal zeros and forbids any -1 with zero; reject ambiguous zero-product inference |
+| Transpose (13) | 17–17 | float32, int64 | 1 → 1 | `perm:INTS` | type preserving; perm defaults to reverse; complete unique nonnegative permutation |
+| Squeeze (13) | 17–17 | float32, int64 | 1–2; optional slots [1] → 1 | None | optional int64 rank-one axes input; omitted axes remove all unit dimensions; explicit axes must be unique and name unit dimensions; explicit empty axes are identity |
+| Unsqueeze (13) | 17–17 | float32, int64 | 2 → 1 | None | required int64 rank-one axes input; unique axes normalized in output rank |
+| Shape (15) | 17–17 | float32, int64 | 1 → 1 | `end:INT`, `start:INT=0` | int64 vector output from concrete runtime shape; schema-15 start/end clamp to input rank after negative indexing; start >= end yields an empty vector |
+| Gather (13) | 17–17 | float32, int64 | 2 → 1 | `axis:INT=0` | float32/int64 rank >= 1 data; arbitrary-rank int64 indices; negative indices supported; exact prefix/indices/suffix shape including empties |
+| Concat (13) | 17–17 | float32, int64 | 1–2147483647 → 1 | `axis:INT` | float32/int64 inputs of one type with equal rank >= 1 and equal non-axis dimensions; checked axis sum; required axis; nonempty variadic input list |
+| Conv (11) | 17–17 | float32 | 2–3; optional slots [2] → 1 | `auto_pad:STRING=NOTSET`, `dilations:INTS`, `group:INT=1`, `kernel_shape:INTS`, `pads:INTS`, `strides:INTS` | float32 NCHW rank four; ONNX [M,C/group,kH,kW] weights; positive channels/filters/kernels/strides/dilations; group divides input/output channels; optional [M] bias; auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; kernel_shape must match weights when present; dynamic weights/bias; nonpositive floor spatial extents clamp to zero |
+| MaxPool (12) | 17–17 | float32 | 1 → 1–2; optional slots [1] | `auto_pad:STRING=NOTSET`, `ceil_mode:INT=0`, `dilations:INTS`, `kernel_shape:INTS`, `pads:INTS`, `storage_order:INT=0`, `strides:INTS` | float32 NCHW rank four; positive 2D kernel/strides/dilations; nonnegative pads; values output only; second empty slot allowed, nonempty indices unsupported; storage_order must be 0; ceil_mode must be 0/1; documented empty/nonfinite differences; auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; ceil mode trims starts in right padded region |
+| AveragePool (11) | 17–17 | float32 | 1 → 1 | `auto_pad:STRING=NOTSET`, `ceil_mode:INT=0`, `count_include_pad:INT=0`, `kernel_shape:INTS`, `pads:INTS`, `strides:INTS` | float32 NCHW rank four; positive 2D kernel/strides; nonnegative pads; no dilation attribute; ceil_mode/count_include_pad must be 0/1; full-kernel divisor when including pad; auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; ceil mode trims starts in right padded region |
+| GlobalAveragePool (1) | 17–17 | float32 | 1 → 1 | None | float32 NCHW rank four; output [N,C,1,1]; empty spatial reduction NaN |
+| BatchNormalization (15) | 17–17 | float32 | 5 → 1 | `epsilon:FLOAT=9.999999747378752e-06`, `momentum:FLOAT=0.8999999761581421`, `training_mode:INT=0` | float32 rank-two or NCHW rank-four input and [C] parameters; exactly one inference output slot; reject all additional output slots and nonzero training_mode; finite nonnegative epsilon; finite momentum in [0,1] accepted but no statistics update; independent stored-statistics reference; documented evaluator/ORT differences; schema-15 inference only: training_mode=0, all five inputs float32, exactly one output slot |
 
 <!-- Implemented capabilities end -->
 

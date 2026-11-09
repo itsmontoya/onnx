@@ -31,7 +31,12 @@ def main():
         raise SystemExit("RT-14 weight capability differs")
     if "external_data_until_RT-14" in manifest["unsupported_features"] or "external_checksum_metadata" not in manifest["unsupported_features"]:
         raise SystemExit("RT-14 external restrictions differ")
-    operators = manifest["operators"]
+    profiles = manifest["profiles"]
+    if profiles != [{"ir_version": 8, "domain": "", "min_opset": version, "max_opset": version, "status": "partial_runtime"} for version in [13, 17]]:
+        raise SystemExit("tested model profiles differ")
+    if len(manifest["operators"]) != 50:
+        raise SystemExit("exactly two 25-operator profiles are required")
+    operators = [entry for entry in manifest["operators"] if entry["min_opset"] == 13]
     if len(operators) != 25 or len({entry["operator"] for entry in operators}) != 25:
         raise SystemExit("initial profile must contain 25 distinct operators")
     for entry in operators:
@@ -61,7 +66,7 @@ def main():
     if constant["attributes"] != {name: {"type": kind, "required": False} for name, kind in [("value", "TENSOR"), ("value_float", "FLOAT"), ("value_floats", "FLOATS"), ("value_int", "INT"), ("value_ints", "INTS")]}:
         raise SystemExit("RT-09 Constant scalar/list/tensor forms differ")
     # The Go resolver tests use these real version changes in isolated profiles;
-    # this does not broaden the model envelope beyond imported opset 13.
+    # older resolver-only cases do not expand the two audited production profiles.
     if defs.get_schema("Softmax", 12).attributes["axis"].default_value.i != 1:
         raise SystemExit("Softmax-11 default changed")
     if defs.get_schema("Softmax", 13).attributes["axis"].default_value.i != -1:

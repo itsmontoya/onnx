@@ -27,11 +27,11 @@ func newBuilder(ctx context.Context, model *onnxpb.ModelProto, encodedBytes int6
 		return nil, err
 	}
 
-	if err = validateFeatures(ctx, model.Graph, b.limits); err != nil {
+	if err = validateFeatures(ctx, model.Graph, b.limits, model.OpsetImport[0].GetVersion()); err != nil {
 		return nil, err
 	}
 
-	if err = validateValueCount(ctx, model.Graph, b.limits.MaxValues); err != nil {
+	if err = validateValueCount(ctx, model.Graph, b.limits.MaxValues, model.OpsetImport[0].GetVersion()); err != nil {
 		return nil, err
 	}
 
@@ -71,7 +71,7 @@ func (b *builder) build(model *onnxpb.ModelProto) (err error) {
 
 	for index, wire := range model.Graph.Node {
 		if err = b.node(index, wire); err != nil {
-			return nodeError(index, wire, err)
+			return nodeError(index, wire, b.graph.metadata.Opset, err)
 		}
 	}
 

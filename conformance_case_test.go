@@ -9,6 +9,8 @@ import (
 
 	"github.com/itsmontoya/onnx/internal/decode"
 	"github.com/itsmontoya/onnx/internal/onnxpb"
+	"github.com/itsmontoya/onnx/internal/operators"
+	"github.com/itsmontoya/onnx/internal/profile"
 )
 
 type conformanceCase struct {
@@ -105,10 +107,26 @@ func (c conformanceCase) validateEnvelope(data []byte) (err error) {
 		return fmt.Errorf("case %q schema count differs", c.Name)
 	}
 
+	var registry *operators.Registry
+	if registry, err = operators.NewRegistry(Capabilities()); err != nil {
+		return err
+	}
+
 	for index, node := range wire.Graph.Node {
 		schema := c.Schemas[index]
 		if node.GetDomain() != schema.Domain || node.GetOpType() != schema.Operator || schema.Version <= 0 || schema.Version > imports[schema.Domain] {
 			return fmt.Errorf("case %q node %d schema provenance differs", c.Name, index)
+		}
+
+		if profile.Accepts(c.IRVersion, schema.Domain, imports[schema.Domain]) && c.Status != "unsupported" {
+			var selected Capability
+			if selected, err = registry.Resolve(schema.Domain, schema.Operator, imports[schema.Domain]); err != nil {
+				return fmt.Errorf("case %q schema selection: %w", c.Name, err)
+			}
+
+			if selected.SchemaVersion != schema.Version {
+				return fmt.Errorf("case %q node %d applicable schema differs", c.Name, index)
+			}
 		}
 	}
 	return nil

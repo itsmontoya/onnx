@@ -1,0 +1,1816 @@
+{
+  "onnx_source_revision": "3bf92c03a9f27eba3bda1e5b9e63ea20ec213557",
+  "operators": [
+    {
+      "operator": "Identity",
+      "import_13": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "b203872e541f250edd6ec9078cf49f7dc013c507455a32152a6d5076d5aa6773"
+      },
+      "import_17": {
+        "version": 16,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "V": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)",
+            "seq(tensor(uint8))",
+            "seq(tensor(uint16))",
+            "seq(tensor(uint32))",
+            "seq(tensor(uint64))",
+            "seq(tensor(int8))",
+            "seq(tensor(int16))",
+            "seq(tensor(int32))",
+            "seq(tensor(int64))",
+            "seq(tensor(float16))",
+            "seq(tensor(float))",
+            "seq(tensor(double))",
+            "seq(tensor(string))",
+            "seq(tensor(bool))",
+            "seq(tensor(complex64))",
+            "seq(tensor(complex128))",
+            "optional(seq(tensor(uint8)))",
+            "optional(seq(tensor(uint16)))",
+            "optional(seq(tensor(uint32)))",
+            "optional(seq(tensor(uint64)))",
+            "optional(seq(tensor(int8)))",
+            "optional(seq(tensor(int16)))",
+            "optional(seq(tensor(int32)))",
+            "optional(seq(tensor(int64)))",
+            "optional(seq(tensor(float16)))",
+            "optional(seq(tensor(float)))",
+            "optional(seq(tensor(double)))",
+            "optional(seq(tensor(string)))",
+            "optional(seq(tensor(bool)))",
+            "optional(seq(tensor(complex64)))",
+            "optional(seq(tensor(complex128)))",
+            "optional(tensor(uint8))",
+            "optional(tensor(uint16))",
+            "optional(tensor(uint32))",
+            "optional(tensor(uint64))",
+            "optional(tensor(int8))",
+            "optional(tensor(int16))",
+            "optional(tensor(int32))",
+            "optional(tensor(int64))",
+            "optional(tensor(float16))",
+            "optional(tensor(float))",
+            "optional(tensor(double))",
+            "optional(tensor(string))",
+            "optional(tensor(bool))",
+            "optional(tensor(complex64))",
+            "optional(tensor(complex128))"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "b203872e541f250edd6ec9078cf49f7dc013c507455a32152a6d5076d5aa6773"
+      },
+      "runtime_decision": "new type/function forms do not expand dense float32/int64 runtime subset; float32 formulas unchanged"
+    },
+    {
+      "operator": "Constant",
+      "import_13": {
+        "version": 13,
+        "min_input": 0,
+        "max_input": 0,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "sparse_value": {
+            "type": "SPARSE_TENSOR",
+            "required": false
+          },
+          "value": {
+            "type": "TENSOR",
+            "required": false
+          },
+          "value_float": {
+            "type": "FLOAT",
+            "required": false
+          },
+          "value_floats": {
+            "type": "FLOATS",
+            "required": false
+          },
+          "value_int": {
+            "type": "INT",
+            "required": false
+          },
+          "value_ints": {
+            "type": "INTS",
+            "required": false
+          },
+          "value_string": {
+            "type": "STRING",
+            "required": false
+          },
+          "value_strings": {
+            "type": "STRINGS",
+            "required": false
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "d191dfa8d40fe794c41aaa22fc54eb8e9492829a76fe72d219dda113871c7810"
+      },
+      "import_17": {
+        "version": 13,
+        "min_input": 0,
+        "max_input": 0,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "sparse_value": {
+            "type": "SPARSE_TENSOR",
+            "required": false
+          },
+          "value": {
+            "type": "TENSOR",
+            "required": false
+          },
+          "value_float": {
+            "type": "FLOAT",
+            "required": false
+          },
+          "value_floats": {
+            "type": "FLOATS",
+            "required": false
+          },
+          "value_int": {
+            "type": "INT",
+            "required": false
+          },
+          "value_ints": {
+            "type": "INTS",
+            "required": false
+          },
+          "value_string": {
+            "type": "STRING",
+            "required": false
+          },
+          "value_strings": {
+            "type": "STRINGS",
+            "required": false
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "d191dfa8d40fe794c41aaa22fc54eb8e9492829a76fe72d219dda113871c7810"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "Add",
+      "import_13": {
+        "version": 13,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "93e92c34f3d455aefe32bc0d29904933f8f9037ce7009cf66a978e8d569fcf86"
+      },
+      "import_17": {
+        "version": 14,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "044c4b1c761e15722ef801e34142e98c1978ef5585711a4c0cfac3749846fe0f"
+      },
+      "runtime_decision": "new type/function forms do not expand dense float32/int64 runtime subset; float32 formulas unchanged"
+    },
+    {
+      "operator": "Sub",
+      "import_13": {
+        "version": 13,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "6356b016bb7ac36d9cd858e0c27f1fc9932ad315600c662afcd3d119f7603990"
+      },
+      "import_17": {
+        "version": 14,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "901bc777339e3a49fcad8be63aaef15338efa3727870171dfc5ac54b9d6dea6c"
+      },
+      "runtime_decision": "new type/function forms do not expand dense float32/int64 runtime subset; float32 formulas unchanged"
+    },
+    {
+      "operator": "Mul",
+      "import_13": {
+        "version": 13,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "7918626fd9b3ec6b2a37f4cb0653f8e42c66c09a28cbcea7e6aea55dc957a14a"
+      },
+      "import_17": {
+        "version": 14,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "d6518456b0ebe930f5518de2a41ba31ed01fa1bc97185bcb9de00a67e2b35f19"
+      },
+      "runtime_decision": "new type/function forms do not expand dense float32/int64 runtime subset; float32 formulas unchanged"
+    },
+    {
+      "operator": "Div",
+      "import_13": {
+        "version": 13,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "1407dcf741cddbfc923cfe22b98908c8949752cc7c948e0bf60c3faed9a766dd"
+      },
+      "import_17": {
+        "version": 14,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "fb4ae78708b2a2fb1dbd9ac5aea4d80cc9d34d177839bee137e9a6a93a867cac"
+      },
+      "runtime_decision": "new type/function forms do not expand dense float32/int64 runtime subset; float32 formulas unchanged"
+    },
+    {
+      "operator": "MatMul",
+      "import_13": {
+        "version": 13,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "3f1f36d2d380fa010c7634e71754bc3d479ee4fd224c7c728e3d613321b8270c"
+      },
+      "import_17": {
+        "version": 13,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "3f1f36d2d380fa010c7634e71754bc3d479ee4fd224c7c728e3d613321b8270c"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "Gemm",
+      "import_13": {
+        "version": 13,
+        "min_input": 2,
+        "max_input": 3,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "alpha": {
+            "type": "FLOAT",
+            "required": false,
+            "default": 1.0
+          },
+          "beta": {
+            "type": "FLOAT",
+            "required": false,
+            "default": 1.0
+          },
+          "transA": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          },
+          "transB": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "3ebb2b1a82fd377f37252230476f51b275358e69315fa683763cd43599f44853"
+      },
+      "import_17": {
+        "version": 13,
+        "min_input": 2,
+        "max_input": 3,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "alpha": {
+            "type": "FLOAT",
+            "required": false,
+            "default": 1.0
+          },
+          "beta": {
+            "type": "FLOAT",
+            "required": false,
+            "default": 1.0
+          },
+          "transA": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          },
+          "transB": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "3ebb2b1a82fd377f37252230476f51b275358e69315fa683763cd43599f44853"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "Relu",
+      "import_13": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "f0096736081c093c277397f8dc6a6224cde1bdc031e669d89c72cf8f1a67361b"
+      },
+      "import_17": {
+        "version": 14,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(float)",
+            "tensor(int32)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int64)",
+            "tensor(float16)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": true,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "f0096736081c093c277397f8dc6a6224cde1bdc031e669d89c72cf8f1a67361b"
+      },
+      "runtime_decision": "new type/function forms do not expand dense float32/int64 runtime subset; float32 formulas unchanged"
+    },
+    {
+      "operator": "Sigmoid",
+      "import_13": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "5190f6174757a9de7fc5101245a82f2fe9fa0b1deb91dd9482621410195bb473"
+      },
+      "import_17": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "5190f6174757a9de7fc5101245a82f2fe9fa0b1deb91dd9482621410195bb473"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "Tanh",
+      "import_13": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "8b843051ed8f671c6ce0cd9627c204832e0f0391556b8070fec1400bae8ffd8b"
+      },
+      "import_17": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "8b843051ed8f671c6ce0cd9627c204832e0f0391556b8070fec1400bae8ffd8b"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "Softmax",
+      "import_13": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "axis": {
+            "type": "INT",
+            "required": false,
+            "default": -1
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": true,
+        "documentation_sha256": "633fa27d36351c9842ab9ee6d57c5fd7732df6ea8b01d74915dcf60f5ed54cae"
+      },
+      "import_17": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "axis": {
+            "type": "INT",
+            "required": false,
+            "default": -1
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": true,
+        "documentation_sha256": "633fa27d36351c9842ab9ee6d57c5fd7732df6ea8b01d74915dcf60f5ed54cae"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "Flatten",
+      "import_13": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "axis": {
+            "type": "INT",
+            "required": false,
+            "default": 1
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "80a726b2826cda7a03ec704447863f69de853df6e2ca151c34b037cdf255de08"
+      },
+      "import_17": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "axis": {
+            "type": "INT",
+            "required": false,
+            "default": 1
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "80a726b2826cda7a03ec704447863f69de853df6e2ca151c34b037cdf255de08"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "Reshape",
+      "import_13": {
+        "version": 13,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "e63532e865bcfabe241c8e9b1fde8d3df94d6cbd99353cf908c82b186bc4d4af"
+      },
+      "import_17": {
+        "version": 14,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "allowzero": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "1028b5bae4f550c8262d607d61ea62f58f00fe70542981345787e18bdeaf8b14"
+      },
+      "runtime_decision": "allowzero 0 copies dimensions; 1 keeps literal zeros; zero with -1 rejected"
+    },
+    {
+      "operator": "Transpose",
+      "import_13": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "perm": {
+            "type": "INTS",
+            "required": false
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "de4d73b8603616f532dc24c240a6f8ebe07b538d31eef45b433746ec4438a1f1"
+      },
+      "import_17": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "perm": {
+            "type": "INTS",
+            "required": false
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "de4d73b8603616f532dc24c240a6f8ebe07b538d31eef45b433746ec4438a1f1"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "Squeeze",
+      "import_13": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "26938f5ccf8398bc8d449bc08b5d385a1d7dff5fb68e22d7c1c7674aaf1d1850"
+      },
+      "import_17": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "26938f5ccf8398bc8d449bc08b5d385a1d7dff5fb68e22d7c1c7674aaf1d1850"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "Unsqueeze",
+      "import_13": {
+        "version": 13,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "720d1a97ac537b63fd4605f0d3f118e8f95cbbfa4c420498f94cb6b963626891"
+      },
+      "import_17": {
+        "version": 13,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "720d1a97ac537b63fd4605f0d3f118e8f95cbbfa4c420498f94cb6b963626891"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "Shape",
+      "import_13": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ],
+          "T1": [
+            "tensor(int64)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "2df67916e0971e00d179ae19989f877d54a1f8763800d229960150713ed4e13a"
+      },
+      "import_17": {
+        "version": 15,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "end": {
+            "type": "INT",
+            "required": false
+          },
+          "start": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ],
+          "T1": [
+            "tensor(int64)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "049aacd139d9d45704588ad8ff8dc7a3129e69d50a8542dcbf6e79e63738d750"
+      },
+      "runtime_decision": "start/end slice concrete rank with negative indexing and clamping"
+    },
+    {
+      "operator": "Gather",
+      "import_13": {
+        "version": 13,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "axis": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ],
+          "Tind": [
+            "tensor(int32)",
+            "tensor(int64)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "6f1700b5e36f44d471125a112a2e6f87f99337ac4df5af7cec21a9b88dd893ab"
+      },
+      "import_17": {
+        "version": 13,
+        "min_input": 2,
+        "max_input": 2,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "axis": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ],
+          "Tind": [
+            "tensor(int32)",
+            "tensor(int64)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "6f1700b5e36f44d471125a112a2e6f87f99337ac4df5af7cec21a9b88dd893ab"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "Concat",
+      "import_13": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 2147483647,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "axis": {
+            "type": "INT",
+            "required": true
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "ae1788aaeaf1bdff72a67e5711b9b811c9677294cda00b88425d78dd4f99bccc"
+      },
+      "import_17": {
+        "version": 13,
+        "min_input": 1,
+        "max_input": 2147483647,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "axis": {
+            "type": "INT",
+            "required": true
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(uint8)",
+            "tensor(uint16)",
+            "tensor(uint32)",
+            "tensor(uint64)",
+            "tensor(int8)",
+            "tensor(int16)",
+            "tensor(int32)",
+            "tensor(int64)",
+            "tensor(bfloat16)",
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(string)",
+            "tensor(bool)",
+            "tensor(complex64)",
+            "tensor(complex128)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "ae1788aaeaf1bdff72a67e5711b9b811c9677294cda00b88425d78dd4f99bccc"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "Conv",
+      "import_13": {
+        "version": 11,
+        "min_input": 2,
+        "max_input": 3,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "auto_pad": {
+            "type": "STRING",
+            "required": false,
+            "default": "NOTSET"
+          },
+          "dilations": {
+            "type": "INTS",
+            "required": false
+          },
+          "group": {
+            "type": "INT",
+            "required": false,
+            "default": 1
+          },
+          "kernel_shape": {
+            "type": "INTS",
+            "required": false
+          },
+          "pads": {
+            "type": "INTS",
+            "required": false
+          },
+          "strides": {
+            "type": "INTS",
+            "required": false
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "ae53e515f56c8277e79aa0dccb5fe9d047f3504ebeed1388b14be333e64cd4a3"
+      },
+      "import_17": {
+        "version": 11,
+        "min_input": 2,
+        "max_input": 3,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "auto_pad": {
+            "type": "STRING",
+            "required": false,
+            "default": "NOTSET"
+          },
+          "dilations": {
+            "type": "INTS",
+            "required": false
+          },
+          "group": {
+            "type": "INT",
+            "required": false,
+            "default": 1
+          },
+          "kernel_shape": {
+            "type": "INTS",
+            "required": false
+          },
+          "pads": {
+            "type": "INTS",
+            "required": false
+          },
+          "strides": {
+            "type": "INTS",
+            "required": false
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "ae53e515f56c8277e79aa0dccb5fe9d047f3504ebeed1388b14be333e64cd4a3"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "MaxPool",
+      "import_13": {
+        "version": 12,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 2,
+        "attributes": {
+          "auto_pad": {
+            "type": "STRING",
+            "required": false,
+            "default": "NOTSET"
+          },
+          "ceil_mode": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          },
+          "dilations": {
+            "type": "INTS",
+            "required": false
+          },
+          "kernel_shape": {
+            "type": "INTS",
+            "required": true
+          },
+          "pads": {
+            "type": "INTS",
+            "required": false
+          },
+          "storage_order": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          },
+          "strides": {
+            "type": "INTS",
+            "required": false
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(int8)",
+            "tensor(uint8)"
+          ],
+          "I": [
+            "tensor(int64)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "96255fc8d99168deb4951cdd12a95d28154b715fda541929964266b115a27542"
+      },
+      "import_17": {
+        "version": 12,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 2,
+        "attributes": {
+          "auto_pad": {
+            "type": "STRING",
+            "required": false,
+            "default": "NOTSET"
+          },
+          "ceil_mode": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          },
+          "dilations": {
+            "type": "INTS",
+            "required": false
+          },
+          "kernel_shape": {
+            "type": "INTS",
+            "required": true
+          },
+          "pads": {
+            "type": "INTS",
+            "required": false
+          },
+          "storage_order": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          },
+          "strides": {
+            "type": "INTS",
+            "required": false
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(int8)",
+            "tensor(uint8)"
+          ],
+          "I": [
+            "tensor(int64)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "96255fc8d99168deb4951cdd12a95d28154b715fda541929964266b115a27542"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "AveragePool",
+      "import_13": {
+        "version": 11,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "auto_pad": {
+            "type": "STRING",
+            "required": false,
+            "default": "NOTSET"
+          },
+          "ceil_mode": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          },
+          "count_include_pad": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          },
+          "kernel_shape": {
+            "type": "INTS",
+            "required": true
+          },
+          "pads": {
+            "type": "INTS",
+            "required": false
+          },
+          "strides": {
+            "type": "INTS",
+            "required": false
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "d0afca09fdf7f5537f82cc8020938f07abbf3979d4368ecb77103d87c2178dde"
+      },
+      "import_17": {
+        "version": 11,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {
+          "auto_pad": {
+            "type": "STRING",
+            "required": false,
+            "default": "NOTSET"
+          },
+          "ceil_mode": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          },
+          "count_include_pad": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          },
+          "kernel_shape": {
+            "type": "INTS",
+            "required": true
+          },
+          "pads": {
+            "type": "INTS",
+            "required": false
+          },
+          "strides": {
+            "type": "INTS",
+            "required": false
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "d0afca09fdf7f5537f82cc8020938f07abbf3979d4368ecb77103d87c2178dde"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "GlobalAveragePool",
+      "import_13": {
+        "version": 1,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "c5c33532febba5f2cf2030c2b34588c734d9e41184c2f9acea468101431cd61c"
+      },
+      "import_17": {
+        "version": 1,
+        "min_input": 1,
+        "max_input": 1,
+        "min_output": 1,
+        "max_output": 1,
+        "attributes": {},
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "c5c33532febba5f2cf2030c2b34588c734d9e41184c2f9acea468101431cd61c"
+      },
+      "runtime_decision": "same applicable schema; original restrictions preserved"
+    },
+    {
+      "operator": "BatchNormalization",
+      "import_13": {
+        "version": 9,
+        "min_input": 5,
+        "max_input": 5,
+        "min_output": 1,
+        "max_output": 5,
+        "attributes": {
+          "epsilon": {
+            "type": "FLOAT",
+            "required": false,
+            "default": 9.999999747378752e-06
+          },
+          "momentum": {
+            "type": "FLOAT",
+            "required": false,
+            "default": 0.8999999761581421
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "aff3423dd7b68f2ab28c9b057c96bd597587ed4a109270a779c74211fed243ce"
+      },
+      "import_17": {
+        "version": 15,
+        "min_input": 5,
+        "max_input": 5,
+        "min_output": 1,
+        "max_output": 3,
+        "attributes": {
+          "epsilon": {
+            "type": "FLOAT",
+            "required": false,
+            "default": 9.999999747378752e-06
+          },
+          "momentum": {
+            "type": "FLOAT",
+            "required": false,
+            "default": 0.8999999761581421
+          },
+          "training_mode": {
+            "type": "INT",
+            "required": false,
+            "default": 0
+          }
+        },
+        "type_constraints": {
+          "T": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ],
+          "T1": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ],
+          "T2": [
+            "tensor(float16)",
+            "tensor(float)",
+            "tensor(double)",
+            "tensor(bfloat16)"
+          ]
+        },
+        "has_function": false,
+        "has_context_dependent_function": false,
+        "documentation_sha256": "9d11511662319a85b9786ca6855ef3c48302ec3fc9f749f5c0012f72fbd04f98"
+      },
+      "runtime_decision": "training_mode=0 and one output only; all five inputs float32; stored-statistics inference"
+    }
+  ]
+}

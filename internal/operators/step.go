@@ -7,6 +7,9 @@ import (
 	"github.com/itsmontoya/onnx/internal/graph"
 )
 
+// fixedStepBytes bounds scalar payload, including both CNN configs and version flags.
+const fixedStepBytes int64 = 256
+
 // Step identifies a resolved node and value-table slots. Empty optional slots
 // use -1. Gemm coefficients and Softmax axis contain resolved ONNX defaults.
 // Constant shares an immutable tensor attribute without allocating numeric data.
@@ -24,6 +27,10 @@ type Step struct {
 	Constant       *graph.Constant
 	CNN            CNNConfig
 	Gemm           tensor.GemmConfig
+	AllowZero      bool
+	ShapeStart     int64
+	ShapeEnd       int64
+	ShapeEndSet    bool
 	Axis           int64
 	Permutation    []int64
 	PermutationSet bool

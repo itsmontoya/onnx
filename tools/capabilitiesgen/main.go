@@ -61,8 +61,8 @@ func generate(write bool) (err error) {
 
 func capabilityTable() (table string) {
 	var rows = []string{
-		"| Operator (schema) | Types | Inputs → outputs | Attributes | Restrictions |",
-		"| --- | --- | --- | --- | --- |",
+		"| Operator (schema) | Tested imports | Types | Inputs → outputs | Attributes | Restrictions |",
+		"| --- | --- | --- | --- | --- | --- |",
 	}
 
 	for _, entry := range onnx.Capabilities() {
@@ -86,8 +86,8 @@ func capabilityTable() (table string) {
 			attributeText = "None"
 		}
 
-		rows = append(rows, fmt.Sprintf("| %s (%d) | %s | %s → %s | %s | %s |",
-			entry.Operator, entry.SchemaVersion, strings.Join(entry.DataTypes, ", "),
+		rows = append(rows, fmt.Sprintf("| %s (%d) | %d–%d | %s | %s → %s | %s | %s |",
+			entry.Operator, entry.SchemaVersion, entry.MinOpset, entry.MaxOpset, strings.Join(entry.DataTypes, ", "),
 			arity(entry.Inputs), arity(entry.Outputs), attributeText,
 			strings.Join(entry.Restrictions, "; ")))
 	}
