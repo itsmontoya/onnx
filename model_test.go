@@ -469,3 +469,39 @@ func TestLoadCancellationAtEveryBoundary(t *testing.T) {
 		}
 	}
 }
+
+func TestModelDefaultSessionLimitAndSlotRelease(t *testing.T) {
+	model := loadedModel(t, modelFixture(t, "profile/identity"), Options{})
+	var sessions []*Session
+	for index := 0; index < 16; index++ {
+		sessions = append(sessions, modelSession(t, model))
+	}
+	if extra, err := model.NewSession(); extra != nil || !errors.Is(err, ErrLimit) {
+		t.Fatalf("default live-session cap: %v, %v", extra, err)
+	}
+
+	if err := sessions[0].Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := sessions[0].Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	replacement := modelSession(t, model)
+	if extra, err := model.NewSession(); extra != nil || !errors.Is(err, ErrLimit) {
+		t.Fatalf("repeated Close released more than one slot: %v, %v", extra, err)
+	}
+
+	if err := model.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	input := floatTensor(t, []int64{1, 2}, []float32{5, 7})
+	outputs, err := replacement.Run(context.Background(), map[string]*Tensor{"x": input}, RunOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assertFloats(t, outputs[0].Tensor, []int64{1, 2}, []float32{5, 7})
+}

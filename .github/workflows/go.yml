@@ -31,3 +31,11 @@ jobs:
         run: CGO_ENABLED=0 go test -tags=purego ./...
       - name: Test races
         run: go test -race ./...
+      - name: Bounded fuzz smoke tests
+        env:
+          GOMAXPROCS: "2"
+        run: |
+          go test ./internal/decode -run '^$' -fuzz '^FuzzProtobufEntrypoints$' -fuzztime=3s -parallel=2
+          go test ./internal/decode -run '^$' -fuzz '^FuzzTensorDecode$' -fuzztime=3s -parallel=2
+          go test ./internal/graph -run '^$' -fuzz '^FuzzGraphReferences$' -fuzztime=3s -parallel=2
+          go test . -run '^$' -fuzz '^FuzzShapeAttributePlanning$' -fuzztime=3s -parallel=2

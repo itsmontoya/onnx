@@ -31,6 +31,10 @@ func newBuilder(ctx context.Context, model *onnxpb.ModelProto, encodedBytes int6
 		return nil, err
 	}
 
+	if err = validateValueCount(ctx, model.Graph, b.limits.MaxValues); err != nil {
+		return nil, err
+	}
+
 	if b.decoder, err = decode.NewTensorDecoderWithResolver(ctx, model, encodedBytes, b.limits.Tensor, resolver); err != nil {
 		return nil, fmt.Errorf("build graph payload: %w", err)
 	}
@@ -157,6 +161,10 @@ func (b *builder) node(index int, wire *onnxpb.NodeProto) (err error) {
 	}
 
 	for slot, name := range wire.Input {
+		if err = b.ctx.Err(); err != nil {
+			return err
+		}
+
 		if name == "" {
 			continue
 		}
@@ -167,6 +175,10 @@ func (b *builder) node(index int, wire *onnxpb.NodeProto) (err error) {
 	}
 
 	for slot, name := range wire.Output {
+		if err = b.ctx.Err(); err != nil {
+			return err
+		}
+
 		if name == "" {
 			continue
 		}

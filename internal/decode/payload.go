@@ -32,13 +32,22 @@ func countPayload(ctx context.Context, message protoreflect.Message, depth int, 
 		return 0, fmt.Errorf("%w: decoded unknown payload", ErrLimit)
 	}
 
-	message.Range(func(field protoreflect.FieldDescriptor, value protoreflect.Value) (more bool) {
+	// Descriptor order makes the first failing field deterministic. Range order
+	// is unspecified and can otherwise change diagnostics for the same input.
+	fields := message.Descriptor().Fields()
+	for fieldIndex := 0; fieldIndex < fields.Len(); fieldIndex++ {
+		field := fields.Get(fieldIndex)
+		if !message.Has(field) {
+			continue
+		}
+
+		value := message.Get(field)
 		if field.IsList() {
 			list := value.List()
 			for index := 0; index < list.Len(); index++ {
 				var size int64
 				if size, err = countField(ctx, field, list.Get(index), depth, limit-bytes, tensors); err != nil {
-					return false
+					return bytes, err
 				}
 
 				bytes += size
@@ -46,14 +55,12 @@ func countPayload(ctx context.Context, message protoreflect.Message, depth int, 
 		} else {
 			var size int64
 			if size, err = countField(ctx, field, value, depth, limit-bytes, tensors); err != nil {
-				return false
+				return bytes, err
 			}
 
 			bytes += size
 		}
-
-		return true
-	})
+	}
 	return bytes, err
 }
 

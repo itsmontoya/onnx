@@ -5,7 +5,7 @@ A Go-native ONNX inference runtime built on
 Load an `.onnx` model, bind named immutable Go tensors, and evaluate named outputs
 on the CPU without cgo or an installed native inference runtime.
 
-RT-01–RT-14 implement the [runtime contract](docs/runtime-contract.md), bounded
+RT-01–RT-15 implement the [runtime contract](docs/runtime-contract.md), bounded
 protobuf and dense tensor loading, named graph validation, versioned planning,
 and serial sessions. The executable subset is deliberately narrow: ONNX IR 8,
 standard-domain opset 13, float32 Add/Sub/Mul/Div, MatMul/Gemm,
@@ -29,6 +29,11 @@ session bounds. External float32/int64 tensors require an explicit
 platforms; the [portable resolver example](examples/external/main.go) explicitly
 permits an in-memory weight file. Checksum metadata is unsupported. `Capabilities()` returns copied manifest records, covering all 25 implemented operators
 and their exact restrictions.
+
+The [RT-15 audit](docs/hardening-rt15.md) maps these limits to regression tests
+and bounded fuzz targets. Limits account logical payloads rather than process
+RSS. Cancellation is checked around synchronous backend calls and before output
+publication; a running kernel has no cancellation-latency guarantee.
 
 The module pins `neuralnetwork v0.7.0`, protobuf v1.36.12, and Go 1.27.2 with a
 Go 1.26.1 baseline. Ordinary builds/tests require neither protoc nor Python.

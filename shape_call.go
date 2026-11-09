@@ -101,6 +101,10 @@ func (c *shapeCall) plan(ctx context.Context) (err error) {
 	case "Concat":
 		shapes := make([][]int64, len(c.inputs))
 		for index, input := range c.inputs {
+			if err = ctx.Err(); err != nil {
+				return err
+			}
+
 			if input.DataType() != c.dataType {
 				return fmt.Errorf("%w: Concat types differ", ErrInvalidModel)
 			}

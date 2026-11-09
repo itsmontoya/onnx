@@ -11,6 +11,34 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+func TestGraphValueLimitBeforeInitializerAllocation(t *testing.T) {
+	model := graphFixture()
+	model.Graph.Initializer = []*onnxpb.TensorProto{{
+		Name: proto.String("weight"), DataType: proto.Int32(1),
+		Dims: []int64{1 << 18}, RawData: make([]byte, 1<<20),
+	}}
+	encoded := encodedLength(t, model)
+	var err error
+	result := testing.Benchmark(func(b *testing.B) {
+		for b.Loop() {
+			_, err = Build(context.Background(), model, encoded, Limits{MaxValues: 2})
+		}
+	})
+	if !errors.Is(err, ErrLimit) || !strings.Contains(err.Error(), `value "y"`) {
+		t.Fatalf("whole-graph value preflight: %v", err)
+	}
+
+	// One initializer requires a MiB each for staging and owned storage. The
+	// count failure must precede both allocations, allowing ordinary diagnostics.
+	if result.AllocedBytesPerOp() > 32<<10 {
+		t.Fatalf("value-count rejection allocated initializer payload: %d bytes", result.AllocedBytesPerOp())
+	}
+
+	if compiled, buildErr := Build(context.Background(), model, encoded, Limits{MaxValues: 3}); compiled == nil || buildErr != nil {
+		t.Fatalf("exact count or retry failed: %v, %v", compiled, buildErr)
+	}
+}
+
 func TestGraphLimits(t *testing.T) {
 	tests := []struct {
 		name      string

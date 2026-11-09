@@ -165,6 +165,10 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 		var call *numericalCall
 		inputs := make([]*tensor.Tensor, len(step.Inputs))
 		for slot, valueIndex := range step.Inputs {
+			if err = e.ctx.Err(); err != nil {
+				return err
+			}
+
 			if valueIndex >= 0 {
 				inputs[slot] = e.values[valueIndex]
 			}

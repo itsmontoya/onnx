@@ -3,11 +3,25 @@ package decode
 import (
 	"context"
 	"errors"
+	"strings"
 	"testing"
 
 	"github.com/itsmontoya/onnx/internal/onnxpb"
 	"google.golang.org/protobuf/proto"
 )
+
+func TestDecodedPayloadDiagnosticOrder(t *testing.T) {
+	wire := &onnxpb.TensorProto{
+		Dims: []int64{1}, DataType: proto.Int32(1), FloatData: []float32{1},
+		Name: proto.String("weight"), DocString: proto.String("description"),
+	}
+	for repeat := 0; repeat < 100; repeat++ {
+		decoder, err := NewTensorDecoder(context.Background(), wire, 0, TensorLimits{MaxLoadBytes: 12})
+		if decoder != nil || !errors.Is(err, ErrLimit) || !strings.Contains(err.Error(), "onnx.TensorProto.float_data") {
+			t.Fatalf("unstable first overflowing field: %v, %v", decoder, err)
+		}
+	}
+}
 
 func TestDecodedPayloadWidths(t *testing.T) {
 	// Account each decoded element at storage width, even when the eventual

@@ -23,6 +23,9 @@ shape operators, exact runtime shape subgraphs, and the NN-13 baseline handoff.
 RT-13 adds all five bounded M3 CNN adapters and a composed multi-batch CNN.
 RT-14 adds explicit external float32/int64 tensor ranges and a confined directory
 resolver, plus an externalized MLP with unchanged reference values.
+RT-15 audits finite limits and lifecycle/cancellation behavior, preflights named
+value counts before tensor conversion, stabilizes payload diagnostics and adds
+bounded native Go fuzz targets.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -1520,7 +1523,7 @@ Markdown target and diff checks pass. RT-15 is next; no later work or merge is
 performed. Keep this stacked PR based on RT-13 open and its final hosted checks
 green.
 
-### [ ] RT-15 — Harden resource limits, errors, cancellation, and lifecycle
+### [x] RT-15 — Harden resource limits, errors, cancellation, and lifecycle
 
 **Depends on:** RT-11; rerun its cases against RT-12–RT-14 as they land.
 **Deliverable:** fuzz targets, resource/lifecycle integration tests, and an audit
@@ -1541,6 +1544,45 @@ independent sessions and lifecycle contention. A failing/cancelled run preserves
 already returned owned outputs and immutable constants. Allocation accounting
 tests include intermediates and scratch, not just final tensor sizes. All
 documented default limits and cancellation promises have direct tests.
+
+**Handoff (2026-11-08):** [The RT-15 audit](docs/hardening-rt15.md) records the
+full limit/test map, allocation evidence, exact cancellation granularity and
+fuzz scope. Base is RT-14 `cdcfb6fdb86e7331587670c83389d6c9558540ba`;
+implementation/test revision is
+[`e33db19db232dab2c78ccc1a334f7c7bcb079053`](https://github.com/itsmontoya/onnx/tree/e33db19db232dab2c78ccc1a334f7c7bcb079053).
+Public APIs and all dependency/toolchain/operator/profile pins are unchanged.
+
+`internal/graph/validation.go` preflights MaxValues before initializer conversion
+or external resolution, coalescing defaults and ignoring absent optional slots;
+`builder.go` still validates all producers/references. `internal/decode/payload.go`
+uses deterministic descriptor-order checked accounting. Runtime/node-slot/Concat
+planning loops poll context per record in builder, evaluation, shapeCall and
+shapePlanner. Official protobuf/backend calls and copies remain synchronous;
+there is no in-kernel callback or cancellation-latency guarantee.
+
+Matching tests add measured pre-allocation count/scratch/intermediate/output-copy
+rejections, the default 16-session cap and exact idempotent slot release, and all
+eight M2 handlers' cancellation/recovery/retained-output checks. Existing M1–M4
+tests cover aggregate raw/external three-copy/owned/snapshot bytes, all fourteen
+defaults, graph/string/rank/dimension limits, cumulative workspace and resident
+constants, joined errors, failed-load reader cleanup and lifecycle races.
+The four dedicated fuzz files target protobuf entry points, tensor conversion,
+graph references and public shape/attribute planning, using real and malformed
+seeds with finite 16 KiB wire caps and model/tensor/graph/run limits. Oversized
+inputs are explicitly skipped; no arbitrary panic recovery or process OOM occurs.
+
+Full formatting/tidy/verify/build/vet/normal/CGO0/CGO0-purego/race checks pass
+offline on Go 1.27.2 Darwin/arm64. Actual 3-second two-worker smokes passed
+109,984/117,421/17,714/144,789 executions respectively. The Go workflow runs those
+smokes. Protobuf/profile/M1/M2/M3/conformance/inference/external regeneration
+preserves every artifact. Logical payload limits still exclude Go object/capacity/
+allocator overhead and previously retained outputs; semantic counts follow the
+official decoder's object allocation. Unknown groups retain the separate fixed
+protobuf cap. DirectoryResolver retains os.Root's confinement/platform limits.
+
+RT-18 documentation is next; RT-16/NN-13 optimization remains separate. Keep this
+stacked RT-15 branch/PR open on RT-14, with hosted checks green; no merge or later
+task is performed here.
 
 ### [ ] RT-18 — Publish complete usage and compatibility documentation
 
