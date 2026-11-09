@@ -4,7 +4,30 @@ import (
 	"context"
 	"errors"
 	"testing"
+
+	"github.com/itsmontoya/onnx/internal/onnxpb"
+	"google.golang.org/protobuf/proto"
 )
+
+func TestRunStorageZeroContractionOverwritesReusedDestination(t *testing.T) {
+	wire := modelWire(t, "m1/matmul_empty_contraction")
+	input := proto.Clone(wire.Graph.Output[0]).(*onnxpb.ValueInfoProto)
+	input.Name = proto.String("x")
+	wire.Graph.Input = append(wire.Graph.Input, input)
+	wire.Graph.Node = append([]*onnxpb.NodeProto{{OpType: proto.String("Add"), Input: []string{"x", "x"}, Output: []string{"unused"}}}, wire.Graph.Node...)
+	plan := loadedModel(t, modelBytes(t, wire), Options{}).plan
+	run, err := newEvaluation(context.Background(), plan)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	outputs, runErr := run.run(numericalInputs(t, wire), RunOptions{})
+	if runErr != nil || run.storage.reuses != 1 {
+		t.Fatalf("zero-contraction reuse: %d, %v", run.storage.reuses, runErr)
+	}
+
+	assertFloats(t, outputs[0].Tensor, []int64{2, 3}, []float32{0, 0, 0, 0, 0, 0})
+}
 
 func TestRunStorageReusesOnlyAfterEveryAliasConsumer(t *testing.T) {
 	plan := loadedModel(t, modelBytes(t, reuseWire(t)), Options{}).plan
