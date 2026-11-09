@@ -1,3 +1,5 @@
 /TODO.md
 /ROADMAP.md
 /NEEDS.md
+/.cache/compare-runtime/
+/tools/__pycache__/

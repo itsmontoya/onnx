@@ -44,6 +44,11 @@ compatible model authoring/export checks, external weights and reproducible
 failure cases. [Development](docs/development.md) gives full verification and
 optional regeneration commands.
 
+The optional [ONNX Runtime comparison tool](tools/compare_runtime/README.md)
+runs a pinned pretrained MNIST model through both runtimes, checks numerical
+and top-1 agreement, and records CPU inference timings. It also accepts other
+compatible local models with named NumPy inputs.
+
 ## Runtime contract
 
 `Load`, `LoadBytes` and `LoadFile` publish immutable shared Models. Create a
