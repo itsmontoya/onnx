@@ -7,10 +7,10 @@ runtime and a shared library are unnecessary for normal use.
 
 ## Try the checked-in examples
 
-Install Go 1.27.2. For the reviewable RT-13 checkout, run:
+Install Go 1.27.2. For the reviewable RT-14 checkout, run:
 
 ```sh
-git clone --branch rt-13-cnn-operators https://github.com/itsmontoya/onnx.git
+git clone --branch rt-14-external-data https://github.com/itsmontoya/onnx.git
 cd onnx
 go mod download
 CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 1
@@ -21,6 +21,8 @@ CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph shape -batch 3
 CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 1
 CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 3
+CGO_ENABLED=0 go run ./examples/external -batch 1
+CGO_ENABLED=0 go run ./examples/external -batch 3
 CGO_ENABLED=0 go test ./...
 ```
 
@@ -91,7 +93,7 @@ process heap quota.
 ## Prepare a compatible model
 
 Choose an exporter that can emit opset 13 with dense float32 numerical tensors,
-inline weights, a known input rank, fixed nonleading input dimensions, and only
+inline or explicitly resolved external weights, a known input rank, fixed nonleading input dimensions, and only
 the implemented operators/attributes below. Declare a symbolic or unknown
 leading axis for variable batch sizes. Repeated nonempty symbols bind to one
 concrete size per run. Dense int64 shape/index tensors and type-preserving M2 transforms are supported.
@@ -174,7 +176,48 @@ cannot be overridden. Inline constants and all outputs obey the finite limits.
 
 Other IR/opsets/domains, unsupported dtypes, sparse tensors, local functions,
 training information, tensor segments, subgraphs/control flow and
-sequence/map/optional values are rejected. External data and resolver options
-are unsupported until RT-14. Reductions and optimization are future work. `Capabilities()` includes
+sequence/map/optional values are rejected. External float32/int64 data requires
+an explicit resolver; unknown metadata keys and checksum metadata are unsupported. Reductions and optimization are future work. `Capabilities()` includes
 planned entries, whose presence does not establish execution support. The
 current examples work without these future milestones.
+
+## Explicit external weights
+
+The [external MLP fixture](../testdata/external/README.md) has the same weights
+and outputs as the inline MLP, stored in one shared file. Every loader, including
+LoadFile, requires an explicit resolver for external tensors:
+
+```go
+resolver, err := onnx.NewDirectoryResolver("testdata/external/models")
+if err != nil {
+    return err
+}
+
+defer resolver.Close()
+model, err := onnx.LoadFile(ctx, "testdata/external/models/mlp.onnx",
+    onnx.Options{ExternalData: resolver})
+if err != nil {
+    return err
+}
+
+defer model.Close()
+```
+
+Close the resolver when loading finishes; the model has independent owned
+weights. The directory helper rejects traversal/absolute paths and symlink
+escapes at open, and supplies separate bounded readers per range. It is
+unsupported on js/plan9; [the memory resolver example](../examples/external/memory_resolver.go)
+shows a portable explicit allowlist that also works without a directory helper.
+Neither loader nor helper guesses a base directory or fetches URLs.
+
+```sh
+CGO_ENABLED=0 go run ./examples/external -batch 1
+CGO_ENABLED=0 go run ./examples/external -batch 3
+CGO_ENABLED=0 go run -tags=purego ./examples/external -batch 3
+```
+
+Location is required; offset and length are nonnegative decimal int64 values.
+An omitted length still resolves exactly the tensor's byte count, and a supplied
+length must match it. Checksum and unknown keys are unsupported. See the
+[runtime contract](runtime-contract.md#external-tensor-data) for
+budgets, reader ownership, cancellation and filesystem limits.

@@ -20,11 +20,13 @@ RT-08 adds public Load/LoadBytes/LoadFile, shared Models and private serial
 Sessions with cancellation, finite budgets, defaults and owned requested outputs.
 RT-09 adds M1 float32 arithmetic/products/activations and exact float/int
 Constant scalar/list forms. [The capability manifest](../capabilities.json)
-records all 12 implemented operators and their restrictions. RT-10 adds a reusable
+records all 25 implemented operators and their restrictions. RT-10 adds a reusable
 offline fixture runner and differential comparison with typed TensorProto values,
 explicit exception classifications and a complete pinned upstream-envelope audit.
 RT-11 adds the [runnable MLP/branch examples](getting-started.md), four dynamic-
 batch reference agreements and [their integration report](integration-rt11.md).
+RT-12 adds exact shape transforms and RT-13 adds the CNN adapters. RT-14 adds
+explicit external tensor ranges and [their integration report](integration-rt14.md).
 
 Public `NewTensor`, `NewFloat32`, and `NewInt64` delegate storage validation and
 allocation to the pinned backend. They copy caller shapes/payloads; shape and
@@ -165,8 +167,18 @@ zero elements. Empty tensors may omit payloads or use empty raw data. Empty
 repeated fields have no protobuf presence, so an empty typed field cannot be
 distinguished from an absent one after unmarshalling. A present raw field with
 nonempty typed data is rejected. Wrong typed fields, invalid shapes/counts,
-segments, unsupported dtypes, sparse values, and all external storage/location
-metadata are rejected; RT-14 must add an explicit resolver.
+segments, unsupported dtypes and sparse values are rejected. External tensors
+use `NewTensorDecoderWithResolver` with the consumer-defined minimal resolver
+interface. The public facade passes `Options.ExternalData` through
+`graph.BuildWithResolver` to the one decoder for the complete model. Metadata,
+shape, byte counts and all numeric reservations are checked before resolving
+each range. A narrow fresh TensorProto conversion view borrows only dimensions
+and the runtime-owned read buffer; generated protobuf messages are never copied
+by value. External conversion reserves raw bytes, typed staging and an owned
+copy, retaining three payload-width charges after success. Failed I/O, close or
+cancelled conversions commit no reservation. See the
+[external-data contract](runtime-contract.md#external-tensor-data) for
+keys, exact ranges, close/cancellation ownership and platform limits.
 
 TensorLimits selects defaults of 1 GiB MaxLoadBytes, 256 MiB
 MaxInitializerBytes, 64 MiB MaxTensorBytes, rank 32, dimension 2^31-1, and
@@ -377,8 +389,9 @@ idempotent, releases the session slot and makes later Run return ErrClosed. Sepa
 sessions run concurrently with immutable shared plans/constants. Context checks
 cover runtime loops, before/after each node/copy and final publication. Backend
 copies remain synchronous with no in-kernel cancellation or partial output result.
-ExternalDataResolver defines the reserved Resolve signature, but nonnil options
-and external tensors fail as unsupported until RT-14; no resolver is called.
+ExternalDataResolver is implemented in RT-14. Every loader requires an explicit
+resolver for external tensors; inline models accept it without calling it.
+The loader closes range readers but leaves the resolver caller-owned.
 
 The three original [session fixtures](../testdata/sessions/README.md) have checked-in
 bytes, pinned-checker provenance and hand-calculated expectations. Ordinary Go tests
@@ -487,3 +500,31 @@ including one composed CNN at batches 1 and 3. It preserves actual results/error
 from ONNX 1.16.2 and ORT 1.19.2 separately from independent formulas. Ordinary
 Go tests require no reference tooling. The [integration report](integration-rt13.md)
 records current limits and validation.
+
+## External weight fixtures
+
+`tools/check_external.py` reproduces the externalized RT-11 MLP, its shared
+weight file and SHA-256 provenance. The pinned ONNX 1.16.2 checker and loader
+accept it; its evaluator matches the unchanged inherited batch 1 and 3 goldens.
+The fixture uses four shared-file ranges with a nonzero prefix and an omitted
+final length. Internal tests additionally exercise omitted lengths before a
+shared file ends, scalar/empty ranges, float bit patterns and exact int64 values.
+Normal Go tests read only checked-in artifacts and never run Python.
+
+```sh
+python tools/check_external.py
+CGO_ENABLED=0 go run ./examples/external -batch 1
+CGO_ENABLED=0 go run ./examples/external -batch 3
+CGO_ENABLED=0 go run -tags=purego ./examples/external -batch 3
+```
+
+The memory resolver example explicitly permits one immutable byte source. For
+filesystem use, choose a model directory with `NewDirectoryResolver`, pass it
+through Options, then close it after loading. The model's values remain usable.
+The [pinned external-data specification](https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/docs/ExternalData.md)
+describes optional whole-file SHA-1 metadata. RT-14 rejects checksum and unknown
+keys, rather than claiming verification. The directory helper uses os.Root's
+confined opens and rejects unsupported js/plan9 platforms; platform guarantees
+and limits are recorded in the runtime contract. Local checks run on Darwin/arm64;
+the Linux/amd64 workflow exercises the same confinement tests. Symlink tests
+skip explicitly when the host cannot create symlinks.

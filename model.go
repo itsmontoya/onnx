@@ -34,7 +34,7 @@ func Load(ctx context.Context, source io.Reader, options Options) (out *Model, e
 		return nil, operationError("load", err, "")
 	}
 
-	return loadModel(ctx, wire, encodedBytes, options.Limits)
+	return loadModel(ctx, wire, encodedBytes, options)
 }
 
 // LoadBytes borrows data only for the call and publishes an owned immutable plan.
@@ -49,11 +49,11 @@ func LoadBytes(ctx context.Context, data []byte, options Options) (out *Model, e
 		return nil, operationError("load", err, "")
 	}
 
-	return loadModel(ctx, wire, int64(len(data)), options.Limits)
+	return loadModel(ctx, wire, int64(len(data)), options)
 }
 
 // LoadFile owns and closes only the file it opens. It never guesses a directory
-// for external data; external tensors and resolver options remain unsupported.
+// for external data; Options.ExternalData must explicitly permit those reads.
 func LoadFile(ctx context.Context, path string, options Options) (out *Model, err error) {
 	if options, err = validateLoad(ctx, options); err != nil {
 		return nil, operationError("load", err, "")
@@ -163,14 +163,15 @@ func validateLoad(ctx context.Context, options Options) (out Options, err error)
 	return out, nil
 }
 
-func loadModel(ctx context.Context, wire *onnxpb.ModelProto, encodedBytes int64, limits Limits) (out *Model, err error) {
+func loadModel(ctx context.Context, wire *onnxpb.ModelProto, encodedBytes int64, options Options) (out *Model, err error) {
 	var (
+		limits   = options.Limits
 		source   *graph.Graph
 		compiled *operators.Plan
 		plan     *executionPlan
 	)
 
-	if source, err = graph.Build(ctx, wire, encodedBytes, limits.graph()); err != nil {
+	if source, err = graph.BuildWithResolver(ctx, wire, encodedBytes, limits.graph(), options.ExternalData); err != nil {
 		return nil, operationError("load", err, "")
 	}
 

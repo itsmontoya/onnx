@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
+	"slices"
 	"sync"
 	"testing"
 
@@ -48,6 +49,24 @@ func TestCapabilitiesCanonicalManifest(t *testing.T) {
 
 	if string(data) != string(capabilityJSON) || !json.Valid(data) {
 		t.Fatal("embedded capabilities differ from canonical file")
+	}
+
+	var manifest struct {
+		Weights struct {
+			Status       string   `json:"status"`
+			Task         string   `json:"task"`
+			Storage      []string `json:"storage"`
+			DataTypes    []string `json:"data_types"`
+			Restrictions []string `json:"restrictions"`
+		} `json:"weights"`
+		Unsupported []string `json:"unsupported_features"`
+	}
+	if err = json.Unmarshal(data, &manifest); err != nil {
+		t.Fatal(err)
+	}
+
+	if manifest.Weights.Status != "implemented" || manifest.Weights.Task != "RT-14" || !slices.Equal(manifest.Weights.Storage, []string{"inline", "external"}) || !slices.Equal(manifest.Weights.DataTypes, []string{"float32", "int64"}) || len(manifest.Weights.Restrictions) == 0 || !slices.Contains(manifest.Unsupported, "external_checksum_metadata") || slices.Contains(manifest.Unsupported, "external_data_until_RT-14") {
+		t.Fatal("external weight manifest status or restrictions differ")
 	}
 }
 

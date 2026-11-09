@@ -12,7 +12,8 @@ float/int scalar/list Constant forms. RT-10 implements the offline conformance
 harness with typed fixtures and explicit reference exceptions. RT-11 adds public
 inference examples; RT-12 implements runtime int64 shape subgraphs and all M2
 transforms/indexing. RT-13 implements the five bounded CNN adapters, with all
-25 capability records implemented.
+25 capability records implemented. RT-14 adds explicit external float32/int64
+tensor resolution and a confined directory helper.
 [capabilities.json](../capabilities.json)
 records the executable
 subset and planned operator coverage. The
@@ -65,7 +66,7 @@ that the profile contains a valid tiny ONNX model, not runtime conformance.
 | Graph | One top-level acyclic graph, checked in declared order, named values, multiple inputs/outputs and fan-out/joins |
 | Values | Dense contiguous row-major float32 and exact int64 tensors; scalar shape `[]`; any concrete zero dimension means an empty tensor |
 | Operators | Only implemented records in the manifest, with their listed dtype/rank/attribute restrictions |
-| Weights | Inline initializers and Constant attributes first; explicit external resolver only after RT-14 |
+| Weights | Inline or explicitly resolved external dense float32/int64 initializers and Constant attributes |
 | Metadata | Preserve harmless producer/doc/metadata strings; ignore unknown protobuf fields semantically while retaining them in the decoded wire object |
 
 Reject absent/duplicate/incompatible imports, other domains (including the literal
@@ -348,7 +349,9 @@ It counts the complete decoded ONNX message before converting any numeric value,
 including scalar/repeated fields at their actual width, strings/bytes, and unknown
 bytes. This conservatively includes shape and metadata payloads. Each successful
 conversion adds an owned copy; raw conversion also retains a staging charge for
-the load lifetime. TensorLimits implements the six load/shape limits used there
+the load lifetime. External conversion reserves three payload widths before I/O:
+raw range bytes, typed conversion staging and the owned backend copy. These
+charges accumulate conservatively across reused ranges and all model constants. TensorLimits implements the six load/shape limits used there
 (MaxLoadBytes, MaxInitializerBytes, MaxTensorBytes, MaxRank, MaxDimension and
 MaxRecursion). Wire byte limits remain separately enforced by RT-03. The public
 loader passes the actual serialized byte count and complete decoded model;
@@ -535,7 +538,9 @@ goldens for two batch sizes. Follow the rest of the roadmap in
 dependency order; an optimization or further profile must never weaken these
 ownership/error/budget rules without an explicit reviewed contract change.
 
-The external-data API reserved for RT-14 is:
+## External tensor data
+
+RT-14 implements the external-data API:
 
 ```go
 type ExternalDataResolver interface {
@@ -559,9 +564,42 @@ offset; the runtime reads bounded chunks, requires exactly the requested bytes,
 and closes resolver-owned resources on every path. The directory helper must
 use a race-safe confined filesystem primitive, rejecting absolute/traversal paths
 and symlink escapes; platforms without that guarantee require a caller resolver.
-No current-directory guesses or automatic URLs. Before RT-14, external tensors
-fail as unsupported even if Options contains a resolver. RT-14 must validate
-recognized keys/duplicates and location context. Initially reject checksum
-metadata as unsupported rather than silently claiming verification; ONNX's
-optional SHA-1 checksum applies to the external file, not just a selected tensor
-range. A later verified-checksum policy needs its own explicit implementation.
+All three loaders require an explicit `Options.ExternalData` resolver, including
+`LoadFile`; no current-directory guesses or automatic URLs occur. Inline-only
+models accept a resolver without invoking it. The resolver itself remains
+caller-owned, and every returned reader is closed exactly once, including a
+reader returned alongside a resolution error. Close failures prevent publication;
+joined errors retain both I/O and close causes. A zero-byte tensor still resolves
+and closes its zero-length range without reading. Failed/cancelled conversions
+leave decoder usage unchanged. Successful tensors and model plans borrow no
+resolver or caller payload buffers.
+
+Recognized keys are `location`, `offset` and `length`; duplicates, missing/empty
+location, malformed decimal numbers, range overflow and inline/external encoding
+conflicts fail before numerical allocation or external I/O for that tensor.
+Unknown keys (including `basepath`) and optional `checksum` metadata are
+unsupported. The pinned [ONNX v1.16.2 external-data specification](https://github.com/onnx/onnx/blob/3bf92c03a9f27eba3bda1e5b9e63ea20ec213557/docs/ExternalData.md)
+and [schema](../third_party/onnx/onnx.proto) define the optional SHA-1 checksum for
+the external file, rather than a selected tensor range. No checksum verification
+is claimed; development fixture SHA-256 hashes are separate provenance checks.
+
+`DirectoryResolver` uses `os.OpenRoot`/`Root.Open` so confinement occurs during
+open. Relative POSIX locations may follow internal relative symlinks; absolute
+paths, `..` components, backslashes, drive/URL forms and symlink escapes are
+rejected. Each resolve opens a regular file, verifies the range against that
+opened file's size and returns an independent bounded reader. Concurrent
+Resolve/Close calls are safe. Close is idempotent, prevents later resolves with
+ErrClosed and leaves previously returned readers usable. Nil/zero resolvers are
+invalid. Regular files may still change or truncate during reading; exact reads
+catch truncation. The caller must arrange stable content when needed.
+
+The Go [os.Root contract](https://pkg.go.dev/os#Root) supplies race-safe opens on
+supported platforms. The helper returns ErrUnsupported on js and plan9 because
+those platforms lack its required symlink/rename guarantees; supply a caller
+resolver there. Confinement is not a filesystem sandbox: hard links, mounts,
+filesystem boundaries and platform special files are not isolated by os.Root.
+The helper accepts only an opened regular file, but does not add a separate
+filesystem sandbox. Cancellation is polled before resolution and between bounded
+reads/conversion chunks; interruption of a blocked caller Resolve/Read requires
+that implementation's cooperation. Synchronous backend copies remain bounded
+but are not interruptible inside the backend call.

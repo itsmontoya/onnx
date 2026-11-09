@@ -1,0 +1,189 @@
+{
+  "format_version": 1,
+  "onnx_source_revision": "3bf92c03a9f27eba3bda1e5b9e63ea20ec213557",
+  "reference_versions": {
+    "python": "3.9.6",
+    "onnx": "1.16.2",
+    "numpy": "1.26.4",
+    "protobuf": "4.25.3"
+  },
+  "original_license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+  "source_model": {
+    "path": "inference/models/mlp.onnx",
+    "sha256": "04df066d0a12b0e6ddf2ba89e9e452768939a745ddd574cfb39780d0e14c06f9"
+  },
+  "weights": {
+    "path": "external/models/weights.bin",
+    "sha256": "44cc639beb769ce884d9f807a3802bde3e0295138d31695d98d9d56943138925"
+  },
+  "ranges": [
+    {
+      "name": "hidden_weight",
+      "location": "weights.bin",
+      "offset": 13,
+      "bytes": 24,
+      "length_omitted": false,
+      "sha256": "65e603a06370bb6dd318f1b9d4f2b11845f45ac8219689e44180f913b5d429bd"
+    },
+    {
+      "name": "hidden_bias",
+      "location": "weights.bin",
+      "offset": 37,
+      "bytes": 12,
+      "length_omitted": false,
+      "sha256": "dec06e121272765ba8f1682ad44a7a3025b9bd8a6d3979e2a44e2d3aef31b4ff"
+    },
+    {
+      "name": "output_weight",
+      "location": "weights.bin",
+      "offset": 49,
+      "bytes": 24,
+      "length_omitted": false,
+      "sha256": "9e4eb868125af0fdd91cc6e4a724f764ded62282e3b0751f0156703a77bc1717"
+    },
+    {
+      "name": "output_bias",
+      "location": "weights.bin",
+      "offset": 73,
+      "bytes": 8,
+      "length_omitted": true,
+      "sha256": "2dc6ad64a41cf5fa205222c306fccc1e62685dd486a3923bcff6657587119f4e"
+    }
+  ],
+  "cases": [
+    {
+      "name": "external_mlp_batch_1",
+      "origin": "tools/check_external.py; RT-11 MLP with identical externalized weights",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "external/models/mlp.onnx",
+        "sha256": "2839759a10df8272f70ee1b633128804ce065187fe9e8fa3a55b286ff80e17ea"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "features",
+          "tensor": {
+            "path": "inference/values/mlp_batch_1/input_features.pb",
+            "sha256": "a7c5c17b754dff70e1f1bc139307bf424a60c5f9ec608e82117fe2d8f0422519"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "probabilities",
+          "tensor": {
+            "path": "inference/values/mlp_batch_1/output_probabilities.pb",
+            "sha256": "6cd5938d54d8f5867c7501edd050016dc52b7073a39461a96c6bd6fbcc8ee3bb"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "evaluator": "onnx.reference.ReferenceEvaluator"
+        },
+        "independent": "NumPy affine/ReLU/stable-softmax formula matched reference"
+      }
+    },
+    {
+      "name": "external_mlp_batch_3",
+      "origin": "tools/check_external.py; RT-11 MLP with identical externalized weights",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "external/models/mlp.onnx",
+        "sha256": "2839759a10df8272f70ee1b633128804ce065187fe9e8fa3a55b286ff80e17ea"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "features",
+          "tensor": {
+            "path": "inference/values/mlp_batch_3/input_features.pb",
+            "sha256": "8a764901fd7ba19fb1ae3a4a09f87ab2e73d1bf1744483cc5f31f2d762ada6cb"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "probabilities",
+          "tensor": {
+            "path": "inference/values/mlp_batch_3/output_probabilities.pb",
+            "sha256": "1e79f8dfb02ff5490df19d497ea382e463e4dcd15ac41ab6629892a2a0273984"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "evaluator": "onnx.reference.ReferenceEvaluator"
+        },
+        "independent": "NumPy affine/ReLU/stable-softmax formula matched reference"
+      }
+    }
+  ]
+}

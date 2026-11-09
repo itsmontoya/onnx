@@ -2,7 +2,7 @@ package decode
 
 import "fmt"
 
-// TensorLimits bounds decoded payloads and inline tensor conversion. Zero fields
+// TensorLimits bounds decoded payloads and dense tensor conversion. Zero fields
 // select the runtime contract's finite defaults; negative fields are invalid.
 // Logical bytes exclude Go object headers, slice capacity and allocator overhead.
 type TensorLimits struct {
