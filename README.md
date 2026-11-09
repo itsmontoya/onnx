@@ -6,8 +6,8 @@ The goal is to load an `.onnx` model, bind named Go tensor inputs, and evaluate
 named outputs on the CPU without cgo or an installed native inference runtime.
 
 RT-01 now specifies the [runtime contract](docs/runtime-contract.md) and an
-initial [capability manifest](capabilities.json); every operator is still marked
-planned. This repository has no runnable inference implementation yet.
+initial [capability manifest](capabilities.json). This repository has no runnable
+inference implementation yet.
 RT-02 establishes the Go module, pinned `neuralnetwork v0.7.0` and protobuf
 dependencies, and a verification workflow. There is no model loader or inference
 implementation yet, and no model compatibility is claimed. RT-03 adds generated
@@ -17,8 +17,12 @@ metadata records, with owned constructor/accessor copies and exact integer
 storage. RT-05 adds shared internal inline TensorProto conversion with checked
 payload budgets, exact typed/raw values, and owned backend copies. RT-06 adds
 whole-model version/structure checks and immutable internal named graph records,
-including branching, defaulted inputs, and positional empty slots. Operator
-resolution, public loading and execution arrive in later roadmap tasks.
+including branching, defaulted inputs, and positional empty slots. RT-07 adds
+versioned operator resolution and immutable execution plans for Identity and the
+dense `value` tensor form of Constant. `Capabilities()` returns independent
+manifest records, including planned entries and the exact implemented planning
+restrictions. Public loading and execution arrive at RT-08; numerical families
+and scalar/list Constant attributes arrive at RT-09.
 
 ## Implementation plans
 

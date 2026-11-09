@@ -13,6 +13,7 @@ RT-02 provides the Go module and verification foundation. RT-03 adds generated
 wire bindings and bounded internal decoding. RT-04 supplies immutable public
 tensors and metadata records. RT-05 adds shared, budgeted inline tensor
 conversion. RT-06 adds immutable named graphs and whole-model structural checks.
+RT-07 adds versioned operator resolution and immutable Identity/Constant planning.
 There is no inference runtime yet.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
@@ -592,7 +593,7 @@ provides a conservative whole-graph bound) and release redundant snapshots.
 RT-08 owns sessions, input symbol
 bindings/default overrides, requested-output copies and per-run clone budgets.
 
-### [ ] RT-07 — Resolve versioned operators and plan types/shapes
+### [x] RT-07 — Resolve versioned operators and plan types/shapes
 
 **Depends on:** RT-06, RT-04. **Deliverable:** an internal operator registry,
 capability manifest integration, and execution-plan compilation.
@@ -612,6 +613,90 @@ older than the model import, unsupported attributes/types/outputs, and absent
 metadata. A capability query reports exactly the implemented restrictions. The
 planner can compile an Identity/Constant test graph through minimal handlers;
 numeric families arrive in RT-09. Errors retain causes for `errors.Is`/`As`.
+
+**Handoff (RT-07):** Implementation revision
+`02a1182b27a08cbc93532803c0d83bcf54249fe5` introduces
+`internal/operators/plan.go`; retrieve it with
+`git log -1 --format=%H -- internal/operators/plan.go`. The focused node-metadata
+preservation revision is `a692f9c5f1d88b01968062818651fd350a8d4bd3`;
+retrieve it with `git log -1 --format=%H -- internal/operators/step.go`.
+Changed files are the new `internal/operators/` compiler, registry, plan/value/
+step/limits/validation and matching tests; `internal/capability/` manifest
+records; `internal/runtimeerror/` diagnostic/sentinel and tests; root
+`capabilities.go`, capability aliases and tests, `error.go` and `errors.go`;
+`capabilities.json`; graph Constant.Rank and its test; `tools/check_profile.py`;
+README, TODO, package GoDoc, development/runtime-contract documentation and this
+roadmap. Backend remains published `neuralnetwork v0.7.0`, commit
+`6048452c57a0a293db4591cd2e2febd7d6b743a3`, protobuf v1.36.12, and
+ONNX v1.16.2 at `3bf92c03a9f27eba3bda1e5b9e63ea20ec213557`.
+Module baseline/toolchain remain Go 1.26.1/1.27.2; no dependency, backend or
+local replacement changed.
+
+Public API adds `Capabilities() []Capability`, aliases Capability,
+CapabilityArity (Min/Max/OptionalSlots), CapabilityAttribute
+(Type/Required/Default JSON), and Error with Error/Unwrap/Is methods, plus
+ErrInvalidModel/ErrUnsupported/ErrLimit. Existing ErrInvalidArgument retains its
+identity contract and is now shared internally. Query results deep-copy all
+operator records, including defaults/maps/slots, and include planned statuses.
+The root embeds the canonical JSON and passes those same records to the internal
+registry; no generated support table duplicates it. Only Identity-13 and
+Constant-13 are marked implemented, explicitly for static planning. Constant
+accepts exactly one dense float32/int64 `value` TENSOR; scalar/list attributes
+remain RT-09 work. There is still no public loader, model, session or Run API.
+
+Internal APIs are `NewRegistry([]capability.Record) (*Registry, error)`,
+`Registry.Resolve(domain, operator string, imported int64) (capability.Record,
+error)`, and `Compile(context.Context, *graph.Graph, *Registry, Limits)
+(*Plan, error)` in `internal/operators`. Registry snapshots records and chooses
+the newest applicable schema before enforcing its tested interval; no older
+fallback or future-opset widening occurs. Production imports remain exactly 13.
+Plan methods Metadata/Inputs/Outputs/Values/Value/Steps return independent
+snapshots; Usage reports aggregate logical load/initializer bytes. Steps carry
+schema/import/node context, immutable Constant references, value-table indices,
+and preserved node docs/properties. Values retain original declarations as well
+as merged type/shape information and a Deferred shape flag. Missing intermediate
+metadata is inferred. Scalars, fixed zero and unknown/symbolic dimensions remain
+distinct. Identity propagates shape/type, and Constant derives concrete metadata
+from the already-owned tensor. Defaulted inputs retain their override contract.
+
+The plan retains no protobuf, decoder or source Graph. It shares immutable
+constants and performs no numeric output allocation or Constant.Clone.
+Compilation continues Graph.Usage accounting, reserving one conservative
+whole-graph bound before each of five deep accessors and reserving later shape/
+dimension payloads before allocation. Constant.Rank avoids an unreserved shape
+query. Limits contains MaxLoadBytes/MaxTensorBytes/MaxRank/MaxDimension with
+1 GiB/64 MiB/32/2^31-1 defaults; use the same effective limits as graph.Build.
+Static sizes use backend ValidateShape without allocating numerical tensors.
+Initializer usage is unchanged. Transient reservations stay conservatively
+charged; headers/capacities/GC retention remain outside logical byte accounting.
+Every declared node is validated, including unused paths. Errors deterministically
+retain cause/classification and node/import/input-shape context. Unknown or
+unavailable diagnostic shapes are nil; scalar shapes are nonnil and empty.
+
+Validation passed on Go 1.27.2, Darwin/arm64: gofmt, `go mod tidy -diff`,
+`go mod verify`, `go build ./...`, `go vet ./...`, normal tests,
+`CGO_ENABLED=0 go test ./...`, `CGO_ENABLED=0 go test -tags=purego ./...`, and
+`go test -race ./...`, using the writable cache and offline dependency mode.
+Tests cover actual Softmax-11/13 defaults, Squeeze-11/13 axes attribute/input
+differences under isolated resolver profiles, older Conv-11 selection at import
+13, rejection of untested future imports, optional slots, wrong arity/attributes/
+types/outputs, static rank/dimension/byte/product failures, dead unsupported nodes,
+absent intermediate metadata, unknown/symbolic/scalar/empty shapes, tensor-only
+Constants with exact int64 values, passthrough/default contracts, deep-copy and
+concurrent reads, numerical-allocation regression, exact budget boundaries,
+every observed cancellation boundary and errors.Is/As. The pinned 25-schema/
+default/status/checker audit and unchanged fixture hash, local Markdown targets,
+contract Go-block formatting and diff checks also pass. Ordinary Go tests remain
+offline and need no Python/protoc/native runtime.
+
+RT-08 must bind input symbols/default overrides, verify every produced value's
+inferred metadata **and original declarations**, and budget all backend constant
+clones and output copies before allocation. Deferred describes shape precision,
+not whether all runtime declaration checks are complete. Extend the diagnostic
+formatter's current `onnx compile` stage for loading/running. RT-09 owns numerical
+families and scalar/list Constant materialization; charge those new constant
+payloads against both initializer and load budgets. RT-17 owns production
+profile expansion; synthetic resolver tests do not broaden the accepted imports.
 
 ### [ ] RT-08 — Implement sessions and serial graph execution
 

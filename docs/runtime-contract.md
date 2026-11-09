@@ -3,10 +3,12 @@
 Status: RT-01 specifies the contract. RT-04 implements its Tensor constructors,
 accessors and metadata records. RT-05 implements shared internal inline tensor
 conversion and load payload accounting. RT-06 implements internal version and
-whole-graph structural validation with immutable snapshots; public loading,
-sessions and operators are still planned.
-[capabilities.json](../capabilities.json) records planned operator coverage;
-only records marked `implemented` may later be advertised as support. The
+whole-graph structural validation with immutable snapshots. RT-07 implements
+versioned static planning for Identity and dense tensor-valued Constant, the
+Capabilities query, and structured compilation errors. Public loading and
+sessions are still planned.
+[capabilities.json](../capabilities.json) records implemented planning restrictions
+and planned operator coverage; it does not yet claim executable inference. The
 [roadmap](../ROADMAP.md) identifies the implementation tasks and their acceptance
 criteria. This project is an independent Go runtime, not Microsoft's ONNX Runtime.
 
@@ -118,9 +120,10 @@ importing the public facade, avoiding import cycles. Public metadata can be
 converted at the facade boundary; it is not a second tensor storage engine.
 
 The Tensor/DataType/DimensionKind/Dimension/ValueInfo/Metadata declarations below
-are implemented by RT-04, along with ErrInvalidArgument. Loader, model, session,
-limits, capability-query and other error APIs remain intended signatures until
-their implementation tasks are checked:
+are implemented by RT-04, along with ErrInvalidArgument. RT-07 implements
+Capabilities, Capability/CapabilityArity/CapabilityAttribute, Error, and
+ErrInvalidModel/ErrUnsupported/ErrLimit. Loader, model, session and public limits
+remain intended signatures until their implementation tasks are checked:
 
 ```go
 // Tensor is an immutable facade containing one private backend *tensor.Tensor.
@@ -209,8 +212,12 @@ func Capabilities() (capabilities []Capability)
 `Operator`, `SchemaVersion`, `MinOpset`, `MaxOpset`, `Status`, `Task`, `DataTypes`,
 `Inputs`, `Outputs`, `Attributes`, and `Restrictions`. The query includes planned
 records with explicit status and returns a deep copy; it does not imply that
-planned operators can load. RT-07 may settle the mechanical nested record types
-without changing this semantic contract. Manifest format/version is separate
+planned operators can load. CapabilityArity has Min/Max integer counts and
+OptionalSlots (`[]int`). CapabilityAttribute has Type, Required and Default
+(`json.RawMessage`, preserving exact integers and absent versus zero defaults).
+Implemented currently means static planning: Identity preserves float32/int64
+type and shape; Constant accepts exactly one dense `value` tensor attribute.
+Scalar/list attribute forms remain planned for RT-09. Manifest format/version is separate
 from an ONNX imported opset. Every record lists the exact schema selected from
 release 1.16.2 at import 13; schema versions 11/12/1/9 are intentional for CNNs.
 
@@ -388,8 +395,8 @@ single large kernel, and no goroutine is abandoned to simulate cancellation.
 
 ## Errors and deterministic diagnostics
 
-Proposed sentinels are ErrInvalidArgument, ErrInvalidModel, ErrUnsupported,
-ErrLimit, ErrBusy, and ErrClosed. State errors with no useful additional context
+Implemented sentinels are ErrInvalidArgument, ErrInvalidModel, ErrUnsupported,
+and ErrLimit; ErrBusy and ErrClosed remain planned for RT-08. State errors with no useful additional context
 are returned directly. Semantic/operational errors use a structured Error:
 
 ```go

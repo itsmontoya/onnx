@@ -37,8 +37,34 @@ def main():
             raise SystemExit("unknown schema attribute: " + entry["operator"])
         if entry["min_opset"] != 13 or entry["max_opset"] != 13:
             raise SystemExit("initial import interval must be exactly 13")
-        if entry["status"] != "planned":
-            raise SystemExit("RT-01 does not implement operators")
+        implemented = entry["operator"] in {"Identity", "Constant"}
+        if entry["status"] != ("implemented" if implemented else "planned"):
+            raise SystemExit("unexpected planning status: " + entry["operator"])
+        if implemented and entry["task"] != "RT-07":
+            raise SystemExit("unexpected implementation task: " + entry["operator"])
+        for name, attribute in entry["attributes"].items():
+            selected = schema.attributes[name]
+            if attribute["type"] != onnx.AttributeProto.AttributeType.Name(int(selected.type)):
+                raise SystemExit("attribute type mismatch: " + entry["operator"] + "." + name)
+            if "default" in attribute:
+                actual_default = helper.get_attribute_value(selected.default_value)
+                if isinstance(actual_default, bytes):
+                    actual_default = actual_default.decode("utf-8")
+                if actual_default != attribute["default"]:
+                    raise SystemExit("attribute default mismatch: " + entry["operator"] + "." + name)
+    constant = next(entry for entry in operators if entry["operator"] == "Constant")
+    if constant["attributes"] != {"value": {"type": "TENSOR", "required": True}}:
+        raise SystemExit("RT-07 Constant supports only the dense value tensor form")
+    # The Go resolver tests use these real version changes in isolated profiles;
+    # this does not broaden the model envelope beyond imported opset 13.
+    if defs.get_schema("Softmax", 12).attributes["axis"].default_value.i != 1:
+        raise SystemExit("Softmax-11 default changed")
+    if defs.get_schema("Softmax", 13).attributes["axis"].default_value.i != -1:
+        raise SystemExit("Softmax-13 default changed")
+    if "axes" not in defs.get_schema("Squeeze", 12).attributes:
+        raise SystemExit("Squeeze-11 axes attribute changed")
+    if "axes" in defs.get_schema("Squeeze", 13).attributes or defs.get_schema("Squeeze", 13).max_input != 2:
+        raise SystemExit("Squeeze-13 axes input changed")
 
     graph = helper.make_graph(
         [helper.make_node("Identity", ["x"], ["y"], name="copy")], "profile_identity",
@@ -67,7 +93,7 @@ def main():
     if model_path.read_bytes() != payload or provenance_path.read_text() != provenance_text:
         raise SystemExit("profile fixture changed; inspect and regenerate deliberately")
     checker.check_model(str(model_path), full_check=True)
-    print("PASS: 25 schema selections, IR 8/opset 13 checker, deterministic fixture " + provenance["sha256"])
+    print("PASS: 25 schema selections/defaults, 2 implemented planners, version differences, IR 8/opset 13 checker, deterministic fixture " + provenance["sha256"])
 
 
 if __name__ == "__main__":

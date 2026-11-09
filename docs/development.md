@@ -14,8 +14,11 @@ ownership, exact values, invalid arguments, and concurrent readers.
 RT-03 adds checked-in ONNX wire bindings and bounded internal protobuf decoding.
 RT-05 adds shared inline tensor conversion with aggregate payload accounting.
 RT-06 adds whole-graph structural validation and immutable named graph records.
+RT-07 adds versioned schema resolution, immutable execution plans, capability
+queries and structured compilation errors for a minimal Identity/Constant subset.
 There is no public model loader or execution API yet.
-Every operator in [the capability manifest](../capabilities.json) remains planned.
+[The capability manifest](../capabilities.json) marks only those two planners
+implemented, with explicit static-only and tensor-only Constant restrictions.
 
 Public `NewTensor`, `NewFloat32`, and `NewInt64` delegate storage validation and
 allocation to the pinned backend. They copy caller shapes/payloads; shape and
@@ -202,7 +205,7 @@ are structurally accepted. Functions, function overloads/references, training,
 subgraphs, sparse storage and non-dense/unsupported types fail with context.
 Generic attribute kinds/defaults are checked, but allowed operator names, attribute
 names, arity and optional-slot positions must be resolved by RT-07 before execution.
-No current capability record becomes implemented through structural acceptance.
+Structural acceptance alone does not mark a capability implemented.
 
 Graph Metadata/Inputs/Outputs/Nodes/Values/Value accessors return copied records.
 Values retain producer indices, defaults and every metadata declaration. Harmless
@@ -233,6 +236,70 @@ complete encoded/decoded payload and these reservations. Go object/header/slice
 capacity overhead and copying accessors after Build are outside the load budget.
 Cancellation is checked through traversal, graph loops, conversions and before
 publication; synchronous backend/protobuf operations remain bounded units.
+
+## Versioned operator planning
+
+The root facade embeds the canonical `capabilities.json`. `Capabilities()` decodes
+independent operator records, including nested optional slots, attribute maps and
+JSON defaults. It reports planned entries explicitly. The private `compileGraph`
+bridge constructs `operators.NewRegistry([]capability.Record)` from those same
+records, then calls `operators.Compile(ctx, graph, registry, limits)`. There is no
+second operator support table and no public loader or compiler API yet.
+
+Registry snapshots its records and resolves by exact domain/operator and imported
+opset. It selects the newest schema no newer than the import, then checks that
+schema's explicit tested interval. It never falls back to older semantics when
+the selected schema lacks coverage. Production intervals remain exactly 13.
+Resolver tests use isolated records for actual Softmax-11/13 defaults and
+Squeeze-11/13 attribute/input differences, and select Conv-11 at import 13; those
+tests do not broaden the accepted model envelope or implement those operators.
+
+Compile visits every node, including unused paths, and rejects planned/unknown
+operators, invalid arity, required empty slots, extra outputs, unknown attributes
+and incorrect attribute kinds. Identity-13 preserves float32/int64 type and shape
+at any rank, including scalar and empty tensors. Constant-13 requires exactly one
+`value` TENSOR attribute, already converted and owned by graph.Build. Float/int
+scalar/list attributes remain unsupported until RT-09. Neither handler allocates
+or clones numerical output storage. Defaulted input metadata keeps its symbolic
+or unknown batch dimension rather than the initializer's current size.
+
+Plan stores input/output contracts, source/producer-ordered Values and resolved
+Steps with value-table indices. It retains no protobuf or source Graph. Constants
+are shared immutable references. Metadata/Inputs/Outputs/Values/Value/Steps return
+independent snapshots; Usage reports aggregate logical load/initializer bytes.
+Value.Info merges declarations and inference, distinguishing absent rank, scalar,
+fixed zero, symbolic and unknown dimensions. Value.Deferred means the merged
+shape is not concrete. All original Value.Declarations are retained: even a
+concrete inferred summary can contain a declared constraint that still needs
+runtime verification. RT-08 must check every produced value against both inferred
+metadata and declarations, and bind symbols afresh each run.
+
+Limits contains MaxLoadBytes (1 GiB), MaxTensorBytes (64 MiB), MaxRank (32) and
+MaxDimension (2^31-1); zero fields choose defaults and negatives fail. Pass the
+same effective load/tensor/rank/dimension limits used to build the Graph. The
+compiler starts with Graph.Usage and reserves a conservative whole-graph payload
+bound for each of five deep accessors before requesting any snapshot. Further
+dimension/shape snapshots are reserved before allocation, using Constant.Rank
+without a copying shape query. Reservations remain charged conservatively even
+when transient snapshots become unreachable. Go object/header/capacity overhead
+is excluded, consistent with graph/decode accounting. Static shapes are checked
+with backend ValidateShape and finite limits without numerical allocation;
+partially known shapes retain checks for Run. Initializer usage never increases
+during compilation. RT-09 must charge any later scalar/list Constant conversion
+against both load and initializer quotas before constructing storage.
+
+Compilation errors use public Error (an internal shared type alias), retaining
+ErrInvalidArgument/ErrInvalidModel/ErrUnsupported/ErrLimit classifications and
+the original cause. Node diagnostics include index/name/domain/operator/import,
+and concrete input shapes when budget permits. Nil diagnostic shape means
+unknown or unavailable; a nonnil empty shape means scalar. Error.Is matches Kind
+and Unwrap retains Cause for errors.Is/As, including cancellation. Diagnostics
+iterate declared order and sort map-derived required names. The formatter
+currently says `onnx compile`; RT-08 must extend stage reporting for load/run.
+Cancellation is checked before snapshots, through value/node/shape reservations
+and before publication. Cancelling compilation leaves the source and registry
+usable. Ordinary Go tests run offline; the pinned Python profile audit also
+checks actual schema attributes/defaults and version-selection differences.
 
 ## Profile fixture verification
 
