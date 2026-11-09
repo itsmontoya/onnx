@@ -20,18 +20,18 @@ func newEvaluation(ctx context.Context, plan *executionPlan) (out *evaluation, e
 	}
 
 	e.ctx, e.plan = ctx, plan
-	e.values = make([]*tensor.Tensor, len(plan.values))
+	e.storage = newRunStorage(plan.lifetimes, e.budget)
 	e.symbols = make(map[string]int64)
 	return &e, nil
 }
 
-// evaluation retains all table entries for one run. Even aliases are charged
-// as separate live values; the plan's immutable constants are charged once.
+// evaluation owns call-local values and symbols. Static alias/consumer groups
+// allow conservative reuse without changing returned-output ownership.
 type evaluation struct {
 	ctx     context.Context
 	plan    *executionPlan
 	budget  *runBudget
-	values  []*tensor.Tensor
+	storage runStorage
 	symbols map[string]int64
 }
 
@@ -49,7 +49,7 @@ func (e *evaluation) run(inputs map[string]*Tensor, options RunOptions) (outputs
 		return nil, err
 	}
 
-	for _, step := range e.plan.steps {
+	for position, step := range e.plan.steps {
 		if err = e.ctx.Err(); err != nil {
 			return nil, e.nodeError(step, err)
 		}
@@ -61,7 +61,9 @@ func (e *evaluation) run(inputs map[string]*Tensor, options RunOptions) (outputs
 		if err = e.ctx.Err(); err != nil {
 			return nil, e.nodeError(step, err)
 		}
+		e.storage.after(position)
 	}
+	e.storage.trim()
 	return e.publish(requested)
 }
 
@@ -118,13 +120,14 @@ func (e *evaluation) bind(inputs map[string]*Tensor) (err error) {
 		}
 
 		var backend *tensor.Tensor
+
 		if provided, exists := inputs[value.Name]; value.Input && exists {
 			if err = provided.Validate(); err != nil {
 				return operationError("run", err, value.Name)
 			}
 
 			backend = provided.value
-			if err = e.budget.reserve(backend.ByteSize(), 0); err != nil {
+			if err = e.storage.reserve(backend.ByteSize(), 0); err != nil {
 				return operationError("run", err, value.Name)
 			}
 		} else if value.Default != nil {
@@ -144,7 +147,7 @@ func (e *evaluation) bind(inputs map[string]*Tensor) (err error) {
 			return operationError("run", err, value.Name)
 		}
 
-		e.values[index] = backend
+		e.storage.values[index] = backend
 	}
 	return nil
 }
@@ -155,12 +158,10 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 	}
 
 	var backend *tensor.Tensor
+
 	switch step.Operator {
 	case "Identity":
-		backend = e.values[step.Inputs[0]]
-		if err = e.budget.reserve(backend.ByteSize(), 0); err != nil {
-			return err
-		}
+		backend = e.storage.values[step.Inputs[0]]
 	case "Constant":
 		if backend, err = e.cloneConstant(step.Constant); err != nil {
 			return err
@@ -174,7 +175,7 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 			}
 
 			if valueIndex >= 0 {
-				inputs[slot] = e.values[valueIndex]
+				inputs[slot] = e.storage.values[valueIndex]
 			}
 		}
 		if operators.IsCNNOperator(step.Operator) {
@@ -183,11 +184,12 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 				return err
 			}
 
-			if err = e.budget.reserve(cnn.bytes, 0); err != nil {
+			var destination *tensor.Tensor
+			if destination, err = e.storage.destination(Float32, cnn.shape, cnn.bytes, 0); err != nil {
 				return err
 			}
 
-			if backend, err = cnn.run(e.ctx); err != nil {
+			if backend, err = cnn.run(e.ctx, destination); err != nil {
 				return err
 			}
 
@@ -200,7 +202,7 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 				return err
 			}
 
-			if err = e.budget.reserve(0, shape.workspace); err != nil {
+			if err = e.storage.reserve(0, shape.workspace); err != nil {
 				return err
 			}
 
@@ -209,11 +211,18 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 				return err
 			}
 
-			if err = e.budget.reserve(shape.bytes, 0); err != nil {
+			var destination *tensor.Tensor
+			if shape.step.Operator == "Shape" {
+				err = e.storage.reserve(shape.bytes, 0)
+			} else {
+				destination, err = e.storage.destination(shape.dataType, shape.shape, shape.bytes, 0)
+			}
+
+			if err != nil {
 				return err
 			}
 
-			if backend, err = shape.run(e.ctx); err != nil {
+			if backend, err = shape.run(e.ctx, destination); err != nil {
 				return err
 			}
 
@@ -224,12 +233,13 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 			return err
 		}
 
-		if err = e.budget.reserve(call.bytes, call.workspace); err != nil {
+		var destination *tensor.Tensor
+		if destination, err = e.storage.destination(Float32, call.shape, call.bytes, call.workspace); err != nil {
 			return err
 		}
 
 		defer e.budget.releaseWorkspace()
-		if backend, err = call.run(e.ctx); err != nil {
+		if backend, err = call.run(e.ctx, destination); err != nil {
 			return err
 		}
 	}
@@ -239,7 +249,7 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 		return operationError("run", err, e.plan.values[index].Name)
 	}
 
-	e.values[index] = backend
+	e.storage.values[index] = backend
 	return nil
 }
 
@@ -247,7 +257,7 @@ func (e *evaluation) normalize(step operators.Step) (err error) {
 	inputs := make([]*tensor.Tensor, len(step.Inputs))
 	for slot, index := range step.Inputs {
 		if index >= 0 {
-			inputs[slot] = e.values[index]
+			inputs[slot] = e.storage.values[index]
 		}
 	}
 	var call *normalizationCall
@@ -255,13 +265,13 @@ func (e *evaluation) normalize(step operators.Step) (err error) {
 		return err
 	}
 
-	if err = e.budget.reserve(0, call.workspace); err != nil {
+	if err = e.storage.reserve(0, call.workspace); err != nil {
 		return err
 	}
 
 	defer e.budget.releaseWorkspace()
 	for _, bytes := range call.bytes {
-		if err = e.budget.reserve(bytes, 0); err != nil {
+		if err = e.storage.reserve(bytes, 0); err != nil {
 			return err
 		}
 	}
@@ -279,7 +289,7 @@ func (e *evaluation) normalize(step operators.Step) (err error) {
 			return operationError("run", err, e.plan.values[index].Name)
 		}
 
-		e.values[index] = outputs[slot]
+		e.storage.values[index] = outputs[slot]
 	}
 	return nil
 }
@@ -358,7 +368,7 @@ func (e *evaluation) cloneConstant(constant *graph.Constant) (out *tensor.Tensor
 
 	// Released tensor.Clone copies directly into its owned destination.
 	// There is no numerical accessor/staging buffer beyond the live copy.
-	if err = e.budget.reserve(constant.ByteSize(), 0); err != nil {
+	if err = e.storage.reserve(constant.ByteSize(), 0); err != nil {
 		return nil, err
 	}
 
@@ -383,7 +393,7 @@ func (e *evaluation) publish(indices []int) (outputs []NamedTensor, err error) {
 
 		name := e.plan.values[valueIndex].Name
 		var value *Tensor
-		if value, err = e.cloneOutput(e.values[valueIndex]); err != nil {
+		if value, err = e.cloneOutput(e.storage.values[valueIndex]); err != nil {
 			return nil, operationError("run", err, name)
 		}
 
@@ -398,7 +408,7 @@ func (e *evaluation) publish(indices []int) (outputs []NamedTensor, err error) {
 }
 
 func (e *evaluation) cloneOutput(source *tensor.Tensor) (out *Tensor, err error) {
-	if err = e.budget.reserve(source.ByteSize(), 0); err != nil {
+	if err = e.storage.reserve(source.ByteSize(), 0); err != nil {
 		return nil, err
 	}
 
@@ -421,8 +431,8 @@ func (e *evaluation) nodeError(step operators.Step, cause error) (out *Error) {
 	diagnostic.Domain, diagnostic.Operator, diagnostic.Opset = step.Domain, step.Operator, step.Opset
 	for _, index := range step.Inputs {
 		var shape []int64
-		if index >= 0 && e.values[index] != nil {
-			shape = e.values[index].Shape()
+		if index >= 0 && e.storage.values[index] != nil {
+			shape = e.storage.values[index].Shape()
 		}
 
 		diagnostic.Shapes = append(diagnostic.Shapes, shape)

@@ -66,7 +66,7 @@ func newNumericalCall(step operators.Step, inputs []*tensor.Tensor, limits Limit
 	return &c, nil
 }
 
-// numericalCall audits all copying v0.7.0 kernel paths before numerical allocation.
+// numericalCall audits the pinned kernel paths before numerical allocation.
 // Workspace conservatively includes every call-local buffer across all batches.
 type numericalCall struct {
 	step      operators.Step
@@ -92,65 +92,22 @@ func (c *numericalCall) scratch(left, right []int64) (bytes int64, err error) {
 		}
 
 		return 0, nil
-	case "Gemm":
-		inner := left[1]
-		if c.step.Gemm.TransposeA {
-			inner = left[0]
-		}
-
-		if inner == 0 {
-			return c.bytes, nil
-		}
-
-		parts := []int64{c.inputs[0].ByteSize(), c.inputs[1].ByteSize(), c.bytes, c.bytes}
-		if c.step.Gemm.TransposeA && c.step.Gemm.TransposeB {
-			parts = append(parts, c.inputs[1].ByteSize())
-		}
-
-		return sumScratch(parts...)
-	case "MatMul":
-		inner := left[len(left)-1]
-		if inner == 0 {
-			return 0, nil
-		}
-
-		rows, cols := int64(1), int64(1)
-		if len(left) > 1 {
-			rows = left[len(left)-2]
-		}
-
-		if len(right) > 1 {
-			cols = right[len(right)-1]
-		}
-
-		// Input shapes and output bytes have already passed checked validation.
-		// Divide output elements by each free dimension to avoid unchecked products.
-		elements := c.bytes / 4
-		var leftCopies, rightCopies, products int64
-		if leftCopies, err = checkedScratch(elements/cols*4, inner); err != nil {
-			return 0, err
-		}
-
-		if rightCopies, err = checkedScratch(elements/rows*4, inner); err != nil {
-			return 0, err
-		}
-
-		if products, err = checkedScratch(c.bytes, 3); err != nil {
-			return 0, err
-		}
-
-		return sumScratch(leftCopies, rightCopies, products)
+	case "Gemm", "MatMul":
+		return productWorkspace(c, left, right)
 	}
 	return 0, nil
 }
 
-func (c *numericalCall) run(ctx context.Context) (out *tensor.Tensor, err error) {
+func (c *numericalCall) run(ctx context.Context, destination *tensor.Tensor) (out *tensor.Tensor, err error) {
 	if err = ctx.Err(); err != nil {
 		return nil, err
 	}
 
-	if out, err = tensor.New(Float32, c.shape); err != nil {
-		return nil, fmt.Errorf("allocate numerical destination: %w", err)
+	out = destination
+	if out == nil {
+		if out, err = tensor.New(Float32, c.shape); err != nil {
+			return nil, fmt.Errorf("allocate numerical destination: %w", err)
+		}
 	}
 
 	left := c.inputs[0]

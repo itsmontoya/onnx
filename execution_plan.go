@@ -56,6 +56,24 @@ func newExecutionPlan(ctx context.Context, compiled *operators.Plan, limits Limi
 		p.outputIndices = append(p.outputIndices, p.indices[output.Name])
 		p.outputNames[output.Name] = p.indices[output.Name]
 	}
+	// Exact-capacity storage uses at most five int arrays plus pinned flags
+	// per value (41 bytes), and one temporary int counter per step (8 bytes).
+	// This includes construction work; Go slice headers/objects are not payload.
+	available := limits.MaxLoadBytes - p.loadBytes
+	if int64(len(p.values)) > available/41 {
+		return nil, fmt.Errorf("%w: value lifetime metadata", ErrLimit)
+	}
+
+	lifetimeBytes := int64(len(p.values)) * 41
+	if int64(len(p.steps)) > (available-lifetimeBytes)/8 {
+		return nil, fmt.Errorf("%w: lifetime retirement counters", ErrLimit)
+	}
+
+	p.loadBytes += lifetimeBytes + int64(len(p.steps))*8
+	if p.lifetimes, err = newValueLifetimes(ctx, &p); err != nil {
+		return nil, err
+	}
+
 	return &p, nil
 }
 
@@ -74,6 +92,7 @@ type executionPlan struct {
 	inputIndices  map[string]int
 	outputIndices []int
 	outputNames   map[string]int
+	lifetimes     *valueLifetimes
 }
 
 func (p *executionPlan) acquire() (err error) {

@@ -37,3 +37,5 @@ func (b *runBudget) reserve(bytes, workspace int64) (err error) {
 }
 
 func (b *runBudget) releaseWorkspace() { b.workspace = 0 }
+
+func (b *runBudget) release(bytes int64) { b.live -= bytes }

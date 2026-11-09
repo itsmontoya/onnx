@@ -54,13 +54,16 @@ type cnnCall struct {
 	bytes  int64
 }
 
-func (c *cnnCall) run(ctx context.Context) (out *tensor.Tensor, err error) {
+func (c *cnnCall) run(ctx context.Context, destination *tensor.Tensor) (out *tensor.Tensor, err error) {
 	if err = ctx.Err(); err != nil {
 		return nil, err
 	}
 
-	if out, err = tensor.New(Float32, c.shape); err != nil {
-		return nil, fmt.Errorf("allocate CNN destination: %w", err)
+	out = destination
+	if out == nil {
+		if out, err = tensor.New(Float32, c.shape); err != nil {
+			return nil, fmt.Errorf("allocate CNN destination: %w", err)
+		}
 	}
 
 	switch c.step.Operator {
