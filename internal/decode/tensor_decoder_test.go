@@ -14,6 +14,56 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
+func TestTensorDecoderReservePayload(t *testing.T) {
+	ctx := context.Background()
+	wire := &onnxpb.TensorProto{DataType: proto.Int32(1), FloatData: []float32{1}}
+	decoder, err := NewTensorDecoder(ctx, wire, 10, TensorLimits{MaxLoadBytes: 30})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	before, _ := decoder.Usage()
+	if err = decoder.ReservePayload(ctx, 30-before); err != nil {
+		t.Fatal(err)
+	}
+
+	if load, owned := decoder.Usage(); load != 30 || owned != 0 {
+		t.Fatalf("reservation usage: %d, %d", load, owned)
+	}
+
+	tests := []struct {
+		name    string
+		decoder *TensorDecoder
+		ctx     context.Context
+		bytes   int64
+		want    error
+	}{
+		{"excess", decoder, ctx, 1, ErrLimit},
+		{"negative", decoder, ctx, -1, ErrInvalidArgument},
+		{"nil decoder", nil, ctx, 0, ErrInvalidArgument},
+		{"zero decoder", &TensorDecoder{}, ctx, 0, ErrInvalidArgument},
+		{"nil context", decoder, nil, 0, ErrInvalidArgument},
+	}
+
+	for _, testcase := range tests {
+		t.Run(testcase.name, func(t *testing.T) {
+			if reserveErr := testcase.decoder.ReservePayload(testcase.ctx, testcase.bytes); !errors.Is(reserveErr, testcase.want) {
+				t.Fatalf("reservation: %v", reserveErr)
+			}
+
+			if load, owned := decoder.Usage(); load != 30 || owned != 0 {
+				t.Fatal("failed reservation changed usage")
+			}
+		})
+	}
+
+	cancelled, cancel := context.WithCancel(ctx)
+	cancel()
+	if err = decoder.ReservePayload(cancelled, 0); !errors.Is(err, context.Canceled) {
+		t.Fatalf("cancelled reservation: %v", err)
+	}
+}
+
 func TestTensorDecoderLiteralWire(t *testing.T) {
 	tests := []struct {
 		name     string

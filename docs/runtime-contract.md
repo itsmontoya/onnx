@@ -2,8 +2,9 @@
 
 Status: RT-01 specifies the contract. RT-04 implements its Tensor constructors,
 accessors and metadata records. RT-05 implements shared internal inline tensor
-conversion and load payload accounting; public loading, sessions and operators
-are still planned.
+conversion and load payload accounting. RT-06 implements internal version and
+whole-graph structural validation with immutable snapshots; public loading,
+sessions and operators are still planned.
 [capabilities.json](../capabilities.json) records planned operator coverage;
 only records marked `implemented` may later be advertised as support. The
 [roadmap](../ROADMAP.md) identifies the implementation tasks and their acceptance
@@ -89,6 +90,20 @@ distinct. Symbols with the same nonempty name bind to the same concrete size
 within a run across all supplied/defaulted inputs; unnamed unknown dimensions
 are independent. Every run binds afresh, including zero batch sizes. Initializer
 metadata and dimensions are immutable after compilation.
+
+RT-06 enforces this envelope and structural contract in `internal/graph.Build`.
+It preserves every node and empty slot for RT-07's schema resolution. Structural
+acceptance alone does not establish operator support: even unknown standard-domain
+operator names remain unresolved records at this stage. Graphs may have no nodes,
+inputs or outputs, consistent with the pinned checker. ModelProto's descriptive
+`domain` is preserved independently of operator import/node domains. Quantization
+annotations remain descriptive metadata and do not enable quantized storage.
+
+Attribute validation checks names, uniqueness, supported generic payload kinds,
+and agreement between the declared kind and present payload. As in the
+[pinned checker's generic validation](https://github.com/onnx/onnx/blob/v1.16.2/onnx/checker.cc),
+absent scalar zero/string defaults and empty repeated lists are representable;
+operator-specific required attributes, types and arity remain RT-07's work.
 
 ## Public surface to implement
 
@@ -320,7 +335,9 @@ the load lifetime. TensorLimits implements the six load/shape limits used there
 (MaxLoadBytes, MaxInitializerBytes, MaxTensorBytes, MaxRank, MaxDimension and
 MaxRecursion). Wire byte limits remain separately enforced by RT-03. The future
 loader must pass the actual serialized byte count and complete decoded model;
-it must not account each tensor in isolation. See [development](development.md#inline-tensor-conversion)
+it must not account each tensor in isolation. RT-06 does so and reserves extra
+owned attribute slice/scalar and dimension snapshot payload before allocation
+through TensorDecoder.ReservePayload. See [development](development.md#inline-tensor-conversion)
 for the implemented internal API and its ownership requirements.
 
 RT-03 confirms that protobuf v1.36.12's configurable recursion limit applies to
