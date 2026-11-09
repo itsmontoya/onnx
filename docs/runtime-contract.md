@@ -277,8 +277,9 @@ and released on successful Session.Close, including after Model.Close.
 For example, after RT-08, LoadFile returns a model, Metadata describes `x`,
 NewSession creates execution state, and `Run(ctx, map[string]*Tensor{"x": x},
 RunOptions{Outputs: []string{"y"}})` yields `outputs[0].Name == "y"`. Close the
-session and model explicitly. RT-11 supplies a checked compiling example;
-the sequence is exercised by the checked-in session tests.
+session and model explicitly. RT-11 supplies a
+[checked compiling example](../examples/inference/main.go); the sequence is
+exercised by the checked-in session tests.
 
 ## Limits and cancellation
 
@@ -512,7 +513,8 @@ wire bindings from the pinned source. RT-04 implements the immutable facade and
 metadata distinction. RT-05 accounts decoded and owned payloads. RT-06 validates
 the entire graph. RT-07 compiles versioned handlers and consults manifest status.
 RT-08 implements lifecycle and limits; RT-09 adds M1 math, RT-10 differential fixtures,
-and RT-11 the first runnable user example. Follow the rest of the roadmap in
+and RT-11 supplies [runnable public inference](getting-started.md) with reference
+goldens for two batch sizes. Follow the rest of the roadmap in
 dependency order; an optimization or further profile must never weaken these
 ownership/error/budget rules without an explicit reviewed contract change.
 

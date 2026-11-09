@@ -23,6 +23,11 @@ RT-10 adds offline typed conformance fixtures and retains the backend reference
 differences as documented extensions or explicit future-adapter rejections;
 see [the fixture guide](testdata/conformance/README.md). No M2/M3 or reduction
 runtime support follows from these reference records.
+RT-11 demonstrates this working M1 runtime with original MLP and two-input/
+two-output branching models at batches 1 and 3. The [integration report](docs/integration-rt11.md)
+records reference comparisons, provenance/hashes, lifecycle/concurrent-session
+checks and exact supported restrictions. RT-12's shape-heavy graph is still
+required before NN-13 can resume; these MLP results do not claim to unblock it.
 
 The library's `NEEDS.md` is ignored and is not included in the release tree.
 Use the published [tensor contract][tensor-contract], source, tests, and tracked

@@ -28,6 +28,28 @@ The module pins `neuralnetwork v0.7.0`, protobuf v1.36.12, and Go 1.27.2 with a
 Go 1.26.1 baseline. Ordinary builds/tests require neither protoc nor Python.
 No general ONNX compatibility is claimed beyond the documented subset.
 
+## Run an example
+
+From the repository root with Go 1.27.2 installed:
+
+```sh
+go mod download
+CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 1
+CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 3
+CGO_ENABLED=0 go run ./examples/inference -graph branch -batch 3
+CGO_ENABLED=0 go test ./...
+```
+
+The [example](examples/inference/main.go) loads an original checked-in model,
+reads metadata, creates a session, supplies named tensors, reads named results
+and closes both owners. Both graphs accept symbolic leading batches and have
+actual reference goldens for batch sizes 1 and 3. The branching graph has two
+named inputs and two outputs. See [getting started](docs/getting-started.md)
+for clean-clone commands, the complete M1 restriction table and compatible export
+requirements, and [the RT-11 integration report](docs/integration-rt11.md) for
+results, provenance and hashes. Initial dependency download needs network;
+cached normal builds/tests need neither network nor reference tooling.
+
 RT-10's [offline conformance harness](testdata/conformance/README.md) verifies
 86 reference agreements, one documented empty-Softmax extension and nine explicit
 rejections, using hashed model/typed TensorProto fixtures. The pinned upstream
@@ -57,7 +79,7 @@ block the first working runtime or release readiness.
 The current CPU profile accepts ONNX IR 8, standard-domain opset 13, and dense
 float32/int64 values. Named graph inputs/outputs and branching are implemented.
 Broadcasting, matrix products, activations and the RT-10 fixture/conformance
-harness are implemented. RT-11 supplies user examples. Later milestones add
+harness and RT-11 user examples are implemented. Later milestones add
 tensor transformations, 2D CNN operators, external weights and a documented release.
 
 The [roadmap's coverage tables](ROADMAP.md#milestones-and-coverage) specify
@@ -88,5 +110,6 @@ in each completed task's handoff.
 
 Use Go 1.27.2 and the [development commands](docs/development.md) to build and
 verify this foundation, including cgo-disabled, `purego`, and race checks.
-Runnable inference examples arrive at RT-11. Pull request descriptions must
-preserve [the repository template](.github/PULL_REQUEST_TEMPLATE.md).
+The [inference guide](docs/getting-started.md) covers the working M1 examples.
+Pull request descriptions must preserve
+[the repository template](.github/PULL_REQUEST_TEMPLATE.md).
