@@ -69,7 +69,8 @@ func (c *shapeCall) plan(ctx context.Context) (err error) {
 
 	switch c.step.Operator {
 	case "Shape":
-		c.shape, c.shapeValues = []int64{int64(len(left))}, left
+		start, end := operators.ShapeRange(c.step, len(left))
+		c.shape, c.shapeValues = []int64{int64(end - start)}, left[start:end]
 	case "Flatten":
 		c.shape, err = tensor.FlattenShape(left, c.step.Axis)
 	case "Transpose":
@@ -84,7 +85,7 @@ func (c *shapeCall) plan(ctx context.Context) (err error) {
 
 		c.shape, err = tensor.TransposeShape(left, c.permutation)
 	case "Reshape":
-		c.shape, err = operators.ResolveReshape(left, c.axes)
+		c.shape, err = operators.ResolveReshapeMode(left, c.axes, c.step.AllowZero)
 	case "Squeeze":
 		if len(c.inputs) == 1 || c.inputs[1] == nil {
 			for axis, dimension := range left {
@@ -93,6 +94,7 @@ func (c *shapeCall) plan(ctx context.Context) (err error) {
 				}
 			}
 		}
+
 		c.shape, err = tensor.SqueezeShape(left, c.axes)
 	case "Unsqueeze":
 		c.shape, err = tensor.UnsqueezeShape(left, c.axes)

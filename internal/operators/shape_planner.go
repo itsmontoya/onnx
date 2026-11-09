@@ -40,6 +40,16 @@ func (p *shapePlanner) infer(node graph.Node) (info graph.ValueInfo, err error) 
 		switch attribute.Name {
 		case "axis":
 			p.step.Axis = attribute.Int
+		case "allowzero":
+			if attribute.Int != 0 && attribute.Int != 1 {
+				return info, fmt.Errorf("%w: allowzero must be 0 or 1", graph.ErrInvalidModel)
+			}
+
+			p.step.AllowZero = attribute.Int == 1
+		case "start":
+			p.step.ShapeStart = attribute.Int
+		case "end":
+			p.step.ShapeEnd, p.step.ShapeEndSet = attribute.Int, true
 		case "perm":
 			p.step.Permutation, p.step.PermutationSet = slices.Clone(attribute.Ints), true
 		}
@@ -49,7 +59,8 @@ func (p *shapePlanner) infer(node graph.Node) (info graph.ValueInfo, err error) 
 		info.DataType, info.ShapeKnown = tensor.Int64, true
 		info.Dimensions = []graph.Dimension{{}}
 		if p.inputs[0].ShapeKnown {
-			info.Dimensions[0] = fixed(int64(len(p.inputs[0].Dimensions)))
+			start, end := ShapeRange(*p.step, len(p.inputs[0].Dimensions))
+			info.Dimensions[0] = fixed(int64(end - start))
 		}
 
 		return info, nil
@@ -163,6 +174,11 @@ func (p *shapePlanner) reshape(info graph.ValueInfo) (out graph.ValueInfo, err e
 
 			inferred = axis
 		case value == 0:
+			if p.step.AllowZero {
+				info.Dimensions[axis] = fixed(0)
+				continue
+			}
+
 			if p.inputs[0].ShapeKnown {
 				if axis >= len(p.inputs[0].Dimensions) {
 					return info, fmt.Errorf("%w: Reshape zero axis exceeds input rank", graph.ErrInvalidModel)
@@ -174,6 +190,14 @@ func (p *shapePlanner) reshape(info graph.ValueInfo) (out graph.ValueInfo, err e
 			info.Dimensions[axis] = fixed(value)
 		}
 	}
+	if p.step.AllowZero && inferred >= 0 {
+		for _, value := range p.values {
+			if value == 0 {
+				return info, fmt.Errorf("%w: allowzero=1 forbids zero with an inferred dimension", graph.ErrInvalidModel)
+			}
+		}
+	}
+
 	productDimensions := slices.Clone(info.Dimensions)
 	if inferred >= 0 {
 		productDimensions[inferred] = fixed(1)

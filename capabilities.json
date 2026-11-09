@@ -19,6 +19,13 @@
       "min_opset": 13,
       "max_opset": 13,
       "status": "partial_runtime"
+    },
+    {
+      "ir_version": 8,
+      "domain": "",
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "partial_runtime"
     }
   ],
   "unsupported_features": [
@@ -914,6 +921,888 @@
         "exactly one inference output slot; reject all additional output slots and training_mode",
         "finite nonnegative epsilon; finite momentum in [0,1] accepted but no statistics update",
         "independent stored-statistics reference; documented evaluator/ORT differences"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Identity",
+      "schema_version": 16,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32",
+        "int64"
+      ],
+      "inputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {},
+      "restrictions": [
+        "static planning and serial execution; session lifecycle implemented by RT-08",
+        "dense float32/int64; arbitrary rank including scalar/empty; output shape/type preserved",
+        "requested outputs own independent copies, including Identity aliases"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Constant",
+      "schema_version": 13,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32",
+        "int64"
+      ],
+      "inputs": {
+        "min": 0,
+        "max": 0,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {
+        "value": {
+          "type": "TENSOR",
+          "required": false
+        },
+        "value_float": {
+          "type": "FLOAT",
+          "required": false
+        },
+        "value_floats": {
+          "type": "FLOATS",
+          "required": false
+        },
+        "value_int": {
+          "type": "INT",
+          "required": false
+        },
+        "value_ints": {
+          "type": "INTS",
+          "required": false
+        }
+      },
+      "restrictions": [
+        "exactly one dense float32/int64 tensor, float/int scalar or float/int vector attribute; exact int64 storage",
+        "arbitrary tensor rank including scalar/empty; reject sparse/string/other forms",
+        "scalar/list materialization shares aggregate load and initializer budgets"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Add",
+      "schema_version": 14,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 2,
+        "max": 2,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {},
+      "restrictions": [
+        "float32 multidirectional broadcasting, including scalars/empty dimensions"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Sub",
+      "schema_version": 14,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 2,
+        "max": 2,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {},
+      "restrictions": [
+        "float32 multidirectional broadcasting, including scalars/empty dimensions"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Mul",
+      "schema_version": 14,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 2,
+        "max": 2,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {},
+      "restrictions": [
+        "float32 multidirectional broadcasting, including scalars/empty dimensions"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Div",
+      "schema_version": 14,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 2,
+        "max": 2,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {},
+      "restrictions": [
+        "float32 multidirectional broadcasting; IEEE division by zero"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "MatMul",
+      "schema_version": 13,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 2,
+        "max": 2,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {},
+      "restrictions": [
+        "float32 rank >= 1; vector promotion and batch broadcasting; empty contractions"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Gemm",
+      "schema_version": 13,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 2,
+        "max": 3,
+        "optional_slots": [
+          2
+        ]
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {
+        "alpha": {
+          "type": "FLOAT",
+          "required": false,
+          "default": 1.0
+        },
+        "beta": {
+          "type": "FLOAT",
+          "required": false,
+          "default": 1.0
+        },
+        "transA": {
+          "type": "INT",
+          "required": false,
+          "default": 0
+        },
+        "transB": {
+          "type": "INT",
+          "required": false,
+          "default": 0
+        }
+      },
+      "restrictions": [
+        "float32 rank-two A/B; optional scalar/vector/row/column/full C with unidirectional broadcast",
+        "transA/transB restricted to 0/1; alpha/beta default 1, including nonfinite coefficients"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Relu",
+      "schema_version": 14,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {},
+      "restrictions": [
+        "float32 arbitrary rank including scalar/empty; propagate NaN; negative zero becomes positive zero"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Sigmoid",
+      "schema_version": 13,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {},
+      "restrictions": [
+        "float32 arbitrary rank including scalar/empty"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Tanh",
+      "schema_version": 13,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {},
+      "restrictions": [
+        "float32 arbitrary rank including scalar/empty"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Softmax",
+      "schema_version": 13,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {
+        "axis": {
+          "type": "INT",
+          "required": false,
+          "default": -1
+        }
+      },
+      "restrictions": [
+        "float32 rank >= 1; axis default -1",
+        "empty tensor accepted after axis validation as explicit reference extension; nonfinite slices preserve NaN behavior"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Flatten",
+      "schema_version": 13,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32",
+        "int64"
+      ],
+      "inputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {
+        "axis": {
+          "type": "INT",
+          "required": false,
+          "default": 1
+        }
+      },
+      "restrictions": [
+        "type preserving; split axis in [-rank,rank], default 1",
+        "explicit concrete products for empty prefixes; documented evaluator rejection difference"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Reshape",
+      "schema_version": 14,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32",
+        "int64"
+      ],
+      "inputs": {
+        "min": 2,
+        "max": 2,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {
+        "allowzero": {
+          "type": "INT",
+          "required": false,
+          "default": 0
+        }
+      },
+      "restrictions": [
+        "int64 rank-one shape input; at most one inferred -1; equal element counts",
+        "allowzero=0 copies input dimensions; allowzero=1 uses literal zeros and forbids any -1 with zero",
+        "reject ambiguous zero-product inference"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Transpose",
+      "schema_version": 13,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32",
+        "int64"
+      ],
+      "inputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {
+        "perm": {
+          "type": "INTS",
+          "required": false
+        }
+      },
+      "restrictions": [
+        "type preserving; perm defaults to reverse; complete unique nonnegative permutation"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Squeeze",
+      "schema_version": 13,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32",
+        "int64"
+      ],
+      "inputs": {
+        "min": 1,
+        "max": 2,
+        "optional_slots": [
+          1
+        ]
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {},
+      "restrictions": [
+        "optional int64 rank-one axes input; omitted axes remove all unit dimensions",
+        "explicit axes must be unique and name unit dimensions; explicit empty axes are identity"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Unsqueeze",
+      "schema_version": 13,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32",
+        "int64"
+      ],
+      "inputs": {
+        "min": 2,
+        "max": 2,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {},
+      "restrictions": [
+        "required int64 rank-one axes input; unique axes normalized in output rank"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Shape",
+      "schema_version": 15,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32",
+        "int64"
+      ],
+      "inputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {
+        "start": {
+          "type": "INT",
+          "required": false,
+          "default": 0
+        },
+        "end": {
+          "type": "INT",
+          "required": false
+        }
+      },
+      "restrictions": [
+        "int64 vector output from concrete runtime shape",
+        "schema-15 start/end clamp to input rank after negative indexing; start >= end yields an empty vector"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Gather",
+      "schema_version": 13,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32",
+        "int64"
+      ],
+      "inputs": {
+        "min": 2,
+        "max": 2,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {
+        "axis": {
+          "type": "INT",
+          "required": false,
+          "default": 0
+        }
+      },
+      "restrictions": [
+        "float32/int64 rank >= 1 data; arbitrary-rank int64 indices",
+        "negative indices supported; exact prefix/indices/suffix shape including empties"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Concat",
+      "schema_version": 13,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32",
+        "int64"
+      ],
+      "inputs": {
+        "min": 1,
+        "max": 2147483647,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {
+        "axis": {
+          "type": "INT",
+          "required": true
+        }
+      },
+      "restrictions": [
+        "float32/int64 inputs of one type with equal rank >= 1 and equal non-axis dimensions; checked axis sum",
+        "required axis; nonempty variadic input list"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "Conv",
+      "schema_version": 11,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 2,
+        "max": 3,
+        "optional_slots": [
+          2
+        ]
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {
+        "auto_pad": {
+          "type": "STRING",
+          "required": false,
+          "default": "NOTSET"
+        },
+        "dilations": {
+          "type": "INTS",
+          "required": false
+        },
+        "group": {
+          "type": "INT",
+          "required": false,
+          "default": 1
+        },
+        "kernel_shape": {
+          "type": "INTS",
+          "required": false
+        },
+        "pads": {
+          "type": "INTS",
+          "required": false
+        },
+        "strides": {
+          "type": "INTS",
+          "required": false
+        }
+      },
+      "restrictions": [
+        "float32 NCHW rank four; ONNX [M,C/group,kH,kW] weights",
+        "positive channels/filters/kernels/strides/dilations; group divides input/output channels; optional [M] bias",
+        "auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads",
+        "kernel_shape must match weights when present; dynamic weights/bias; nonpositive floor spatial extents clamp to zero"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "MaxPool",
+      "schema_version": 12,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 2,
+        "optional_slots": [
+          1
+        ]
+      },
+      "attributes": {
+        "auto_pad": {
+          "type": "STRING",
+          "required": false,
+          "default": "NOTSET"
+        },
+        "ceil_mode": {
+          "type": "INT",
+          "required": false,
+          "default": 0
+        },
+        "dilations": {
+          "type": "INTS",
+          "required": false
+        },
+        "kernel_shape": {
+          "type": "INTS",
+          "required": true
+        },
+        "pads": {
+          "type": "INTS",
+          "required": false
+        },
+        "storage_order": {
+          "type": "INT",
+          "required": false,
+          "default": 0
+        },
+        "strides": {
+          "type": "INTS",
+          "required": false
+        }
+      },
+      "restrictions": [
+        "float32 NCHW rank four; positive 2D kernel/strides/dilations; nonnegative pads",
+        "values output only; second empty slot allowed, nonempty indices unsupported",
+        "storage_order must be 0; ceil_mode must be 0/1; documented empty/nonfinite differences",
+        "auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; ceil mode trims starts in right padded region"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "AveragePool",
+      "schema_version": 11,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {
+        "auto_pad": {
+          "type": "STRING",
+          "required": false,
+          "default": "NOTSET"
+        },
+        "ceil_mode": {
+          "type": "INT",
+          "required": false,
+          "default": 0
+        },
+        "count_include_pad": {
+          "type": "INT",
+          "required": false,
+          "default": 0
+        },
+        "kernel_shape": {
+          "type": "INTS",
+          "required": true
+        },
+        "pads": {
+          "type": "INTS",
+          "required": false
+        },
+        "strides": {
+          "type": "INTS",
+          "required": false
+        }
+      },
+      "restrictions": [
+        "float32 NCHW rank four; positive 2D kernel/strides; nonnegative pads; no dilation attribute",
+        "ceil_mode/count_include_pad must be 0/1; full-kernel divisor when including pad",
+        "auto_pad NOTSET/VALID/SAME_UPPER/SAME_LOWER; reject conflicting pads; ceil mode trims starts in right padded region"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "GlobalAveragePool",
+      "schema_version": 1,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {},
+      "restrictions": [
+        "float32 NCHW rank four; output [N,C,1,1]; empty spatial reduction NaN"
+      ]
+    },
+    {
+      "domain": "",
+      "operator": "BatchNormalization",
+      "schema_version": 15,
+      "min_opset": 17,
+      "max_opset": 17,
+      "status": "implemented",
+      "task": "RT-17",
+      "data_types": [
+        "float32"
+      ],
+      "inputs": {
+        "min": 5,
+        "max": 5,
+        "optional_slots": []
+      },
+      "outputs": {
+        "min": 1,
+        "max": 1,
+        "optional_slots": []
+      },
+      "attributes": {
+        "epsilon": {
+          "type": "FLOAT",
+          "required": false,
+          "default": 9.999999747378752e-06
+        },
+        "momentum": {
+          "type": "FLOAT",
+          "required": false,
+          "default": 0.8999999761581421
+        },
+        "training_mode": {
+          "type": "INT",
+          "required": false,
+          "default": 0
+        }
+      },
+      "restrictions": [
+        "float32 rank-two or NCHW rank-four input and [C] parameters",
+        "exactly one inference output slot; reject all additional output slots and nonzero training_mode",
+        "finite nonnegative epsilon; finite momentum in [0,1] accepted but no statistics update",
+        "independent stored-statistics reference; documented evaluator/ORT differences",
+        "schema-15 inference only: training_mode=0, all five inputs float32, exactly one output slot"
       ]
     }
   ]

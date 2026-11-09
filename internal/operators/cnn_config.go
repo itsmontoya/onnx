@@ -106,6 +106,10 @@ func (c *CNNConfig) attribute(attribute graph.Attribute) (err error) {
 		if attribute.Int != 0 {
 			return fmt.Errorf("%w: MaxPool storage_order must be 0", graph.ErrUnsupported)
 		}
+	case "training_mode":
+		if attribute.Int != 0 {
+			return fmt.Errorf("%w: BatchNormalization training_mode must be 0", graph.ErrUnsupported)
+		}
 	case "epsilon":
 		c.Epsilon = attribute.Float
 	case "momentum":

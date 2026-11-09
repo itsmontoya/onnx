@@ -28,7 +28,7 @@ func properties(wires []*onnxpb.StringStringEntryProto) (out []Property, err err
 func readMetadata(model *onnxpb.ModelProto) (metadata Metadata, err error) {
 	metadata.Name = model.Graph.GetName()
 	metadata.IRVersion = model.GetIrVersion()
-	metadata.Opset = 13
+	metadata.Opset = model.OpsetImport[0].GetVersion()
 	metadata.Producer = model.GetProducerName()
 	metadata.ProducerVersion = model.GetProducerVersion()
 	metadata.ModelDomain = model.GetDomain()

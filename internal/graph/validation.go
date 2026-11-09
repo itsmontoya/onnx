@@ -6,6 +6,7 @@ import (
 
 	"github.com/itsmontoya/neuralnetwork/tensor"
 	"github.com/itsmontoya/onnx/internal/onnxpb"
+	"github.com/itsmontoya/onnx/internal/profile"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
@@ -34,8 +35,8 @@ func validateEnvelope(model *onnxpb.ModelProto) (err error) {
 		}
 
 		seen[domain] = true
-		if domain != "" || imported.GetVersion() != 13 {
-			return fmt.Errorf("model opset_import[%d] domain %q version %d: %w: require empty domain opset 13", index, domain, imported.GetVersion(), ErrUnsupported)
+		if !profile.Accepts(model.GetIrVersion(), domain, imported.GetVersion()) {
+			return fmt.Errorf("model opset_import[%d] domain %q version %d: %w: require empty domain opset 13 or 17", index, domain, imported.GetVersion(), ErrUnsupported)
 		}
 	}
 
@@ -50,7 +51,7 @@ func validateEnvelope(model *onnxpb.ModelProto) (err error) {
 	return nil
 }
 
-func validateFeatures(ctx context.Context, wire *onnxpb.GraphProto, limits Limits) (err error) {
+func validateFeatures(ctx context.Context, wire *onnxpb.GraphProto, limits Limits, opset int64) (err error) {
 	if len(wire.Node) > limits.MaxNodes {
 		return fmt.Errorf("graph %q: %w: node count", wire.GetName(), ErrLimit)
 	}
@@ -79,40 +80,40 @@ func validateFeatures(ctx context.Context, wire *onnxpb.GraphProto, limits Limit
 	var attributes int
 	for index, node := range wire.Node {
 		if err = ctx.Err(); err != nil {
-			return nodeError(index, node, err)
+			return nodeError(index, node, opset, err)
 		}
 
 		if node == nil {
-			return nodeError(index, node, fmt.Errorf("%w: nil node", ErrInvalidModel))
+			return nodeError(index, node, opset, fmt.Errorf("%w: nil node", ErrInvalidModel))
 		}
 
 		if node.GetDomain() != "" || node.GetOverload() != "" {
-			return nodeError(index, node, fmt.Errorf("%w: custom domain or function overload", ErrUnsupported))
+			return nodeError(index, node, opset, fmt.Errorf("%w: custom domain or function overload", ErrUnsupported))
 		}
 
 		if len(node.Attribute) > limits.MaxAttributes-attributes {
-			return nodeError(index, node, fmt.Errorf("%w: aggregate attribute count", ErrLimit))
+			return nodeError(index, node, opset, fmt.Errorf("%w: aggregate attribute count", ErrLimit))
 		}
 
 		attributes += len(node.Attribute)
 		seen := make(map[string]bool)
 		for slot, attribute := range node.Attribute {
 			if err = ctx.Err(); err != nil {
-				return nodeError(index, node, err)
+				return nodeError(index, node, opset, err)
 			}
 
 			if attribute == nil || attribute.GetName() == "" {
-				return nodeError(index, node, fmt.Errorf("attribute[%d] name %q: %w: nonempty attribute required", slot, attribute.GetName(), ErrInvalidModel))
+				return nodeError(index, node, opset, fmt.Errorf("attribute[%d] name %q: %w: nonempty attribute required", slot, attribute.GetName(), ErrInvalidModel))
 			}
 
 			name := attribute.GetName()
 			if seen[name] {
-				return nodeError(index, node, fmt.Errorf("attribute %q: %w: duplicate attribute", name, ErrInvalidModel))
+				return nodeError(index, node, opset, fmt.Errorf("attribute %q: %w: duplicate attribute", name, ErrInvalidModel))
 			}
 
 			seen[name] = true
 			if err = validateAttribute(attribute); err != nil {
-				return nodeError(index, node, fmt.Errorf("attribute %q: %w", name, err))
+				return nodeError(index, node, opset, fmt.Errorf("attribute %q: %w", name, err))
 			}
 		}
 	}
@@ -121,7 +122,7 @@ func validateFeatures(ctx context.Context, wire *onnxpb.GraphProto, limits Limit
 
 // validateValueCount rejects the whole graph before any initializer conversion.
 // Defaulted inputs reuse their named source; empty optional slots are absent.
-func validateValueCount(ctx context.Context, wire *onnxpb.GraphProto, limit int) (err error) {
+func validateValueCount(ctx context.Context, wire *onnxpb.GraphProto, limit int, opset int64) (err error) {
 	seen := make(map[string]bool)
 	for _, input := range wire.Input {
 		if err = countValue(ctx, seen, input.GetName(), limit); err != nil {
@@ -136,7 +137,7 @@ func validateValueCount(ctx context.Context, wire *onnxpb.GraphProto, limit int)
 	for index, node := range wire.Node {
 		for _, name := range node.Output {
 			if err = countValue(ctx, seen, name, limit); err != nil {
-				return nodeError(index, node, err)
+				return nodeError(index, node, opset, err)
 			}
 		}
 	}
@@ -206,8 +207,8 @@ func validateAttribute(wire *onnxpb.AttributeProto) (err error) {
 	return nil
 }
 
-func nodeError(index int, wire *onnxpb.NodeProto, cause error) (err error) {
-	return fmt.Errorf("node[%d] name %q domain %q operator %q opset 13: %w", index, wire.GetName(), wire.GetDomain(), wire.GetOpType(), cause)
+func nodeError(index int, wire *onnxpb.NodeProto, opset int64, cause error) (err error) {
+	return fmt.Errorf("node[%d] name %q domain %q operator %q opset %d: %w", index, wire.GetName(), wire.GetDomain(), wire.GetOpType(), opset, cause)
 }
 
 func validateStrings(ctx context.Context, message protoreflect.Message, path string, limit int) (err error) {

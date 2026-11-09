@@ -1,4 +1,4 @@
-// Command inference runs the checked-in dynamic-batch MLP, branching, shape or CNN graph.
+// Command inference runs the checked-in dynamic-batch MLP, branching, shape, CNN or exported MLP graph.
 package main
 
 import (
@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	graph := flag.String("graph", "mlp", "fixture graph: mlp, branch, shape or cnn")
+	graph := flag.String("graph", "mlp", "fixture graph: mlp, branch, shape, cnn or exported")
 	batch := flag.Int("batch", 1, "fixture batch size: 1 or 3")
 	flag.Parse()
 	if err := run(*graph, *batch); err != nil {
@@ -40,6 +40,10 @@ func run(graph string, batch int) (err error) {
 	}
 
 	path := filepath.Join("testdata", directory, "models", graph+".onnx")
+	if graph == "exported" {
+		path = filepath.Join("testdata", "profiles", "exports", "pytorch_mlp.onnx")
+	}
+
 	if model, err = onnx.LoadFile(ctx, path, onnx.Options{}); err != nil {
 		return fmt.Errorf("load %s: %w", graph, err)
 	}
@@ -81,8 +85,8 @@ func run(graph string, batch int) (err error) {
 }
 
 func fixtureInputs(graph string, batch int) (inputs map[string]*onnx.Tensor, err error) {
-	if graph != "mlp" && graph != "branch" && graph != "shape" && graph != "cnn" {
-		return nil, fmt.Errorf("graph must be mlp, branch, shape or cnn")
+	if graph != "mlp" && graph != "branch" && graph != "shape" && graph != "cnn" && graph != "exported" {
+		return nil, fmt.Errorf("graph must be mlp, branch, shape, cnn or exported")
 	}
 
 	if batch != 1 && batch != 3 {

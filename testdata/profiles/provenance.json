@@ -1,0 +1,5654 @@
+{
+  "format_version": 1,
+  "onnx_source_revision": "3bf92c03a9f27eba3bda1e5b9e63ea20ec213557",
+  "reference_versions": {
+    "python": "3.9.6",
+    "onnx": "1.16.2",
+    "numpy": "1.26.4",
+    "protobuf": "4.25.3",
+    "onnxruntime": "1.19.2",
+    "torch": "2.2.2"
+  },
+  "original_license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+  "schema_audit": {
+    "path": "profiles/schema_audit.json",
+    "sha256": "89a81cac6d3d7dc24b172a9d8e4341fdb2d0a43d992a5e2fca0eabaeef6d33c8"
+  },
+  "exporter": {
+    "name": "torch.onnx.export",
+    "version": "2.2.2",
+    "source": "https://github.com/pytorch/pytorch/tree/39901f229520a5256505ec24782f716ee7ddc843/torch/onnx",
+    "source_revision": "39901f229520a5256505ec24782f716ee7ddc843",
+    "tool_license": "BSD-3-Clause; optional development dependency, no PyTorch implementation copied",
+    "demand": "Execute actual default float32 dynamic-batch MLP inference exports requesting opset 17",
+    "unmodified_export": {
+      "path": "profiles/exports/pytorch_mlp.onnx",
+      "sha256": "34d16bc9604e8d1166a27255750d91d5caf20f29833cf017d1f7d55c7c80c9a1"
+    },
+    "ir_version": 8,
+    "opsets": {
+      "": 17
+    },
+    "runtime_conversion": false
+  },
+  "cases": [
+    {
+      "name": "opset13_identity",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Identity",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_identity.onnx",
+        "sha256": "636cb06967c1bd521418e3dd3b22ddc450112d1bb18875c939830849c76b229b"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_identity/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_identity/output_y.pb",
+            "sha256": "70a80f67a966751d2278b00f7a6d86b72524413bd40fab4aa35eaf9b477509c9"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_constant",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Constant",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_constant.onnx",
+        "sha256": "9c1e2550d722426c913ab5c60e75149c13528b51f07b8219a8ece5d2e14da21c"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_constant/output_y.pb",
+            "sha256": "bfe01d14077b0adbb8161a689f2f8bcc2a862195c4dab3cbd02eb5dab3567683"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "int64",
+              "integers": [
+                -9223372036854775808,
+                9223372036854775807,
+                16777217
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "int64",
+              "integers": [
+                -9223372036854775808,
+                9223372036854775807,
+                16777217
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_add",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Add",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_add.onnx",
+        "sha256": "ee53fda820d1f033e88ea0d9af23045f3fb208dc1259e8ffcdf6267506a9b920"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_add/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset13_add/input_b.pb",
+            "sha256": "42580ab3983a26dce4acb90fe22aae398001ed7e59a27671fae67a9a00c5f2d0"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_add/output_y.pb",
+            "sha256": "67e03539de5687b6b5d937c4f1ff920ae64e96b1e61fa43236ed4feee090986b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1077936128,
+                1073741824,
+                1084227584,
+                1090519040
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1077936128,
+                1073741824,
+                1084227584,
+                1090519040
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_sub",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Sub",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_sub.onnx",
+        "sha256": "bce2598b9901552f39905d51306b1e38498913cb617422d65a0a3fda753191ba"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_sub/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset13_sub/input_b.pb",
+            "sha256": "42580ab3983a26dce4acb90fe22aae398001ed7e59a27671fae67a9a00c5f2d0"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_sub/output_y.pb",
+            "sha256": "6e574bed6b747657b8c3c0a8ed59001bead63b8b6a4cd898d8d124d3ba0c7f3b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                3212836864,
+                3233808384,
+                1065353216,
+                0
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                3212836864,
+                3233808384,
+                1065353216,
+                0
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_mul",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Mul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_mul.onnx",
+        "sha256": "732b666dc13753e76ef552b2197677273e8822e497cf6bd8f4f2db5475d7f7c5"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_mul/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset13_mul/input_b.pb",
+            "sha256": "42580ab3983a26dce4acb90fe22aae398001ed7e59a27671fae67a9a00c5f2d0"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_mul/output_y.pb",
+            "sha256": "ef3929dcc15d315be5bf163c51e3b1a8f03a4a3bc27b1862c3f8cc85db7e89e0"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                3238002688,
+                1086324736,
+                1098907648
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                3238002688,
+                1086324736,
+                1098907648
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_div",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Div",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_div.onnx",
+        "sha256": "bab1da4b532d815c3d3c360b22ac0b5fc3343d4ad14ad0ee21c340fa3e8e0fa3"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_div/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset13_div/input_b.pb",
+            "sha256": "42580ab3983a26dce4acb90fe22aae398001ed7e59a27671fae67a9a00c5f2d0"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_div/output_y.pb",
+            "sha256": "d5125f494fc50c4e4de49658e25b73e02bce1256ca6b21f2e162d5f98a3f131c"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1056964608,
+                3204448256,
+                1069547520,
+                1065353216
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1056964608,
+                3204448256,
+                1069547520,
+                1065353216
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_matmul",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "MatMul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_matmul.onnx",
+        "sha256": "3e91ce9b505b9199a4c0a6a17dc1ecd617d5bdf631c4913e724e293ba51e1662"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_matmul/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset13_matmul/input_b.pb",
+            "sha256": "f07c2da72b494cf84864cbfb933db6aed3f9d39e35ae03e16565629fada9987d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_matmul/output_y.pb",
+            "sha256": "05079444a54ca69aac838a480aa45e20c920e23f5c2a5c424df93cdf89d140dc"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                3231711232,
+                3233808384,
+                1097859072,
+                1102053376
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                3231711232,
+                3233808384,
+                1097859072,
+                1102053376
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_gemm",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_gemm.onnx",
+        "sha256": "2dc00eec9e76a0be06f39e920624eeba46f6807c0bb234c645658374ff77d582"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_gemm/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset13_gemm/input_b.pb",
+            "sha256": "f07c2da72b494cf84864cbfb933db6aed3f9d39e35ae03e16565629fada9987d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_gemm/output_y.pb",
+            "sha256": "05079444a54ca69aac838a480aa45e20c920e23f5c2a5c424df93cdf89d140dc"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                3231711232,
+                3233808384,
+                1097859072,
+                1102053376
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                3231711232,
+                3233808384,
+                1097859072,
+                1102053376
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_relu",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_relu.onnx",
+        "sha256": "1ff114df915713200682cdfc16057aef02a0178a00166cf39da522a14e6bf67a"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_relu/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_relu/output_y.pb",
+            "sha256": "40b8541d59d2b0ba4659b3d92f9b27ff54002f76ccc4cb4b78e78c73366ecaba"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                0,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                0,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_sigmoid",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Sigmoid",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_sigmoid.onnx",
+        "sha256": "85f63b7e044c7df46bf283711d95d04cb8030a88d961d1eeea4e77ea94207264"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_sigmoid/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_sigmoid/output_y.pb",
+            "sha256": "d4b965f653ee6b1faa01ff6876040ae14017856cb1b0aa468a3e2a12c9c61aeb"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1060841128,
+                1039409321,
+                1064557542,
+                1065051457
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1060841128,
+                1039409320,
+                1064557542,
+                1065051457
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_tanh",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Tanh",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_tanh.onnx",
+        "sha256": "5ad6459e9d579f275a5f6c6a7c05a0e7f689e427c21bdb702ae8effcf4b16f92"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_tanh/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_tanh/output_y.pb",
+            "sha256": "d62982038e23bf6d0fb7e07dfc76790b432859985c903a99702817c093e674ae"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1061353430,
+                3212233347,
+                1065270249,
+                1065341964
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1061353430,
+                3212233347,
+                1065270248,
+                1065341962
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_softmax",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_softmax.onnx",
+        "sha256": "652b92f7163591817dc3b68acaacf017409126eafb76d3092d81372c87d31191"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_softmax/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_softmax/output_y.pb",
+            "sha256": "f95919c5b550dcbfe43c23d3f995f8ba492436dd77cc479ea15250076aa5c495"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1064557542,
+                1027752354,
+                1049211569,
+                1060841128
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1064557542,
+                1027752354,
+                1049211569,
+                1060841128
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_flatten",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_flatten.onnx",
+        "sha256": "6b91224ae1228acbda1f2a466852905b68ba831171a8b1825975a494136295b4"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_flatten/input_x.pb",
+            "sha256": "799d9306b0105f47c0ee444ad84a20ca9792eda5a94719a1ab23c0b226bfccc9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_flatten/output_y.pb",
+            "sha256": "37f51319c16ef7a8c23115dce37d89dedc7217bbc27adf2603ed945f936f7949"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                4
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                4
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_reshape",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Reshape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_reshape.onnx",
+        "sha256": "c89788cd56055cb630e2a851371258d842682bc5a0777d0637305769df9cad7a"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_reshape/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_reshape/output_y.pb",
+            "sha256": "70a80f67a966751d2278b00f7a6d86b72524413bd40fab4aa35eaf9b477509c9"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_transpose",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Transpose",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_transpose.onnx",
+        "sha256": "4eaae8e508f7f1582efc8fd14836151c267cca698a525855809cc939aeda62d5"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_transpose/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_transpose/output_y.pb",
+            "sha256": "b71c2aff1b53019794e05e184bb283dc4cd8535b0787673ea88f03d8c5d07d57"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                1077936128,
+                3221225472,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                1077936128,
+                3221225472,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_squeeze",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Squeeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_squeeze.onnx",
+        "sha256": "791b84919be6df9a5a761eb305c54f6afc1e884a77a97172b17d27c137c7c04c"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_squeeze/input_x.pb",
+            "sha256": "799d9306b0105f47c0ee444ad84a20ca9792eda5a94719a1ab23c0b226bfccc9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_squeeze/output_y.pb",
+            "sha256": "70a80f67a966751d2278b00f7a6d86b72524413bd40fab4aa35eaf9b477509c9"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_unsqueeze",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Unsqueeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_unsqueeze.onnx",
+        "sha256": "d0b0970bd516b65e8ed0e8074e17210b60cc8776970338e6d63cdd8529a00c37"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_unsqueeze/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_unsqueeze/output_y.pb",
+            "sha256": "6abedc16cf275278b45ff7d31cfe7150d1f193fb5b33ca866438f93f3cf52e03"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_shape",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Shape",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_shape.onnx",
+        "sha256": "c5ec4e94e511dc8417c5687ecf47d9d927aefbd6fdba04535d97b7bfd44ba7b9"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_shape/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_shape/output_y.pb",
+            "sha256": "f1874f9fd9178f9813b595991694a0f3aceccb2b45a7657156bccb7f6f56ac33"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "integers": [
+                2,
+                2
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "integers": [
+                2,
+                2
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_gather",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_gather.onnx",
+        "sha256": "bb356774ddeb1a8183be611e5c45f43152b394f9cc617d87c735e78925dcae88"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_gather/input_x.pb",
+            "sha256": "9a1f9ca10ae5a213766365e14b19b217694dce67dfe5490fe7443d915f0106e4"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_gather/output_y.pb",
+            "sha256": "dc508fd047722d1c5d3c3e149b857ca0805dcc4524bd7caa7594beaa38e2593c"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "integers": [
+                16777217,
+                -9223372036854775808
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "integers": [
+                16777217,
+                -9223372036854775808
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_concat",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Concat",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_concat.onnx",
+        "sha256": "8cab0106bf72d53e4ce914b2145e3ed80e8aaa5b913cd6b18e640c538345b2fd"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_concat/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset13_concat/input_b.pb",
+            "sha256": "6579ad5eb8b49df7160a348f7adb208bc37782e6c6204b4b108c5b6bfddab502"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_concat/output_y.pb",
+            "sha256": "439c092f2a86d9774f4d8b2a61baed24f4de9d5bc617359c48ef3c0b95cde2e8"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                4,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432,
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                4,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432,
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_conv",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Conv",
+          "version": 11
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_conv.onnx",
+        "sha256": "6f65935f7f9f136a5e00aae6bc98dc462b341b33f781b4c2a67a4aa1b5e2128a"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_conv/input_x.pb",
+            "sha256": "8d556c9cf613b6a2647b3a1ab3a14a800bd42551fe678388d04a1c775de53128"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_conv/output_y.pb",
+            "sha256": "5224d73ece9c17664c5b1a640806b1b43e4db407761f70c8dd411b1c60908b80"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                1082130432,
+                1086324736,
+                1090519040
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                1082130432,
+                1086324736,
+                1090519040
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_maxpool",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "MaxPool",
+          "version": 12
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_maxpool.onnx",
+        "sha256": "e1f99a32bed1c86d4303c95acafc4558c196678a6d935f63a8d52ec006a21011"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_maxpool/input_x.pb",
+            "sha256": "8d556c9cf613b6a2647b3a1ab3a14a800bd42551fe678388d04a1c775de53128"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_maxpool/output_y.pb",
+            "sha256": "03f69bfffc9d686f24f02c2f52f16c10c9672a1f1a63ac3b327c1a813ec33c20"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_averagepool",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "AveragePool",
+          "version": 11
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_averagepool.onnx",
+        "sha256": "b09da1fa0f7d549902c1e51d89352295bd13dbeedb1705da51ac7db11668d8e7"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_averagepool/input_x.pb",
+            "sha256": "8d556c9cf613b6a2647b3a1ab3a14a800bd42551fe678388d04a1c775de53128"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_averagepool/output_y.pb",
+            "sha256": "4546fbb2c9ac9b5f1b0c7e5c4fea91aaef76d1a66ba1e183fbb797fba93488af"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1075838976
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1075838976
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_globalaveragepool",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "GlobalAveragePool",
+          "version": 1
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_globalaveragepool.onnx",
+        "sha256": "a8ad333f21e2f1e232b7fdeb5d3aa292d12d4cb166148b4eb4e24b626f8139c6"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_globalaveragepool/input_x.pb",
+            "sha256": "8d556c9cf613b6a2647b3a1ab3a14a800bd42551fe678388d04a1c775de53128"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_globalaveragepool/output_y.pb",
+            "sha256": "4546fbb2c9ac9b5f1b0c7e5c4fea91aaef76d1a66ba1e183fbb797fba93488af"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1075838976
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1075838976
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset13_batchnormalization",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "BatchNormalization",
+          "version": 9
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset13_batchnormalization.onnx",
+        "sha256": "eb7c183b1cf8fc7c684578ec5b06922e9d11d9f85fb35716d3e7919527787bbe"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset13_batchnormalization/input_x.pb",
+            "sha256": "a079e9a9142c1b022771b7d241ef8dd255088f88c4ed6627c42c0d6a0709cce2"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset13_batchnormalization/output_y.pb",
+            "sha256": "3e2abfed4a814dfb4f2a08870a192fe75bc80ed136b146897457aa90e94a2f84"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3212836864
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3212836864
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_identity",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Identity",
+          "version": 16
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_identity.onnx",
+        "sha256": "14efc97b1b392b2096925ac127d38eb0315938ffba3cdef18e9d6c1fb203851a"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_identity/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_identity/output_y.pb",
+            "sha256": "70a80f67a966751d2278b00f7a6d86b72524413bd40fab4aa35eaf9b477509c9"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_constant",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Constant",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_constant.onnx",
+        "sha256": "8d4c0042d504b153511232c91355d01cbdb55802fb550ee5d485d257065b6ad7"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_constant/output_y.pb",
+            "sha256": "bfe01d14077b0adbb8161a689f2f8bcc2a862195c4dab3cbd02eb5dab3567683"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "int64",
+              "integers": [
+                -9223372036854775808,
+                9223372036854775807,
+                16777217
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "int64",
+              "integers": [
+                -9223372036854775808,
+                9223372036854775807,
+                16777217
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_add",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Add",
+          "version": 14
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_add.onnx",
+        "sha256": "e55006a8b4c2eb4ac714433b5a340af382ee74b039cd660a25029957658cac45"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_add/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset17_add/input_b.pb",
+            "sha256": "42580ab3983a26dce4acb90fe22aae398001ed7e59a27671fae67a9a00c5f2d0"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_add/output_y.pb",
+            "sha256": "67e03539de5687b6b5d937c4f1ff920ae64e96b1e61fa43236ed4feee090986b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1077936128,
+                1073741824,
+                1084227584,
+                1090519040
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1077936128,
+                1073741824,
+                1084227584,
+                1090519040
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_sub",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Sub",
+          "version": 14
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_sub.onnx",
+        "sha256": "c0867bd64d28cbc9719873e12abddeb6c5415e57b52a2ff4ba6e961328de17c3"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_sub/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset17_sub/input_b.pb",
+            "sha256": "42580ab3983a26dce4acb90fe22aae398001ed7e59a27671fae67a9a00c5f2d0"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_sub/output_y.pb",
+            "sha256": "6e574bed6b747657b8c3c0a8ed59001bead63b8b6a4cd898d8d124d3ba0c7f3b"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                3212836864,
+                3233808384,
+                1065353216,
+                0
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                3212836864,
+                3233808384,
+                1065353216,
+                0
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_mul",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Mul",
+          "version": 14
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_mul.onnx",
+        "sha256": "a2418d62bc888e9c6be29020af458935dfdfd6eec160d83aa9cc8c359ed44a17"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_mul/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset17_mul/input_b.pb",
+            "sha256": "42580ab3983a26dce4acb90fe22aae398001ed7e59a27671fae67a9a00c5f2d0"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_mul/output_y.pb",
+            "sha256": "ef3929dcc15d315be5bf163c51e3b1a8f03a4a3bc27b1862c3f8cc85db7e89e0"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                3238002688,
+                1086324736,
+                1098907648
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                3238002688,
+                1086324736,
+                1098907648
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_div",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Div",
+          "version": 14
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_div.onnx",
+        "sha256": "a5facb733111383a2d6002cae4340c4f094c3a9212486612ce946359d17c3da6"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_div/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset17_div/input_b.pb",
+            "sha256": "42580ab3983a26dce4acb90fe22aae398001ed7e59a27671fae67a9a00c5f2d0"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_div/output_y.pb",
+            "sha256": "d5125f494fc50c4e4de49658e25b73e02bce1256ca6b21f2e162d5f98a3f131c"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1056964608,
+                3204448256,
+                1069547520,
+                1065353216
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1056964608,
+                3204448256,
+                1069547520,
+                1065353216
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_matmul",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "MatMul",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_matmul.onnx",
+        "sha256": "2e04ae9f7366391a88ec7ea1c21527ee08010fcac99fb3a5c2e8da1a3f8e3edb"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_matmul/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset17_matmul/input_b.pb",
+            "sha256": "f07c2da72b494cf84864cbfb933db6aed3f9d39e35ae03e16565629fada9987d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_matmul/output_y.pb",
+            "sha256": "05079444a54ca69aac838a480aa45e20c920e23f5c2a5c424df93cdf89d140dc"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                3231711232,
+                3233808384,
+                1097859072,
+                1102053376
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                3231711232,
+                3233808384,
+                1097859072,
+                1102053376
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_gemm",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_gemm.onnx",
+        "sha256": "d87734b03ffc83b3afafc8e4931c53709aa438e20f3fb117cc1207ccf78c7597"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_gemm/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset17_gemm/input_b.pb",
+            "sha256": "f07c2da72b494cf84864cbfb933db6aed3f9d39e35ae03e16565629fada9987d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_gemm/output_y.pb",
+            "sha256": "05079444a54ca69aac838a480aa45e20c920e23f5c2a5c424df93cdf89d140dc"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                3231711232,
+                3233808384,
+                1097859072,
+                1102053376
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                3231711232,
+                3233808384,
+                1097859072,
+                1102053376
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_relu",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 14
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_relu.onnx",
+        "sha256": "b39c430dcc3efbe56ec71fdec54d0bdf020c51aa1fdd9ed70884c0e57759c272"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_relu/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_relu/output_y.pb",
+            "sha256": "40b8541d59d2b0ba4659b3d92f9b27ff54002f76ccc4cb4b78e78c73366ecaba"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                0,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                0,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_sigmoid",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Sigmoid",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_sigmoid.onnx",
+        "sha256": "b519c84b431da7b67667d47857f91499b5766a30672b8c879ff484acd7691cbd"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_sigmoid/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_sigmoid/output_y.pb",
+            "sha256": "d4b965f653ee6b1faa01ff6876040ae14017856cb1b0aa468a3e2a12c9c61aeb"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1060841128,
+                1039409321,
+                1064557542,
+                1065051457
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1060841128,
+                1039409320,
+                1064557542,
+                1065051457
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_tanh",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Tanh",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_tanh.onnx",
+        "sha256": "d805384cf45bf6a33287b79257a3dc55971dcb952ca7d61040baa4669502a13b"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_tanh/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_tanh/output_y.pb",
+            "sha256": "d62982038e23bf6d0fb7e07dfc76790b432859985c903a99702817c093e674ae"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1061353430,
+                3212233347,
+                1065270249,
+                1065341964
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1061353430,
+                3212233347,
+                1065270248,
+                1065341962
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_softmax",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_softmax.onnx",
+        "sha256": "75698b7232eb79c230d38235d04186abd17b83a7275a4a0af7d8d94643fb5ccd"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_softmax/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_softmax/output_y.pb",
+            "sha256": "f95919c5b550dcbfe43c23d3f995f8ba492436dd77cc479ea15250076aa5c495"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1064557542,
+                1027752354,
+                1049211569,
+                1060841128
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1064557542,
+                1027752354,
+                1049211569,
+                1060841128
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_flatten",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Flatten",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_flatten.onnx",
+        "sha256": "9a26ee15395367242c90d7f35ef14e556f00a8f0a748ad4b42cfd542f9209ae2"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_flatten/input_x.pb",
+            "sha256": "799d9306b0105f47c0ee444ad84a20ca9792eda5a94719a1ab23c0b226bfccc9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_flatten/output_y.pb",
+            "sha256": "37f51319c16ef7a8c23115dce37d89dedc7217bbc27adf2603ed945f936f7949"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                4
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                4
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_reshape",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Reshape",
+          "version": 14
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_reshape.onnx",
+        "sha256": "02c8e16c69825e3b66f1ffe38c77abfd021fea433a4cc8288813eb6fe1514519"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_reshape/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_reshape/output_y.pb",
+            "sha256": "70a80f67a966751d2278b00f7a6d86b72524413bd40fab4aa35eaf9b477509c9"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_transpose",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Transpose",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_transpose.onnx",
+        "sha256": "49cb6cb3f9b164f0d08e9af775c77502c9d6f5853706f08fb7e5bc284cc1abdc"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_transpose/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_transpose/output_y.pb",
+            "sha256": "b71c2aff1b53019794e05e184bb283dc4cd8535b0787673ea88f03d8c5d07d57"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                1077936128,
+                3221225472,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                1077936128,
+                3221225472,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_squeeze",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Squeeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_squeeze.onnx",
+        "sha256": "9dbeb1e2da8964e449dc97254eec877d89de61d8bcd5bb80ed214b91b7398f97"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_squeeze/input_x.pb",
+            "sha256": "799d9306b0105f47c0ee444ad84a20ca9792eda5a94719a1ab23c0b226bfccc9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_squeeze/output_y.pb",
+            "sha256": "70a80f67a966751d2278b00f7a6d86b72524413bd40fab4aa35eaf9b477509c9"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_unsqueeze",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Unsqueeze",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_unsqueeze.onnx",
+        "sha256": "a5a1591c2508ad97e412e7dc139768efa92c1b2e19959a432970d2f2635652b7"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_unsqueeze/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_unsqueeze/output_y.pb",
+            "sha256": "6abedc16cf275278b45ff7d31cfe7150d1f193fb5b33ca866438f93f3cf52e03"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_shape",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Shape",
+          "version": 15
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_shape.onnx",
+        "sha256": "530321811c30e47545d1b4e277d451017190061e516cbf214f6ef4bd5261dba4"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_shape/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_shape/output_y.pb",
+            "sha256": "f1874f9fd9178f9813b595991694a0f3aceccb2b45a7657156bccb7f6f56ac33"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "integers": [
+                2,
+                2
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "integers": [
+                2,
+                2
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_gather",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gather",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_gather.onnx",
+        "sha256": "7c4b2839dd3788b7e0ec7fb292d73bb48861c1d0a332b690f52402f4c973d08b"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_gather/input_x.pb",
+            "sha256": "9a1f9ca10ae5a213766365e14b19b217694dce67dfe5490fe7443d915f0106e4"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_gather/output_y.pb",
+            "sha256": "dc508fd047722d1c5d3c3e149b857ca0805dcc4524bd7caa7594beaa38e2593c"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "integers": [
+                16777217,
+                -9223372036854775808
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "integers": [
+                16777217,
+                -9223372036854775808
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_concat",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Concat",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_concat.onnx",
+        "sha256": "b7a04ef399d8c0618762d4924eed598b91ec07d857d29d409e3d888d0c182b70"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_concat/input_x.pb",
+            "sha256": "d36e2d06b1b78b284a55605cd2031ca401fed1a5933b89999afd55b1184c8f1f"
+          }
+        },
+        {
+          "name": "b",
+          "tensor": {
+            "path": "profiles/values/opset17_concat/input_b.pb",
+            "sha256": "6579ad5eb8b49df7160a348f7adb208bc37782e6c6204b4b108c5b6bfddab502"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_concat/output_y.pb",
+            "sha256": "439c092f2a86d9774f4d8b2a61baed24f4de9d5bc617359c48ef3c0b95cde2e8"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                4,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432,
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                4,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432,
+                1065353216,
+                3221225472,
+                1077936128,
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_conv",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Conv",
+          "version": 11
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_conv.onnx",
+        "sha256": "416fa09767457fcc9677abe09211c223456537f2aa47e05a713c32101e184e8a"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_conv/input_x.pb",
+            "sha256": "8d556c9cf613b6a2647b3a1ab3a14a800bd42551fe678388d04a1c775de53128"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_conv/output_y.pb",
+            "sha256": "5224d73ece9c17664c5b1a640806b1b43e4db407761f70c8dd411b1c60908b80"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                1082130432,
+                1086324736,
+                1090519040
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                2,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1073741824,
+                1082130432,
+                1086324736,
+                1090519040
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_maxpool",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "MaxPool",
+          "version": 12
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_maxpool.onnx",
+        "sha256": "51a5a64905e757835cb4e1176232218c811479f4585a199a719ea48ffe7a37fd"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_maxpool/input_x.pb",
+            "sha256": "8d556c9cf613b6a2647b3a1ab3a14a800bd42551fe678388d04a1c775de53128"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_maxpool/output_y.pb",
+            "sha256": "03f69bfffc9d686f24f02c2f52f16c10c9672a1f1a63ac3b327c1a813ec33c20"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1082130432
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1082130432
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_averagepool",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "AveragePool",
+          "version": 11
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_averagepool.onnx",
+        "sha256": "0b3a7f9bfed33a76ec63a119d38b3cb61523dd0c53a31e999085818e841515da"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_averagepool/input_x.pb",
+            "sha256": "8d556c9cf613b6a2647b3a1ab3a14a800bd42551fe678388d04a1c775de53128"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_averagepool/output_y.pb",
+            "sha256": "4546fbb2c9ac9b5f1b0c7e5c4fea91aaef76d1a66ba1e183fbb797fba93488af"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1075838976
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1075838976
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_globalaveragepool",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "GlobalAveragePool",
+          "version": 1
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_globalaveragepool.onnx",
+        "sha256": "596fbb77a257ccb67e2e88f6ffb9204d560483095bc09b03b34759e2d35c4450"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_globalaveragepool/input_x.pb",
+            "sha256": "8d556c9cf613b6a2647b3a1ab3a14a800bd42551fe678388d04a1c775de53128"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_globalaveragepool/output_y.pb",
+            "sha256": "4546fbb2c9ac9b5f1b0c7e5c4fea91aaef76d1a66ba1e183fbb797fba93488af"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1075838976
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1075838976
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "opset17_batchnormalization",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "BatchNormalization",
+          "version": 15
+        }
+      ],
+      "model": {
+        "path": "profiles/models/opset17_batchnormalization.onnx",
+        "sha256": "78ac785dde634f7a6fd5e3ef4857521e0f38d1a44e1430344aa6b80655809606"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/opset17_batchnormalization/input_x.pb",
+            "sha256": "a079e9a9142c1b022771b7d241ef8dd255088f88c4ed6627c42c0d6a0709cce2"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/opset17_batchnormalization/output_y.pb",
+            "sha256": "3e2abfed4a814dfb4f2a08870a192fe75bc80ed136b146897457aa90e94a2f84"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3212836864
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1065353216,
+                3212836864
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "identity_int64_13",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Identity",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/identity_int64_13.onnx",
+        "sha256": "73a00911f28a9f2c3d2a7ac9cdadb20f32b1b405162f503fe1390b43ad40cf7d"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/identity_int64_13/input_x.pb",
+            "sha256": "9a1f9ca10ae5a213766365e14b19b217694dce67dfe5490fe7443d915f0106e4"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/identity_int64_13/output_y.pb",
+            "sha256": "bfe01d14077b0adbb8161a689f2f8bcc2a862195c4dab3cbd02eb5dab3567683"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "int64",
+              "integers": [
+                -9223372036854775808,
+                9223372036854775807,
+                16777217
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "int64",
+              "integers": [
+                -9223372036854775808,
+                9223372036854775807,
+                16777217
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "identity_empty_13",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Identity",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/identity_empty_13.onnx",
+        "sha256": "e3bec6eeefb36459583ca75efc111661d1eeec201a35f68370b8e88c8724f62b"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/identity_empty_13/input_x.pb",
+            "sha256": "5b3ed9dfb6d19b5a8566a1b6727be8caad3b75e2be76de00c6c7e2de8f71015d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/identity_empty_13/output_y.pb",
+            "sha256": "c9280374984c64d52d4a393a525e6a07bfac6f1011a679264fb6928f9a295709"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0,
+                2
+              ],
+              "dtype": "int64",
+              "integers": []
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0,
+                2
+              ],
+              "dtype": "int64",
+              "integers": []
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "identity_special_13",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Identity",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/models/identity_special_13.onnx",
+        "sha256": "f57ebb69ac4d8b6893c961927b49414c76c7bc9091e680363e24e1f0cb8da7d4"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/identity_special_13/input_x.pb",
+            "sha256": "fc9e291e29f110c6e841240bd6a88a064b96d81e4dc5edf9237f7e074bce6c90"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/identity_special_13/output_y.pb",
+            "sha256": "4b464d74576f69be60c5a787fd8a7c19761bfa58ff4d4a710773550f39517dae"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                5
+              ],
+              "dtype": "float32",
+              "bits": [
+                2143289344,
+                2139095040,
+                4286578688,
+                2147483648,
+                0
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                5
+              ],
+              "dtype": "float32",
+              "bits": [
+                2143289344,
+                2139095040,
+                4286578688,
+                2147483648,
+                0
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "identity_int64_17",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Identity",
+          "version": 16
+        }
+      ],
+      "model": {
+        "path": "profiles/models/identity_int64_17.onnx",
+        "sha256": "be8c4edfe2b698ac34a756e75a51539d54915553b554933a9c619250ce5a198e"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/identity_int64_17/input_x.pb",
+            "sha256": "9a1f9ca10ae5a213766365e14b19b217694dce67dfe5490fe7443d915f0106e4"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/identity_int64_17/output_y.pb",
+            "sha256": "bfe01d14077b0adbb8161a689f2f8bcc2a862195c4dab3cbd02eb5dab3567683"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "int64",
+              "integers": [
+                -9223372036854775808,
+                9223372036854775807,
+                16777217
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "int64",
+              "integers": [
+                -9223372036854775808,
+                9223372036854775807,
+                16777217
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "identity_empty_17",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Identity",
+          "version": 16
+        }
+      ],
+      "model": {
+        "path": "profiles/models/identity_empty_17.onnx",
+        "sha256": "65756b13f39607304648166390f1eee025641f909fe06d7fafb002938831907d"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/identity_empty_17/input_x.pb",
+            "sha256": "5b3ed9dfb6d19b5a8566a1b6727be8caad3b75e2be76de00c6c7e2de8f71015d"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/identity_empty_17/output_y.pb",
+            "sha256": "c9280374984c64d52d4a393a525e6a07bfac6f1011a679264fb6928f9a295709"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0,
+                2
+              ],
+              "dtype": "int64",
+              "integers": []
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0,
+                2
+              ],
+              "dtype": "int64",
+              "integers": []
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "identity_special_17",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Identity",
+          "version": 16
+        }
+      ],
+      "model": {
+        "path": "profiles/models/identity_special_17.onnx",
+        "sha256": "c25eb3671259078387f94ef74e7e068953cab5f08c1ac8df74b40ef08c2b4287"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/identity_special_17/input_x.pb",
+            "sha256": "fc9e291e29f110c6e841240bd6a88a064b96d81e4dc5edf9237f7e074bce6c90"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/identity_special_17/output_y.pb",
+            "sha256": "4b464d74576f69be60c5a787fd8a7c19761bfa58ff4d4a710773550f39517dae"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                5
+              ],
+              "dtype": "float32",
+              "bits": [
+                2143289344,
+                2139095040,
+                4286578688,
+                2147483648,
+                0
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                5
+              ],
+              "dtype": "float32",
+              "bits": [
+                2143289344,
+                2139095040,
+                4286578688,
+                2147483648,
+                0
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "reshape_allowzero_0",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Reshape",
+          "version": 14
+        }
+      ],
+      "model": {
+        "path": "profiles/models/reshape_allowzero_0.onnx",
+        "sha256": "3c77b2a8b1a171f39b1c27abcd77f36e70af0f4f7e6a536521dc782f23d6ee65"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/reshape_allowzero_0/input_x.pb",
+            "sha256": "ed0f8988a043c42b5442d8be2c0440d5b3cf6dbce5f852bc2e6bca98b79c7e66"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/reshape_allowzero_0/output_y.pb",
+            "sha256": "b808f8ac363c2643ab88d012c15d605c66d8b5c126cf879f78ed980d7db4ae37"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0,
+                2
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0,
+                2
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "reshape_allowzero_1",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Reshape",
+          "version": 14
+        }
+      ],
+      "model": {
+        "path": "profiles/models/reshape_allowzero_1.onnx",
+        "sha256": "43b217866fba38e959a38db790e0886074e335603bc5d0c1c96411bb11daa9f1"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/reshape_allowzero_1/input_x.pb",
+            "sha256": "ed0f8988a043c42b5442d8be2c0440d5b3cf6dbce5f852bc2e6bca98b79c7e66"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/reshape_allowzero_1/output_y.pb",
+            "sha256": "89ffcf03b029fb4c474805360427ea3829bea61e4c7e15cb691c7fb96769032f"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                0
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                0
+              ],
+              "dtype": "float32",
+              "bits": []
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "shape_slice_58",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Shape",
+          "version": 15
+        }
+      ],
+      "model": {
+        "path": "profiles/models/shape_slice_58.onnx",
+        "sha256": "a1710e2834bb4a0472a10b2e95cc6006329d38dd56e32a6436bde26f394bdd72"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/shape_slice_58/input_x.pb",
+            "sha256": "cbfb2dd5f51291952574051fdc4b9d1e8941f51a54b1a06b37ba6935e98ac7a8"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/shape_slice_58/output_y.pb",
+            "sha256": "a3fb0ccf6560725b74468af672a49768dda9edc9b82dad4b30a081f0eff4693d"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "integers": [
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "integers": [
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "shape_slice_59",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Shape",
+          "version": 15
+        }
+      ],
+      "model": {
+        "path": "profiles/models/shape_slice_59.onnx",
+        "sha256": "ec126ec1a5ad220a8a0c2e6fec1677b2038f398bb8bcffb0a3a2c268c3e8c319"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/shape_slice_59/input_x.pb",
+            "sha256": "cbfb2dd5f51291952574051fdc4b9d1e8941f51a54b1a06b37ba6935e98ac7a8"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/shape_slice_59/output_y.pb",
+            "sha256": "ba32929c35201b03769628b50c7062dc61527130687ea999e11cc56c538873d1"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1
+              ],
+              "dtype": "int64",
+              "integers": [
+                3
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1
+              ],
+              "dtype": "int64",
+              "integers": [
+                3
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "shape_slice_60",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Shape",
+          "version": 15
+        }
+      ],
+      "model": {
+        "path": "profiles/models/shape_slice_60.onnx",
+        "sha256": "aad80ab61278e880272d9f1a13abc8f842df92b1b12da920eafd7e224f4e0bba"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/shape_slice_60/input_x.pb",
+            "sha256": "cbfb2dd5f51291952574051fdc4b9d1e8941f51a54b1a06b37ba6935e98ac7a8"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/shape_slice_60/output_y.pb",
+            "sha256": "4adaf99a1788f5dbe40ae75302d67c18159b58d078be6d27bd4da51d05fbcf20"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0
+              ],
+              "dtype": "int64",
+              "integers": []
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0
+              ],
+              "dtype": "int64",
+              "integers": []
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "shape_slice_61",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Shape",
+          "version": 15
+        }
+      ],
+      "model": {
+        "path": "profiles/models/shape_slice_61.onnx",
+        "sha256": "72458f785e28f2e19e3fcf86bb24c322695b18c077af24b7813e140d6c160ee3"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/shape_slice_61/input_x.pb",
+            "sha256": "cbfb2dd5f51291952574051fdc4b9d1e8941f51a54b1a06b37ba6935e98ac7a8"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/shape_slice_61/output_y.pb",
+            "sha256": "82c0a81a93f434a094a645cfe1a29a92952e6fca38a883078f8a1753013195af"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "int64",
+              "integers": [
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3
+              ],
+              "dtype": "int64",
+              "integers": [
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "shape_slice_62",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Shape",
+          "version": 15
+        }
+      ],
+      "model": {
+        "path": "profiles/models/shape_slice_62.onnx",
+        "sha256": "3238f3774345ec605d4d06db8636cdcd624ed5f006f37b9725f1c2eabbbe146a"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/shape_slice_62/input_x.pb",
+            "sha256": "cbfb2dd5f51291952574051fdc4b9d1e8941f51a54b1a06b37ba6935e98ac7a8"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/shape_slice_62/output_y.pb",
+            "sha256": "4adaf99a1788f5dbe40ae75302d67c18159b58d078be6d27bd4da51d05fbcf20"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0
+              ],
+              "dtype": "int64",
+              "integers": []
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                0
+              ],
+              "dtype": "int64",
+              "integers": []
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "bn_stored_statistics_13",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "difference",
+      "reason": "BN-9 evaluator applies momentum; runtime and ORT use unchanged stored statistics.",
+      "ir_version": 8,
+      "opsets": {
+        "": 13
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "BatchNormalization",
+          "version": 9
+        }
+      ],
+      "model": {
+        "path": "profiles/models/bn_stored_statistics_13.onnx",
+        "sha256": "71ec54868d15181698c2afc10e5564a5fbbff2060b55808153724418c4e933d9"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/bn_stored_statistics_13/input_x.pb",
+            "sha256": "691f22dc1066599668f33268c2953a73fbcbbabb75ecea4936c3aa6693bcc133"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/bn_stored_statistics_13/output_y.pb",
+            "sha256": "d5a0703dc8e5818317ced3415020b31f771a00f7f4b057a115e70fe7f07ea566"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1074864118,
+                1082858304
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1075838976,
+                1083179008
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "bn_stored_statistics_17",
+      "origin": "tools/check_profiles.py; original deterministic graph and values",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "BatchNormalization",
+          "version": 15
+        }
+      ],
+      "model": {
+        "path": "profiles/models/bn_stored_statistics_17.onnx",
+        "sha256": "f09afb3e618a750185307d1f878dc4a42421b6d6ff26822a9eeeeb14a9357ab0"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "x",
+          "tensor": {
+            "path": "profiles/values/bn_stored_statistics_17/input_x.pb",
+            "sha256": "691f22dc1066599668f33268c2953a73fbcbbabb75ecea4936c3aa6693bcc133"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "tensor": {
+            "path": "profiles/values/bn_stored_statistics_17/output_y.pb",
+            "sha256": "d5a0703dc8e5818317ced3415020b31f771a00f7f4b057a115e70fe7f07ea566"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1075838976,
+                1083179008
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                2,
+                1
+              ],
+              "dtype": "float32",
+              "bits": [
+                1075838976,
+                1083179008
+              ]
+            }
+          ]
+        },
+        "independent": "independent NumPy/literal expectation"
+      }
+    },
+    {
+      "name": "pytorch_mlp_batch_1",
+      "origin": "Original ExportedMLP above; actual torch.onnx.export 2.2.2; no envelope conversion",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 14
+        },
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/exports/pytorch_mlp.onnx",
+        "sha256": "34d16bc9604e8d1166a27255750d91d5caf20f29833cf017d1f7d55c7c80c9a1"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "features",
+          "tensor": {
+            "path": "profiles/values/pytorch_mlp_batch_1/input_features.pb",
+            "sha256": "a7c5c17b754dff70e1f1bc139307bf424a60c5f9ec608e82117fe2d8f0422519"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "probabilities",
+          "tensor": {
+            "path": "profiles/values/pytorch_mlp_batch_1/output_probabilities.pb",
+            "sha256": "6cd5938d54d8f5867c7501edd050016dc52b7073a39461a96c6bd6fbcc8ee3bb"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1064824344,
+                1023483520
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                1,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1064824344,
+                1023483520
+              ]
+            }
+          ]
+        },
+        "independent": "PyTorch eager inference compared with ONNX evaluator and ORT"
+      }
+    },
+    {
+      "name": "pytorch_mlp_batch_3",
+      "origin": "Original ExportedMLP above; actual torch.onnx.export 2.2.2; no envelope conversion",
+      "license": "No repository LICENSE is present; original fixtures have no separately declared license.",
+      "status": "agreement",
+      "reason": "",
+      "ir_version": 8,
+      "opsets": {
+        "": 17
+      },
+      "schemas": [
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Relu",
+          "version": 14
+        },
+        {
+          "domain": "",
+          "operator": "Gemm",
+          "version": 13
+        },
+        {
+          "domain": "",
+          "operator": "Softmax",
+          "version": 13
+        }
+      ],
+      "model": {
+        "path": "profiles/exports/pytorch_mlp.onnx",
+        "sha256": "34d16bc9604e8d1166a27255750d91d5caf20f29833cf017d1f7d55c7c80c9a1"
+      },
+      "comparison": {
+        "absolute": 1e-05,
+        "relative": 1e-05,
+        "signed_zero": true
+      },
+      "inputs": [
+        {
+          "name": "features",
+          "tensor": {
+            "path": "profiles/values/pytorch_mlp_batch_3/input_features.pb",
+            "sha256": "8a764901fd7ba19fb1ae3a4a09f87ab2e73d1bf1744483cc5f31f2d762ada6cb"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "probabilities",
+          "tensor": {
+            "path": "profiles/values/pytorch_mlp_batch_3/output_probabilities.pb",
+            "sha256": "13e7f6d9bcabb893f4561a3e7124a80eaddfb0272ac881bd2e7800b1c4ae7aad"
+          }
+        }
+      ],
+      "observations": {
+        "reference": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1064824344,
+                1023483520,
+                1055292456,
+                1057800683,
+                1026184899,
+                1064655508
+              ]
+            }
+          ]
+        },
+        "onnxruntime": {
+          "status": "returned",
+          "outputs": [
+            {
+              "shape": [
+                3,
+                2
+              ],
+              "dtype": "float32",
+              "bits": [
+                1064824344,
+                1023483520,
+                1055292456,
+                1057800683,
+                1026184898,
+                1064655508
+              ]
+            }
+          ]
+        },
+        "independent": "PyTorch eager inference compared with ONNX evaluator and ORT"
+      }
+    }
+  ]
+}

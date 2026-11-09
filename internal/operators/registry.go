@@ -27,8 +27,8 @@ func NewRegistry(records []capability.Record) (out *Registry, err error) {
 		}
 
 		for _, previous := range r.records {
-			if previous.Domain == record.Domain && previous.Operator == record.Operator && previous.SchemaVersion == record.SchemaVersion {
-				return nil, fmt.Errorf("%w: duplicate capability %s-%d", runtimeerror.ErrInvalidArgument, record.Operator, record.SchemaVersion)
+			if previous.Domain == record.Domain && previous.Operator == record.Operator && previous.SchemaVersion == record.SchemaVersion && previous.MinOpset <= record.MaxOpset && record.MinOpset <= previous.MaxOpset {
+				return nil, fmt.Errorf("%w: overlapping capability %s-%d", runtimeerror.ErrInvalidArgument, record.Operator, record.SchemaVersion)
 			}
 		}
 		r.records = append(r.records, record.Clone())
@@ -65,11 +65,12 @@ func (r *Registry) Resolve(domain, operator string, imported int64) (record capa
 		return record, fmt.Errorf("%w: no schema for domain %q operator %q imported opset %d", graph.ErrUnsupported, domain, operator, imported)
 	}
 
-	if imported < selected.MinOpset || imported > selected.MaxOpset {
-		return record, fmt.Errorf("%w: %s-%d tested imports [%d,%d], requested %d", graph.ErrUnsupported, operator, selected.SchemaVersion, selected.MinOpset, selected.MaxOpset, imported)
+	for _, candidate := range r.records {
+		if candidate.Domain == domain && candidate.Operator == operator && candidate.SchemaVersion == selected.SchemaVersion && imported >= candidate.MinOpset && imported <= candidate.MaxOpset {
+			return candidate.Clone(), nil
+		}
 	}
-
-	return selected.Clone(), nil
+	return record, fmt.Errorf("%w: %s-%d has no tested interval for requested import %d", graph.ErrUnsupported, operator, selected.SchemaVersion, imported)
 }
 
 func hasPlanner(record capability.Record) (supported bool) {
@@ -79,10 +80,11 @@ func hasPlanner(record capability.Record) (supported bool) {
 
 	if IsCNNOperator(record.Operator) {
 		versions := map[string]int64{"Conv": 11, "MaxPool": 12, "AveragePool": 11, "GlobalAveragePool": 1, "BatchNormalization": 9}
-		return record.SchemaVersion == versions[record.Operator]
+		return record.SchemaVersion == versions[record.Operator] || record.Operator == "BatchNormalization" && record.SchemaVersion == 15
 	}
 
-	if record.SchemaVersion != 13 {
+	versions := map[string]int64{"Identity": 16, "Add": 14, "Sub": 14, "Mul": 14, "Div": 14, "Relu": 14, "Reshape": 14, "Shape": 15}
+	if record.SchemaVersion != 13 && record.SchemaVersion != versions[record.Operator] {
 		return false
 	}
 

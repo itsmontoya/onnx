@@ -30,7 +30,9 @@ records reference comparisons, provenance/hashes, lifecycle/concurrent-session
 checks and exact supported restrictions. RT-12 adds a shape-heavy graph at both batch sizes and supplies the
 [accessible runtime handoff](docs/handoff-nn13.md) needed to resume NN-13. RT-14 adds explicit external weights, RT-15 hardens
 resource/lifecycle behavior, and RT-18 documents the M1–M4 subset and
-[release checks](docs/release-checklist.md). Backend revisions remain unchanged.
+[release checks](docs/release-checklist.md). RT-17 adds exactly IR 8/opset 17
+with [audited schema adapters and a real PyTorch export](docs/handoff-rt17.md);
+the original opset-13 profile is preserved. Backend revisions remain unchanged.
 
 The library's `NEEDS.md` is ignored and is not included in the release tree.
 Use the published [tensor contract][tensor-contract], source, tests, and tracked
@@ -69,7 +71,7 @@ RT-02 must verify the selected toolchain against the full dependency graph.
 | Shape and CNN edge cases | [NN-07][nn-07], [NN-08][nn-08], and [NN-09][nn-09] record empty-shape/reference differences. Schema defaults, reshape `0`/`-1`, omitted axes, automatic padding, and accepted ONNX geometry remain runtime responsibilities. |
 | Pooling | [NN-10][nn-10] records ceil-window, NaN, empty/all-padding, and reference disagreements. `CountIncludePad` uses the full kernel area, including partial ceil windows. Max indices/storage-order variants are absent. RT-13 validates its supported subset with [87 runtime fixtures](testdata/m3/README.md) and retains explicit reference differences. |
 | Normalization | [NN-11][nn-11] preserves supplied inference statistics. The ONNX 1.16.2 schema-9 evaluator applies momentum and differs on 23 fixtures; ORT 1.19.2 agrees on 30 of 31, with a zero-variance/zero-epsilon difference. RT-10/RT-13 use independent stored-statistics expectations; current runtime counts and actual oracle results are in [M3 provenance](testdata/m3/provenance.json). |
-| Expansion | [NN-12][nn-12] uses resolved mathematical axes; empty axes mean identity. Its reduction reference models use opset 18, while unary math/Pow models use opset 13. Kernel availability does not expand this runtime's proposed opset-13 coverage. |
+| Expansion | [NN-12][nn-12] uses resolved mathematical axes; empty axes mean identity. Its reduction reference models use opset 18, while unary math/Pow models use opset 13. Kernel availability does not expand this runtime's tested opset-13/17 operator coverage. |
 
 Fixture versions, tolerances, hashes, and actual reference exceptions are recorded
 in the [published fixture provenance][backend-fixtures]. A reference rejection

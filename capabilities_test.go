@@ -12,23 +12,28 @@ import (
 	"github.com/itsmontoya/onnx/internal/decode"
 	"github.com/itsmontoya/onnx/internal/graph"
 	"github.com/itsmontoya/onnx/internal/operators"
+	"github.com/itsmontoya/onnx/internal/profile"
 )
 
 func TestCapabilitiesCanonicalManifest(t *testing.T) {
 	records := Capabilities()
-	if len(records) != 25 {
+	if len(records) != 50 {
 		t.Fatalf("capability count = %d", len(records))
 	}
 
 	implemented := 0
 	for _, record := range records {
-		if record.MinOpset != 13 || record.MaxOpset != 13 {
+		if record.MinOpset != record.MaxOpset || !profile.Accepts(8, record.Domain, record.MinOpset) {
 			t.Fatalf("untested interval: %+v", record)
 		}
 
 		if record.Status == "implemented" {
 			implemented++
-			if record.Operator == "Identity" && record.Task != "RT-07" || record.Operator != "Identity" && record.Task != "RT-09" && record.Task != "RT-12" && record.Task != "RT-13" {
+			if record.MinOpset == 17 && record.Task != "RT-17" {
+				t.Fatalf("unexpected profile task: %+v", record)
+			}
+
+			if record.MinOpset == 13 && (record.Operator == "Identity" && record.Task != "RT-07" || record.Operator != "Identity" && record.Task != "RT-09" && record.Task != "RT-12" && record.Task != "RT-13") {
 				t.Fatalf("unexpected implemented operator: %+v", record)
 			}
 		}
@@ -38,7 +43,7 @@ func TestCapabilitiesCanonicalManifest(t *testing.T) {
 		}
 	}
 
-	if implemented != 25 {
+	if implemented != 50 {
 		t.Fatalf("implemented count = %d", implemented)
 	}
 
@@ -52,6 +57,13 @@ func TestCapabilitiesCanonicalManifest(t *testing.T) {
 	}
 
 	var manifest struct {
+		Profiles []struct {
+			IRVersion int64  `json:"ir_version"`
+			Domain    string `json:"domain"`
+			MinOpset  int64  `json:"min_opset"`
+			MaxOpset  int64  `json:"max_opset"`
+			Status    string `json:"status"`
+		} `json:"profiles"`
 		Weights struct {
 			Status       string   `json:"status"`
 			Task         string   `json:"task"`
@@ -63,6 +75,26 @@ func TestCapabilitiesCanonicalManifest(t *testing.T) {
 	}
 	if err = json.Unmarshal(data, &manifest); err != nil {
 		t.Fatal(err)
+	}
+
+	if len(manifest.Profiles) != 2 {
+		t.Fatal("manifest must list exactly two tested profiles")
+	}
+
+	for ir := int64(1); ir <= 12; ir++ {
+		for opset := int64(1); opset <= 25; opset++ {
+			listed := false
+			for _, entry := range manifest.Profiles {
+				if entry.MinOpset != entry.MaxOpset || entry.Domain != "" || entry.Status != "partial_runtime" {
+					t.Fatalf("invalid tested profile: %+v", entry)
+				}
+
+				listed = listed || entry.IRVersion == ir && entry.MinOpset == opset
+			}
+			if listed != profile.Accepts(ir, "", opset) || profile.Accepts(ir, "ai.onnx", opset) {
+				t.Fatalf("manifest/version policy differs at IR %d import %d", ir, opset)
+			}
+		}
 	}
 
 	if manifest.Weights.Status != "implemented" || manifest.Weights.Task != "RT-14" || !slices.Equal(manifest.Weights.Storage, []string{"inline", "external"}) || !slices.Equal(manifest.Weights.DataTypes, []string{"float32", "int64"}) || len(manifest.Weights.Restrictions) == 0 || !slices.Contains(manifest.Unsupported, "external_checksum_metadata") || slices.Contains(manifest.Unsupported, "external_data_until_RT-14") {

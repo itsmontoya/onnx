@@ -1,6 +1,6 @@
 // Package onnx loads and evaluates a bounded Go-native ONNX inference subset.
 //
-// Load, LoadBytes and LoadFile accept IR 8, standard-domain opset 13 models.
+// Load, LoadBytes and LoadFile accept IR 8, standard-domain opset 13 or 17 models.
 // M1 arithmetic/activations, M2 shape transforms and M3 CNNs execute serially.
 // Capabilities lists exact restrictions and explicitly planned operators.
 // Models share immutable plans across sessions; each session permits one Run

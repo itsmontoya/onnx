@@ -1,4 +1,4 @@
-# Runtime contract and initial compatibility profile
+# Runtime contract and tested compatibility profiles
 
 Status: RT-01 specifies the contract. RT-04 implements its Tensor constructors,
 accessors and metadata records. RT-05 implements shared internal inline tensor
@@ -19,7 +19,7 @@ lifecycle and cancellation behavior. RT-18 provides the
 [third-party notices](../third_party/README.md).
 [capabilities.json](../capabilities.json)
 records the executable
-subset; all 25 current operator records are implemented. Future planned records
+subset; all 50 records (25 operators at each import) are implemented. Future planned records
 would not establish execution support. The
 [roadmap](../ROADMAP.md) identifies the implementation tasks and their acceptance
 criteria. This project is an independent Go runtime, not Microsoft's ONNX Runtime.
@@ -61,12 +61,18 @@ rewrite an existing export's version. Run it using the pinned development
 Python environment; `--write` regenerates these RT-01 artifacts. It establishes
 that the profile contains a valid tiny ONNX model, not runtime conformance.
 
+RT-17 adds exactly IR 8/opset 17. The [schema audit and fixtures](../testdata/profiles/README.md)
+compare all 25 applicable schemas at both imports and retain an actual unmodified
+PyTorch 2.2.2 export. No new IR, dtype or operator family is accepted. The shared
+internal profile policy is checked against the manifest; metadata, diagnostics
+and plans retain the actual accepted import. No runtime conversion occurs.
+
 ## Accepted model envelope
 
 | Boundary | Initial contract |
 | --- | --- |
 | Execution | CPU inference, deterministic serial topological scheduling |
-| Versions | IR exactly 8; one standard empty-string domain import, opset exactly 13 |
+| Versions | IR exactly 8; one standard empty-string domain import, opset exactly 13 or 17 |
 | Graph | One top-level acyclic graph, checked in declared order, named values, multiple inputs/outputs and fan-out/joins |
 | Values | Dense contiguous row-major float32 and exact int64 tensors; scalar shape `[]`; any concrete zero dimension means an empty tensor |
 | Operators | Only implemented records in the manifest, with their listed dtype/rank/attribute restrictions |
@@ -498,8 +504,15 @@ fixture tolerance is not a universal numerical error bound.
 The manifest gives exact arity, allowed optional name positions, attribute names,
 and rank/type restrictions. Attributes of an operator are not accepted merely
 because another schema version defines them. In particular Reshape-13 has no
-allowzero, Shape-13 has no start/end, and Squeeze/Unsqueeze-13 use int64 axes
-inputs. Runtime-dependent rank/axes/shape checks remain at Run. MaxPool indices
+allowzero (even zero is rejected), Shape-13 has no start/end, and
+Squeeze/Unsqueeze-13 use int64 axes inputs in both profiles. At import 17,
+Reshape-14 defaults allowzero to 0 and implements 1 as literal zeros; a literal
+zero with -1 is invalid. Shape-15 defaults start=0/end=rank, translates negative
+bounds relative to rank and clamps each to [0,rank]; start >= end returns an
+empty int64 vector. BatchNormalization-15 accepts training_mode=0 only and one
+output slot, with all five inputs float32 and the same stored-statistics formula.
+It never updates statistics. Type extensions and standard function definitions
+in the newer schemas do not expand the bounded dense value or inference subset. Runtime-dependent rank/axes/shape checks remain at Run. MaxPool indices
 and nonzero storage_order are explicitly unsupported. String/sparse Constants
 are unsupported even though schema-13 defines those attribute forms.
 
@@ -534,8 +547,8 @@ and multidimensional mismatch position.
 
 The pinned suite's 1,422 backend models contain no exact IR-8/opset-13 envelope.
 Copied upstream models retain their IR-7 bytes as version rejection tests;
-independent original IR-8/opset-13 models provide numerical coverage. This does
-not broaden accepted versions. The reduction case remains an unsupported-version error. RT-12 enables Gather;
+independent original IR-8/opset-13 models provide numerical coverage. Those unchanged bytes remain initial-profile evidence; RT-17 independently
+adds the second audited profile. The reduction case remains an unsupported-version error. RT-12 enables Gather;
 RT-13 executes the retained CNN cases with independent expectations and actual
 oracle observations. The [87-case M3 set](../testdata/m3/README.md) adds isolated
 CNN cases and a composed model at batches 1 and 3. Original fixture origin is distinct from licensing: this repository

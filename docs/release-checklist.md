@@ -7,7 +7,7 @@ The [RT-18 handoff](handoff-rt18.md) records exact revisions and validation.
 
 ## Scope and known gaps
 
-- [x] Document IR **exactly 8**, one **empty-domain opset-13** import, CPU serial
+- [x] Document IR **exactly 8**, one **empty-domain import at exactly opset 13 or 17**, CPU serial
   scheduling and dense **float32/int64**. Operator schema versions remain
   distinct from the import version.
 - [x] Generate the operator table from `Capabilities()`, whose embedded
@@ -24,7 +24,7 @@ The [RT-18 handoff](handoff-rt18.md) records exact revisions and validation.
 - [x] State gaps: other IR/opsets/domains/dtypes, sparse/sequence/map/optional
   values, local functions, training, subgraphs/control flow, tensor segments,
   unknown input ranks and dynamic nonleading input dimensions are unsupported.
-  MaxPool indices, later-schema attributes and external checksum metadata are
+  MaxPool indices, attributes outside the selected schemas and external checksum metadata are
   unsupported. See the [generated operator restrictions](getting-started.md#implemented-capability-table).
 
 All nodes execute even when requesting fewer outputs. The executor retains all
@@ -116,12 +116,14 @@ Pinned tools are **Python 3.9.6, ONNX 1.16.2** at
 `3bf92c03a9f27eba3bda1e5b9e63ea20ec213557`, **NumPy 1.26.4**, **Python protobuf
 4.25.3** and, for secondary comparisons, **ORT 1.19.2** CPUExecutionProvider.
 Original graphs use ONNX helper/numpy_helper, explicit IR/imports and the full
-checker. No third-party exporter has been validated. Fixtures contain SHA-256
+checker. RT-17 additionally validates one actual PyTorch 2.2.2 exported MLP at
+IR 8/opset 17; this is a bounded module, not general exporter compatibility. Fixtures contain SHA-256
 for each model/named TensorProto value plus actual reference returns/errors.
 
 | Set and provenance | Actual evidence, without adding overlapping sets together |
 | --- | --- |
 | [Profile](../testdata/profile/provenance.json) | Original Identity model and selected schema audit establish the exact initial envelope; decoding alone is not conformance |
+| [Additional profile](../testdata/profiles/README.md) | 67 executed cases: 66 evaluator agreements, one BN-9 evaluator difference; all 67 agree with ORT, including two batches of the unmodified actual PyTorch IR-8/opset-17 export |
 | [M1](../testdata/m1/provenance.json) | 80 evaluator agreements and one explicit empty-axis Softmax extension; Relu NaN propagation is repaired by the runtime |
 | [Conformance](../testdata/conformance/README.md) | 96 classified cases: 87 agreements, one empty-Softmax extension, four executed independent differences and four required unsupported-model rejections |
 | [M2](../testdata/m2/README.md) | 66 executed cases: 60 evaluator agreements, two empty-prefix Flatten evaluator rejections and four empty-Gather shape differences |
@@ -166,5 +168,5 @@ reproduction of those observations, never new agreement claims.
 
 RT-18's documentation work is complete when its checked technical items pass;
 the unchecked maintainer actions remain visible before any public release.
-NN-13/RT-16 optimization, RT-17 profiles and RT-19 audited-corpus expansion are
-later tasks and do not require changing this documented M1–M4 profile.
+RT-17 adds the independently audited second profile; see its [handoff](handoff-rt17.md).
+NN-13/RT-16 optimization and RT-19 audited-corpus expansion remain separate tasks.

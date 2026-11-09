@@ -13,7 +13,7 @@ import (
 
 func TestRegistryVersionSelection(t *testing.T) {
 	// Actual ONNX 1.16.2 schema differences. These synthetic planning profiles
-	// exercise resolution only; graph.Build still rejects every import but 13.
+	// exercise resolution only; graph.Build accepts only the two audited production profiles.
 	// Softmax-11 coerces to 2D with axis=1; Softmax-13 uses axis=-1.
 	// Squeeze-11 uses an axes attribute; Squeeze-13 uses an optional input.
 	records := []capability.Record{
@@ -145,5 +145,42 @@ func TestRegistryOwnershipAndInvalidArguments(t *testing.T) {
 
 	if _, err = registry.Resolve("", "Softmax", 0); !errors.Is(err, runtimeerror.ErrInvalidArgument) {
 		t.Fatalf("invalid import = %v", err)
+	}
+}
+
+func TestRegistryDisjointProfiles(t *testing.T) {
+	records := []capability.Record{
+		{Operator: "Softmax", SchemaVersion: 13, MinOpset: 13, MaxOpset: 13, Status: "implemented"},
+		{Operator: "Softmax", SchemaVersion: 13, MinOpset: 17, MaxOpset: 17, Status: "implemented"},
+		{Operator: "Identity", SchemaVersion: 13, MinOpset: 13, MaxOpset: 99, Status: "implemented"},
+		{Operator: "Identity", SchemaVersion: 16, MinOpset: 17, MaxOpset: 17, Status: "implemented"},
+	}
+	registry, err := NewRegistry(records)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for _, operator := range []string{"Softmax", "Identity"} {
+		for _, imported := range []int64{13, 17} {
+			selected, resolveErr := registry.Resolve("", operator, imported)
+			if resolveErr != nil || selected.MinOpset > imported || selected.MaxOpset < imported {
+				t.Fatalf("%s import %d = %+v, %v", operator, imported, selected, resolveErr)
+			}
+		}
+	}
+	for _, imported := range []int64{14, 15, 16, 18, 99} {
+		if _, err = registry.Resolve("", "Softmax", imported); !errors.Is(err, graph.ErrUnsupported) {
+			t.Fatalf("disjoint interval gap %d = %v", imported, err)
+		}
+	}
+	for _, imported := range []int64{16, 18, 99} {
+		if _, err = registry.Resolve("", "Identity", imported); !errors.Is(err, graph.ErrUnsupported) {
+			t.Fatalf("new schema fell back at %d = %v", imported, err)
+		}
+	}
+	overlap := records[0]
+	overlap.MaxOpset = 17
+	if _, err = NewRegistry([]capability.Record{overlap, records[1]}); !errors.Is(err, runtimeerror.ErrInvalidArgument) {
+		t.Fatalf("overlapping same-schema intervals = %v", err)
 	}
 }

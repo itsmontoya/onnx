@@ -224,7 +224,7 @@ then releases decoder/wire references. No proto.Clone or second numerical copy i
 needed at load. ReadModelWithSize returns the actual encoded length for public
 reader loading; proto.Size cannot reconstruct it.
 
-Build validates IR 8, exactly one empty-domain opset-13 import, a named top-level
+Build validates IR 8, exactly one empty-domain import at opset 13 or 17, a named top-level
 graph, unique producers/declarations/attributes, and all named references in
 declared topological order. Checking preceding producers rejects missing/forward
 references and cycles without reordering nodes. Repeated node labels are valid.
@@ -285,7 +285,10 @@ second operator support table; the compiler remains private to the public loader
 Registry snapshots its records and resolves by exact domain/operator and imported
 opset. It selects the newest schema no newer than the import, then checks that
 schema's explicit tested interval. It never falls back to older semantics when
-the selected schema lacks coverage. Production intervals remain exactly 13.
+the selected schema lacks coverage. Production records use disjoint exact intervals [13,13] and [17,17]. Repeated
+schema versions have separate nonoverlapping records; no 14–16 coverage is
+inferred. Graph and compiler share `internal/profile.Accepts`; the manifest test
+checks the policy against both advertised profiles.
 Resolver tests use isolated records for actual Softmax-11/13 defaults and
 Squeeze-11/13 attribute/input differences, and select Conv-11 at import 13; those
 tests do not broaden the accepted model envelope or implement those operators.
@@ -519,7 +522,7 @@ for graph fixtures, reproducible commands and measurement boundaries.
 The compiler validates known ranks/channels/kernel/bias/statistics and infers
 spatial dimensions separately; unknown intermediate ranks/shapes defer to Run.
 No numerical output is allocated during planning. Fixed step metadata, including
-the embedded CNN config, reserves 256 bytes during numerical planning and deep
+the embedded CNN config and version flags, reserves 256 bytes during numerical planning and deep
 executable snapshot accounting. Shape metadata remains separately bounded.
 
 `cnnCall` computes checked concrete shapes and SAME padding before reserving the
@@ -562,3 +565,22 @@ confined opens and rejects unsupported js/plan9 platforms; platform guarantees
 and limits are recorded in the runtime contract. Local checks run on Darwin/arm64;
 the Linux/amd64 workflow exercises the same confinement tests. Symlink tests
 skip explicitly when the host cannot create symlinks.
+
+## Additional tested profile
+
+RT-17 supports IR 8/opset 17 alongside the original 13 profile. The
+[profile fixture guide](../testdata/profiles/README.md) gives exact optional
+exporter/reference pins and commands. `tools/check_profiles.py` audits each
+applicable ONNX 1.16.2 schema, reproduces 67 offline cases and the unmodified
+actual PyTorch export. Its schema audit includes type constraints, attribute
+required/default values, arities and standard-function flags. The generator
+compares exact int64/type/shape values, float32 tolerance and signed zeros;
+actual oracle results/errors are retained separately. Normal tests use only Go.
+
+`Capabilities()` returns 50 records for 25 operators, each with a single tested
+import. The Go-only table generator displays those intervals. Conformance
+provenance validation checks each accepted node's actual selected schema against
+the registry, while preserving all existing fixture bytes/hashes and exception
+classifications. Step's scalar metadata remains within 256 bytes, checked by
+`TestStepFixedMetadataReservation`; dynamic Shape/Reshape staging/destination
+reservations follow the original budget rules.
