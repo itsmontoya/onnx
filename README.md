@@ -14,7 +14,9 @@ implementation yet, and no model compatibility is claimed. RT-03 adds generated
 ONNX wire bindings and bounded internal decoding; ordinary builds and tests need
 neither protoc nor Python. RT-04 adds immutable float32/int64 tensors and model
 metadata records, with owned constructor/accessor copies and exact integer
-storage. Public loading and execution arrive in later roadmap tasks.
+storage. RT-05 adds shared internal inline TensorProto conversion with checked
+payload budgets, exact typed/raw values, and owned backend copies. Public
+loading and execution arrive in later roadmap tasks.
 
 ## Implementation plans
 

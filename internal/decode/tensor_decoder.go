@@ -1,0 +1,246 @@
+package decode
+
+import (
+	"context"
+	"encoding/binary"
+	"fmt"
+	"math"
+
+	"github.com/itsmontoya/neuralnetwork/tensor"
+	"github.com/itsmontoya/onnx/internal/onnxpb"
+	"google.golang.org/protobuf/proto"
+)
+
+// NewTensorDecoder accounts encoded bytes and all decoded payloads in wire before
+// numeric conversion. Pass the complete model, attribute or test tensor message
+// and its original encoded length. Do not mutate wire during the decoder's life.
+// The decoder retains tensor messages, but never borrows their numeric storage.
+func NewTensorDecoder(ctx context.Context, wire proto.Message, encodedBytes int64, limits TensorLimits) (out *TensorDecoder, err error) {
+	var (
+		d            TensorDecoder
+		decodedBytes int64
+	)
+
+	if d.limits, err = limits.normalized(); err != nil {
+		return nil, err
+	}
+
+	if ctx == nil || wire == nil || !wire.ProtoReflect().IsValid() || encodedBytes < 0 {
+		return nil, fmt.Errorf("%w: context, wire message or encoded byte count", ErrInvalidArgument)
+	}
+
+	if wire.ProtoReflect().Descriptor().ParentFile() != onnxpb.File_onnx_proto {
+		return nil, fmt.Errorf("%w: message is not from the pinned ONNX schema", ErrInvalidArgument)
+	}
+
+	if encodedBytes > d.limits.MaxLoadBytes {
+		return nil, fmt.Errorf("%w: encoded payload", ErrLimit)
+	}
+
+	d.tensors = make(map[*onnxpb.TensorProto]bool)
+	if decodedBytes, err = countPayload(ctx, wire.ProtoReflect(), d.limits.MaxRecursion, d.limits.MaxLoadBytes-encodedBytes, d.tensors); err != nil {
+		return nil, err
+	}
+
+	d.loadBytes = encodedBytes + decodedBytes
+	return &d, nil
+}
+
+// TensorDecoder converts registered inline TensorProto values to owned backend
+// tensors. Use one decoder per load to aggregate initializer/Constant copies.
+// It is not safe for concurrent calls or mutation of registered wire messages.
+// Raw conversion reserves staging plus an owned copy; typed conversion reserves
+// its owned copy. Successful staging charges are retained conservatively for the
+// load's lifetime. Accounting excludes Go object/allocation overhead.
+type TensorDecoder struct {
+	limits           TensorLimits
+	tensors          map[*onnxpb.TensorProto]bool
+	loadBytes        int64
+	initializerBytes int64
+}
+
+// Decode validates an inline tensor before allocating numerical storage.
+// Both wire parsing entry points and all tensor-bearing model fields share it.
+func (d *TensorDecoder) Decode(ctx context.Context, value *onnxpb.TensorProto) (out *tensor.Tensor, err error) {
+	if d == nil || d.tensors == nil || ctx == nil || value == nil || !d.tensors[value] {
+		return nil, fmt.Errorf("%w: unregistered tensor or invalid decoder/context", ErrInvalidArgument)
+	}
+
+	if err = ctx.Err(); err != nil {
+		return nil, fmt.Errorf("decode tensor %q: %w", value.GetName(), err)
+	}
+
+	var (
+		dataType                tensor.DataType
+		elements, bytes, charge int64
+	)
+
+	if dataType, elements, bytes, err = d.validate(value); err != nil {
+		return nil, fmt.Errorf("decode tensor %q: %w", value.GetName(), err)
+	}
+
+	if bytes > d.limits.MaxInitializerBytes-d.initializerBytes {
+		return nil, fmt.Errorf("decode tensor %q: %w: aggregate initializer bytes", value.GetName(), ErrLimit)
+	}
+
+	charge = bytes
+	if value.RawData != nil {
+		// Reserve both allocations without multiplying or summing past int64.
+		if bytes > (d.limits.MaxLoadBytes-d.loadBytes)/2 {
+			return nil, fmt.Errorf("decode tensor %q: %w: raw staging and owned copy", value.GetName(), ErrLimit)
+		}
+
+		charge += bytes
+	}
+
+	if charge > d.limits.MaxLoadBytes-d.loadBytes {
+		return nil, fmt.Errorf("decode tensor %q: %w: owned copy", value.GetName(), ErrLimit)
+	}
+
+	if out, err = convertTensor(ctx, value, dataType, elements); err != nil {
+		return nil, fmt.Errorf("decode tensor %q: %w", value.GetName(), err)
+	}
+
+	d.loadBytes += charge
+	d.initializerBytes += bytes
+	return out, nil
+}
+
+// Usage returns conservative load payload bytes and owned initializer bytes.
+func (d *TensorDecoder) Usage() (loadBytes, initializerBytes int64) {
+	if d == nil {
+		return 0, 0
+	}
+
+	return d.loadBytes, d.initializerBytes
+}
+
+func (d *TensorDecoder) validate(value *onnxpb.TensorProto) (dataType tensor.DataType, elements, bytes int64, err error) {
+	if value.Segment != nil {
+		return dataType, 0, 0, fmt.Errorf("%w: tensor segments", ErrUnsupported)
+	}
+
+	if value.GetDataLocation() != onnxpb.TensorProto_DEFAULT || len(value.ExternalData) != 0 {
+		return dataType, 0, 0, fmt.Errorf("%w: external tensor storage/data location %d requires a resolver (RT-14)", ErrUnsupported, value.GetDataLocation())
+	}
+
+	switch value.GetDataType() {
+	case int32(onnxpb.TensorProto_FLOAT):
+		dataType = tensor.Float32
+	case int32(onnxpb.TensorProto_INT64):
+		dataType = tensor.Int64
+	default:
+		return dataType, 0, 0, fmt.Errorf("%w: tensor data type %d", ErrUnsupported, value.GetDataType())
+	}
+
+	if len(value.Dims) > d.limits.MaxRank {
+		return dataType, 0, 0, fmt.Errorf("%w: tensor rank %d", ErrLimit, len(value.Dims))
+	}
+
+	for axis, dimension := range value.Dims {
+		if dimension < 0 {
+			return dataType, 0, 0, fmt.Errorf("%w: negative dimension %d at axis %d", ErrInvalidTensor, dimension, axis)
+		}
+
+		if dimension > d.limits.MaxDimension {
+			return dataType, 0, 0, fmt.Errorf("%w: dimension %d at axis %d", ErrLimit, dimension, axis)
+		}
+	}
+
+	if elements, bytes, err = tensor.ValidateShape(value.Dims, dataType); err != nil {
+		return dataType, 0, 0, fmt.Errorf("%w: shape: %w", ErrInvalidTensor, err)
+	}
+
+	if bytes > d.limits.MaxTensorBytes {
+		return dataType, 0, 0, fmt.Errorf("%w: tensor bytes %d", ErrLimit, bytes)
+	}
+
+	if err = validateEncoding(value, dataType, elements, bytes); err != nil {
+		return dataType, 0, 0, err
+	}
+
+	return dataType, elements, bytes, nil
+}
+
+func validateEncoding(value *onnxpb.TensorProto, dataType tensor.DataType, elements, bytes int64) (err error) {
+	if len(value.Int32Data) != 0 || len(value.StringData) != 0 || len(value.DoubleData) != 0 || len(value.Uint64Data) != 0 || (dataType == tensor.Float32 && len(value.Int64Data) != 0) || (dataType == tensor.Int64 && len(value.FloatData) != 0) {
+		return fmt.Errorf("%w: incompatible typed payload for data type %d", ErrInvalidTensor, value.GetDataType())
+	}
+
+	count := int64(len(value.Int64Data))
+	if dataType == tensor.Float32 {
+		count = int64(len(value.FloatData))
+	}
+
+	if value.RawData != nil {
+		if count != 0 {
+			return fmt.Errorf("%w: conflicting raw and typed encodings", ErrInvalidTensor)
+		}
+
+		if int64(len(value.RawData)) != bytes {
+			return fmt.Errorf("%w: raw byte count %d, want %d", ErrInvalidTensor, len(value.RawData), bytes)
+		}
+
+		return nil
+	}
+
+	if count != elements {
+		return fmt.Errorf("%w: typed element count %d, want %d", ErrInvalidTensor, count, elements)
+	}
+
+	return nil
+}
+
+func convertTensor(ctx context.Context, value *onnxpb.TensorProto, dataType tensor.DataType, elements int64) (out *tensor.Tensor, err error) {
+	if dataType == tensor.Float32 {
+		values := value.FloatData
+		if value.RawData != nil {
+			values = make([]float32, int(elements))
+			for index := range values {
+				if index%1024 == 0 {
+					if err = ctx.Err(); err != nil {
+						return nil, err
+					}
+				}
+
+				values[index] = math.Float32frombits(binary.LittleEndian.Uint32(value.RawData[index*4:]))
+			}
+		}
+
+		if err = ctx.Err(); err != nil {
+			return nil, err
+		}
+
+		out, err = tensor.FromFloat32(value.Dims, values)
+	} else {
+		values := value.Int64Data
+		if value.RawData != nil {
+			values = make([]int64, int(elements))
+			for index := range values {
+				if index%1024 == 0 {
+					if err = ctx.Err(); err != nil {
+						return nil, err
+					}
+				}
+
+				values[index] = int64(binary.LittleEndian.Uint64(value.RawData[index*8:]))
+			}
+		}
+
+		if err = ctx.Err(); err != nil {
+			return nil, err
+		}
+
+		out, err = tensor.FromInt64(value.Dims, values)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	if err = ctx.Err(); err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}

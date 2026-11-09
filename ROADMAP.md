@@ -11,7 +11,8 @@ dependencies. A Go protobuf dependency is compatible with this goal.
 This document tracks the implementation plan. RT-01 has specified the contract;
 RT-02 provides the Go module and verification foundation. RT-03 adds generated
 wire bindings and bounded internal decoding. RT-04 supplies immutable public
-tensors and metadata records. There is no inference runtime yet.
+tensors and metadata records. RT-05 adds shared, budgeted inline tensor
+conversion. There is no inference runtime yet.
 Checked tasks have met their stated acceptance criteria; planned operator records
 do not represent implemented runtime support.
 
@@ -394,7 +395,7 @@ TensorProto decoder; facade wrapping must remain private to package onnx.
 Future execution must allocate disjoint destinations and clone published outputs
 so constants and previously returned tensors remain immutable.
 
-### [ ] RT-05 — Decode inline initializers and tensor attributes
+### [x] RT-05 — Decode inline initializers and tensor attributes
 
 **Depends on:** RT-03, RT-04. **Deliverable:** one shared TensorProto decoder for
 initializers, Constant tensor attributes, and backend test value files.
@@ -412,6 +413,75 @@ including negative integers, values above `2^24`, NaN/infinity, scalars, and emp
 tensors. Malformed/truncated data, mismatched counts, negative dimensions, and
 large allocations fail without panics. Resource accounting includes protobuf's
 decoded payload and the owned tensor copy rather than claiming zero-copy loading.
+
+**Handoff (RT-05):** The task revision is the commit introducing
+`internal/decode/tensor_decoder.go`; obtain its full hash with
+`git log -1 --format=%H -- internal/decode/tensor_decoder.go`. Changed files are
+that decoder, `tensor_limits.go`, `payload.go`, their tests plus the deterministic
+cancellation fixture, internal errors/package documentation, public package
+status documentation, README, TODO, development/contract documentation, and this
+roadmap. Backend remains published `neuralnetwork v0.7.0`, commit
+`6048452c57a0a293db4591cd2e2febd7d6b743a3`; protobuf remains v1.36.12, and the
+vendored ONNX schema remains v1.16.2 at
+`3bf92c03a9f27eba3bda1e5b9e63ea20ec213557`. No replacement or unpublished API
+is used.
+
+Internal API is `NewTensorDecoder(context.Context, proto.Message, int64,
+TensorLimits) (*TensorDecoder, error)`, with `Decode(context.Context,
+*onnxpb.TensorProto) (*tensor.Tensor, error)` and
+`Usage() (loadBytes, initializerBytes int64)`. Pass the complete decoded ONNX
+model/attribute/test tensor and the actual original encoded byte count. The
+constructor registers nested TensorProto pointers and counts all decoded fields
+before numeric conversion: repeated/scalar numeric widths, strings/bytes, and
+retained unknown bytes, conservatively including shape/metadata. TensorLimits
+implements MaxLoadBytes (1 GiB), MaxInitializerBytes (256 MiB), MaxTensorBytes
+(64 MiB), MaxRank (32), MaxDimension (2^31-1), and MaxRecursion (64); zero fields
+select defaults and negatives fail. Match raised wire/traversal recursion limits.
+The existing ParseModel/ReadModel/ParseTensor/ReadTensor APIs still return wire
+objects, not numerical values.
+
+One decoder per load aggregates all owned initializer/Constant copies. Each
+typed conversion charges one owned copy; raw conversion charges both staging
+and an owned copy. Successful staging charges remain conservatively reserved.
+Usage is unchanged on errors/cancellation. Checked remaining-budget arithmetic,
+backend ValidateShape, rank and every-dimension checks precede numeric allocation.
+Object headers, slice excess capacity and GC retention are outside these logical
+payload limits. The decoder is local to a load, retains registered wire tensor
+pointers, and requires wire objects to remain unmodified during use. Returned
+backend values own their shapes/payloads. Root package onnx must wrap backend
+values privately; internal packages must not import its public facade.
+
+Supported encodings are exact float_data/int64_data or little-endian raw_data.
+Scalar and empty shapes remain distinct; empty payloads are valid for zero
+counts. Float NaN payloads/infinities/signed zero and exact int64 extrema are
+preserved. Wrong/conflicting payloads, segments, unsupported dtypes, sparse
+messages and all external location/metadata are rejected. Empty repeated fields
+have no wire-object presence and are treated as absent. New internal
+ErrInvalidTensor/ErrUnsupported categories and the broadened ErrLimit retain
+errors.Is classification and wrapped causes; conversion errors name the tensor.
+Cancellation is polled during decoded traversal, every 1,024 raw elements, and
+before/after synchronous backend copies; those backend copies are not
+interruptible.
+
+Validation on Go 1.27.2, Darwin/arm64 passed: `go fmt ./...`, `go mod tidy -diff`,
+`go mod verify`, `go build ./...`, `go vet ./...`, `go test ./...`,
+`CGO_ENABLED=0 go test ./...`, `CGO_ENABLED=0 go test -tags=purego ./...`, and
+`go test -race ./...`, using the writable build cache and offline dependency
+mode. Literal tests verify typed/raw and packed/unpacked values, exact bit/value
+preservation, independent owned data, malformed/truncated wire, count/type/
+encoding errors, huge/overflowed shapes, scalar/empty values, nested registration,
+sparse/external rejection, aggregate/boundary budgets, constructed-object cycles,
+and cancellation/failed reservation rollback. The pinned 25-schema/checker
+fixture, local Markdown targets, Go contract-block formatting, and diff whitespace
+checks pass. Ordinary tests need no Python or protoc.
+
+RT-06 must validate the entire model graph and use one decoder with its complete
+wire object and actual encoded size, tracking reader consumption rather than
+substituting proto.Size. It must avoid uncharged extra numerical copies, retain
+immutable constants, and release wire/decoder state when compilation finishes.
+RT-07/RT-09 still own Constant schema/attribute validation and operator handling;
+RT-14 must add explicit external resolution. No public loader, graph validator,
+operator, or session is enabled by this task.
 
 ### [ ] RT-06 — Validate the model and build a named graph
 
