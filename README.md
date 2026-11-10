@@ -1,7 +1,7 @@
 # onnx
 
 A Go-native ONNX inference runtime built on
-[`neuralnetwork` v0.10.2](https://github.com/itsmontoya/neuralnetwork/tree/v0.10.2).
+[`neuralnetwork` v0.10.3](https://github.com/itsmontoya/neuralnetwork/tree/v0.10.3).
 Load an `.onnx` model, bind named immutable tensors, and evaluate named outputs
 on the CPU with `CGO_ENABLED=0`, without Python or native runtime libraries.
 
@@ -30,34 +30,54 @@ CGO_ENABLED=0 go run ./examples/external -batch 3
 CGO_ENABLED=0 go run ./examples/normalization
 CGO_ENABLED=0 go test ./...
 CGO_ENABLED=0 go test -tags=purego ./...
-go run ./tools/capabilitiesgen
 ```
 
 The initial clone/module download needs network. Cached builds and tests use
 checked-in models and typed reference values without network, protoc, Python,
 C/C++ inference libraries or an external service. The `purego` tag selects the
 portable backend CPU path. The module requires
-Go 1.27.2, `neuralnetwork` v0.10.2 in [go.mod](go.mod), and protobuf v1.36.12.
+Go 1.27.2, `neuralnetwork` v0.10.3 in [go.mod](go.mod), and protobuf v1.36.12.
 
 Detailed guides and historical reports below link to their last tracked
-versions; the `docs/` directory is no longer included in this repository.
+versions; the `docs/` and `tools/` directories are no longer included in this repository.
 
 [Getting started](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/getting-started.md) covers the public APIs, named I/O,
 compatible model authoring/export checks, external weights and reproducible
 failure cases. [Development](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/development.md) gives full verification and
 optional regeneration commands.
 
-The optional [ONNX Runtime comparison tool](tools/compare_runtime/README.md)
+The archived [ONNX Runtime comparison tool](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md)
 runs a pinned pretrained MNIST model through both runtimes, checks numerical
 and top-1 agreement, and records CPU inference timings. It also accepts other
 compatible local models with named NumPy inputs.
-With `neuralnetwork` v0.10.2, seven alternating benchmark pairs on Apple M3
-measure 17.2% lower MNIST inference latency than v0.10.1, with unchanged
-allocations. The [comparison results](tools/compare_runtime/README.md) record a
-fresh 3.77× median gap versus ORT and unchanged numerical agreement. The
-[fifth-pass investigation](tools/compare_runtime/pass5/README.md) and
-[v0.10.2 validation](tools/compare_runtime/pass5/v0.10.2/README.md) retain the
-profiling evidence and raw before/after measurements.
+With published `neuralnetwork` **v0.10.3**, seven alternating precompiled
+benchmark pairs on Apple M3 (Go 1.27.2, `CGO_ENABLED=0`, `GOMAXPROCS=1`,
+`GOARM64=v8.0`) measure **165.835 → 141.647 µs/op** versus v0.10.2:
+**14.6% lower MNIST latency**, with unchanged **179,440 B/op / 174 allocations**.
+Samples span 162.836–167.806 µs before and 138.900–143.850 µs after, with
+sample CVs of 1.16% and 1.23%. The median paired latency reduction is 14.3%.
+
+The backend's general contiguous broadcast Add path reduces the two prepared
+channel-bias additions from **25.977 to 3.321 µs combined (7.8× faster)**.
+The unchanged 19-case comparison, repeated seven times per version, measures
+Go at **170.813 → 147.813 µs**, versus ORT at **44.459 → 44.375 µs**:
+a **3.84× → 3.33×** median gap. ORT uses one thread, sequential execution and
+disabled graph optimization. Each case retains ten warmups and 100 timed calls;
+the Go benchmark uses a separate deterministic input. These are workload- and
+hardware-specific results, not a general performance guarantee.
+
+All numerical and top-1 checks pass; outputs remain bit-identical to v0.10.2.
+An additional 131 archived probes also match bit for bit across v0.10.2,
+v0.10.3 and v0.10.3 `purego`. Convolution remains the largest measured cost;
+its two prepared calls total about 83.5 µs after the upgrade. Default,
+cgo-disabled, `purego` and race suites, bounded fuzzing, and module/build checks
+validate the integration. No ONNX API, operator coverage, numerical tolerance
+or model-specific branch changed.
+
+The archived [comparison results](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md),
+[fifth-pass investigation](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/pass5/README.md) and
+[v0.10.2 validation](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/pass5/v0.10.2/README.md)
+retain the earlier measurements and profiling evidence.
 
 ## Runtime contract
 

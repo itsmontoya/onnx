@@ -1,5 +1,0 @@
-PASS: 19 cases; max absolute error 1.9073486e-05
-Top-1 agreement: 19/19; original/conversion/upstream checks recorded
-go: median 199.10 us; p95 283.84 us (1900 runs)
-ort: median 42.17 us; p95 99.88 us (1900 runs)
-Report: /private/tmp/onnx-v0.10.2-integration/before-report.json
