@@ -48,8 +48,9 @@ The optional [ONNX Runtime comparison tool](tools/compare_runtime/README.md)
 runs a pinned pretrained MNIST model through both runtimes, checks numerical
 and top-1 agreement, and records CPU inference timings. It also accepts other
 compatible local models with named NumPy inputs.
-The [MNIST profiling report](docs/performance/mnist-round2/README.md) records the
-v0.9.0 comparison and allocation measurements.
+The [MNIST profiling report](docs/performance/mnist-round3/README.md) records the
+v0.10.0 comparison and allocation measurements: 28.5% lower inference latency
+than v0.9.0 on the measured Apple M3, with a 7.33× ORT median gap on this model.
 
 ## Runtime contract
 

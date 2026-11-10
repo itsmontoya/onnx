@@ -131,6 +131,16 @@ for v0.9.0, about 39% lower latency. The
 the published module identity, raw benchmark samples and validation.
 The full comparison is `.cache/compare-runtime/v0.9.0-report.json`.
 
+With published **neuralnetwork v0.10.0**, the unchanged driver measured Go at
+324.21 / 374.30 µs median / p95 and ORT at 44.21 / 46.50 µs on 2026-11-09,
+a **7.33×** median gap. All 19 numerical and top-1 checks pass, with unchanged
+maximum absolute error and Go outputs bit-identical to v0.9.0. Seven alternating
+Go benchmark pairs measured medians of 433.70 µs for v0.9.0 and 310.14 µs for
+v0.10.0, about 28.5% lower latency with unchanged allocations. The
+[third profiling report](../../docs/performance/mnist-round3/README.md) records
+the published module identity, raw measurements and validation. The full
+comparison is `.cache/compare-runtime/v0.10.0-report.json`.
+
 The comparison-policy tests run with the same optional Python environment:
 
 ```sh
