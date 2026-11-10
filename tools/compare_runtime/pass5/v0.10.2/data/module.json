@@ -1,0 +1,10 @@
+{
+	"Path": "github.com/itsmontoya/neuralnetwork",
+	"Version": "v0.10.2",
+	"Time": "2026-11-10T17:36:37Z",
+	"Dir": "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.2",
+	"GoMod": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.2.mod",
+	"GoVersion": "1.26.1",
+	"Sum": "h1:FYqGuz6rbQOkhlklqNVUOnEtOj3trsgx16Zxu//LyBY=",
+	"GoModSum": "h1:4ha7jggW7cxuYy1EIaGUvn6aLe8NBt8BLOYm4to6y+Y="
+}

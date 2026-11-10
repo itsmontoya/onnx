@@ -1,0 +1,14 @@
+{
+  "all_eight_comparisons_pass": true,
+  "model_hashes_match_previous_pass": true,
+  "model_matches_previous": true,
+  "inputs_matches_previous": true,
+  "source_matches_previous": true,
+  "output_bits_match_previous": true,
+  "final_output_bits_match_baseline": true,
+  "driver_hash_matches_previous": true,
+  "runner_hashes_match_previous": true,
+  "final_ratio": 4.6390377367058715,
+  "baseline_case_checks": 19,
+  "all_eight_output_bits_and_workload_hashes_match_previous": true
+}

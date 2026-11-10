@@ -1,0 +1,27 @@
+File: baseline.test
+Type: alloc_space
+Time: 2026-11-10 07:42:23 PST
+Showing nodes accounting for 172576.24kB, 98.00% of 176107.05kB total
+Dropped 436 nodes (cum <= 880.54kB)
+      flat  flat%   sum%        cum   cum%
+  124966kB 70.96% 70.96%   124966kB 70.96%  github.com/itsmontoya/neuralnetwork/tensor.newTensor (inline)
+39914.88kB 22.67% 93.63% 39914.88kB 22.67%  github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Float32Values
+ 3034.28kB  1.72% 95.35%  3159.41kB  1.79%  github.com/itsmontoya/onnx.newCNNCall
+    3003kB  1.71% 97.05%  3331.45kB  1.89%  github.com/itsmontoya/onnx.newNumericalCall
+ 1501.50kB  0.85% 97.91%  1501.50kB  0.85%  github.com/itsmontoya/onnx.newShapeCall
+  156.41kB 0.089% 97.99% 149523.23kB 84.90%  github.com/itsmontoya/onnx.(*evaluation).execute
+    0.12kB 7.1e-05% 98.00% 176092.12kB   100%  testing.(*B).runN
+    0.05kB 3.1e-05% 98.00% 176087.12kB   100%  github.com/itsmontoya/onnx.BenchmarkMNIST
+         0     0% 98.00% 25417.36kB 14.43%  github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Clone
+         0     0% 98.00% 25195.34kB 14.31%  github.com/itsmontoya/neuralnetwork/tensor.FromFloat32
+         0     0% 98.00% 99520.16kB 56.51%  github.com/itsmontoya/neuralnetwork/tensor.New
+         0     0% 98.00% 175409.81kB 99.60%  github.com/itsmontoya/onnx.(*Session).Run
+         0     0% 98.00% 47923.53kB 27.21%  github.com/itsmontoya/onnx.(*cnnCall).run
+         0     0% 98.00% 25260.95kB 14.34%  github.com/itsmontoya/onnx.(*evaluation).bind
+         0     0% 98.00% 25260.95kB 14.34%  github.com/itsmontoya/onnx.(*evaluation).cloneConstant
+         0     0% 98.00% 174971.88kB 99.36%  github.com/itsmontoya/onnx.(*evaluation).run
+         0     0% 98.00% 39914.88kB 22.67%  github.com/itsmontoya/onnx.(*numericalCall).patchRelu
+         0     0% 98.00% 81300.06kB 46.17%  github.com/itsmontoya/onnx.(*numericalCall).run
+         0     0% 98.00%    11275kB  6.40%  github.com/itsmontoya/onnx.(*shapeCall).run
+         0     0% 98.00% 25260.95kB 14.34%  github.com/itsmontoya/onnx/internal/graph.(*Constant).Clone (inline)
+         0     0% 98.00% 176088.66kB   100%  testing.(*B).run1.func1

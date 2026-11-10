@@ -1,0 +1,6 @@
+fuzz: elapsed: 0s, gathering baseline coverage: 0/215 completed
+fuzz: elapsed: 0s, gathering baseline coverage: 215/215 completed, now fuzzing with 2 workers
+fuzz: elapsed: 3s, execs: 94787 (31590/sec), new interesting: 11 (total: 226)
+fuzz: elapsed: 4s, execs: 94787 (0/sec), new interesting: 11 (total: 226)
+PASS
+ok  	github.com/itsmontoya/onnx/internal/decode	3.959s

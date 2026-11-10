@@ -1,0 +1,14 @@
+ok  	github.com/itsmontoya/onnx	4.339s
+?   	github.com/itsmontoya/onnx/examples/external	[no test files]
+?   	github.com/itsmontoya/onnx/examples/inference	[no test files]
+?   	github.com/itsmontoya/onnx/examples/normalization	[no test files]
+?   	github.com/itsmontoya/onnx/internal/capability	[no test files]
+ok  	github.com/itsmontoya/onnx/internal/decode	0.293s
+ok  	github.com/itsmontoya/onnx/internal/graph	1.958s
+?   	github.com/itsmontoya/onnx/internal/onnxpb	[no test files]
+ok  	github.com/itsmontoya/onnx/internal/operators	5.794s
+?   	github.com/itsmontoya/onnx/internal/profile	[no test files]
+ok  	github.com/itsmontoya/onnx/internal/runtimeerror	1.197s
+?   	github.com/itsmontoya/onnx/tools/capabilitiesgen	[no test files]
+?   	github.com/itsmontoya/onnx/tools/compare_runtime	[no test files]
+?   	github.com/itsmontoya/onnx/tools/onnxgen	[no test files]
