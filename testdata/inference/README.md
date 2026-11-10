@@ -47,8 +47,8 @@ and four rejections;
 neither suite claims full ONNX profile coverage.
 
 See [the runnable command](../../examples/inference/main.go),
-[getting started](../../docs/getting-started.md) and
-[the integration report](../../docs/integration-rt11.md).
+[getting started](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/getting-started.md) and
+[the integration report](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/integration-rt11.md).
 
 RT-12 adds `shape.onnx` with float32 input `features:[batch,2,3]` and named
 outputs `reshaped:[batch,6]`, int64 `target:[2]`, and `flat:[1,6*batch]`. Its
@@ -56,7 +56,7 @@ Shape/Gather/Unsqueeze/Concat/Reshape/Unsqueeze/Transpose/Squeeze/Flatten graph
 has no intermediate value_info. Inputs are row-major 1 through 6*batch; target
 is exactly `[batch,-1]`. NumPy checks the reshaped and transposed-flat order
 independently. Both batches execute through the same session and concurrently
-through separate sessions. See [the NN-13 handoff](../../docs/handoff-nn13.md).
+through separate sessions. See [the NN-13 handoff](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-nn13.md).
 
 RT-13 adds a separate [CNN fixture set](../m3/README.md) with composed batches
 1 and 3 and a public `-graph cnn` example. The MLP/branch/shape bytes here remain

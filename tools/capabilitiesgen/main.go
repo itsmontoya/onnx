@@ -1,4 +1,4 @@
-// Command capabilitiesgen checks or updates the guide from the runtime manifest.
+// Command capabilitiesgen checks or updates the table from the runtime manifest.
 package main
 
 import (
@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	write := flag.Bool("write", false, "update the generated guide table")
+	write := flag.Bool("write", false, "update the generated capability table")
 	flag.Parse()
 	if err := generate(*write); err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -23,10 +23,10 @@ func main() {
 }
 
 func generate(write bool) (err error) {
-	const path = "docs/getting-started.md"
+	const path = "CAPABILITIES.md"
 	var data []byte
 	if data, err = os.ReadFile(path); err != nil {
-		return fmt.Errorf("read capability guide: %w", err)
+		return fmt.Errorf("read capability table: %w", err)
 	}
 
 	var (
@@ -38,7 +38,7 @@ func generate(write bool) (err error) {
 	)
 
 	if !hasStart || !hasEnd || strings.Count(text, start) != 1 || strings.Count(text, end) != 1 {
-		return fmt.Errorf("capability guide requires exactly one ordered marker pair")
+		return fmt.Errorf("capability table requires exactly one ordered marker pair")
 	}
 
 	generated := before + start + "\n\n" + capabilityTable() + "\n\n" + end + after
@@ -48,14 +48,14 @@ func generate(write bool) (err error) {
 	}
 
 	if !write {
-		return fmt.Errorf("capability guide differs; run go run ./tools/capabilitiesgen -write")
+		return fmt.Errorf("capability table differs; run go run ./tools/capabilitiesgen -write")
 	}
 
 	if err = os.WriteFile(path, []byte(generated), 0644); err != nil {
-		return fmt.Errorf("write capability guide: %w", err)
+		return fmt.Errorf("write capability table: %w", err)
 	}
 
-	fmt.Println("Updated capability guide from the runtime capability manifest")
+	fmt.Println("Updated capability table from the runtime capability manifest")
 	return nil
 }
 

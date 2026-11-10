@@ -1,9 +1,0 @@
-{
-  "cases": 131,
-  "bit_identical": true,
-  "upstream_expected_max_absolute_error": 3.0517578125e-05,
-  "upstream_top1": 3,
-  "random_generator": "Python random.Random(20261109); 64 uniform[0,1], 64 uniform[-10,10]",
-  "reference": "published neuralnetwork v0.9.0 output bits; archived Model Zoo expected output for upstream case",
-  "fresh_ort_comparison": false
-}
