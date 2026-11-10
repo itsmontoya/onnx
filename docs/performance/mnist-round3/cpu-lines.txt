@@ -1,0 +1,110 @@
+Total: 16.29s
+ROUTINE ======================== github.com/itsmontoya/neuralnetwork/tensor.conv2DFourValues in /Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.9.0/tensor/conv2d.go
+     1.79s      1.80s (flat, cum) 11.05% of Total
+         .          .    184:func conv2DFourValues(input, weights *Tensor, batch, channel, row, start int, config Conv2DConfig) (first, second, third, fourth float32) {
+         .          .    185:	var (
+         .          .    186:		inputChannel, kernelRow, kernelCol  int
+         .          .    187:		inputRow, inputOffset, weightOffset int
+         .          .    188:		inputValues, weightValues           []float32
+         .          .    189:		weight                              float32
+         .          .    190:		channels                            = int(weights.shape[1])
+         .          .    191:		kernelH                             = int(weights.shape[2])
+         .          .    192:		kernelW                             = int(weights.shape[3])
+         .          .    193:		inputH                              = int(input.shape[2])
+         .          .    194:		inputW                              = int(input.shape[3])
+         .          .    195:		inputPlane                          = inputH * inputW
+         .          .    196:		kernelPlane                         = kernelH * kernelW
+         .          .    197:		groupStart                          = channel / int(weights.shape[0]/config.Groups) * channels
+         .          .    198:		inputBase                           = (batch*int(input.shape[1]) + groupStart) * inputPlane
+         .          .    199:		weightBase                          = channel * channels * kernelPlane
+         .          .    200:		rowStart                            = row*int(config.Strides[0]) - int(config.Pads[0])
+         .          .    201:		stride                              = int(config.Strides[1])
+         .          .    202:	)
+         .          .    203:
+      60ms       60ms    204:	for inputChannel = 0; inputChannel < channels; inputChannel++ {
+     180ms      180ms    205:		for kernelRow = 0; kernelRow < kernelH; kernelRow++ {
+      20ms       20ms    206:			inputRow = rowStart + kernelRow*int(config.Dilations[0])
+      70ms       70ms    207:			if inputRow < 0 || inputRow >= inputH {
+         .          .    208:				continue
+         .          .    209:			}
+         .          .    210:
+         .          .    211:			inputOffset = inputBase + inputChannel*inputPlane + inputRow*inputW + start
+         .          .    212:			weightOffset = weightBase + inputChannel*kernelPlane + kernelRow*kernelW
+     290ms      290ms    213:			inputValues = input.floats[inputOffset : inputOffset+3*stride+kernelW]
+     110ms      110ms    214:			weightValues = weights.floats[weightOffset : weightOffset+kernelW]
+     300ms      300ms    215:			for kernelCol, weight = range weightValues {
+     270ms      280ms    216:				first += inputValues[kernelCol] * weight
+     200ms      200ms    217:				second += inputValues[kernelCol+stride] * weight
+      90ms       90ms    218:				third += inputValues[kernelCol+2*stride] * weight
+     200ms      200ms    219:				fourth += inputValues[kernelCol+3*stride] * weight
+         .          .    220:			}
+         .          .    221:		}
+         .          .    222:	}
+         .          .    223:	return first, second, third, fourth
+         .          .    224:}
+ROUTINE ======================== github.com/itsmontoya/neuralnetwork/tensor.conv2DValue in /Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.9.0/tensor/conv2d.go
+     2.89s      2.92s (flat, cum) 17.93% of Total
+         .       10ms    121:func conv2DValue(input, weights *Tensor, batch, channel, row, col int, config Conv2DConfig) (value float32) {
+         .          .    122:	var (
+         .          .    123:		inputChannel, kernelRow, kernelCol int
+         .          .    124:		inputRow                           int
+         .          .    125:		inputOffset, weightOffset          int
+      10ms       10ms    126:		channels                           = int(weights.shape[1])
+         .          .    127:		kernelH                            = int(weights.shape[2])
+      30ms       30ms    128:		kernelW                            = int(weights.shape[3])
+         .          .    129:		first                              = channel / int(weights.shape[0]/config.Groups) * channels
+      30ms       30ms    130:		inputH                             = int(input.shape[2])
+         .          .    131:		inputW                             = int(input.shape[3])
+         .          .    132:		inputPlane                         = inputH * inputW
+         .          .    133:		kernelPlane                        = kernelH * kernelW
+      10ms       10ms    134:		inputBase                          = (batch*int(input.shape[1]) + first) * inputPlane
+         .          .    135:		weightBase                         = channel * channels * kernelPlane
+         .          .    136:		rowStart                           = row*int(config.Strides[0]) - int(config.Pads[0])
+         .          .    137:		colStart                           = col*int(config.Strides[1]) - int(config.Pads[1])
+         .          .    138:		dilationW                          = int(config.Dilations[1])
+         .          .    139:		kernelStart                        int
+         .          .    140:		kernelEnd                          = kernelW
+         .          .    141:	)
+         .          .    142:
+      10ms       10ms    143:	if inputH == 0 || inputW == 0 || colStart >= inputW {
+         .          .    144:		return 0
+         .          .    145:	}
+         .          .    146:
+         .          .    147:	if colStart < 0 {
+         .          .    148:		kernelStart = (-colStart-1)/dilationW + 1
+         .          .    149:	}
+         .          .    150:
+      20ms       20ms    151:	if kernelStart >= kernelW {
+         .          .    152:		return 0
+         .          .    153:	}
+         .          .    154:
+         .          .    155:	colStart += kernelStart * dilationW
+         .          .    156:	if colStart >= inputW {
+         .          .    157:		return 0
+         .          .    158:	}
+         .          .    159:
+      10ms       10ms    160:	kernelEnd = min(kernelEnd, kernelStart+(inputW-1-colStart)/dilationW+1)
+      40ms       40ms    161:	for inputChannel = 0; inputChannel < channels; inputChannel++ {
+     120ms      120ms    162:		for kernelRow = 0; kernelRow < kernelH; kernelRow++ {
+         .          .    163:			// The planner checks maximum padded coordinates before subtraction;
+         .          .    164:			// valid spatial indices then bound every payload offset below.
+      10ms       10ms    165:			inputRow = rowStart + kernelRow*int(config.Dilations[0])
+     330ms      330ms    166:			if inputRow < 0 || inputRow >= inputH {
+         .          .    167:				continue
+         .          .    168:			}
+         .          .    169:
+      10ms       10ms    170:			inputOffset = inputBase + inputChannel*inputPlane + inputRow*inputW + colStart
+     110ms      110ms    171:			weightOffset = weightBase + inputChannel*kernelPlane + kernelRow*kernelW + kernelStart
+     290ms      290ms    172:			for kernelCol = kernelStart; kernelCol < kernelEnd; kernelCol++ {
+     1.74s      1.76s    173:				value += input.floats[inputOffset] * weights.floats[weightOffset]
+      70ms       70ms    174:				inputOffset += dilationW
+         .          .    175:				weightOffset++
+         .          .    176:			}
+         .          .    177:		}
+         .          .    178:	}
+      50ms       50ms    179:	return value
+         .          .    180:}
+         .          .    181:
+         .          .    182:// conv2DFourValues preserves each output's accumulation order while sharing
+         .          .    183:// weights and geometry across four interior columns with unit width dilation.
+         .          .    184:func conv2DFourValues(input, weights *Tensor, batch, channel, row, start int, config Conv2DConfig) (first, second, third, fourth float32) {

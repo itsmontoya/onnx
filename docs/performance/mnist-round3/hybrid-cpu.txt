@@ -1,0 +1,70 @@
+File: hybrid.test
+Type: cpu
+Time: 2026-11-09 17:30:23 PST
+Duration: 14.43s, Total samples = 3.23s (22.39%)
+Active filters:
+   focus=onnx.\(\*Session\).Run
+Showing nodes accounting for 3.18s, 98.45% of 3.23s total
+Dropped 42 nodes (cum <= 0.02s)
+Showing top 60 nodes out of 74
+      flat  flat%   sum%        cum   cum%
+     1.31s 40.56% 40.56%      1.32s 40.87%  github.com/itsmontoya/neuralnetwork/tensor.conv2DFourValues
+     0.88s 27.24% 67.80%      0.89s 27.55%  github.com/itsmontoya/neuralnetwork/tensor.conv2DFourChannels
+     0.20s  6.19% 73.99%      0.27s  8.36%  github.com/itsmontoya/neuralnetwork/tensor.broadcastFloat32Into
+     0.12s  3.72% 77.71%      0.12s  3.72%  github.com/itsmontoya/neuralnetwork/tensor.ReLUInto
+     0.11s  3.41% 81.11%      2.32s 71.83%  github.com/itsmontoya/neuralnetwork/tensor.conv2DChannelBlocksInto
+     0.09s  2.79% 83.90%      0.12s  3.72%  github.com/itsmontoya/onnx.(*numericalCall).patchRelu
+     0.09s  2.79% 86.69%      0.09s  2.79%  internal/runtime/atomic.(*UnsafePointer).Load (inline)
+     0.06s  1.86% 88.54%      0.13s  4.02%  github.com/itsmontoya/neuralnetwork/tensor.maxPool2DValue
+     0.06s  1.86% 90.40%      0.06s  1.86%  runtime.asyncPreempt
+     0.05s  1.55% 91.95%      0.05s  1.55%  github.com/itsmontoya/neuralnetwork/internal/f32.IsNaN (inline)
+     0.05s  1.55% 93.50%      0.05s  1.55%  github.com/itsmontoya/neuralnetwork/internal/float32product.Standard
+     0.03s  0.93% 94.43%      0.05s  1.55%  runtime.scanObject
+     0.02s  0.62% 95.05%      0.02s  0.62%  github.com/itsmontoya/neuralnetwork/tensor.checkedAdd
+     0.02s  0.62% 95.67%      0.02s  0.62%  github.com/itsmontoya/neuralnetwork/tensor.checkedMultiply
+     0.02s  0.62% 96.28%      0.02s  0.62%  github.com/itsmontoya/neuralnetwork/tensor.poolKernelRange (inline)
+     0.02s  0.62% 96.90%      0.02s  0.62%  runtime.goschedImpl
+     0.02s  0.62% 97.52%      0.02s  0.62%  runtime.tryDeferToSpanScan
+     0.02s  0.62% 98.14%      0.02s  0.62%  runtime.typePointers.next
+     0.01s  0.31% 98.45%      0.14s  4.33%  github.com/itsmontoya/neuralnetwork/tensor.MaxPool2DInto
+         0     0% 98.45%      0.06s  1.86%  github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Clone
+         0     0% 98.45%      0.02s  0.62%  github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Float32Values
+         0     0% 98.45%      0.02s  0.62%  github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Validate
+         0     0% 98.45%      0.30s  9.29%  github.com/itsmontoya/neuralnetwork/tensor.AddInto (inline)
+         0     0% 98.45%      0.03s  0.93%  github.com/itsmontoya/neuralnetwork/tensor.BroadcastShape
+         0     0% 98.45%      2.32s 71.83%  github.com/itsmontoya/neuralnetwork/tensor.Conv2DInto
+         0     0% 98.45%      0.02s  0.62%  github.com/itsmontoya/neuralnetwork/tensor.Conv2DShape
+         0     0% 98.45%      0.06s  1.86%  github.com/itsmontoya/neuralnetwork/tensor.FromFloat32
+         0     0% 98.45%      0.05s  1.55%  github.com/itsmontoya/neuralnetwork/tensor.MatMulInto
+         0     0% 98.45%      0.03s  0.93%  github.com/itsmontoya/neuralnetwork/tensor.New
+         0     0% 98.45%      0.30s  9.29%  github.com/itsmontoya/neuralnetwork/tensor.binaryFloat32Into
+         0     0% 98.45%      0.03s  0.93%  github.com/itsmontoya/neuralnetwork/tensor.broadcastDimensions
+         0     0% 98.45%      0.02s  0.62%  github.com/itsmontoya/neuralnetwork/tensor.broadcastStrides
+         0     0% 98.45%      0.02s  0.62%  github.com/itsmontoya/neuralnetwork/tensor.checkedProduct
+         0     0% 98.45%      2.32s 71.83%  github.com/itsmontoya/neuralnetwork/tensor.conv2DValuesInto
+         0     0% 98.45%      0.05s  1.55%  github.com/itsmontoya/neuralnetwork/tensor.matMulBatchesInto
+         0     0% 98.45%      0.05s  1.55%  github.com/itsmontoya/neuralnetwork/tensor.matrixProductInto
+         0     0% 98.45%      0.09s  2.79%  github.com/itsmontoya/neuralnetwork/tensor.newTensor (inline)
+         0     0% 98.45%      0.02s  0.62%  github.com/itsmontoya/neuralnetwork/tensor.spatialOutputDimension
+         0     0% 98.45%      0.02s  0.62%  github.com/itsmontoya/neuralnetwork/tensor.validateShapeSize
+         0     0% 98.45%      3.23s   100%  github.com/itsmontoya/onnx.(*Session).Run
+         0     0% 98.45%      2.48s 76.78%  github.com/itsmontoya/onnx.(*cnnCall).run
+         0     0% 98.45%      0.06s  1.86%  github.com/itsmontoya/onnx.(*evaluation).bind
+         0     0% 98.45%      0.06s  1.86%  github.com/itsmontoya/onnx.(*evaluation).cloneConstant
+         0     0% 98.45%      3.16s 97.83%  github.com/itsmontoya/onnx.(*evaluation).execute
+         0     0% 98.45%      3.22s 99.69%  github.com/itsmontoya/onnx.(*evaluation).run
+         0     0% 98.45%      0.60s 18.58%  github.com/itsmontoya/onnx.(*numericalCall).run
+         0     0% 98.45%      0.02s  0.62%  github.com/itsmontoya/onnx.(*shapeCall).plan
+         0     0% 98.45%      3.23s   100%  github.com/itsmontoya/onnx.BenchmarkMNIST
+         0     0% 98.45%      0.04s  1.24%  github.com/itsmontoya/onnx.newCNNCall
+         0     0% 98.45%      0.06s  1.86%  github.com/itsmontoya/onnx/internal/graph.(*Constant).Clone (inline)
+         0     0% 98.45%      0.03s  0.93%  github.com/itsmontoya/onnx/internal/operators.CNNConfig.Shape
+         0     0% 98.45%      0.02s  0.62%  github.com/itsmontoya/onnx/internal/operators.ResolveReshapeMode
+         0     0% 98.45%      0.05s  1.55%  runtime.deductAssistCredit
+         0     0% 98.45%      0.06s  1.86%  runtime.gcAssistAlloc
+         0     0% 98.45%      0.06s  1.86%  runtime.gcAssistAlloc.func2
+         0     0% 98.45%      0.06s  1.86%  runtime.gcAssistAlloc1
+         0     0% 98.45%      0.06s  1.86%  runtime.gcDrainN
+         0     0% 98.45%      0.02s  0.62%  runtime.gopreempt_m (inline)
+         0     0% 98.45%      0.02s  0.62%  runtime.growslice
+         0     0% 98.45%      0.11s  3.41%  runtime.mProf_Malloc

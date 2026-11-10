@@ -1,0 +1,47 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNISTNodes/00_Conv         	   10000	     48370 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/00_Conv
+    round3_probe_test.go:83: input=[1 1 28 28] weights=[8 1 5 5] output=[1 8 28 28] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/00_Conv         	   10000	     48359 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/00_Conv
+    round3_probe_test.go:83: input=[1 1 28 28] weights=[8 1 5 5] output=[1 8 28 28] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/00_Conv         	    9625	     53016 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/00_Conv
+    round3_probe_test.go:83: input=[1 1 28 28] weights=[8 1 5 5] output=[1 8 28 28] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/01_Add          	   26996	     17742 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/01_Add          	   27355	     17616 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/01_Add          	   27266	     17639 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/02_Relu         	   44587	     10844 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu         	   44847	     10877 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu         	   44305	     10880 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/03_MaxPool      	   30542	     15836 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/03_MaxPool      	   30416	     15826 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/03_MaxPool      	   30288	     15849 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/04_Conv         	    2787	    193411 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_Conv
+    round3_probe_test.go:83: input=[1 8 14 14] weights=[16 8 5 5] output=[1 16 14 14] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/04_Conv         	    2521	    181016 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_Conv
+    round3_probe_test.go:83: input=[1 8 14 14] weights=[16 8 5 5] output=[1 16 14 14] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/04_Conv         	    2618	    180487 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_Conv
+    round3_probe_test.go:83: input=[1 8 14 14] weights=[16 8 5 5] output=[1 16 14 14] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/05_Add          	   56551	      8544 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/05_Add          	   56521	      8534 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/05_Add          	   56594	      8500 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/06_Relu         	   86530	      5555 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu         	   86466	      5876 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu         	   87349	      5867 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/07_MaxPool      	  100377	      4757 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/07_MaxPool      	  102800	      4723 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/07_MaxPool      	  102519	      4761 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/10_MatMul       	  296812	      1692 ns/op	     144 B/op	       3 allocs/op
+BenchmarkMNISTNodes/10_MatMul       	  290085	      1703 ns/op	     144 B/op	       3 allocs/op
+BenchmarkMNISTNodes/10_MatMul       	  290674	      1687 ns/op	     144 B/op	       3 allocs/op
+BenchmarkMNISTNodes/11_Add          	 2346631	       203.9 ns/op	     352 B/op	       8 allocs/op
+BenchmarkMNISTNodes/11_Add          	 2363995	       203.1 ns/op	     352 B/op	       8 allocs/op
+BenchmarkMNISTNodes/11_Add          	 2358459	       205.2 ns/op	     352 B/op	       8 allocs/op
+PASS

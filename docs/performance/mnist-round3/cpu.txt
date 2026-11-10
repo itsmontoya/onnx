@@ -1,0 +1,60 @@
+File: baseline.test
+Type: cpu
+Time: 2026-11-09 17:24:01 PST
+Duration: 20.08s, Total samples = 6.31s (31.43%)
+Active filters:
+   focus=onnx.\(\*Session\).Run
+Showing nodes accounting for 6.04s, 95.72% of 6.31s total
+Dropped 63 nodes (cum <= 0.03s)
+      flat  flat%   sum%        cum   cum%
+     2.89s 45.80% 45.80%      2.92s 46.28%  github.com/itsmontoya/neuralnetwork/tensor.conv2DValue
+     1.79s 28.37% 74.17%      1.80s 28.53%  github.com/itsmontoya/neuralnetwork/tensor.conv2DFourValues
+     0.33s  5.23% 79.40%      0.37s  5.86%  github.com/itsmontoya/neuralnetwork/tensor.broadcastFloat32Into
+     0.28s  4.44% 83.84%         5s 79.24%  github.com/itsmontoya/neuralnetwork/tensor.conv2DValuesInto
+     0.20s  3.17% 87.00%      0.28s  4.44%  github.com/itsmontoya/neuralnetwork/tensor.maxPool2DValue
+     0.12s  1.90% 88.91%      0.17s  2.69%  github.com/itsmontoya/onnx.(*numericalCall).patchRelu
+     0.11s  1.74% 90.65%      0.11s  1.74%  internal/runtime/atomic.(*UnsafePointer).Load (inline)
+     0.10s  1.58% 92.23%      0.10s  1.58%  runtime.asyncPreempt
+     0.06s  0.95% 93.19%      0.06s  0.95%  github.com/itsmontoya/neuralnetwork/internal/f32.IsNaN (inline)
+     0.03s  0.48% 93.66%      0.31s  4.91%  github.com/itsmontoya/neuralnetwork/tensor.MaxPool2DInto
+     0.03s  0.48% 94.14%      0.05s  0.79%  github.com/itsmontoya/neuralnetwork/tensor.ReLUInto
+     0.03s  0.48% 94.61%      0.05s  0.79%  github.com/itsmontoya/onnx.(*evaluation).checkValue
+     0.03s  0.48% 95.09%      0.05s  0.79%  runtime.typePointers.next
+     0.01s  0.16% 95.25%      6.31s   100%  github.com/itsmontoya/onnx.(*Session).Run
+     0.01s  0.16% 95.40%      0.04s  0.63%  github.com/itsmontoya/onnx.newNumericalCall
+     0.01s  0.16% 95.56%      0.08s  1.27%  runtime.mallocgcSmallNoscan
+     0.01s  0.16% 95.72%      0.07s  1.11%  runtime.scanObject
+         0     0% 95.72%      0.08s  1.27%  github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Clone
+         0     0% 95.72%      0.04s  0.63%  github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Float32Values
+         0     0% 95.72%      0.38s  6.02%  github.com/itsmontoya/neuralnetwork/tensor.AddInto (inline)
+         0     0% 95.72%      5.01s 79.40%  github.com/itsmontoya/neuralnetwork/tensor.Conv2DInto
+         0     0% 95.72%      0.07s  1.11%  github.com/itsmontoya/neuralnetwork/tensor.FromFloat32
+         0     0% 95.72%      0.12s  1.90%  github.com/itsmontoya/neuralnetwork/tensor.New
+         0     0% 95.72%      0.38s  6.02%  github.com/itsmontoya/neuralnetwork/tensor.binaryFloat32Into
+         0     0% 95.72%      0.19s  3.01%  github.com/itsmontoya/neuralnetwork/tensor.newTensor (inline)
+         0     0% 95.72%      5.38s 85.26%  github.com/itsmontoya/onnx.(*cnnCall).run
+         0     0% 95.72%      0.06s  0.95%  github.com/itsmontoya/onnx.(*evaluation).bind
+         0     0% 95.72%      0.04s  0.63%  github.com/itsmontoya/onnx.(*evaluation).cloneConstant
+         0     0% 95.72%      0.04s  0.63%  github.com/itsmontoya/onnx.(*evaluation).cloneOutput
+         0     0% 95.72%      6.19s 98.10%  github.com/itsmontoya/onnx.(*evaluation).execute
+         0     0% 95.72%      0.04s  0.63%  github.com/itsmontoya/onnx.(*evaluation).publish
+         0     0% 95.72%      6.30s 99.84%  github.com/itsmontoya/onnx.(*evaluation).run
+         0     0% 95.72%      0.68s 10.78%  github.com/itsmontoya/onnx.(*numericalCall).run
+         0     0% 95.72%      6.31s   100%  github.com/itsmontoya/onnx.BenchmarkMNIST
+         0     0% 95.72%      0.04s  0.63%  github.com/itsmontoya/onnx/internal/graph.(*Constant).Clone (inline)
+         0     0% 95.72%      0.09s  1.43%  runtime.deductAssistCredit
+         0     0% 95.72%      0.09s  1.43%  runtime.gcAssistAlloc
+         0     0% 95.72%      0.09s  1.43%  runtime.gcAssistAlloc.func2
+         0     0% 95.72%      0.09s  1.43%  runtime.gcAssistAlloc1
+         0     0% 95.72%      0.09s  1.43%  runtime.gcDrainN
+         0     0% 95.72%      0.12s  1.90%  runtime.mProf_Malloc
+         0     0% 95.72%      0.22s  3.49%  runtime.makeslice
+         0     0% 95.72%      0.28s  4.44%  runtime.mallocgc
+         0     0% 95.72%      0.04s  0.63%  runtime.mallocgcSmallNoScanSC5
+         0     0% 95.72%      0.04s  0.63%  runtime.mallocgcSmallScanNoHeader
+         0     0% 95.72%      0.05s  0.79%  runtime.newobject
+         0     0% 95.72%      0.12s  1.90%  runtime.profilealloc
+         0     0% 95.72%      0.12s  1.90%  runtime.stkbucket
+         0     0% 95.72%      0.11s  1.74%  runtime.systemstack
+         0     0% 95.72%      6.31s   100%  testing.(*B).run1.func1
+         0     0% 95.72%      6.31s   100%  testing.(*B).runN

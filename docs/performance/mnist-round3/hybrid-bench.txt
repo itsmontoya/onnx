@@ -1,0 +1,42 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNIST 	    2614	    318644 ns/op	  179440 B/op	     174 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNIST 	    2720	    311868 ns/op	  179440 B/op	     174 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNIST 	    2709	    312228 ns/op	  179440 B/op	     174 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNIST 	    2560	    314178 ns/op	  179440 B/op	     174 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNIST 	    2638	    325647 ns/op	  179440 B/op	     174 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNIST 	    2632	    318930 ns/op	  179440 B/op	     174 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNIST 	    2589	    321792 ns/op	  179440 B/op	     174 allocs/op
+PASS
