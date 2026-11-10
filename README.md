@@ -48,6 +48,8 @@ The optional [ONNX Runtime comparison tool](tools/compare_runtime/README.md)
 runs a pinned pretrained MNIST model through both runtimes, checks numerical
 and top-1 agreement, and records CPU inference timings. It also accepts other
 compatible local models with named NumPy inputs.
+The [MNIST profiling report](docs/performance/mnist/README.md) records the
+v0.8.0 comparison and allocation measurements.
 
 ## Runtime contract
 

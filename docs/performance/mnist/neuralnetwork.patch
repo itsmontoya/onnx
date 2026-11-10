@@ -1,0 +1,202 @@
+diff --git a/tensor/activation.go b/tensor/activation.go
+--- a/tensor/activation.go
++++ b/tensor/activation.go
+@@ -11,8 +11,21 @@
+ // It preserves the existing activation's positive-zero result for NaN and
+ // negative zero. All returned errors leave destination unchanged.
+ func ReLUInto(input, destination *Tensor) (err error) {
+-	err = activationFloat32Into(input, destination, activation.ReLU{})
+-	return err
++	if err = validateTensorType("input", input, Float32); err != nil {
++		return err
++	}
++
++	if err = validateDestination(destination, Float32, input.shape, input); err != nil {
++		return err
++	}
++
++	for index, value := range input.floats {
++		destination.floats[index] = 0
++		if value > 0 {
++			destination.floats[index] = value
++		}
++	}
++	return nil
+ }
+ 
+ // SigmoidInto writes the stable float32 logistic activation into destination.
+diff --git a/tensor/conv2d.go b/tensor/conv2d.go
+--- a/tensor/conv2d.go
++++ b/tensor/conv2d.go
+@@ -99,30 +99,58 @@
+ func conv2DValue(input, weights *Tensor, batch, channel, row, col int, config Conv2DConfig) (value float32) {
+ 	var (
+ 		inputChannel, kernelRow, kernelCol int
+-		inputRow, inputCol                 int
++		inputRow                           int
+ 		inputOffset, weightOffset          int
+ 		channels                           = int(weights.shape[1])
+ 		kernelH                            = int(weights.shape[2])
+ 		kernelW                            = int(weights.shape[3])
+ 		first                              = channel / int(weights.shape[0]/config.Groups) * channels
++		inputH                             = int(input.shape[2])
++		inputW                             = int(input.shape[3])
++		inputPlane                         = inputH * inputW
++		kernelPlane                        = kernelH * kernelW
++		inputBase                          = (batch*int(input.shape[1]) + first) * inputPlane
++		weightBase                         = channel * channels * kernelPlane
++		rowStart                           = row*int(config.Strides[0]) - int(config.Pads[0])
++		colStart                           = col*int(config.Strides[1]) - int(config.Pads[1])
++		dilationW                          = int(config.Dilations[1])
++		kernelStart                        int
++		kernelEnd                          = kernelW
+ 	)
+ 
++	if inputH == 0 || inputW == 0 || colStart >= inputW {
++		return 0
++	}
++
++	if colStart < 0 {
++		kernelStart = (-colStart-1)/dilationW + 1
++	}
++
++	if kernelStart >= kernelW {
++		return 0
++	}
++
++	colStart += kernelStart * dilationW
++	if colStart >= inputW {
++		return 0
++	}
++
++	kernelEnd = min(kernelEnd, kernelStart+(inputW-1-colStart)/dilationW+1)
+ 	for inputChannel = 0; inputChannel < channels; inputChannel++ {
+ 		for kernelRow = 0; kernelRow < kernelH; kernelRow++ {
+ 			// The planner checks maximum padded coordinates before subtraction;
+ 			// valid spatial indices then bound every payload offset below.
+-			inputRow = row*int(config.Strides[0]) + kernelRow*int(config.Dilations[0]) - int(config.Pads[0])
+-			if inputRow < 0 || inputRow >= int(input.shape[2]) {
++			inputRow = rowStart + kernelRow*int(config.Dilations[0])
++			if inputRow < 0 || inputRow >= inputH {
+ 				continue
+ 			}
+-			for kernelCol = 0; kernelCol < kernelW; kernelCol++ {
+-				inputCol = col*int(config.Strides[1]) + kernelCol*int(config.Dilations[1]) - int(config.Pads[1])
+-				if inputCol < 0 || inputCol >= int(input.shape[3]) {
+-					continue
+-				}
+-				inputOffset = ((batch*int(input.shape[1])+first+inputChannel)*int(input.shape[2])+inputRow)*int(input.shape[3]) + inputCol
+-				weightOffset = ((channel*channels+inputChannel)*kernelH+kernelRow)*kernelW + kernelCol
++
++			inputOffset = inputBase + inputChannel*inputPlane + inputRow*inputW + colStart
++			weightOffset = weightBase + inputChannel*kernelPlane + kernelRow*kernelW + kernelStart
++			for kernelCol = kernelStart; kernelCol < kernelEnd; kernelCol++ {
+ 				value += input.floats[inputOffset] * weights.floats[weightOffset]
++				inputOffset += dilationW
++				weightOffset++
+ 			}
+ 		}
+ 	}
+diff --git a/tensor/conv2d_internal_test.go b/tensor/conv2d_internal_test.go
+new file mode 100644
+--- /dev/null
++++ b/tensor/conv2d_internal_test.go
+@@ -0,0 +1,98 @@
++package tensor
++
++import (
++	"math"
++	"testing"
++)
++
++func Test_Conv2D_ClippedColumns(t *testing.T) {
++	tests := []struct {
++		name     string
++		input    []float32
++		weights  []float32
++		stride   int64
++		dilation int64
++		left     int64
++		right    int64
++		want     []float32
++	}{
++		{
++			name:  "dilated strided asymmetric padding",
++			input: []float32{1, 2, 3, 4}, weights: []float32{1, 10, 100},
++			stride: 2, dilation: 2, left: 3, right: 4,
++			want: []float32{200, 420, 42, 4},
++		},
++		{
++			name:  "windows entirely left of input",
++			input: []float32{1, 2, 3, 4}, weights: []float32{1, 10, 100},
++			stride: 1, dilation: 2, left: 7, right: 1,
++			want: []float32{0, 0, 0, 100, 200, 310, 420, 31},
++		},
++		{
++			name:  "dilation skips narrow input",
++			input: []float32{2}, weights: []float32{3, 4},
++			stride: 1, dilation: 3, left: 1, right: 2,
++			want: []float32{0},
++		},
++		{
++			name:  "padding skips nonfinite products",
++			input: []float32{2}, weights: []float32{float32(math.Inf(1))},
++			stride: 1, dilation: 1, left: 2, right: 2,
++			want: []float32{0, 0, float32(math.Inf(1)), 0, 0},
++		},
++		{
++			name:    "empty width with padded output",
++			weights: []float32{float32(math.NaN())},
++			stride:  1, dilation: 1, left: 1, right: 1,
++			want: []float32{0, 0},
++		},
++	}
++	for _, tt := range tests {
++		t.Run(tt.name, func(t *testing.T) {
++			var (
++				input, weights, output *Tensor
++				shape                  []int64
++				values                 []float32
++				config                 = Conv2DConfig{
++					Strides: [2]int64{1, tt.stride}, Dilations: [2]int64{1, tt.dilation},
++					Pads: [4]int64{0, tt.left, 0, tt.right}, Groups: 1,
++				}
++				err error
++			)
++
++			if input, err = FromFloat32([]int64{1, 1, 1, int64(len(tt.input))}, tt.input); err != nil {
++				t.Fatal(err)
++			}
++
++			if weights, err = FromFloat32([]int64{1, 1, 1, int64(len(tt.weights))}, tt.weights); err != nil {
++				t.Fatal(err)
++			}
++
++			if shape, err = Conv2DShape(input.shape, weights.shape, config); err != nil {
++				t.Fatal(err)
++			}
++
++			if output, err = New(Float32, shape); err != nil {
++				t.Fatal(err)
++			}
++
++			if err = Conv2DInto(input, weights, nil, output, config); err != nil {
++				t.Fatal(err)
++			}
++
++			if values, err = output.Float32Values(); err != nil {
++				t.Fatal(err)
++			}
++
++			if len(values) != len(tt.want) {
++				t.Fatalf("output length = %d, want %d", len(values), len(tt.want))
++			}
++
++			for index, want := range tt.want {
++				if math.Float32bits(values[index]) != math.Float32bits(want) {
++					t.Fatalf("output[%d] = %v, want %v", index, values[index], want)
++				}
++			}
++		})
++	}
++}

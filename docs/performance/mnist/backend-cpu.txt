@@ -1,0 +1,24 @@
+File: onnx-mnist-backend.test
+Type: cpu
+Time: 2026-11-09 14:37:34 PST
+Duration: 3.70s, Total samples = 1.45s (39.18%)
+Active filters:
+   focus=onnx.\(\*Session\).Run
+Showing nodes accounting for 1.45s, 100% of 1.45s total
+Showing top 15 nodes out of 64
+      flat  flat%   sum%        cum   cum%
+     1.07s 73.79% 73.79%      1.07s 73.79%  github.com/itsmontoya/neuralnetwork/tensor.conv2DValue
+     0.12s  8.28% 82.07%      0.13s  8.97%  github.com/itsmontoya/neuralnetwork/tensor.broadcastFloat32Into
+     0.09s  6.21% 88.28%      1.16s 80.00%  github.com/itsmontoya/neuralnetwork/tensor.conv2DValuesInto
+     0.03s  2.07% 90.34%      0.03s  2.07%  github.com/itsmontoya/neuralnetwork/tensor.maxPool2DValue
+     0.03s  2.07% 92.41%      0.03s  2.07%  runtime.memclrNoHeapPointers
+     0.02s  1.38% 93.79%      0.02s  1.38%  internal/runtime/atomic.(*UnsafePointer).Load
+     0.01s  0.69% 94.48%      0.01s  0.69%  github.com/itsmontoya/neuralnetwork/tensor.ReLUInto
+     0.01s  0.69% 95.17%      0.01s  0.69%  github.com/itsmontoya/neuralnetwork/tensor.ValidateBroadcastTo
+     0.01s  0.69% 95.86%      0.01s  0.69%  github.com/itsmontoya/neuralnetwork/tensor.checkedMultiply
+     0.01s  0.69% 96.55%      0.01s  0.69%  github.com/itsmontoya/neuralnetwork/tensor.validateShapeSize
+     0.01s  0.69% 97.24%      0.01s  0.69%  github.com/itsmontoya/onnx.(*numericalCall).patchRelu
+     0.01s  0.69% 97.93%      0.01s  0.69%  github.com/itsmontoya/onnx.(*runStorage).after
+     0.01s  0.69% 98.62%      0.01s  0.69%  runtime.(*spanSet).pop
+     0.01s  0.69% 99.31%      0.01s  0.69%  runtime.mallocgcSmallScanNoHeaderSC5
+     0.01s  0.69%   100%      0.01s  0.69%  runtime.tryDeferToSpanScan

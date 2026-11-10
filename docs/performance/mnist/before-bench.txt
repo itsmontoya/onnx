@@ -1,0 +1,85 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkInference/mlp_batch_1/Warm    	   63676	      3710 ns/op	    4816 B/op	      88 allocs/op
+BenchmarkInference/mlp_batch_3/Warm    	   66183	      3630 ns/op	    5160 B/op	      88 allocs/op
+BenchmarkInference/shape_batch_1/Warm  	   39084	      6152 ns/op	   10928 B/op	     138 allocs/op
+BenchmarkInference/shape_batch_3/Warm  	   38377	      6306 ns/op	   11320 B/op	     138 allocs/op
+BenchmarkInference/cnn_batch_1/Warm    	   37886	      6432 ns/op	    9064 B/op	     126 allocs/op
+BenchmarkInference/cnn_batch_3/Warm    	   31440	      7662 ns/op	   11400 B/op	     126 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkInference/mlp_batch_1/Warm    	   65796	      3655 ns/op	    4816 B/op	      88 allocs/op
+BenchmarkInference/mlp_batch_3/Warm    	   64429	      3769 ns/op	    5160 B/op	      88 allocs/op
+BenchmarkInference/shape_batch_1/Warm  	   37350	      6349 ns/op	   10928 B/op	     138 allocs/op
+BenchmarkInference/shape_batch_3/Warm  	   37657	      6438 ns/op	   11320 B/op	     138 allocs/op
+BenchmarkInference/cnn_batch_1/Warm    	   36476	      6571 ns/op	    9064 B/op	     126 allocs/op
+BenchmarkInference/cnn_batch_3/Warm    	   30486	      8002 ns/op	   11400 B/op	     126 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkInference/mlp_batch_1/Warm    	   65431	      3705 ns/op	    4816 B/op	      88 allocs/op
+BenchmarkInference/mlp_batch_3/Warm    	   62377	      3872 ns/op	    5160 B/op	      88 allocs/op
+BenchmarkInference/shape_batch_1/Warm  	   37714	      6450 ns/op	   10928 B/op	     138 allocs/op
+BenchmarkInference/shape_batch_3/Warm  	   36440	      6635 ns/op	   11320 B/op	     138 allocs/op
+BenchmarkInference/cnn_batch_1/Warm    	   36042	      6660 ns/op	    9064 B/op	     126 allocs/op
+BenchmarkInference/cnn_batch_3/Warm    	   30051	      8024 ns/op	   11400 B/op	     126 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkInference/mlp_batch_1/Warm    	   64929	      3700 ns/op	    4816 B/op	      88 allocs/op
+BenchmarkInference/mlp_batch_3/Warm    	   62517	      3871 ns/op	    5160 B/op	      88 allocs/op
+BenchmarkInference/shape_batch_1/Warm  	   37034	      6428 ns/op	   10928 B/op	     138 allocs/op
+BenchmarkInference/shape_batch_3/Warm  	   36655	      6596 ns/op	   11320 B/op	     138 allocs/op
+BenchmarkInference/cnn_batch_1/Warm    	   36198	      6682 ns/op	    9064 B/op	     126 allocs/op
+BenchmarkInference/cnn_batch_3/Warm    	   30027	      8019 ns/op	   11400 B/op	     126 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkInference/mlp_batch_1/Warm    	   65024	      3719 ns/op	    4816 B/op	      88 allocs/op
+BenchmarkInference/mlp_batch_3/Warm    	   62233	      3879 ns/op	    5160 B/op	      88 allocs/op
+BenchmarkInference/shape_batch_1/Warm  	   37210	      6500 ns/op	   10928 B/op	     138 allocs/op
+BenchmarkInference/shape_batch_3/Warm  	   36484	      6579 ns/op	   11320 B/op	     138 allocs/op
+BenchmarkInference/cnn_batch_1/Warm    	   35692	      6770 ns/op	    9064 B/op	     126 allocs/op
+BenchmarkInference/cnn_batch_3/Warm    	   29865	      8028 ns/op	   11400 B/op	     126 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNIST 	     434	   1343105 ns/op	  384112 B/op	     196 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNIST 	     490	   1212348 ns/op	  384112 B/op	     196 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNIST 	     486	   1226329 ns/op	  384112 B/op	     196 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNIST 	     488	   1228204 ns/op	  384112 B/op	     196 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNIST 	     490	   1227888 ns/op	  384112 B/op	     196 allocs/op
+PASS

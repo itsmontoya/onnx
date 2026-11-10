@@ -1,2 +1,5 @@
 # Preserve the pinned upstream schema's trailing blank line byte-for-byte.
 third_party/onnx/onnx.proto whitespace=-blank-at-eof
+
+# Unified diff context preserves whitespace after its leading space marker.
+docs/performance/mnist/neuralnetwork.patch whitespace=-blank-at-eol,-space-before-tab
