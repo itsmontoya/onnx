@@ -1,335 +1,335 @@
 TEXT github.com/itsmontoya/neuralnetwork/tensor.conv2DValuesInto(SB) /Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.9.0/tensor/conv2d.go
-  conv2d.go:77		0x10026b280		f9400b90		MOVD 16(R28), R16							
-  conv2d.go:77		0x10026b284		d10103f1		SUB $64, RSP, R17							
-  conv2d.go:77		0x10026b288		eb10023f		CMP R16, R17								
-  conv2d.go:77		0x10026b28c		54001569		BLS 171(PC)								
-  conv2d.go:77		0x10026b290		f8140ffe		MOVD.W R30, -192(RSP)							
-  conv2d.go:77		0x10026b294		f81f83fd		MOVD R29, -8(RSP)							
-  conv2d.go:77		0x10026b298		d10023fd		SUB $8, RSP, R29							
-  conv2d.go:83		0x10026b29c		f9008be0		MOVD R0, 272(RSP)							
-  conv2d.go:83		0x10026b2a0		f9008fe1		MOVD R1, 280(RSP)							
-  conv2d.go:83		0x10026b2a4		f90093e2		MOVD R2, 288(RSP)							
-  conv2d.go:83		0x10026b2a8		f90097e3		MOVD R3, 296(RSP)							
-  conv2d.go:83		0x10026b2ac		aa1f03e6		MOVD ZR, R6								
-  conv2d.go:83		0x10026b2b0		aa1f03e4		MOVD ZR, R4								
-  conv2d.go:83		0x10026b2b4		14000002		JMP 2(PC)								
-  conv2d.go:83		0x10026b2b8		910004c6		ADD $1, R6, R6								
-  conv2d.go:83		0x10026b2bc		a940a067		LDP 8(R3), (R7, R8)							
-  conv2d.go:83		0x10026b2c0		b4001388		CBZ R8, 156(PC)								
-  conv2d.go:83		0x10026b2c4		f94000e7		MOVD (R7), R7								
-  conv2d.go:83		0x10026b2c8		eb0700df		CMP R7, R6								
-  conv2d.go:83		0x10026b2cc		5400118a		BGE 140(PC)								
-  conv2d.go:83		0x10026b2d0		f90057e6		MOVD R6, 168(RSP)							
-  conv2d.go:84		0x10026b2d4		aa1f03e5		MOVD ZR, R5								
-  conv2d.go:84		0x10026b2d8		14000002		JMP 2(PC)								
-  conv2d.go:84		0x10026b2dc		910004a5		ADD $1, R5, R5								
-  conv2d.go:84		0x10026b2e0		a940a067		LDP 8(R3), (R7, R8)							
-  conv2d.go:84		0x10026b2e4		f100051f		CMP $1, R8								
-  conv2d.go:84		0x10026b2e8		54001229		BLS 145(PC)								
-  conv2d.go:84		0x10026b2ec		f94004e7		MOVD 8(R7), R7								
-  conv2d.go:84		0x10026b2f0		eb0700bf		CMP R7, R5								
-  conv2d.go:84		0x10026b2f4		54fffe2a		BGE -15(PC)								
-  conv2d.go:84		0x10026b2f8		f90053e5		MOVD R5, 160(RSP)							
-  conv2d.go:85		0x10026b2fc		aa1f03e7		MOVD ZR, R7								
-  conv2d.go:85		0x10026b300		14000002		JMP 2(PC)								
-  conv2d.go:85		0x10026b304		910004e7		ADD $1, R7, R7								
-  conv2d.go:85		0x10026b308		a940a468		LDP 8(R3), (R8, R9)							
-  conv2d.go:85		0x10026b30c		f100093f		CMP $2, R9								
-  conv2d.go:85		0x10026b310		540010c9		BLS 134(PC)								
-  conv2d.go:85		0x10026b314		f9400908		MOVD 16(R8), R8								
-  conv2d.go:85		0x10026b318		eb0800ff		CMP R8, R7								
-  conv2d.go:85		0x10026b31c		54fffe0a		BGE -16(PC)								
-  conv2d.go:85		0x10026b320		f90047e7		MOVD R7, 136(RSP)							
-  conv2d.go:86		0x10026b324		aa1f03e8		MOVD ZR, R8								
-  conv2d.go:86		0x10026b328		1400000a		JMP 10(PC)								
-  conv2d.go:86		0x10026b32c		91000428		ADD $1, R1, R8								
-  conv2d.go:109		0x10026b330		f9408be0		MOVD 272(RSP), R0							
-  conv2d.go:109		0x10026b334		f9408fe1		MOVD 280(RSP), R1							
-  conv2d.go:110		0x10026b338		f94093e2		MOVD 288(RSP), R2							
-  conv2d.go:86		0x10026b33c		aa0603e3		MOVD R6, R3								
-  conv2d.go:109		0x10026b340		f94053e5		MOVD 160(RSP), R5							
-  conv2d.go:109		0x10026b344		f94057e6		MOVD 168(RSP), R6							
-  conv2d.go:109		0x10026b348		f94047e7		MOVD 136(RSP), R7							
-  conv2d.go:86		0x10026b34c		aa0903e4		MOVD R9, R4								
-  conv2d.go:86		0x10026b350		a940a869		LDP 8(R3), (R9, R10)							
-  conv2d.go:86		0x10026b354		f1000d5f		CMP $3, R10								
-  conv2d.go:86		0x10026b358		54000e69		BLS 115(PC)								
-  conv2d.go:86		0x10026b35c		f9400d29		MOVD 24(R9), R9								
-  conv2d.go:86		0x10026b360		eb09011f		CMP R9, R8								
-  conv2d.go:86		0x10026b364		54fffd0a		BGE -24(PC)								
-  conv2d.go:86		0x10026b368		f9004be4		MOVD R4, 144(RSP)							
-  conv2d.go:87		0x10026b36c		f9406bea		MOVD 208(RSP), R10							
-  conv2d.go:87		0x10026b370		9b0a7d0b		MUL R10, R8, R11							
-  conv2d.go:87		0x10026b374		f9407bec		MOVD 240(RSP), R12							
-  conv2d.go:89		0x10026b378		f94073ed		MOVD 224(RSP), R13							
-  conv2d.go:87		0x10026b37c		cb0c016b		SUB R12, R11, R11							
-  conv2d.go:89		0x10026b380		f10005bf		CMP $1, R13								
-  conv2d.go:89		0x10026b384		540007a1		BNE 61(PC)								
-  conv2d.go:89		0x10026b388		91000d0c		ADD $3, R8, R12								
-  conv2d.go:89		0x10026b38c		eb0c013f		CMP R12, R9								
-  conv2d.go:89		0x10026b390		5400074d		BLE 58(PC)								
-  conv2d.go:89		0x10026b394		b7f8072b		TBNZ $63, R11, 57(PC)							
-  conv2d.go:90		0x10026b398		8b0a0549		ADD R10<<1, R10, R9							
-  conv2d.go:90		0x10026b39c		a940b42a		LDP 8(R1), (R10, R13)							
-  conv2d.go:90		0x10026b3a0		8b0b0129		ADD R11, R9, R9								
-  conv2d.go:90		0x10026b3a4		f1000dbf		CMP $3, R13								
-  conv2d.go:90		0x10026b3a8		54000bc9		BLS 94(PC)								
-  conv2d.go:90		0x10026b3ac		f9400d4a		MOVD 24(R10), R10							
-  conv2d.go:90		0x10026b3b0		a940b80d		LDP 8(R0), (R13, R14)							
-  conv2d.go:90		0x10026b3b4		8b0a0129		ADD R10, R9, R9								
-  conv2d.go:90		0x10026b3b8		f1000ddf		CMP $3, R14								
-  conv2d.go:90		0x10026b3bc		54000b09		BLS 88(PC)								
-  conv2d.go:90		0x10026b3c0		d1000529		SUB $1, R9, R9								
-  conv2d.go:90		0x10026b3c4		f9400daa		MOVD 24(R13), R10							
-  conv2d.go:90		0x10026b3c8		eb09015f		CMP R9, R10								
-  conv2d.go:90		0x10026b3cc		5400056d		BLE 43(PC)								
-  conv2d.go:89		0x10026b3d0		f9005bec		MOVD R12, 176(RSP)							
-  conv2d.go:92		0x10026b3d4		910023e8		ADD $8, RSP, R8								
-  conv2d.go:92		0x10026b3d8		910323e9		ADD $200, RSP, R9							
-  conv2d.go:92		0x10026b3dc		ad404530		FLDPQ (R9), (F16, F17)							
-  conv2d.go:92		0x10026b3e0		ad004510		FSTPQ (F16, F17), (R8)							
-  conv2d.go:92		0x10026b3e4		ad414530		FLDPQ 32(R9), (F16, F17)						
-  conv2d.go:92		0x10026b3e8		ad014510		FSTPQ (F16, F17), 32(R8)						
-  conv2d.go:92		0x10026b3ec		f9402139		MOVD 64(R9), R25							
-  conv2d.go:92		0x10026b3f0		f9002119		MOVD R25, 64(R8)							
-  conv2d.go:92		0x10026b3f4		aa0603e2		MOVD R6, R2								
-  conv2d.go:92		0x10026b3f8		aa0503e3		MOVD R5, R3								
-  conv2d.go:92		0x10026b3fc		aa0703e4		MOVD R7, R4								
-  conv2d.go:92		0x10026b400		aa0b03e5		MOVD R11, R5								
-  conv2d.go:92		0x10026b404		940000eb		CALL github.com/itsmontoya/neuralnetwork/tensor.conv2DFourValues(SB)	
-  conv2d.go:93		0x10026b408		f94097e6		MOVD 296(RSP), R6							
-  conv2d.go:93		0x10026b40c		f94018c7		MOVD 48(R6), R7								
-  conv2d.go:93		0x10026b410		f9404be8		MOVD 144(RSP), R8							
-  conv2d.go:93		0x10026b414		91001109		ADD $4, R8, R9								
-  conv2d.go:93		0x10026b418		eb0900ff		CMP R9, R7								
-  conv2d.go:93		0x10026b41c		540007e3		BCC 63(PC)								
-  conv2d.go:93		0x10026b420		eb09011f		CMP R9, R8								
-  conv2d.go:93		0x10026b424		54000788		BHI 60(PC)								
-  conv2d.go:93		0x10026b428		f94010c7		MOVD 32(R6), R7								
-  conv2d.go:93		0x10026b42c		8b0808ea		ADD R8<<2, R7, R10							
-  conv2d.go:96		0x10026b430		f94093e0		MOVD 288(RSP), R0							
-  conv2d.go:96		0x10026b434		b4000160		CBZ R0, 11(PC)								
-  conv2d.go:97		0x10026b438		a942300b		LDP 32(R0), (R11, R12)							
-  conv2d.go:97		0x10026b43c		f94053e3		MOVD 160(RSP), R3							
-  conv2d.go:97		0x10026b440		eb0c007f		CMP R12, R3								
-  conv2d.go:97		0x10026b444		54000662		BCS 51(PC)								
-  conv2d.go:97		0x10026b448		bc637964		FMOVS (R11)(R3<<2), F4							
-  conv2d.go:97		0x10026b44c		1e242800		FADDS F4, F0, F0							
-  conv2d.go:98		0x10026b450		1e242821		FADDS F4, F1, F1							
-  conv2d.go:99		0x10026b454		1e242842		FADDS F4, F2, F2							
-  conv2d.go:100		0x10026b458		1e242863		FADDS F4, F3, F3							
-  conv2d.go:100		0x10026b45c		14000002		JMP 2(PC)								
-  conv2d.go:109		0x10026b460		f94053e3		MOVD 160(RSP), R3							
-  conv2d.go:103		0x10026b464		bc2878e0		FMOVS F0, (R7)(R8<<2)							
-  conv2d.go:103		0x10026b468		2d008941		FSTPS (F1, F2), 4(R10)							
-  conv2d.go:103		0x10026b46c		bd000d43		FMOVS F3, 12(R10)							
-  conv2d.go:86		0x10026b470		f9405be1		MOVD 176(RSP), R1							
-  conv2d.go:106		0x10026b474		17ffffae		JMP -82(PC)								
-  conv2d.go:86		0x10026b478		f9004fe8		MOVD R8, 152(RSP)							
-  conv2d.go:109		0x10026b47c		910023e9		ADD $8, RSP, R9								
-  conv2d.go:109		0x10026b480		910323ea		ADD $200, RSP, R10							
-  conv2d.go:109		0x10026b484		ad404550		FLDPQ (R10), (F16, F17)							
-  conv2d.go:109		0x10026b488		ad004530		FSTPQ (F16, F17), (R9)							
-  conv2d.go:109		0x10026b48c		ad414550		FLDPQ 32(R10), (F16, F17)						
-  conv2d.go:109		0x10026b490		ad014530		FSTPQ (F16, F17), 32(R9)						
-  conv2d.go:109		0x10026b494		f9402159		MOVD 64(R10), R25							
-  conv2d.go:109		0x10026b498		f9002139		MOVD R25, 64(R9)							
-  conv2d.go:109		0x10026b49c		aa0603e2		MOVD R6, R2								
-  conv2d.go:109		0x10026b4a0		aa0503e3		MOVD R5, R3								
-  conv2d.go:109		0x10026b4a4		aa0703e4		MOVD R7, R4								
-  conv2d.go:109		0x10026b4a8		aa0803e5		MOVD R8, R5								
-  conv2d.go:109		0x10026b4ac		9400002d		CALL github.com/itsmontoya/neuralnetwork/tensor.conv2DValue(SB)		
-  conv2d.go:110		0x10026b4b0		f94093e0		MOVD 288(RSP), R0							
-  conv2d.go:110		0x10026b4b4		b4000100		CBZ R0, 8(PC)								
-  conv2d.go:111		0x10026b4b8		a9421c06		LDP 32(R0), (R6, R7)							
-  conv2d.go:111		0x10026b4bc		f94053e3		MOVD 160(RSP), R3							
-  conv2d.go:111		0x10026b4c0		eb07007f		CMP R7, R3								
-  conv2d.go:111		0x10026b4c4		54000242		BCS 18(PC)								
-  conv2d.go:111		0x10026b4c8		bc6378c1		FMOVS (R6)(R3<<2), F1							
-  conv2d.go:111		0x10026b4cc		1e212800		FADDS F1, F0, F0							
-  conv2d.go:111		0x10026b4d0		14000002		JMP 2(PC)								
-  conv2d.go:109		0x10026b4d4		f94053e3		MOVD 160(RSP), R3							
-  conv2d.go:113		0x10026b4d8		f94097e6		MOVD 296(RSP), R6							
-  conv2d.go:113		0x10026b4dc		a94220c7		LDP 32(R6), (R7, R8)							
-  conv2d.go:113		0x10026b4e0		f9404be9		MOVD 144(RSP), R9							
-  conv2d.go:113		0x10026b4e4		eb08013f		CMP R8, R9								
-  conv2d.go:113		0x10026b4e8		54000102		BCS 8(PC)								
-  conv2d.go:113		0x10026b4ec		bc2978e0		FMOVS F0, (R7)(R9<<2)							
-  conv2d.go:114		0x10026b4f0		91000529		ADD $1, R9, R9								
-  conv2d.go:86		0x10026b4f4		f9404fe1		MOVD 152(RSP), R1							
-  conv2d.go:114		0x10026b4f8		17ffff8d		JMP -115(PC)								
-  conv2d.go:119		0x10026b4fc		f85f83fd		MOVD -8(RSP), R29							
-  conv2d.go:119		0x10026b500		f84c07fe		MOVD.P 192(RSP), R30							
-  conv2d.go:119		0x10026b504		d65f03c0		RET									
-  conv2d.go:113		0x10026b508		97f87086		CALL runtime.panicBounds(SB)						
-  conv2d.go:111		0x10026b50c		97f87085		CALL runtime.panicBounds(SB)						
-  conv2d.go:97		0x10026b510		97f87084		CALL runtime.panicBounds(SB)						
-  conv2d.go:93		0x10026b514		97f87083		CALL runtime.panicBounds(SB)						
-  conv2d.go:93		0x10026b518		97f87082		CALL runtime.panicBounds(SB)						
-  conv2d.go:90		0x10026b51c		97f87081		CALL runtime.panicBounds(SB)						
-  conv2d.go:90		0x10026b520		97f87080		CALL runtime.panicBounds(SB)						
-  conv2d.go:86		0x10026b524		97f8707f		CALL runtime.panicBounds(SB)						
-  conv2d.go:85		0x10026b528		97f8707e		CALL runtime.panicBounds(SB)						
-  conv2d.go:84		0x10026b52c		97f8707d		CALL runtime.panicBounds(SB)						
-  conv2d.go:83		0x10026b530		97f8707c		CALL runtime.panicBounds(SB)						
-  conv2d.go:83		0x10026b534		d503201f		NOOP									
-  conv2d.go:77		0x10026b538		a90507e0		STP (R0, R1), 80(RSP)							
-  conv2d.go:77		0x10026b53c		a9060fe2		STP (R2, R3), 96(RSP)							
-  conv2d.go:77		0x10026b540		aa1e03e3		MOVD R30, R3								
-  conv2d.go:77		0x10026b544		97f86833		CALL runtime.morestack_noctxt.abi0(SB)					
-  conv2d.go:77		0x10026b548		a94507e0		LDP 80(RSP), (R0, R1)							
-  conv2d.go:77		0x10026b54c		a9460fe2		LDP 96(RSP), (R2, R3)							
-  conv2d.go:77		0x10026b550		17ffff4c		JMP github.com/itsmontoya/neuralnetwork/tensor.conv2DValuesInto(SB)	
-  conv2d.go:77		0x10026b554		00000000		?									
-  conv2d.go:77		0x10026b558		00000000		?									
-  conv2d.go:77		0x10026b55c		00000000		?									
+  conv2d.go:77		0x10026b280		f9400b90		MOVD 16(R28), R16
+  conv2d.go:77		0x10026b284		d10103f1		SUB $64, RSP, R17
+  conv2d.go:77		0x10026b288		eb10023f		CMP R16, R17
+  conv2d.go:77		0x10026b28c		54001569		BLS 171(PC)
+  conv2d.go:77		0x10026b290		f8140ffe		MOVD.W R30, -192(RSP)
+  conv2d.go:77		0x10026b294		f81f83fd		MOVD R29, -8(RSP)
+  conv2d.go:77		0x10026b298		d10023fd		SUB $8, RSP, R29
+  conv2d.go:83		0x10026b29c		f9008be0		MOVD R0, 272(RSP)
+  conv2d.go:83		0x10026b2a0		f9008fe1		MOVD R1, 280(RSP)
+  conv2d.go:83		0x10026b2a4		f90093e2		MOVD R2, 288(RSP)
+  conv2d.go:83		0x10026b2a8		f90097e3		MOVD R3, 296(RSP)
+  conv2d.go:83		0x10026b2ac		aa1f03e6		MOVD ZR, R6
+  conv2d.go:83		0x10026b2b0		aa1f03e4		MOVD ZR, R4
+  conv2d.go:83		0x10026b2b4		14000002		JMP 2(PC)
+  conv2d.go:83		0x10026b2b8		910004c6		ADD $1, R6, R6
+  conv2d.go:83		0x10026b2bc		a940a067		LDP 8(R3), (R7, R8)
+  conv2d.go:83		0x10026b2c0		b4001388		CBZ R8, 156(PC)
+  conv2d.go:83		0x10026b2c4		f94000e7		MOVD (R7), R7
+  conv2d.go:83		0x10026b2c8		eb0700df		CMP R7, R6
+  conv2d.go:83		0x10026b2cc		5400118a		BGE 140(PC)
+  conv2d.go:83		0x10026b2d0		f90057e6		MOVD R6, 168(RSP)
+  conv2d.go:84		0x10026b2d4		aa1f03e5		MOVD ZR, R5
+  conv2d.go:84		0x10026b2d8		14000002		JMP 2(PC)
+  conv2d.go:84		0x10026b2dc		910004a5		ADD $1, R5, R5
+  conv2d.go:84		0x10026b2e0		a940a067		LDP 8(R3), (R7, R8)
+  conv2d.go:84		0x10026b2e4		f100051f		CMP $1, R8
+  conv2d.go:84		0x10026b2e8		54001229		BLS 145(PC)
+  conv2d.go:84		0x10026b2ec		f94004e7		MOVD 8(R7), R7
+  conv2d.go:84		0x10026b2f0		eb0700bf		CMP R7, R5
+  conv2d.go:84		0x10026b2f4		54fffe2a		BGE -15(PC)
+  conv2d.go:84		0x10026b2f8		f90053e5		MOVD R5, 160(RSP)
+  conv2d.go:85		0x10026b2fc		aa1f03e7		MOVD ZR, R7
+  conv2d.go:85		0x10026b300		14000002		JMP 2(PC)
+  conv2d.go:85		0x10026b304		910004e7		ADD $1, R7, R7
+  conv2d.go:85		0x10026b308		a940a468		LDP 8(R3), (R8, R9)
+  conv2d.go:85		0x10026b30c		f100093f		CMP $2, R9
+  conv2d.go:85		0x10026b310		540010c9		BLS 134(PC)
+  conv2d.go:85		0x10026b314		f9400908		MOVD 16(R8), R8
+  conv2d.go:85		0x10026b318		eb0800ff		CMP R8, R7
+  conv2d.go:85		0x10026b31c		54fffe0a		BGE -16(PC)
+  conv2d.go:85		0x10026b320		f90047e7		MOVD R7, 136(RSP)
+  conv2d.go:86		0x10026b324		aa1f03e8		MOVD ZR, R8
+  conv2d.go:86		0x10026b328		1400000a		JMP 10(PC)
+  conv2d.go:86		0x10026b32c		91000428		ADD $1, R1, R8
+  conv2d.go:109		0x10026b330		f9408be0		MOVD 272(RSP), R0
+  conv2d.go:109		0x10026b334		f9408fe1		MOVD 280(RSP), R1
+  conv2d.go:110		0x10026b338		f94093e2		MOVD 288(RSP), R2
+  conv2d.go:86		0x10026b33c		aa0603e3		MOVD R6, R3
+  conv2d.go:109		0x10026b340		f94053e5		MOVD 160(RSP), R5
+  conv2d.go:109		0x10026b344		f94057e6		MOVD 168(RSP), R6
+  conv2d.go:109		0x10026b348		f94047e7		MOVD 136(RSP), R7
+  conv2d.go:86		0x10026b34c		aa0903e4		MOVD R9, R4
+  conv2d.go:86		0x10026b350		a940a869		LDP 8(R3), (R9, R10)
+  conv2d.go:86		0x10026b354		f1000d5f		CMP $3, R10
+  conv2d.go:86		0x10026b358		54000e69		BLS 115(PC)
+  conv2d.go:86		0x10026b35c		f9400d29		MOVD 24(R9), R9
+  conv2d.go:86		0x10026b360		eb09011f		CMP R9, R8
+  conv2d.go:86		0x10026b364		54fffd0a		BGE -24(PC)
+  conv2d.go:86		0x10026b368		f9004be4		MOVD R4, 144(RSP)
+  conv2d.go:87		0x10026b36c		f9406bea		MOVD 208(RSP), R10
+  conv2d.go:87		0x10026b370		9b0a7d0b		MUL R10, R8, R11
+  conv2d.go:87		0x10026b374		f9407bec		MOVD 240(RSP), R12
+  conv2d.go:89		0x10026b378		f94073ed		MOVD 224(RSP), R13
+  conv2d.go:87		0x10026b37c		cb0c016b		SUB R12, R11, R11
+  conv2d.go:89		0x10026b380		f10005bf		CMP $1, R13
+  conv2d.go:89		0x10026b384		540007a1		BNE 61(PC)
+  conv2d.go:89		0x10026b388		91000d0c		ADD $3, R8, R12
+  conv2d.go:89		0x10026b38c		eb0c013f		CMP R12, R9
+  conv2d.go:89		0x10026b390		5400074d		BLE 58(PC)
+  conv2d.go:89		0x10026b394		b7f8072b		TBNZ $63, R11, 57(PC)
+  conv2d.go:90		0x10026b398		8b0a0549		ADD R10<<1, R10, R9
+  conv2d.go:90		0x10026b39c		a940b42a		LDP 8(R1), (R10, R13)
+  conv2d.go:90		0x10026b3a0		8b0b0129		ADD R11, R9, R9
+  conv2d.go:90		0x10026b3a4		f1000dbf		CMP $3, R13
+  conv2d.go:90		0x10026b3a8		54000bc9		BLS 94(PC)
+  conv2d.go:90		0x10026b3ac		f9400d4a		MOVD 24(R10), R10
+  conv2d.go:90		0x10026b3b0		a940b80d		LDP 8(R0), (R13, R14)
+  conv2d.go:90		0x10026b3b4		8b0a0129		ADD R10, R9, R9
+  conv2d.go:90		0x10026b3b8		f1000ddf		CMP $3, R14
+  conv2d.go:90		0x10026b3bc		54000b09		BLS 88(PC)
+  conv2d.go:90		0x10026b3c0		d1000529		SUB $1, R9, R9
+  conv2d.go:90		0x10026b3c4		f9400daa		MOVD 24(R13), R10
+  conv2d.go:90		0x10026b3c8		eb09015f		CMP R9, R10
+  conv2d.go:90		0x10026b3cc		5400056d		BLE 43(PC)
+  conv2d.go:89		0x10026b3d0		f9005bec		MOVD R12, 176(RSP)
+  conv2d.go:92		0x10026b3d4		910023e8		ADD $8, RSP, R8
+  conv2d.go:92		0x10026b3d8		910323e9		ADD $200, RSP, R9
+  conv2d.go:92		0x10026b3dc		ad404530		FLDPQ (R9), (F16, F17)
+  conv2d.go:92		0x10026b3e0		ad004510		FSTPQ (F16, F17), (R8)
+  conv2d.go:92		0x10026b3e4		ad414530		FLDPQ 32(R9), (F16, F17)
+  conv2d.go:92		0x10026b3e8		ad014510		FSTPQ (F16, F17), 32(R8)
+  conv2d.go:92		0x10026b3ec		f9402139		MOVD 64(R9), R25
+  conv2d.go:92		0x10026b3f0		f9002119		MOVD R25, 64(R8)
+  conv2d.go:92		0x10026b3f4		aa0603e2		MOVD R6, R2
+  conv2d.go:92		0x10026b3f8		aa0503e3		MOVD R5, R3
+  conv2d.go:92		0x10026b3fc		aa0703e4		MOVD R7, R4
+  conv2d.go:92		0x10026b400		aa0b03e5		MOVD R11, R5
+  conv2d.go:92		0x10026b404		940000eb		CALL github.com/itsmontoya/neuralnetwork/tensor.conv2DFourValues(SB)
+  conv2d.go:93		0x10026b408		f94097e6		MOVD 296(RSP), R6
+  conv2d.go:93		0x10026b40c		f94018c7		MOVD 48(R6), R7
+  conv2d.go:93		0x10026b410		f9404be8		MOVD 144(RSP), R8
+  conv2d.go:93		0x10026b414		91001109		ADD $4, R8, R9
+  conv2d.go:93		0x10026b418		eb0900ff		CMP R9, R7
+  conv2d.go:93		0x10026b41c		540007e3		BCC 63(PC)
+  conv2d.go:93		0x10026b420		eb09011f		CMP R9, R8
+  conv2d.go:93		0x10026b424		54000788		BHI 60(PC)
+  conv2d.go:93		0x10026b428		f94010c7		MOVD 32(R6), R7
+  conv2d.go:93		0x10026b42c		8b0808ea		ADD R8<<2, R7, R10
+  conv2d.go:96		0x10026b430		f94093e0		MOVD 288(RSP), R0
+  conv2d.go:96		0x10026b434		b4000160		CBZ R0, 11(PC)
+  conv2d.go:97		0x10026b438		a942300b		LDP 32(R0), (R11, R12)
+  conv2d.go:97		0x10026b43c		f94053e3		MOVD 160(RSP), R3
+  conv2d.go:97		0x10026b440		eb0c007f		CMP R12, R3
+  conv2d.go:97		0x10026b444		54000662		BCS 51(PC)
+  conv2d.go:97		0x10026b448		bc637964		FMOVS (R11)(R3<<2), F4
+  conv2d.go:97		0x10026b44c		1e242800		FADDS F4, F0, F0
+  conv2d.go:98		0x10026b450		1e242821		FADDS F4, F1, F1
+  conv2d.go:99		0x10026b454		1e242842		FADDS F4, F2, F2
+  conv2d.go:100		0x10026b458		1e242863		FADDS F4, F3, F3
+  conv2d.go:100		0x10026b45c		14000002		JMP 2(PC)
+  conv2d.go:109		0x10026b460		f94053e3		MOVD 160(RSP), R3
+  conv2d.go:103		0x10026b464		bc2878e0		FMOVS F0, (R7)(R8<<2)
+  conv2d.go:103		0x10026b468		2d008941		FSTPS (F1, F2), 4(R10)
+  conv2d.go:103		0x10026b46c		bd000d43		FMOVS F3, 12(R10)
+  conv2d.go:86		0x10026b470		f9405be1		MOVD 176(RSP), R1
+  conv2d.go:106		0x10026b474		17ffffae		JMP -82(PC)
+  conv2d.go:86		0x10026b478		f9004fe8		MOVD R8, 152(RSP)
+  conv2d.go:109		0x10026b47c		910023e9		ADD $8, RSP, R9
+  conv2d.go:109		0x10026b480		910323ea		ADD $200, RSP, R10
+  conv2d.go:109		0x10026b484		ad404550		FLDPQ (R10), (F16, F17)
+  conv2d.go:109		0x10026b488		ad004530		FSTPQ (F16, F17), (R9)
+  conv2d.go:109		0x10026b48c		ad414550		FLDPQ 32(R10), (F16, F17)
+  conv2d.go:109		0x10026b490		ad014530		FSTPQ (F16, F17), 32(R9)
+  conv2d.go:109		0x10026b494		f9402159		MOVD 64(R10), R25
+  conv2d.go:109		0x10026b498		f9002139		MOVD R25, 64(R9)
+  conv2d.go:109		0x10026b49c		aa0603e2		MOVD R6, R2
+  conv2d.go:109		0x10026b4a0		aa0503e3		MOVD R5, R3
+  conv2d.go:109		0x10026b4a4		aa0703e4		MOVD R7, R4
+  conv2d.go:109		0x10026b4a8		aa0803e5		MOVD R8, R5
+  conv2d.go:109		0x10026b4ac		9400002d		CALL github.com/itsmontoya/neuralnetwork/tensor.conv2DValue(SB)
+  conv2d.go:110		0x10026b4b0		f94093e0		MOVD 288(RSP), R0
+  conv2d.go:110		0x10026b4b4		b4000100		CBZ R0, 8(PC)
+  conv2d.go:111		0x10026b4b8		a9421c06		LDP 32(R0), (R6, R7)
+  conv2d.go:111		0x10026b4bc		f94053e3		MOVD 160(RSP), R3
+  conv2d.go:111		0x10026b4c0		eb07007f		CMP R7, R3
+  conv2d.go:111		0x10026b4c4		54000242		BCS 18(PC)
+  conv2d.go:111		0x10026b4c8		bc6378c1		FMOVS (R6)(R3<<2), F1
+  conv2d.go:111		0x10026b4cc		1e212800		FADDS F1, F0, F0
+  conv2d.go:111		0x10026b4d0		14000002		JMP 2(PC)
+  conv2d.go:109		0x10026b4d4		f94053e3		MOVD 160(RSP), R3
+  conv2d.go:113		0x10026b4d8		f94097e6		MOVD 296(RSP), R6
+  conv2d.go:113		0x10026b4dc		a94220c7		LDP 32(R6), (R7, R8)
+  conv2d.go:113		0x10026b4e0		f9404be9		MOVD 144(RSP), R9
+  conv2d.go:113		0x10026b4e4		eb08013f		CMP R8, R9
+  conv2d.go:113		0x10026b4e8		54000102		BCS 8(PC)
+  conv2d.go:113		0x10026b4ec		bc2978e0		FMOVS F0, (R7)(R9<<2)
+  conv2d.go:114		0x10026b4f0		91000529		ADD $1, R9, R9
+  conv2d.go:86		0x10026b4f4		f9404fe1		MOVD 152(RSP), R1
+  conv2d.go:114		0x10026b4f8		17ffff8d		JMP -115(PC)
+  conv2d.go:119		0x10026b4fc		f85f83fd		MOVD -8(RSP), R29
+  conv2d.go:119		0x10026b500		f84c07fe		MOVD.P 192(RSP), R30
+  conv2d.go:119		0x10026b504		d65f03c0		RET
+  conv2d.go:113		0x10026b508		97f87086		CALL runtime.panicBounds(SB)
+  conv2d.go:111		0x10026b50c		97f87085		CALL runtime.panicBounds(SB)
+  conv2d.go:97		0x10026b510		97f87084		CALL runtime.panicBounds(SB)
+  conv2d.go:93		0x10026b514		97f87083		CALL runtime.panicBounds(SB)
+  conv2d.go:93		0x10026b518		97f87082		CALL runtime.panicBounds(SB)
+  conv2d.go:90		0x10026b51c		97f87081		CALL runtime.panicBounds(SB)
+  conv2d.go:90		0x10026b520		97f87080		CALL runtime.panicBounds(SB)
+  conv2d.go:86		0x10026b524		97f8707f		CALL runtime.panicBounds(SB)
+  conv2d.go:85		0x10026b528		97f8707e		CALL runtime.panicBounds(SB)
+  conv2d.go:84		0x10026b52c		97f8707d		CALL runtime.panicBounds(SB)
+  conv2d.go:83		0x10026b530		97f8707c		CALL runtime.panicBounds(SB)
+  conv2d.go:83		0x10026b534		d503201f		NOOP
+  conv2d.go:77		0x10026b538		a90507e0		STP (R0, R1), 80(RSP)
+  conv2d.go:77		0x10026b53c		a9060fe2		STP (R2, R3), 96(RSP)
+  conv2d.go:77		0x10026b540		aa1e03e3		MOVD R30, R3
+  conv2d.go:77		0x10026b544		97f86833		CALL runtime.morestack_noctxt.abi0(SB)
+  conv2d.go:77		0x10026b548		a94507e0		LDP 80(RSP), (R0, R1)
+  conv2d.go:77		0x10026b54c		a9460fe2		LDP 96(RSP), (R2, R3)
+  conv2d.go:77		0x10026b550		17ffff4c		JMP github.com/itsmontoya/neuralnetwork/tensor.conv2DValuesInto(SB)
+  conv2d.go:77		0x10026b554		00000000		?
+  conv2d.go:77		0x10026b558		00000000		?
+  conv2d.go:77		0x10026b55c		00000000		?
 
 TEXT github.com/itsmontoya/neuralnetwork/tensor.conv2DValue(SB) /Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.9.0/tensor/conv2d.go
-  conv2d.go:121		0x10026b560		f9400b90		MOVD 16(R28), R16						
-  conv2d.go:121		0x10026b564		eb3063ff		CMP R16, RSP							
-  conv2d.go:121		0x10026b568		54001109		BLS 136(PC)							
-  conv2d.go:121		0x10026b56c		f81f0ffe		MOVD.W R30, -16(RSP)						
-  conv2d.go:121		0x10026b570		f81f83fd		MOVD R29, -8(RSP)						
-  conv2d.go:121		0x10026b574		d10023fd		SUB $8, RSP, R29						
-  conv2d.go:126		0x10026b578		a9409c26		LDP 8(R1), (R6, R7)						
-  conv2d.go:126		0x10026b57c		f10004ff		CMP $1, R7							
-  conv2d.go:126		0x10026b580		54001009		BLS 128(PC)							
-  conv2d.go:126		0x10026b584		a940a4c8		LDP 8(R6), (R8, R9)						
-  conv2d.go:127		0x10026b588		f10008ff		CMP $2, R7							
-  conv2d.go:127		0x10026b58c		54000f89		BLS 124(PC)							
-  conv2d.go:128		0x10026b590		f1000cff		CMP $3, R7							
-  conv2d.go:128		0x10026b594		54000f29		BLS 121(PC)							
-  conv2d.go:129		0x10026b598		f9402fe7		MOVD 88(RSP), R7						
-  conv2d.go:129		0x10026b59c		b4000ec7		CBZ R7, 118(PC)							
-  conv2d.go:129		0x10026b5a0		f94000ca		MOVD (R6), R10							
-  conv2d.go:129		0x10026b5a4		9ac70d47		SDIV R7, R10, R7						
-  conv2d.go:129		0x10026b5a8		b4000e67		CBZ R7, 115(PC)							
-  conv2d.go:130		0x10026b5ac		a940ac0a		LDP 8(R0), (R10, R11)						
-  conv2d.go:129		0x10026b5b0		9ac70c67		SDIV R7, R3, R7							
-  conv2d.go:130		0x10026b5b4		f100097f		CMP $2, R11							
-  conv2d.go:130		0x10026b5b8		54000dc9		BLS 110(PC)							
-  conv2d.go:130		0x10026b5bc		a941354c		LDP 16(R10), (R12, R13)						
-  conv2d.go:131		0x10026b5c0		f1000d7f		CMP $3, R11							
-  conv2d.go:131		0x10026b5c4		54000d49		BLS 106(PC)							
-  conv2d.go:128		0x10026b5c8		f9400cc6		MOVD 24(R6), R6							
-  conv2d.go:134		0x10026b5cc		f940054a		MOVD 8(R10), R10						
-  conv2d.go:134		0x10026b5d0		9b027d42		MUL R2, R10, R2							
-  conv2d.go:136		0x10026b5d4		a941afea		LDP 24(RSP), (R10, R11)						
-  conv2d.go:136		0x10026b5d8		9b047d44		MUL R4, R10, R4							
-  conv2d.go:137		0x10026b5dc		9b057d65		MUL R5, R11, R5							
-  conv2d.go:137		0x10026b5e0		f94023ea		MOVD 64(RSP), R10						
-  conv2d.go:138		0x10026b5e4		a9433beb		LDP 48(RSP), (R11, R14)						
-  conv2d.go:132		0x10026b5e8		9b0c7daf		MUL R12, R13, R15						
-  conv2d.go:133		0x10026b5ec		9b067d30		MUL R6, R9, R16							
-  conv2d.go:134		0x10026b5f0		9b070902		MADD R7, R2, R8, R2						
-  conv2d.go:136		0x10026b5f4		cb0e0084		SUB R14, R4, R4							
-  conv2d.go:137		0x10026b5f8		cb0a00a7		SUB R10, R5, R7							
-  conv2d.go:143		0x10026b5fc		b400048c		CBZ R12, 36(PC)							
-  conv2d.go:143		0x10026b600		b400046d		CBZ R13, 35(PC)							
-  conv2d.go:143		0x10026b604		eb0701bf		CMP R7, R13							
-  conv2d.go:143		0x10026b608		5400042d		BLE 33(PC)							
-  conv2d.go:147		0x10026b60c		b6f800e7		TBZ $63, R7, 7(PC)						
-  conv2d.go:148		0x10026b610		cb050145		SUB R5, R10, R5							
-  conv2d.go:148		0x10026b614		b4000aab		CBZ R11, 85(PC)							
-  conv2d.go:148		0x10026b618		d10004a5		SUB $1, R5, R5							
-  conv2d.go:148		0x10026b61c		9acb0ca5		SDIV R11, R5, R5						
-  conv2d.go:148		0x10026b620		910004a5		ADD $1, R5, R5							
-  conv2d.go:148		0x10026b624		14000002		JMP 2(PC)							
-  conv2d.go:151		0x10026b628		aa1f03e5		MOVD ZR, R5							
-  conv2d.go:151		0x10026b62c		eb0600bf		CMP R6, R5							
-  conv2d.go:151		0x10026b630		5400026a		BGE 19(PC)							
-  conv2d.go:155		0x10026b634		9b051d67		MADD R5, R7, R11, R7						
-  conv2d.go:156		0x10026b638		eb0701bf		CMP R7, R13							
-  conv2d.go:156		0x10026b63c		5400018d		BLE 12(PC)							
-  conv2d.go:160		0x10026b640		cb0701aa		SUB R7, R13, R10						
-  conv2d.go:160		0x10026b644		b400090b		CBZ R11, 72(PC)							
-  conv2d.go:160		0x10026b648		d100054a		SUB $1, R10, R10						
-  conv2d.go:160		0x10026b64c		9acb0d4a		SDIV R11, R10, R10						
-  conv2d.go:160		0x10026b650		8b0a00aa		ADD R10, R5, R10						
-  conv2d.go:160		0x10026b654		9100054e		ADD $1, R10, R14						
-  conv2d.go:160		0x10026b658		eb0e00df		CMP R14, R6							
-  conv2d.go:161		0x10026b65c		9a8ad4ca		CSINC LE, R6, R10, R10						
-  conv2d.go:160		0x10026b660		aa1f03ee		MOVD ZR, R14							
-  conv2d.go:160		0x10026b664		1e2703e1		FMOVS ZR, F1							
-  conv2d.go:160		0x10026b668		1400000e		JMP 14(PC)							
-  conv2d.go:157		0x10026b66c		1e2703e0		FMOVS ZR, F0							
-  conv2d.go:157		0x10026b670		f85f83fd		MOVD -8(RSP), R29						
-  conv2d.go:157		0x10026b674		f84107fe		MOVD.P 16(RSP), R30						
-  conv2d.go:157		0x10026b678		d65f03c0		RET								
-  conv2d.go:152		0x10026b67c		1e2703e0		FMOVS ZR, F0							
-  conv2d.go:152		0x10026b680		f85f83fd		MOVD -8(RSP), R29						
-  conv2d.go:152		0x10026b684		f84107fe		MOVD.P 16(RSP), R30						
-  conv2d.go:152		0x10026b688		d65f03c0		RET								
-  conv2d.go:144		0x10026b68c		1e2703e0		FMOVS ZR, F0							
-  conv2d.go:144		0x10026b690		f85f83fd		MOVD -8(RSP), R29						
-  conv2d.go:144		0x10026b694		f84107fe		MOVD.P 16(RSP), R30						
-  conv2d.go:144		0x10026b698		d65f03c0		RET								
-  conv2d.go:161		0x10026b69c		910005ce		ADD $1, R14, R14						
-  conv2d.go:161		0x10026b6a0		eb0801df		CMP R8, R14							
-  conv2d.go:161		0x10026b6a4		540004ca		BGE 38(PC)							
-  conv2d.go:162		0x10026b6a8		aa1f03f1		MOVD ZR, R17							
-  conv2d.go:162		0x10026b6ac		14000002		JMP 2(PC)							
-  conv2d.go:162		0x10026b6b0		91000631		ADD $1, R17, R17						
-  conv2d.go:162		0x10026b6b4		eb09023f		CMP R9, R17							
-  conv2d.go:162		0x10026b6b8		54ffff2a		BGE -7(PC)							
-  conv2d.go:165		0x10026b6bc		f94017f3		MOVD 40(RSP), R19						
-  conv2d.go:165		0x10026b6c0		9b131233		MADD R19, R4, R17, R19						
-  conv2d.go:166		0x10026b6c4		b7ffff73		TBNZ $63, R19, -5(PC)						
-  conv2d.go:166		0x10026b6c8		eb13019f		CMP R19, R12							
-  conv2d.go:166		0x10026b6cc		54ffff2d		BLE -7(PC)							
-  conv2d.go:170		0x10026b6d0		8b0201d4		ADD R2, R14, R20						
-  conv2d.go:170		0x10026b6d4		9b137db3		MUL R19, R13, R19						
-  conv2d.go:170		0x10026b6d8		9b144df3		MADD R20, R19, R15, R19						
-  conv2d.go:171		0x10026b6dc		9b033914		MADD R3, R14, R8, R20						
-  conv2d.go:171		0x10026b6e0		9b147e14		MUL R20, R16, R20						
-  conv2d.go:171		0x10026b6e4		9b1150d4		MADD R17, R20, R6, R20						
-  conv2d.go:170		0x10026b6e8		8b070273		ADD R7, R19, R19						
-  conv2d.go:171		0x10026b6ec		8b1400b4		ADD R20, R5, R20						
-  conv2d.go:151		0x10026b6f0		aa0503f5		MOVD R5, R21							
-  conv2d.go:172		0x10026b6f4		14000006		JMP 6(PC)							
-  conv2d.go:173		0x10026b6f8		bc747ae2		FMOVS (R23)(R20<<2), F2						
-  conv2d.go:173		0x10026b6fc		1f000441		FMADDS F0, F1, F2, F1						
-  conv2d.go:174		0x10026b700		8b0b0273		ADD R11, R19, R19						
-  conv2d.go:172		0x10026b704		910004a5		ADD $1, R5, R5							
-  conv2d.go:175		0x10026b708		91000694		ADD $1, R20, R20						
-  conv2d.go:172		0x10026b70c		eb0a00bf		CMP R10, R5							
-  conv2d.go:172		0x10026b710		5400012a		BGE 9(PC)							
-  conv2d.go:173		0x10026b714		a9425c16		LDP 32(R0), (R22, R23)						
-  conv2d.go:173		0x10026b718		eb17027f		CMP R23, R19							
-  conv2d.go:173		0x10026b71c		540001e2		BCS 15(PC)							
-  conv2d.go:173		0x10026b720		a9426037		LDP 32(R1), (R23, R24)						
-  conv2d.go:173		0x10026b724		bc737ac0		FMOVS (R22)(R19<<2), F0						
-  conv2d.go:173		0x10026b728		eb18029f		CMP R24, R20							
-  conv2d.go:173		0x10026b72c		54fffe63		BCC -13(PC)							
-  conv2d.go:173		0x10026b730		14000007		JMP 7(PC)							
-  conv2d.go:171		0x10026b734		aa1503e5		MOVD R21, R5							
-  conv2d.go:172		0x10026b738		17ffffde		JMP -34(PC)							
-  conv2d.go:179		0x10026b73c		1e204020		FMOVS F1, F0							
-  conv2d.go:179		0x10026b740		f85f83fd		MOVD -8(RSP), R29						
-  conv2d.go:179		0x10026b744		f84107fe		MOVD.P 16(RSP), R30						
-  conv2d.go:179		0x10026b748		d65f03c0		RET								
-  conv2d.go:173		0x10026b74c		aa1403e0		MOVD R20, R0							
-  conv2d.go:173		0x10026b750		aa1803e1		MOVD R24, R1							
-  conv2d.go:173		0x10026b754		97f86ff3		CALL runtime.panicBounds(SB)					
-  conv2d.go:173		0x10026b758		aa1303e0		MOVD R19, R0							
-  conv2d.go:173		0x10026b75c		aa1703e1		MOVD R23, R1							
-  conv2d.go:173		0x10026b760		97f86ff0		CALL runtime.panicBounds(SB)					
-  conv2d.go:160		0x10026b764		97f76373		CALL runtime.panicdivide(SB)					
-  conv2d.go:148		0x10026b768		97f76372		CALL runtime.panicdivide(SB)					
-  conv2d.go:131		0x10026b76c		97f86fed		CALL runtime.panicBounds(SB)					
-  conv2d.go:130		0x10026b770		97f86fec		CALL runtime.panicBounds(SB)					
-  conv2d.go:129		0x10026b774		97f7636f		CALL runtime.panicdivide(SB)					
-  conv2d.go:128		0x10026b778		97f86fea		CALL runtime.panicBounds(SB)					
-  conv2d.go:127		0x10026b77c		97f86fe9		CALL runtime.panicBounds(SB)					
-  conv2d.go:126		0x10026b780		97f86fe8		CALL runtime.panicBounds(SB)					
-  conv2d.go:126		0x10026b784		d503201f		NOOP								
-  conv2d.go:121		0x10026b788		a90507e0		STP (R0, R1), 80(RSP)						
-  conv2d.go:121		0x10026b78c		a9060fe2		STP (R2, R3), 96(RSP)						
-  conv2d.go:121		0x10026b790		a90717e4		STP (R4, R5), 112(RSP)						
-  conv2d.go:121		0x10026b794		aa1e03e3		MOVD R30, R3							
-  conv2d.go:121		0x10026b798		97f8679e		CALL runtime.morestack_noctxt.abi0(SB)				
-  conv2d.go:121		0x10026b79c		a94507e0		LDP 80(RSP), (R0, R1)						
-  conv2d.go:121		0x10026b7a0		a9460fe2		LDP 96(RSP), (R2, R3)						
-  conv2d.go:121		0x10026b7a4		a94717e4		LDP 112(RSP), (R4, R5)						
-  conv2d.go:121		0x10026b7a8		17ffff6e		JMP github.com/itsmontoya/neuralnetwork/tensor.conv2DValue(SB)	
-  conv2d.go:121		0x10026b7ac		00000000		?								
+  conv2d.go:121		0x10026b560		f9400b90		MOVD 16(R28), R16
+  conv2d.go:121		0x10026b564		eb3063ff		CMP R16, RSP
+  conv2d.go:121		0x10026b568		54001109		BLS 136(PC)
+  conv2d.go:121		0x10026b56c		f81f0ffe		MOVD.W R30, -16(RSP)
+  conv2d.go:121		0x10026b570		f81f83fd		MOVD R29, -8(RSP)
+  conv2d.go:121		0x10026b574		d10023fd		SUB $8, RSP, R29
+  conv2d.go:126		0x10026b578		a9409c26		LDP 8(R1), (R6, R7)
+  conv2d.go:126		0x10026b57c		f10004ff		CMP $1, R7
+  conv2d.go:126		0x10026b580		54001009		BLS 128(PC)
+  conv2d.go:126		0x10026b584		a940a4c8		LDP 8(R6), (R8, R9)
+  conv2d.go:127		0x10026b588		f10008ff		CMP $2, R7
+  conv2d.go:127		0x10026b58c		54000f89		BLS 124(PC)
+  conv2d.go:128		0x10026b590		f1000cff		CMP $3, R7
+  conv2d.go:128		0x10026b594		54000f29		BLS 121(PC)
+  conv2d.go:129		0x10026b598		f9402fe7		MOVD 88(RSP), R7
+  conv2d.go:129		0x10026b59c		b4000ec7		CBZ R7, 118(PC)
+  conv2d.go:129		0x10026b5a0		f94000ca		MOVD (R6), R10
+  conv2d.go:129		0x10026b5a4		9ac70d47		SDIV R7, R10, R7
+  conv2d.go:129		0x10026b5a8		b4000e67		CBZ R7, 115(PC)
+  conv2d.go:130		0x10026b5ac		a940ac0a		LDP 8(R0), (R10, R11)
+  conv2d.go:129		0x10026b5b0		9ac70c67		SDIV R7, R3, R7
+  conv2d.go:130		0x10026b5b4		f100097f		CMP $2, R11
+  conv2d.go:130		0x10026b5b8		54000dc9		BLS 110(PC)
+  conv2d.go:130		0x10026b5bc		a941354c		LDP 16(R10), (R12, R13)
+  conv2d.go:131		0x10026b5c0		f1000d7f		CMP $3, R11
+  conv2d.go:131		0x10026b5c4		54000d49		BLS 106(PC)
+  conv2d.go:128		0x10026b5c8		f9400cc6		MOVD 24(R6), R6
+  conv2d.go:134		0x10026b5cc		f940054a		MOVD 8(R10), R10
+  conv2d.go:134		0x10026b5d0		9b027d42		MUL R2, R10, R2
+  conv2d.go:136		0x10026b5d4		a941afea		LDP 24(RSP), (R10, R11)
+  conv2d.go:136		0x10026b5d8		9b047d44		MUL R4, R10, R4
+  conv2d.go:137		0x10026b5dc		9b057d65		MUL R5, R11, R5
+  conv2d.go:137		0x10026b5e0		f94023ea		MOVD 64(RSP), R10
+  conv2d.go:138		0x10026b5e4		a9433beb		LDP 48(RSP), (R11, R14)
+  conv2d.go:132		0x10026b5e8		9b0c7daf		MUL R12, R13, R15
+  conv2d.go:133		0x10026b5ec		9b067d30		MUL R6, R9, R16
+  conv2d.go:134		0x10026b5f0		9b070902		MADD R7, R2, R8, R2
+  conv2d.go:136		0x10026b5f4		cb0e0084		SUB R14, R4, R4
+  conv2d.go:137		0x10026b5f8		cb0a00a7		SUB R10, R5, R7
+  conv2d.go:143		0x10026b5fc		b400048c		CBZ R12, 36(PC)
+  conv2d.go:143		0x10026b600		b400046d		CBZ R13, 35(PC)
+  conv2d.go:143		0x10026b604		eb0701bf		CMP R7, R13
+  conv2d.go:143		0x10026b608		5400042d		BLE 33(PC)
+  conv2d.go:147		0x10026b60c		b6f800e7		TBZ $63, R7, 7(PC)
+  conv2d.go:148		0x10026b610		cb050145		SUB R5, R10, R5
+  conv2d.go:148		0x10026b614		b4000aab		CBZ R11, 85(PC)
+  conv2d.go:148		0x10026b618		d10004a5		SUB $1, R5, R5
+  conv2d.go:148		0x10026b61c		9acb0ca5		SDIV R11, R5, R5
+  conv2d.go:148		0x10026b620		910004a5		ADD $1, R5, R5
+  conv2d.go:148		0x10026b624		14000002		JMP 2(PC)
+  conv2d.go:151		0x10026b628		aa1f03e5		MOVD ZR, R5
+  conv2d.go:151		0x10026b62c		eb0600bf		CMP R6, R5
+  conv2d.go:151		0x10026b630		5400026a		BGE 19(PC)
+  conv2d.go:155		0x10026b634		9b051d67		MADD R5, R7, R11, R7
+  conv2d.go:156		0x10026b638		eb0701bf		CMP R7, R13
+  conv2d.go:156		0x10026b63c		5400018d		BLE 12(PC)
+  conv2d.go:160		0x10026b640		cb0701aa		SUB R7, R13, R10
+  conv2d.go:160		0x10026b644		b400090b		CBZ R11, 72(PC)
+  conv2d.go:160		0x10026b648		d100054a		SUB $1, R10, R10
+  conv2d.go:160		0x10026b64c		9acb0d4a		SDIV R11, R10, R10
+  conv2d.go:160		0x10026b650		8b0a00aa		ADD R10, R5, R10
+  conv2d.go:160		0x10026b654		9100054e		ADD $1, R10, R14
+  conv2d.go:160		0x10026b658		eb0e00df		CMP R14, R6
+  conv2d.go:161		0x10026b65c		9a8ad4ca		CSINC LE, R6, R10, R10
+  conv2d.go:160		0x10026b660		aa1f03ee		MOVD ZR, R14
+  conv2d.go:160		0x10026b664		1e2703e1		FMOVS ZR, F1
+  conv2d.go:160		0x10026b668		1400000e		JMP 14(PC)
+  conv2d.go:157		0x10026b66c		1e2703e0		FMOVS ZR, F0
+  conv2d.go:157		0x10026b670		f85f83fd		MOVD -8(RSP), R29
+  conv2d.go:157		0x10026b674		f84107fe		MOVD.P 16(RSP), R30
+  conv2d.go:157		0x10026b678		d65f03c0		RET
+  conv2d.go:152		0x10026b67c		1e2703e0		FMOVS ZR, F0
+  conv2d.go:152		0x10026b680		f85f83fd		MOVD -8(RSP), R29
+  conv2d.go:152		0x10026b684		f84107fe		MOVD.P 16(RSP), R30
+  conv2d.go:152		0x10026b688		d65f03c0		RET
+  conv2d.go:144		0x10026b68c		1e2703e0		FMOVS ZR, F0
+  conv2d.go:144		0x10026b690		f85f83fd		MOVD -8(RSP), R29
+  conv2d.go:144		0x10026b694		f84107fe		MOVD.P 16(RSP), R30
+  conv2d.go:144		0x10026b698		d65f03c0		RET
+  conv2d.go:161		0x10026b69c		910005ce		ADD $1, R14, R14
+  conv2d.go:161		0x10026b6a0		eb0801df		CMP R8, R14
+  conv2d.go:161		0x10026b6a4		540004ca		BGE 38(PC)
+  conv2d.go:162		0x10026b6a8		aa1f03f1		MOVD ZR, R17
+  conv2d.go:162		0x10026b6ac		14000002		JMP 2(PC)
+  conv2d.go:162		0x10026b6b0		91000631		ADD $1, R17, R17
+  conv2d.go:162		0x10026b6b4		eb09023f		CMP R9, R17
+  conv2d.go:162		0x10026b6b8		54ffff2a		BGE -7(PC)
+  conv2d.go:165		0x10026b6bc		f94017f3		MOVD 40(RSP), R19
+  conv2d.go:165		0x10026b6c0		9b131233		MADD R19, R4, R17, R19
+  conv2d.go:166		0x10026b6c4		b7ffff73		TBNZ $63, R19, -5(PC)
+  conv2d.go:166		0x10026b6c8		eb13019f		CMP R19, R12
+  conv2d.go:166		0x10026b6cc		54ffff2d		BLE -7(PC)
+  conv2d.go:170		0x10026b6d0		8b0201d4		ADD R2, R14, R20
+  conv2d.go:170		0x10026b6d4		9b137db3		MUL R19, R13, R19
+  conv2d.go:170		0x10026b6d8		9b144df3		MADD R20, R19, R15, R19
+  conv2d.go:171		0x10026b6dc		9b033914		MADD R3, R14, R8, R20
+  conv2d.go:171		0x10026b6e0		9b147e14		MUL R20, R16, R20
+  conv2d.go:171		0x10026b6e4		9b1150d4		MADD R17, R20, R6, R20
+  conv2d.go:170		0x10026b6e8		8b070273		ADD R7, R19, R19
+  conv2d.go:171		0x10026b6ec		8b1400b4		ADD R20, R5, R20
+  conv2d.go:151		0x10026b6f0		aa0503f5		MOVD R5, R21
+  conv2d.go:172		0x10026b6f4		14000006		JMP 6(PC)
+  conv2d.go:173		0x10026b6f8		bc747ae2		FMOVS (R23)(R20<<2), F2
+  conv2d.go:173		0x10026b6fc		1f000441		FMADDS F0, F1, F2, F1
+  conv2d.go:174		0x10026b700		8b0b0273		ADD R11, R19, R19
+  conv2d.go:172		0x10026b704		910004a5		ADD $1, R5, R5
+  conv2d.go:175		0x10026b708		91000694		ADD $1, R20, R20
+  conv2d.go:172		0x10026b70c		eb0a00bf		CMP R10, R5
+  conv2d.go:172		0x10026b710		5400012a		BGE 9(PC)
+  conv2d.go:173		0x10026b714		a9425c16		LDP 32(R0), (R22, R23)
+  conv2d.go:173		0x10026b718		eb17027f		CMP R23, R19
+  conv2d.go:173		0x10026b71c		540001e2		BCS 15(PC)
+  conv2d.go:173		0x10026b720		a9426037		LDP 32(R1), (R23, R24)
+  conv2d.go:173		0x10026b724		bc737ac0		FMOVS (R22)(R19<<2), F0
+  conv2d.go:173		0x10026b728		eb18029f		CMP R24, R20
+  conv2d.go:173		0x10026b72c		54fffe63		BCC -13(PC)
+  conv2d.go:173		0x10026b730		14000007		JMP 7(PC)
+  conv2d.go:171		0x10026b734		aa1503e5		MOVD R21, R5
+  conv2d.go:172		0x10026b738		17ffffde		JMP -34(PC)
+  conv2d.go:179		0x10026b73c		1e204020		FMOVS F1, F0
+  conv2d.go:179		0x10026b740		f85f83fd		MOVD -8(RSP), R29
+  conv2d.go:179		0x10026b744		f84107fe		MOVD.P 16(RSP), R30
+  conv2d.go:179		0x10026b748		d65f03c0		RET
+  conv2d.go:173		0x10026b74c		aa1403e0		MOVD R20, R0
+  conv2d.go:173		0x10026b750		aa1803e1		MOVD R24, R1
+  conv2d.go:173		0x10026b754		97f86ff3		CALL runtime.panicBounds(SB)
+  conv2d.go:173		0x10026b758		aa1303e0		MOVD R19, R0
+  conv2d.go:173		0x10026b75c		aa1703e1		MOVD R23, R1
+  conv2d.go:173		0x10026b760		97f86ff0		CALL runtime.panicBounds(SB)
+  conv2d.go:160		0x10026b764		97f76373		CALL runtime.panicdivide(SB)
+  conv2d.go:148		0x10026b768		97f76372		CALL runtime.panicdivide(SB)
+  conv2d.go:131		0x10026b76c		97f86fed		CALL runtime.panicBounds(SB)
+  conv2d.go:130		0x10026b770		97f86fec		CALL runtime.panicBounds(SB)
+  conv2d.go:129		0x10026b774		97f7636f		CALL runtime.panicdivide(SB)
+  conv2d.go:128		0x10026b778		97f86fea		CALL runtime.panicBounds(SB)
+  conv2d.go:127		0x10026b77c		97f86fe9		CALL runtime.panicBounds(SB)
+  conv2d.go:126		0x10026b780		97f86fe8		CALL runtime.panicBounds(SB)
+  conv2d.go:126		0x10026b784		d503201f		NOOP
+  conv2d.go:121		0x10026b788		a90507e0		STP (R0, R1), 80(RSP)
+  conv2d.go:121		0x10026b78c		a9060fe2		STP (R2, R3), 96(RSP)
+  conv2d.go:121		0x10026b790		a90717e4		STP (R4, R5), 112(RSP)
+  conv2d.go:121		0x10026b794		aa1e03e3		MOVD R30, R3
+  conv2d.go:121		0x10026b798		97f8679e		CALL runtime.morestack_noctxt.abi0(SB)
+  conv2d.go:121		0x10026b79c		a94507e0		LDP 80(RSP), (R0, R1)
+  conv2d.go:121		0x10026b7a0		a9460fe2		LDP 96(RSP), (R2, R3)
+  conv2d.go:121		0x10026b7a4		a94717e4		LDP 112(RSP), (R4, R5)
+  conv2d.go:121		0x10026b7a8		17ffff6e		JMP github.com/itsmontoya/neuralnetwork/tensor.conv2DValue(SB)
+  conv2d.go:121		0x10026b7ac		00000000		?
