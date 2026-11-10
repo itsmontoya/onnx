@@ -34,13 +34,13 @@ normalization helper graphs have no redistribution grant or project license.
 ## Go runtime dependencies
 
 License copies below are byte-identical to the LICENSE in each pinned downloaded
-Go module, verified on 2026-11-08 with `go mod verify`. Module zip/content and
+Go module; neuralnetwork v0.8.0 was rechecked on 2026-11-09. Module zip/content and
 module-file checksums remain in [go.sum](../go.sum). No dependencies, replacements
 or backend changes were introduced for RT-18.
 
 | Module | Version | Primary upstream license | Included text |
 | --- | --- | --- | --- |
-| github.com/itsmontoya/neuralnetwork | v0.7.1-0.20261109154142-a64fa687e269, commit `a64fa687e269c3a1bf3ac345434b46c8ed4a59fc` | [MIT, copyright 2026 Josh Montoya](https://github.com/itsmontoya/neuralnetwork/blob/a64fa687e269c3a1bf3ac345434b46c8ed4a59fc/LICENSE) | [neuralnetwork-LICENSE](licenses/neuralnetwork-LICENSE) |
+| github.com/itsmontoya/neuralnetwork | v0.8.0, commit `743e049ca9e4877de3c33c0969b17119b6f1491d` | [MIT, copyright 2026 Josh Montoya](https://github.com/itsmontoya/neuralnetwork/blob/743e049ca9e4877de3c33c0969b17119b6f1491d/LICENSE) | [neuralnetwork-LICENSE](licenses/neuralnetwork-LICENSE) |
 | google.golang.org/protobuf | v1.36.12 | [BSD 3-Clause, copyright 2018 The Go Authors](https://github.com/protocolbuffers/protobuf-go/blob/v1.36.12/LICENSE) | [protobuf-LICENSE](licenses/protobuf-LICENSE) |
 | github.com/tphakala/simd (indirect) | v1.3.0 | [MIT, copyright 2025 Tomi P. Hakala](https://github.com/tphakala/simd/blob/v1.3.0/LICENSE) | [simd-LICENSE](licenses/simd-LICENSE) |
 | golang.org/x/sys (indirect) | v0.45.0 | [BSD 3-Clause, copyright 2009 The Go Authors](https://cs.opensource.google/go/x/sys/+/v0.45.0:LICENSE) | [x-sys-LICENSE](licenses/x-sys-LICENSE) |
@@ -62,7 +62,7 @@ versions pinned in go.mod.
 
 Recheck with `go mod verify`, `go list -m all` and
 `shasum -a 256 third_party/licenses/*`. To compare a license copy directly, use
-`cmp third_party/licenses/neuralnetwork-LICENSE "$(go env GOMODCACHE)/github.com/itsmontoya/neuralnetwork@v0.7.1-0.20261109154142-a64fa687e269/LICENSE"`
+`cmp third_party/licenses/neuralnetwork-LICENSE "$(go env GOMODCACHE)/github.com/itsmontoya/neuralnetwork@v0.8.0/LICENSE"`
 and the corresponding paths for the other modules. The module graph also retains
 checksums for upstream testing dependencies; that does not make those packages
 runtime imports. Inspect the target build with `go list -deps ./...`.
