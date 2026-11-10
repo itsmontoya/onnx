@@ -1,8 +1,6 @@
 module github.com/itsmontoya/onnx
 
-go 1.26.1
-
-toolchain go1.27.2
+go 1.27.2
 
 require (
 	github.com/itsmontoya/neuralnetwork v0.10.0
