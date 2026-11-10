@@ -1,7 +1,7 @@
 # onnx
 
 A Go-native ONNX inference runtime built on
-[`neuralnetwork` v0.9.0](https://github.com/itsmontoya/neuralnetwork/tree/v0.9.0).
+[`neuralnetwork` v0.10.0](https://github.com/itsmontoya/neuralnetwork/tree/v0.10.0).
 Load an `.onnx` model, bind named immutable tensors, and evaluate named outputs
 on the CPU with `CGO_ENABLED=0`, without Python or native runtime libraries.
 
@@ -37,7 +37,7 @@ The initial clone/module download needs network. Cached builds and tests use
 checked-in models and typed reference values without network, protoc, Python,
 C/C++ inference libraries or an external service. The `purego` tag selects the
 portable backend CPU path. The module has a Go 1.26.1 language baseline and pins
-Go 1.27.2, `neuralnetwork` v0.9.0 in [go.mod](go.mod), and protobuf v1.36.12.
+Go 1.27.2, `neuralnetwork` v0.10.0 in [go.mod](go.mod), and protobuf v1.36.12.
 
 [Getting started](docs/getting-started.md) covers the public APIs, named I/O,
 compatible model authoring/export checks, external weights and reproducible
@@ -48,8 +48,9 @@ The optional [ONNX Runtime comparison tool](tools/compare_runtime/README.md)
 runs a pinned pretrained MNIST model through both runtimes, checks numerical
 and top-1 agreement, and records CPU inference timings. It also accepts other
 compatible local models with named NumPy inputs.
-The [MNIST profiling report](docs/performance/mnist-round2/README.md) records the
-v0.9.0 comparison and allocation measurements.
+The [MNIST profiling report](docs/performance/mnist-round3/README.md) records the
+v0.10.0 comparison and allocation measurements: 28.5% lower inference latency
+than v0.9.0 on the measured Apple M3, with a 7.33× ORT median gap on this model.
 
 ## Runtime contract
 

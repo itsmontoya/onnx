@@ -1,0 +1,55 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkInference/mlp_batch_1/Warm    	   69331	      3451 ns/op	    4528 B/op	      78 allocs/op
+BenchmarkInference/mlp_batch_3/Warm    	   67563	      3572 ns/op	    4712 B/op	      78 allocs/op
+BenchmarkInference/shape_batch_1/Warm  	   37771	      6359 ns/op	   10928 B/op	     138 allocs/op
+BenchmarkInference/shape_batch_3/Warm  	   37909	      6341 ns/op	   11320 B/op	     138 allocs/op
+BenchmarkInference/cnn_batch_1/Warm    	   38341	      6307 ns/op	    8200 B/op	     116 allocs/op
+BenchmarkInference/cnn_batch_3/Warm    	   32907	      7340 ns/op	    9256 B/op	     116 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkInference/mlp_batch_1/Warm    	   70842	      3462 ns/op	    4528 B/op	      78 allocs/op
+BenchmarkInference/mlp_batch_3/Warm    	   68179	      3569 ns/op	    4712 B/op	      78 allocs/op
+BenchmarkInference/shape_batch_1/Warm  	   37539	      6453 ns/op	   10928 B/op	     138 allocs/op
+BenchmarkInference/shape_batch_3/Warm  	   34243	      6948 ns/op	   11320 B/op	     138 allocs/op
+BenchmarkInference/cnn_batch_1/Warm    	   38083	      6390 ns/op	    8200 B/op	     116 allocs/op
+BenchmarkInference/cnn_batch_3/Warm    	   32182	      7392 ns/op	    9256 B/op	     116 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkInference/mlp_batch_1/Warm    	   70056	      3436 ns/op	    4528 B/op	      78 allocs/op
+BenchmarkInference/mlp_batch_3/Warm    	   66724	      3585 ns/op	    4712 B/op	      78 allocs/op
+BenchmarkInference/shape_batch_1/Warm  	   38132	      6361 ns/op	   10928 B/op	     138 allocs/op
+BenchmarkInference/shape_batch_3/Warm  	   36739	      6501 ns/op	   11320 B/op	     138 allocs/op
+BenchmarkInference/cnn_batch_1/Warm    	   37494	      6392 ns/op	    8200 B/op	     116 allocs/op
+BenchmarkInference/cnn_batch_3/Warm    	   32079	      7445 ns/op	    9256 B/op	     116 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkInference/mlp_batch_1/Warm    	   69582	      3473 ns/op	    4528 B/op	      78 allocs/op
+BenchmarkInference/mlp_batch_3/Warm    	   66414	      3611 ns/op	    4712 B/op	      78 allocs/op
+BenchmarkInference/shape_batch_1/Warm  	   37230	      6491 ns/op	   10928 B/op	     138 allocs/op
+BenchmarkInference/shape_batch_3/Warm  	   36564	      6521 ns/op	   11320 B/op	     138 allocs/op
+BenchmarkInference/cnn_batch_1/Warm    	   38242	      6342 ns/op	    8200 B/op	     116 allocs/op
+BenchmarkInference/cnn_batch_3/Warm    	   32250	      7456 ns/op	    9256 B/op	     116 allocs/op
+PASS
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkInference/mlp_batch_1/Warm    	   69742	      3436 ns/op	    4528 B/op	      78 allocs/op
+BenchmarkInference/mlp_batch_3/Warm    	   67053	      3591 ns/op	    4712 B/op	      78 allocs/op
+BenchmarkInference/shape_batch_1/Warm  	   36792	      6456 ns/op	   10928 B/op	     138 allocs/op
+BenchmarkInference/shape_batch_3/Warm  	   36661	      6565 ns/op	   11320 B/op	     138 allocs/op
+BenchmarkInference/cnn_batch_1/Warm    	   37659	      6391 ns/op	    8200 B/op	     116 allocs/op
+BenchmarkInference/cnn_batch_3/Warm    	   32236	      7450 ns/op	    9256 B/op	     116 allocs/op
+PASS

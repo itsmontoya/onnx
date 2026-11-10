@@ -1,0 +1,113 @@
+package onnx
+
+import (
+	"context"
+	"fmt"
+	"testing"
+
+	"github.com/itsmontoya/neuralnetwork/tensor"
+	"github.com/itsmontoya/onnx/internal/operators"
+)
+
+// BenchmarkMNISTNodes isolates kernels using the benchmark's real intermediate tensors.
+// Copy this file to round3_probe_test.go in the repository root to run it.
+func BenchmarkMNISTNodes(b *testing.B) {
+	var (
+		ctx     = context.Background()
+		model   *Model
+		session *Session
+		input   *Tensor
+		run     *evaluation
+		err     error
+	)
+
+	if model, err = LoadFile(ctx, ".cache/compare-runtime/mnist-ir8-opset13.onnx", Options{}); err != nil {
+		b.Fatal(err)
+	}
+
+	b.Cleanup(func() {
+		if closeErr := model.Close(); closeErr != nil {
+			b.Error(closeErr)
+		}
+	})
+	if session, err = model.NewSession(); err != nil {
+		b.Fatal(err)
+	}
+
+	b.Cleanup(func() {
+		if closeErr := session.Close(); closeErr != nil {
+			b.Error(closeErr)
+		}
+	})
+	values := make([]float32, 28*28)
+	for index := range values {
+		values[index] = float32(index%256) / 255
+	}
+	if input, err = NewFloat32([]int64{1, 1, 28, 28}, values); err != nil {
+		b.Fatal(err)
+	}
+
+	if run, err = newEvaluation(ctx, session.plan); err != nil {
+		b.Fatal(err)
+	}
+
+	if err = run.bind(map[string]*Tensor{"Input3": input}); err != nil {
+		b.Fatal(err)
+	}
+
+	for _, step := range session.plan.steps {
+		if err = run.execute(step); err != nil {
+			b.Fatal(err)
+		}
+
+		inputs := make([]*tensor.Tensor, len(step.Inputs))
+		for slot, valueIndex := range step.Inputs {
+			if valueIndex >= 0 {
+				inputs[slot] = run.storage.values[valueIndex]
+			}
+		}
+		output := run.storage.values[step.Outputs[0]]
+		b.Run(fmt.Sprintf("%02d_%s", step.Index, step.Operator), func(node *testing.B) {
+			var (
+				cnn       *cnnCall
+				numerical *numericalCall
+				nodeErr   error
+			)
+
+			if operators.IsCNNOperator(step.Operator) {
+				if cnn, nodeErr = newCNNCall(step, inputs, session.plan.limits); nodeErr != nil {
+					node.Fatal(nodeErr)
+				}
+
+				if step.Operator == "Conv" {
+					node.Logf("input=%v weights=%v output=%v config=%+v", inputs[0].Shape(), inputs[1].Shape(), output.Shape(), cnn.conv)
+				}
+
+				node.ReportAllocs()
+				node.ResetTimer()
+				for node.Loop() {
+					if _, nodeErr = cnn.run(ctx, output); nodeErr != nil {
+						node.Fatal(nodeErr)
+					}
+				}
+				return
+			}
+
+			if operators.IsShapeOperator(step.Operator) {
+				node.Skip("shape operator excluded from isolated numerical kernel measurements")
+			}
+
+			if numerical, nodeErr = newNumericalCall(step, inputs, session.plan.limits); nodeErr != nil {
+				node.Fatal(nodeErr)
+			}
+
+			node.ReportAllocs()
+			node.ResetTimer()
+			for node.Loop() {
+				if _, nodeErr = numerical.run(ctx, output); nodeErr != nil {
+					node.Fatal(nodeErr)
+				}
+			}
+		})
+	}
+}

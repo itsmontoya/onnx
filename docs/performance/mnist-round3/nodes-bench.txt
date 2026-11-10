@@ -1,0 +1,75 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNISTNodes/00_Conv         	    7264	     62454 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/00_Conv
+    round3_probe_test.go:83: input=[1 1 28 28] weights=[8 1 5 5] output=[1 8 28 28] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/00_Conv         	    7832	     61939 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/00_Conv
+    round3_probe_test.go:83: input=[1 1 28 28] weights=[8 1 5 5] output=[1 8 28 28] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/00_Conv         	    7399	     59480 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/00_Conv
+    round3_probe_test.go:83: input=[1 1 28 28] weights=[8 1 5 5] output=[1 8 28 28] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/00_Conv         	    8400	     59435 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/00_Conv
+    round3_probe_test.go:83: input=[1 1 28 28] weights=[8 1 5 5] output=[1 8 28 28] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/00_Conv         	    8284	     59095 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/00_Conv
+    round3_probe_test.go:83: input=[1 1 28 28] weights=[8 1 5 5] output=[1 8 28 28] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/01_Add          	   27219	     17613 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/01_Add          	   27088	     17693 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/01_Add          	   27378	     17547 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/01_Add          	   27001	     17697 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/01_Add          	   27034	     17920 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/02_Relu         	   40663	     11166 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu         	   44611	     10874 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu         	   43278	     11070 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu         	   44432	     10800 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu         	   44743	     10769 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/03_MaxPool      	   29704	     15887 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/03_MaxPool      	   30391	     15777 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/03_MaxPool      	   29931	     15909 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/03_MaxPool      	   30204	     15891 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/03_MaxPool      	   30524	     15812 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/04_Conv         	    1621	    284287 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_Conv
+    round3_probe_test.go:83: input=[1 8 14 14] weights=[16 8 5 5] output=[1 16 14 14] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/04_Conv         	    1735	    284520 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_Conv
+    round3_probe_test.go:83: input=[1 8 14 14] weights=[16 8 5 5] output=[1 16 14 14] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/04_Conv         	    1671	    283288 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_Conv
+    round3_probe_test.go:83: input=[1 8 14 14] weights=[16 8 5 5] output=[1 16 14 14] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/04_Conv         	    1671	    300420 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_Conv
+    round3_probe_test.go:83: input=[1 8 14 14] weights=[16 8 5 5] output=[1 16 14 14] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/04_Conv         	    1425	    304941 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_Conv
+    round3_probe_test.go:83: input=[1 8 14 14] weights=[16 8 5 5] output=[1 16 14 14] config={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1}
+BenchmarkMNISTNodes/05_Add          	   55936	      8802 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/05_Add          	   55364	      8569 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/05_Add          	   56473	      8531 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/05_Add          	   56655	      8541 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/05_Add          	   56482	      8507 ns/op	     216 B/op	       7 allocs/op
+BenchmarkMNISTNodes/06_Relu         	   86048	      5591 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu         	   88507	      5578 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu         	   86500	      6448 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu         	   83457	      6449 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu         	   85626	      5759 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/07_MaxPool      	  100908	      4740 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/07_MaxPool      	  100899	      4735 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/07_MaxPool      	  103801	      4711 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/07_MaxPool      	  100510	      4745 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/07_MaxPool      	  103556	      4694 ns/op	      32 B/op	       1 allocs/op
+BenchmarkMNISTNodes/10_MatMul       	  288266	      1687 ns/op	     144 B/op	       3 allocs/op
+BenchmarkMNISTNodes/10_MatMul       	  255628	      1723 ns/op	     144 B/op	       3 allocs/op
+BenchmarkMNISTNodes/10_MatMul       	  278781	      1703 ns/op	     144 B/op	       3 allocs/op
+BenchmarkMNISTNodes/10_MatMul       	  279129	      1736 ns/op	     144 B/op	       3 allocs/op
+BenchmarkMNISTNodes/10_MatMul       	  282331	      1774 ns/op	     144 B/op	       3 allocs/op
+BenchmarkMNISTNodes/11_Add          	 2340711	       204.2 ns/op	     352 B/op	       8 allocs/op
+BenchmarkMNISTNodes/11_Add          	 2347296	       204.2 ns/op	     352 B/op	       8 allocs/op
+BenchmarkMNISTNodes/11_Add          	 2370535	       204.7 ns/op	     352 B/op	       8 allocs/op
+BenchmarkMNISTNodes/11_Add          	 2327130	       205.0 ns/op	     352 B/op	       8 allocs/op
+BenchmarkMNISTNodes/11_Add          	 2357911	       204.7 ns/op	     352 B/op	       8 allocs/op
+PASS
