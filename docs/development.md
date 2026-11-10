@@ -2,7 +2,7 @@
 
 RT-02 establishes module `github.com/itsmontoya/onnx`, package `onnx`, with a
 Go 1.26.1 language baseline and the selected Go 1.27.2 toolchain. The pinned
-`neuralnetwork` v0.9.0 module requires Go 1.26.1; its SIMD and `x/sys`
+`neuralnetwork` v0.10.0 module requires Go 1.26.1; its SIMD and `x/sys`
 dependencies require Go 1.25.0. The pure-Go protobuf dependency is
 `google.golang.org/protobuf v1.36.12` (Go 1.23). No local path replacements
 or workspace are required.
