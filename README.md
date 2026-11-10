@@ -30,7 +30,6 @@ CGO_ENABLED=0 go run ./examples/external -batch 3
 CGO_ENABLED=0 go run ./examples/normalization
 CGO_ENABLED=0 go test ./...
 CGO_ENABLED=0 go test -tags=purego ./...
-go run ./tools/capabilitiesgen
 ```
 
 The initial clone/module download needs network. Cached builds and tests use
@@ -40,23 +39,23 @@ portable backend CPU path. The module requires
 Go 1.27.2, `neuralnetwork` v0.10.2 in [go.mod](go.mod), and protobuf v1.36.12.
 
 Detailed guides and historical reports below link to their last tracked
-versions; the `docs/` directory is no longer included in this repository.
+versions; the `docs/` and `tools/` directories are no longer included in this repository.
 
 [Getting started](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/getting-started.md) covers the public APIs, named I/O,
 compatible model authoring/export checks, external weights and reproducible
 failure cases. [Development](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/development.md) gives full verification and
 optional regeneration commands.
 
-The optional [ONNX Runtime comparison tool](tools/compare_runtime/README.md)
+The archived [ONNX Runtime comparison tool](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md)
 runs a pinned pretrained MNIST model through both runtimes, checks numerical
 and top-1 agreement, and records CPU inference timings. It also accepts other
 compatible local models with named NumPy inputs.
 With `neuralnetwork` v0.10.2, seven alternating benchmark pairs on Apple M3
 measure 17.2% lower MNIST inference latency than v0.10.1, with unchanged
-allocations. The [comparison results](tools/compare_runtime/README.md) record a
+allocations. The [comparison results](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md) record a
 fresh 3.77× median gap versus ORT and unchanged numerical agreement. The
-[fifth-pass investigation](tools/compare_runtime/pass5/README.md) and
-[v0.10.2 validation](tools/compare_runtime/pass5/v0.10.2/README.md) retain the
+[fifth-pass investigation](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/pass5/README.md) and
+[v0.10.2 validation](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/pass5/v0.10.2/README.md) retain the
 profiling evidence and raw before/after measurements.
 
 ## Runtime contract
