@@ -171,6 +171,35 @@ and race suites, bounded fuzzing and comparison-policy tests pass. The full
 comparison is `.cache/compare-runtime/v0.10.1-report.json`; local raw validation
 and benchmark logs are in `/private/tmp/onnx-v0.10.1-integration/`.
 
+With published **neuralnetwork v0.10.2**, commit
+`531e7f835c9e4bd2ac3122439231b6d0bace72b8`, the unchanged driver on 2026-11-10
+measures Go at **161.81 / 244.64 µs** median / p95 and ORT at
+**42.96 / 48.79 µs**, a **3.77×** median gap. All 19 numerical and top-1 cases
+pass, with maximum absolute error unchanged at `1.9073486328125e-5`. Model/input
+hashes and every Go output bit match the fresh v0.10.1 baseline.
+
+Seven alternating precompiled benchmark pairs, reversing order each repetition,
+measure **200.790 → 166.291 µs/op**: **17.2% lower latency / 1.21× faster**,
+with unchanged **179440 B/op / 174 allocations**. Each sample runs for 700 ms
+using the same single-thread and build settings as the preceding comparison.
+Baseline samples span 199.140–202.997 µs; v0.10.2 samples span
+162.629–174.519 µs. The backend's new ARM64 residual-column assembly retains
+scalar fused reductions while removing repeated inner indexing and bounds
+checks; it is separate from the existing SIMD interior tile. Portable builds
+retain the existing fallback. This dependency upgrade changes no ONNX APIs,
+operator coverage, comparison cases or numerical tolerances.
+
+The first prepared convolution improves from 18.322 to 16.166 µs, and the
+second from 100.540 to 67.408 µs. Five alternating samples of each small warm
+fixture show median decreases of 0.4–2.4%, with unchanged allocations; those
+small differences do not establish a general performance benefit. The 131
+archived probes remain bit-identical across v0.10.1, v0.10.2 and v0.10.2
+`purego`. Full default, cgo-disabled, `purego` and race suites, bounded fuzzing,
+module/build checks and comparison-policy tests pass. The
+[integration report](pass5/v0.10.2/README.md) retains raw measurements, profiles,
+validation logs and module identity. The full comparison is also cached at
+`.cache/compare-runtime/v0.10.2-report.json`.
+
 The optional `BenchmarkMNISTNodes` isolates prepared operators and ReLU
 correction costs using real intermediate tensors. Its `04_ConvRotatingWorkingSet`
 subbenchmarks rotate independent tensor sets to diagnose cache sensitivity;

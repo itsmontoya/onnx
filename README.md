@@ -1,7 +1,7 @@
 # onnx
 
 A Go-native ONNX inference runtime built on
-[`neuralnetwork` v0.10.1](https://github.com/itsmontoya/neuralnetwork/tree/v0.10.1).
+[`neuralnetwork` v0.10.2](https://github.com/itsmontoya/neuralnetwork/tree/v0.10.2).
 Load an `.onnx` model, bind named immutable tensors, and evaluate named outputs
 on the CPU with `CGO_ENABLED=0`, without Python or native runtime libraries.
 
@@ -37,7 +37,7 @@ The initial clone/module download needs network. Cached builds and tests use
 checked-in models and typed reference values without network, protoc, Python,
 C/C++ inference libraries or an external service. The `purego` tag selects the
 portable backend CPU path. The module requires
-Go 1.27.2, `neuralnetwork` v0.10.1 in [go.mod](go.mod), and protobuf v1.36.12.
+Go 1.27.2, `neuralnetwork` v0.10.2 in [go.mod](go.mod), and protobuf v1.36.12.
 
 Detailed guides and historical reports below link to their last tracked
 versions; the `docs/` directory is no longer included in this repository.
@@ -51,10 +51,13 @@ The optional [ONNX Runtime comparison tool](tools/compare_runtime/README.md)
 runs a pinned pretrained MNIST model through both runtimes, checks numerical
 and top-1 agreement, and records CPU inference timings. It also accepts other
 compatible local models with named NumPy inputs.
-With `neuralnetwork` v0.10.1, seven alternating benchmark pairs on Apple M3
-measure 35.7% lower MNIST inference latency than v0.10.0, with unchanged
+With `neuralnetwork` v0.10.2, seven alternating benchmark pairs on Apple M3
+measure 17.2% lower MNIST inference latency than v0.10.1, with unchanged
 allocations. The [comparison results](tools/compare_runtime/README.md) record a
-fresh 4.64× median gap versus ORT and unchanged numerical agreement.
+fresh 3.77× median gap versus ORT and unchanged numerical agreement. The
+[fifth-pass investigation](tools/compare_runtime/pass5/README.md) and
+[v0.10.2 validation](tools/compare_runtime/pass5/v0.10.2/README.md) retain the
+profiling evidence and raw before/after measurements.
 
 ## Runtime contract
 

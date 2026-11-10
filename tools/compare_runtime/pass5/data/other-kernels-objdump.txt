@@ -1,303 +1,303 @@
 TEXT github.com/itsmontoya/neuralnetwork/tensor.broadcastFloat32Into(SB) /Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.1/tensor/arithmetic.go
-  arithmetic.go:90	0x1002686d0		f9400b90		MOVD 16(R28), R16							
-  arithmetic.go:90	0x1002686d4		d100c3f1		SUB $48, RSP, R17							
-  arithmetic.go:90	0x1002686d8		eb10023f		CMP R16, R17								
-  arithmetic.go:90	0x1002686dc		54001369		BLS 155(PC)								
-  arithmetic.go:90	0x1002686e0		f8150ffe		MOVD.W R30, -176(RSP)							
-  arithmetic.go:90	0x1002686e4		f81f83fd		MOVD R29, -8(RSP)							
-  arithmetic.go:90	0x1002686e8		d10023fd		SUB $8, RSP, R29							
-  arithmetic.go:97	0x1002686ec		f9005fe0		MOVD R0, 184(RSP)							
-  arithmetic.go:97	0x1002686f0		f90063e1		MOVD R1, 192(RSP)							
-  arithmetic.go:97	0x1002686f4		f90067e2		MOVD R2, 200(RSP)							
-  arithmetic.go:97	0x1002686f8		f9006be3		MOVD R3, 208(RSP)							
-  arithmetic.go:97	0x1002686fc		a9408406		LDP 8(R0), (R6, R1)							
-  arithmetic.go:97	0x100268700		f9400c07		MOVD 24(R0), R7								
-  arithmetic.go:97	0x100268704		a9409043		LDP 8(R2), (R3, R4)							
-  arithmetic.go:97	0x100268708		f9400c45		MOVD 24(R2), R5								
-  arithmetic.go:97	0x10026870c		aa0603e0		MOVD R6, R0								
-  arithmetic.go:97	0x100268710		aa0703e2		MOVD R7, R2								
-  arithmetic.go:97	0x100268714		94000097		CALL github.com/itsmontoya/neuralnetwork/tensor.broadcastStrides(SB)	
-  arithmetic.go:97	0x100268718		b5000583		CBNZ R3, 44(PC)								
-  arithmetic.go:97	0x10026871c		f90027e1		MOVD R1, 72(RSP)							
-  arithmetic.go:97	0x100268720		f9004fe0		MOVD R0, 152(RSP)							
-  arithmetic.go:101	0x100268724		f94063e6		MOVD 192(RSP), R6							
-  arithmetic.go:101	0x100268728		a94084c0		LDP 8(R6), (R0, R1)							
-  arithmetic.go:101	0x10026872c		f9400cc2		MOVD 24(R6), R2								
-  arithmetic.go:101	0x100268730		f94067e6		MOVD 200(RSP), R6							
-  arithmetic.go:101	0x100268734		a94090c3		LDP 8(R6), (R3, R4)							
-  arithmetic.go:101	0x100268738		f9400cc5		MOVD 24(R6), R5								
-  arithmetic.go:101	0x10026873c		9400008d		CALL github.com/itsmontoya/neuralnetwork/tensor.broadcastStrides(SB)	
-  arithmetic.go:101	0x100268740		b50003a3		CBNZ R3, 29(PC)								
-  arithmetic.go:101	0x100268744		f9004be0		MOVD R0, 144(RSP)							
-  arithmetic.go:101	0x100268748		f9001fe1		MOVD R1, 56(RSP)							
-  arithmetic.go:105	0x10026874c		f94067e3		MOVD 200(RSP), R3							
-  arithmetic.go:105	0x100268750		f9400862		MOVD 16(R3), R2								
-  arithmetic.go:105	0x100268754		f90037e2		MOVD R2, 104(RSP)							
-  arithmetic.go:105	0x100268758		f100105f		CMP $4, R2								
-  arithmetic.go:105	0x10026875c		540000c8		BHI 6(PC)								
-  arithmetic.go:105	0x100268760		9101c3e4		ADD $112, RSP, R4							
-  arithmetic.go:105	0x100268764		a9007c9f		STP (ZR, ZR), (R4)							
-  arithmetic.go:105	0x100268768		a9017c9f		STP (ZR, ZR), 16(R4)							
-  arithmetic.go:105	0x10026876c		9101c3e4		ADD $112, RSP, R4							
-  arithmetic.go:105	0x100268770		1400000a		JMP 10(PC)								
-  arithmetic.go:105	0x100268774		f0001cc0		ADRP 3780608(PC), R0							
-  arithmetic.go:105	0x100268778		9137c000		ADD $3568, R0, R0							
-  arithmetic.go:105	0x10026877c		aa0203e1		MOVD R2, R1								
-  arithmetic.go:105	0x100268780		97f86780		CALL runtime.makeslice(SB)						
-  arithmetic.go:120	0x100268784		f9401fe1		MOVD 56(RSP), R1							
-  arithmetic.go:110	0x100268788		f94037e2		MOVD 104(RSP), R2							
-  arithmetic.go:106	0x10026878c		f94067e3		MOVD 200(RSP), R3							
-  arithmetic.go:106	0x100268790		aa0003e4		MOVD R0, R4								
-  arithmetic.go:120	0x100268794		f9404be0		MOVD 144(RSP), R0							
-  arithmetic.go:106	0x100268798		f90053e4		MOVD R4, 160(RSP)							
-  arithmetic.go:106	0x10026879c		f9401465		MOVD 40(R3), R5								
-  arithmetic.go:106	0x1002687a0		f90033e5		MOVD R5, 96(RSP)							
-  arithmetic.go:106	0x1002687a4		aa1f03e6		MOVD ZR, R6								
-  arithmetic.go:106	0x1002687a8		aa1f03e7		MOVD ZR, R7								
-  arithmetic.go:106	0x1002687ac		aa1f03e8		MOVD ZR, R8								
-  arithmetic.go:106	0x1002687b0		14000012		JMP 18(PC)								
-  arithmetic.go:102	0x1002687b4		aa0303e0		MOVD R3, R0								
-  arithmetic.go:102	0x1002687b8		aa0403e1		MOVD R4, R1								
-  arithmetic.go:102	0x1002687bc		f85f83fd		MOVD -8(RSP), R29							
-  arithmetic.go:102	0x1002687c0		f84b07fe		MOVD.P 176(RSP), R30							
-  arithmetic.go:102	0x1002687c4		d65f03c0		RET									
-  arithmetic.go:98	0x1002687c8		aa0303e0		MOVD R3, R0								
-  arithmetic.go:98	0x1002687cc		aa0403e1		MOVD R4, R1								
-  arithmetic.go:98	0x1002687d0		f85f83fd		MOVD -8(RSP), R29							
-  arithmetic.go:98	0x1002687d4		f84b07fe		MOVD.P 176(RSP), R30							
-  arithmetic.go:98	0x1002687d8		d65f03c0		RET									
-  arithmetic.go:106	0x1002687dc		9100046c		ADD $1, R3, R12								
-  arithmetic.go:120	0x1002687e0		aa0b03e0		MOVD R11, R0								
-  arithmetic.go:120	0x1002687e4		aa0a03e1		MOVD R10, R1								
-  arithmetic.go:107	0x1002687e8		f94067e3		MOVD 200(RSP), R3							
-  arithmetic.go:111	0x1002687ec		aa0503e4		MOVD R5, R4								
-  arithmetic.go:106	0x1002687f0		f94033e5		MOVD 96(RSP), R5							
-  arithmetic.go:106	0x1002687f4		aa0c03e6		MOVD R12, R6								
-  arithmetic.go:106	0x1002687f8		eb0500df		CMP R5, R6								
-  arithmetic.go:106	0x1002687fc		5400088a		BGE 68(PC)								
-  arithmetic.go:107	0x100268800		f9405fe9		MOVD 184(RSP), R9							
-  arithmetic.go:107	0x100268804		a9422d2a		LDP 32(R9), (R10, R11)							
-  arithmetic.go:107	0x100268808		eb0b011f		CMP R11, R8								
-  arithmetic.go:107	0x10026880c		540009a2		BCS 77(PC)								
-  arithmetic.go:107	0x100268810		f94063eb		MOVD 192(RSP), R11							
-  arithmetic.go:107	0x100268814		a942356c		LDP 32(R11), (R12, R13)							
-  arithmetic.go:107	0x100268818		bc687940		FMOVS (R10)(R8<<2), F0							
-  arithmetic.go:107	0x10026881c		eb0d00ff		CMP R13, R7								
-  arithmetic.go:107	0x100268820		540008e2		BCS 71(PC)								
-  arithmetic.go:106	0x100268824		f9002fe6		MOVD R6, 88(RSP)							
-  arithmetic.go:106	0x100268828		f90023e7		MOVD R7, 64(RSP)							
-  arithmetic.go:106	0x10026882c		f9002be8		MOVD R8, 80(RSP)							
-  arithmetic.go:107	0x100268830		f9406bfa		MOVD 208(RSP), R26							
-  arithmetic.go:107	0x100268834		f9400340		MOVD (R26), R0								
-  arithmetic.go:107	0x100268838		bc677981		FMOVS (R12)(R7<<2), F1							
-  arithmetic.go:107	0x10026883c		d63f0000		CALL (R0)								
-  arithmetic.go:107	0x100268840		f94067e0		MOVD 200(RSP), R0							
-  arithmetic.go:107	0x100268844		a9420801		LDP 32(R0), (R1, R2)							
-  arithmetic.go:107	0x100268848		f9402fe3		MOVD 88(RSP), R3							
-  arithmetic.go:107	0x10026884c		eb02007f		CMP R2, R3								
-  arithmetic.go:107	0x100268850		54000742		BCS 58(PC)								
-  arithmetic.go:107	0x100268854		bc237820		FMOVS F0, (R1)(R3<<2)							
-  arithmetic.go:110	0x100268858		f94037e2		MOVD 104(RSP), R2							
-  arithmetic.go:110	0x10026885c		d1000444		SUB $1, R2, R4								
-  arithmetic.go:110	0x100268860		f94023e7		MOVD 64(RSP), R7							
-  arithmetic.go:110	0x100268864		f9402be8		MOVD 80(RSP), R8							
-  arithmetic.go:110	0x100268868		f94053e5		MOVD 160(RSP), R5							
-  arithmetic.go:110	0x10026886c		f94027e6		MOVD 72(RSP), R6							
-  arithmetic.go:110	0x100268870		f9404fe9		MOVD 152(RSP), R9							
-  arithmetic.go:110	0x100268874		f9401fea		MOVD 56(RSP), R10							
-  arithmetic.go:110	0x100268878		f9404beb		MOVD 144(RSP), R11							
-  arithmetic.go:110	0x10026887c		14000004		JMP 4(PC)								
-  arithmetic.go:120	0x100268880		f864796d		MOVD (R11)(R4<<3), R13							
-  arithmetic.go:120	0x100268884		9b0d9d87		MSUB R13, R7, R12, R7							
-  arithmetic.go:110	0x100268888		d1000484		SUB $1, R4, R4								
-  arithmetic.go:110	0x10026888c		b7fffa84		TBNZ $63, R4, -44(PC)							
-  arithmetic.go:111	0x100268890		f86478ac		MOVD (R5)(R4<<3), R12							
-  arithmetic.go:111	0x100268894		9100058c		ADD $1, R12, R12							
-  arithmetic.go:111	0x100268898		f82478ac		MOVD R12, (R5)(R4<<3)							
-  arithmetic.go:112	0x10026889c		a940b80d		LDP 8(R0), (R13, R14)							
-  arithmetic.go:112	0x1002688a0		eb0e009f		CMP R14, R4								
-  arithmetic.go:112	0x1002688a4		54000482		BCS 36(PC)								
-  arithmetic.go:112	0x1002688a8		f86479ad		MOVD (R13)(R4<<3), R13							
-  arithmetic.go:112	0x1002688ac		eb0c01bf		CMP R12, R13								
-  arithmetic.go:112	0x1002688b0		540001cc		BGT 14(PC)								
-  arithmetic.go:118	0x1002688b4		f82478bf		MOVD ZR, (R5)(R4<<3)							
-  arithmetic.go:119	0x1002688b8		a940b40c		LDP 8(R0), (R12, R13)							
-  arithmetic.go:119	0x1002688bc		eb0d009f		CMP R13, R4								
-  arithmetic.go:119	0x1002688c0		54000382		BCS 28(PC)								
-  arithmetic.go:119	0x1002688c4		f864798c		MOVD (R12)(R4<<3), R12							
-  arithmetic.go:119	0x1002688c8		eb0400df		CMP R4, R6								
-  arithmetic.go:119	0x1002688cc		54000309		BLS 24(PC)								
-  arithmetic.go:119	0x1002688d0		d100058c		SUB $1, R12, R12							
-  arithmetic.go:119	0x1002688d4		f864792d		MOVD (R9)(R4<<3), R13							
-  arithmetic.go:119	0x1002688d8		9b0da188		MSUB R13, R8, R12, R8							
-  arithmetic.go:120	0x1002688dc		eb04015f		CMP R4, R10								
-  arithmetic.go:120	0x1002688e0		54fffd08		BHI -24(PC)								
-  arithmetic.go:120	0x1002688e4		14000011		JMP 17(PC)								
-  arithmetic.go:113	0x1002688e8		eb0400df		CMP R4, R6								
-  arithmetic.go:113	0x1002688ec		540001c9		BLS 14(PC)								
-  arithmetic.go:113	0x1002688f0		f864792c		MOVD (R9)(R4<<3), R12							
-  arithmetic.go:113	0x1002688f4		8b080188		ADD R8, R12, R8								
-  arithmetic.go:114	0x1002688f8		eb04015f		CMP R4, R10								
-  arithmetic.go:114	0x1002688fc		54000129		BLS 9(PC)								
-  arithmetic.go:114	0x100268900		f8647964		MOVD (R11)(R4<<3), R4							
-  arithmetic.go:114	0x100268904		8b070087		ADD R7, R4, R7								
-  arithmetic.go:115	0x100268908		17ffffb5		JMP -75(PC)								
-  arithmetic.go:123	0x10026890c		aa1f03e0		MOVD ZR, R0								
-  arithmetic.go:123	0x100268910		aa1f03e1		MOVD ZR, R1								
-  arithmetic.go:123	0x100268914		f85f83fd		MOVD -8(RSP), R29							
-  arithmetic.go:123	0x100268918		f84b07fe		MOVD.P 176(RSP), R30							
-  arithmetic.go:123	0x10026891c		d65f03c0		RET									
-  arithmetic.go:114	0x100268920		97f87b80		CALL runtime.panicBounds(SB)						
-  arithmetic.go:113	0x100268924		97f87b7f		CALL runtime.panicBounds(SB)						
-  arithmetic.go:120	0x100268928		97f87b7e		CALL runtime.panicBounds(SB)						
-  arithmetic.go:119	0x10026892c		97f87b7d		CALL runtime.panicBounds(SB)						
-  arithmetic.go:119	0x100268930		97f87b7c		CALL runtime.panicBounds(SB)						
-  arithmetic.go:112	0x100268934		97f87b7b		CALL runtime.panicBounds(SB)						
-  arithmetic.go:107	0x100268938		97f87b7a		CALL runtime.panicBounds(SB)						
-  arithmetic.go:107	0x10026893c		97f87b79		CALL runtime.panicBounds(SB)						
-  arithmetic.go:107	0x100268940		97f87b78		CALL runtime.panicBounds(SB)						
-  arithmetic.go:107	0x100268944		d503201f		NOOP									
-  arithmetic.go:90	0x100268948		a90087e0		STP (R0, R1), 8(RSP)							
-  arithmetic.go:90	0x10026894c		a9018fe2		STP (R2, R3), 24(RSP)							
-  arithmetic.go:90	0x100268950		aa1e03e3		MOVD R30, R3								
-  arithmetic.go:90	0x100268954		97f8732f		CALL runtime.morestack_noctxt.abi0(SB)					
-  arithmetic.go:90	0x100268958		a94087e0		LDP 8(RSP), (R0, R1)							
-  arithmetic.go:90	0x10026895c		a9418fe2		LDP 24(RSP), (R2, R3)							
-  arithmetic.go:90	0x100268960		17ffff5c		JMP github.com/itsmontoya/neuralnetwork/tensor.broadcastFloat32Into(SB)	
-  arithmetic.go:90	0x100268964		00000000		?									
-  arithmetic.go:90	0x100268968		00000000		?									
-  arithmetic.go:90	0x10026896c		00000000		?									
+  arithmetic.go:90	0x1002686d0		f9400b90		MOVD 16(R28), R16
+  arithmetic.go:90	0x1002686d4		d100c3f1		SUB $48, RSP, R17
+  arithmetic.go:90	0x1002686d8		eb10023f		CMP R16, R17
+  arithmetic.go:90	0x1002686dc		54001369		BLS 155(PC)
+  arithmetic.go:90	0x1002686e0		f8150ffe		MOVD.W R30, -176(RSP)
+  arithmetic.go:90	0x1002686e4		f81f83fd		MOVD R29, -8(RSP)
+  arithmetic.go:90	0x1002686e8		d10023fd		SUB $8, RSP, R29
+  arithmetic.go:97	0x1002686ec		f9005fe0		MOVD R0, 184(RSP)
+  arithmetic.go:97	0x1002686f0		f90063e1		MOVD R1, 192(RSP)
+  arithmetic.go:97	0x1002686f4		f90067e2		MOVD R2, 200(RSP)
+  arithmetic.go:97	0x1002686f8		f9006be3		MOVD R3, 208(RSP)
+  arithmetic.go:97	0x1002686fc		a9408406		LDP 8(R0), (R6, R1)
+  arithmetic.go:97	0x100268700		f9400c07		MOVD 24(R0), R7
+  arithmetic.go:97	0x100268704		a9409043		LDP 8(R2), (R3, R4)
+  arithmetic.go:97	0x100268708		f9400c45		MOVD 24(R2), R5
+  arithmetic.go:97	0x10026870c		aa0603e0		MOVD R6, R0
+  arithmetic.go:97	0x100268710		aa0703e2		MOVD R7, R2
+  arithmetic.go:97	0x100268714		94000097		CALL github.com/itsmontoya/neuralnetwork/tensor.broadcastStrides(SB)
+  arithmetic.go:97	0x100268718		b5000583		CBNZ R3, 44(PC)
+  arithmetic.go:97	0x10026871c		f90027e1		MOVD R1, 72(RSP)
+  arithmetic.go:97	0x100268720		f9004fe0		MOVD R0, 152(RSP)
+  arithmetic.go:101	0x100268724		f94063e6		MOVD 192(RSP), R6
+  arithmetic.go:101	0x100268728		a94084c0		LDP 8(R6), (R0, R1)
+  arithmetic.go:101	0x10026872c		f9400cc2		MOVD 24(R6), R2
+  arithmetic.go:101	0x100268730		f94067e6		MOVD 200(RSP), R6
+  arithmetic.go:101	0x100268734		a94090c3		LDP 8(R6), (R3, R4)
+  arithmetic.go:101	0x100268738		f9400cc5		MOVD 24(R6), R5
+  arithmetic.go:101	0x10026873c		9400008d		CALL github.com/itsmontoya/neuralnetwork/tensor.broadcastStrides(SB)
+  arithmetic.go:101	0x100268740		b50003a3		CBNZ R3, 29(PC)
+  arithmetic.go:101	0x100268744		f9004be0		MOVD R0, 144(RSP)
+  arithmetic.go:101	0x100268748		f9001fe1		MOVD R1, 56(RSP)
+  arithmetic.go:105	0x10026874c		f94067e3		MOVD 200(RSP), R3
+  arithmetic.go:105	0x100268750		f9400862		MOVD 16(R3), R2
+  arithmetic.go:105	0x100268754		f90037e2		MOVD R2, 104(RSP)
+  arithmetic.go:105	0x100268758		f100105f		CMP $4, R2
+  arithmetic.go:105	0x10026875c		540000c8		BHI 6(PC)
+  arithmetic.go:105	0x100268760		9101c3e4		ADD $112, RSP, R4
+  arithmetic.go:105	0x100268764		a9007c9f		STP (ZR, ZR), (R4)
+  arithmetic.go:105	0x100268768		a9017c9f		STP (ZR, ZR), 16(R4)
+  arithmetic.go:105	0x10026876c		9101c3e4		ADD $112, RSP, R4
+  arithmetic.go:105	0x100268770		1400000a		JMP 10(PC)
+  arithmetic.go:105	0x100268774		f0001cc0		ADRP 3780608(PC), R0
+  arithmetic.go:105	0x100268778		9137c000		ADD $3568, R0, R0
+  arithmetic.go:105	0x10026877c		aa0203e1		MOVD R2, R1
+  arithmetic.go:105	0x100268780		97f86780		CALL runtime.makeslice(SB)
+  arithmetic.go:120	0x100268784		f9401fe1		MOVD 56(RSP), R1
+  arithmetic.go:110	0x100268788		f94037e2		MOVD 104(RSP), R2
+  arithmetic.go:106	0x10026878c		f94067e3		MOVD 200(RSP), R3
+  arithmetic.go:106	0x100268790		aa0003e4		MOVD R0, R4
+  arithmetic.go:120	0x100268794		f9404be0		MOVD 144(RSP), R0
+  arithmetic.go:106	0x100268798		f90053e4		MOVD R4, 160(RSP)
+  arithmetic.go:106	0x10026879c		f9401465		MOVD 40(R3), R5
+  arithmetic.go:106	0x1002687a0		f90033e5		MOVD R5, 96(RSP)
+  arithmetic.go:106	0x1002687a4		aa1f03e6		MOVD ZR, R6
+  arithmetic.go:106	0x1002687a8		aa1f03e7		MOVD ZR, R7
+  arithmetic.go:106	0x1002687ac		aa1f03e8		MOVD ZR, R8
+  arithmetic.go:106	0x1002687b0		14000012		JMP 18(PC)
+  arithmetic.go:102	0x1002687b4		aa0303e0		MOVD R3, R0
+  arithmetic.go:102	0x1002687b8		aa0403e1		MOVD R4, R1
+  arithmetic.go:102	0x1002687bc		f85f83fd		MOVD -8(RSP), R29
+  arithmetic.go:102	0x1002687c0		f84b07fe		MOVD.P 176(RSP), R30
+  arithmetic.go:102	0x1002687c4		d65f03c0		RET
+  arithmetic.go:98	0x1002687c8		aa0303e0		MOVD R3, R0
+  arithmetic.go:98	0x1002687cc		aa0403e1		MOVD R4, R1
+  arithmetic.go:98	0x1002687d0		f85f83fd		MOVD -8(RSP), R29
+  arithmetic.go:98	0x1002687d4		f84b07fe		MOVD.P 176(RSP), R30
+  arithmetic.go:98	0x1002687d8		d65f03c0		RET
+  arithmetic.go:106	0x1002687dc		9100046c		ADD $1, R3, R12
+  arithmetic.go:120	0x1002687e0		aa0b03e0		MOVD R11, R0
+  arithmetic.go:120	0x1002687e4		aa0a03e1		MOVD R10, R1
+  arithmetic.go:107	0x1002687e8		f94067e3		MOVD 200(RSP), R3
+  arithmetic.go:111	0x1002687ec		aa0503e4		MOVD R5, R4
+  arithmetic.go:106	0x1002687f0		f94033e5		MOVD 96(RSP), R5
+  arithmetic.go:106	0x1002687f4		aa0c03e6		MOVD R12, R6
+  arithmetic.go:106	0x1002687f8		eb0500df		CMP R5, R6
+  arithmetic.go:106	0x1002687fc		5400088a		BGE 68(PC)
+  arithmetic.go:107	0x100268800		f9405fe9		MOVD 184(RSP), R9
+  arithmetic.go:107	0x100268804		a9422d2a		LDP 32(R9), (R10, R11)
+  arithmetic.go:107	0x100268808		eb0b011f		CMP R11, R8
+  arithmetic.go:107	0x10026880c		540009a2		BCS 77(PC)
+  arithmetic.go:107	0x100268810		f94063eb		MOVD 192(RSP), R11
+  arithmetic.go:107	0x100268814		a942356c		LDP 32(R11), (R12, R13)
+  arithmetic.go:107	0x100268818		bc687940		FMOVS (R10)(R8<<2), F0
+  arithmetic.go:107	0x10026881c		eb0d00ff		CMP R13, R7
+  arithmetic.go:107	0x100268820		540008e2		BCS 71(PC)
+  arithmetic.go:106	0x100268824		f9002fe6		MOVD R6, 88(RSP)
+  arithmetic.go:106	0x100268828		f90023e7		MOVD R7, 64(RSP)
+  arithmetic.go:106	0x10026882c		f9002be8		MOVD R8, 80(RSP)
+  arithmetic.go:107	0x100268830		f9406bfa		MOVD 208(RSP), R26
+  arithmetic.go:107	0x100268834		f9400340		MOVD (R26), R0
+  arithmetic.go:107	0x100268838		bc677981		FMOVS (R12)(R7<<2), F1
+  arithmetic.go:107	0x10026883c		d63f0000		CALL (R0)
+  arithmetic.go:107	0x100268840		f94067e0		MOVD 200(RSP), R0
+  arithmetic.go:107	0x100268844		a9420801		LDP 32(R0), (R1, R2)
+  arithmetic.go:107	0x100268848		f9402fe3		MOVD 88(RSP), R3
+  arithmetic.go:107	0x10026884c		eb02007f		CMP R2, R3
+  arithmetic.go:107	0x100268850		54000742		BCS 58(PC)
+  arithmetic.go:107	0x100268854		bc237820		FMOVS F0, (R1)(R3<<2)
+  arithmetic.go:110	0x100268858		f94037e2		MOVD 104(RSP), R2
+  arithmetic.go:110	0x10026885c		d1000444		SUB $1, R2, R4
+  arithmetic.go:110	0x100268860		f94023e7		MOVD 64(RSP), R7
+  arithmetic.go:110	0x100268864		f9402be8		MOVD 80(RSP), R8
+  arithmetic.go:110	0x100268868		f94053e5		MOVD 160(RSP), R5
+  arithmetic.go:110	0x10026886c		f94027e6		MOVD 72(RSP), R6
+  arithmetic.go:110	0x100268870		f9404fe9		MOVD 152(RSP), R9
+  arithmetic.go:110	0x100268874		f9401fea		MOVD 56(RSP), R10
+  arithmetic.go:110	0x100268878		f9404beb		MOVD 144(RSP), R11
+  arithmetic.go:110	0x10026887c		14000004		JMP 4(PC)
+  arithmetic.go:120	0x100268880		f864796d		MOVD (R11)(R4<<3), R13
+  arithmetic.go:120	0x100268884		9b0d9d87		MSUB R13, R7, R12, R7
+  arithmetic.go:110	0x100268888		d1000484		SUB $1, R4, R4
+  arithmetic.go:110	0x10026888c		b7fffa84		TBNZ $63, R4, -44(PC)
+  arithmetic.go:111	0x100268890		f86478ac		MOVD (R5)(R4<<3), R12
+  arithmetic.go:111	0x100268894		9100058c		ADD $1, R12, R12
+  arithmetic.go:111	0x100268898		f82478ac		MOVD R12, (R5)(R4<<3)
+  arithmetic.go:112	0x10026889c		a940b80d		LDP 8(R0), (R13, R14)
+  arithmetic.go:112	0x1002688a0		eb0e009f		CMP R14, R4
+  arithmetic.go:112	0x1002688a4		54000482		BCS 36(PC)
+  arithmetic.go:112	0x1002688a8		f86479ad		MOVD (R13)(R4<<3), R13
+  arithmetic.go:112	0x1002688ac		eb0c01bf		CMP R12, R13
+  arithmetic.go:112	0x1002688b0		540001cc		BGT 14(PC)
+  arithmetic.go:118	0x1002688b4		f82478bf		MOVD ZR, (R5)(R4<<3)
+  arithmetic.go:119	0x1002688b8		a940b40c		LDP 8(R0), (R12, R13)
+  arithmetic.go:119	0x1002688bc		eb0d009f		CMP R13, R4
+  arithmetic.go:119	0x1002688c0		54000382		BCS 28(PC)
+  arithmetic.go:119	0x1002688c4		f864798c		MOVD (R12)(R4<<3), R12
+  arithmetic.go:119	0x1002688c8		eb0400df		CMP R4, R6
+  arithmetic.go:119	0x1002688cc		54000309		BLS 24(PC)
+  arithmetic.go:119	0x1002688d0		d100058c		SUB $1, R12, R12
+  arithmetic.go:119	0x1002688d4		f864792d		MOVD (R9)(R4<<3), R13
+  arithmetic.go:119	0x1002688d8		9b0da188		MSUB R13, R8, R12, R8
+  arithmetic.go:120	0x1002688dc		eb04015f		CMP R4, R10
+  arithmetic.go:120	0x1002688e0		54fffd08		BHI -24(PC)
+  arithmetic.go:120	0x1002688e4		14000011		JMP 17(PC)
+  arithmetic.go:113	0x1002688e8		eb0400df		CMP R4, R6
+  arithmetic.go:113	0x1002688ec		540001c9		BLS 14(PC)
+  arithmetic.go:113	0x1002688f0		f864792c		MOVD (R9)(R4<<3), R12
+  arithmetic.go:113	0x1002688f4		8b080188		ADD R8, R12, R8
+  arithmetic.go:114	0x1002688f8		eb04015f		CMP R4, R10
+  arithmetic.go:114	0x1002688fc		54000129		BLS 9(PC)
+  arithmetic.go:114	0x100268900		f8647964		MOVD (R11)(R4<<3), R4
+  arithmetic.go:114	0x100268904		8b070087		ADD R7, R4, R7
+  arithmetic.go:115	0x100268908		17ffffb5		JMP -75(PC)
+  arithmetic.go:123	0x10026890c		aa1f03e0		MOVD ZR, R0
+  arithmetic.go:123	0x100268910		aa1f03e1		MOVD ZR, R1
+  arithmetic.go:123	0x100268914		f85f83fd		MOVD -8(RSP), R29
+  arithmetic.go:123	0x100268918		f84b07fe		MOVD.P 176(RSP), R30
+  arithmetic.go:123	0x10026891c		d65f03c0		RET
+  arithmetic.go:114	0x100268920		97f87b80		CALL runtime.panicBounds(SB)
+  arithmetic.go:113	0x100268924		97f87b7f		CALL runtime.panicBounds(SB)
+  arithmetic.go:120	0x100268928		97f87b7e		CALL runtime.panicBounds(SB)
+  arithmetic.go:119	0x10026892c		97f87b7d		CALL runtime.panicBounds(SB)
+  arithmetic.go:119	0x100268930		97f87b7c		CALL runtime.panicBounds(SB)
+  arithmetic.go:112	0x100268934		97f87b7b		CALL runtime.panicBounds(SB)
+  arithmetic.go:107	0x100268938		97f87b7a		CALL runtime.panicBounds(SB)
+  arithmetic.go:107	0x10026893c		97f87b79		CALL runtime.panicBounds(SB)
+  arithmetic.go:107	0x100268940		97f87b78		CALL runtime.panicBounds(SB)
+  arithmetic.go:107	0x100268944		d503201f		NOOP
+  arithmetic.go:90	0x100268948		a90087e0		STP (R0, R1), 8(RSP)
+  arithmetic.go:90	0x10026894c		a9018fe2		STP (R2, R3), 24(RSP)
+  arithmetic.go:90	0x100268950		aa1e03e3		MOVD R30, R3
+  arithmetic.go:90	0x100268954		97f8732f		CALL runtime.morestack_noctxt.abi0(SB)
+  arithmetic.go:90	0x100268958		a94087e0		LDP 8(RSP), (R0, R1)
+  arithmetic.go:90	0x10026895c		a9418fe2		LDP 24(RSP), (R2, R3)
+  arithmetic.go:90	0x100268960		17ffff5c		JMP github.com/itsmontoya/neuralnetwork/tensor.broadcastFloat32Into(SB)
+  arithmetic.go:90	0x100268964		00000000		?
+  arithmetic.go:90	0x100268968		00000000		?
+  arithmetic.go:90	0x10026896c		00000000		?
 
 TEXT github.com/itsmontoya/neuralnetwork/tensor.maxPool2DValue(SB) /Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.1/tensor/max_pool2d.go
-  max_pool2d.go:32	0x10026f780		f9400b90		MOVD 16(R28), R16							
-  max_pool2d.go:32	0x10026f784		eb3063ff		CMP R16, RSP								
-  max_pool2d.go:32	0x10026f788		54000f29		BLS 121(PC)								
-  max_pool2d.go:32	0x10026f78c		f81f0ffe		MOVD.W R30, -16(RSP)							
-  max_pool2d.go:32	0x10026f790		f81f83fd		MOVD R29, -8(RSP)							
-  max_pool2d.go:32	0x10026f794		d10023fd		SUB $8, RSP, R29							
-  max_pool2d.go:41	0x10026f798		a9429be5		LDP 40(RSP), (R5, R6)							
-  max_pool2d.go:41	0x10026f79c		9b037ca3		MUL R3, R5, R3								
-  max_pool2d.go:41	0x10026f7a0		a9449fe5		LDP 72(RSP), (R5, R7)							
-  max_pool2d.go:42	0x10026f7a4		9b047cc4		MUL R4, R6, R4								
-  max_pool2d.go:43	0x10026f7a8		a940a006		LDP 8(R0), (R6, R8)							
-  max_pool2d.go:41	0x10026f7ac		cb050069		SUB R5, R3, R9								
-  max_pool2d.go:42	0x10026f7b0		cb07008a		SUB R7, R4, R10								
-  max_pool2d.go:43	0x10026f7b4		f100091f		CMP $2, R8								
-  max_pool2d.go:43	0x10026f7b8		54000d69		BLS 107(PC)								
-  max_pool2d.go:43	0x10026f7bc		f9401feb		MOVD 56(RSP), R11							
-  max_pool2d.go:43	0x10026f7c0		f94008cc		MOVD 16(R6), R12							
-  pool2d.go:80		0x10026f7c4		b400006c		CBZ R12, 3(PC)								
-  pool2d.go:80		0x10026f7c8		eb09019f		CMP R9, R12								
-  pool2d.go:80		0x10026f7cc		5400008c		BGT 4(PC)								
-  max_pool2d.go:43	0x10026f7d0		aa1f03ee		MOVD ZR, R14								
-  max_pool2d.go:43	0x10026f7d4		aa1f03e3		MOVD ZR, R3								
-  max_pool2d.go:43	0x10026f7d8		14000018		JMP 24(PC)								
-  pool2d.go:83		0x10026f7dc		b6f80129		TBZ $63, R9, 9(PC)							
-  pool2d.go:84		0x10026f7e0		cb0300ad		SUB R3, R5, R13								
-  pool2d.go:84		0x10026f7e4		b4000beb		CBZ R11, 95(PC)								
-  pool2d.go:84		0x10026f7e8		9acb0dae		SDIV R11, R13, R14							
-  pool2d.go:85		0x10026f7ec		9acb0dbb		SDIV R11, R13, R27							
-  pool2d.go:85		0x10026f7f0		9b0bb76d		MSUB R11, R13, R27, R13							
-  pool2d.go:85		0x10026f7f4		b400008d		CBZ R13, 4(PC)								
-  pool2d.go:86		0x10026f7f8		910005ce		ADD $1, R14, R14							
-  pool2d.go:86		0x10026f7fc		14000002		JMP 2(PC)								
-  pool2d.go:90		0x10026f800		aa1f03ee		MOVD ZR, R14								
-  pool2d.go:90		0x10026f804		8b050185		ADD R5, R12, R5								
-  pool2d.go:90		0x10026f808		cb0300a3		SUB R3, R5, R3								
-  pool2d.go:90		0x10026f80c		b4000a8b		CBZ R11, 84(PC)								
-  max_pool2d.go:43	0x10026f810		f9400fe5		MOVD 24(RSP), R5							
-  pool2d.go:90		0x10026f814		d1000463		SUB $1, R3, R3								
-  pool2d.go:90		0x10026f818		9acb0c63		SDIV R11, R3, R3							
-  pool2d.go:90		0x10026f81c		9100046c		ADD $1, R3, R12								
-  pool2d.go:90		0x10026f820		eb0c00bf		CMP R12, R5								
-  pool2d.go:91		0x10026f824		9a83d4a3		CSINC LE, R5, R3, R3							
-  pool2d.go:91		0x10026f828		eb0301df		CMP R3, R14								
-  pool2d.go:90		0x10026f82c		5400006b		BLT 3(PC)								
-  max_pool2d.go:43	0x10026f830		aa1f03ee		MOVD ZR, R14								
-  max_pool2d.go:43	0x10026f834		aa1f03e3		MOVD ZR, R3								
-  max_pool2d.go:44	0x10026f838		f1000d1f		CMP $3, R8								
-  max_pool2d.go:44	0x10026f83c		540008e9		BLS 71(PC)								
-  max_pool2d.go:44	0x10026f840		f94023e5		MOVD 64(RSP), R5							
-  max_pool2d.go:44	0x10026f844		f9400cc8		MOVD 24(R6), R8								
-  pool2d.go:80		0x10026f848		b4000068		CBZ R8, 3(PC)								
-  pool2d.go:80		0x10026f84c		eb0a011f		CMP R10, R8								
-  pool2d.go:80		0x10026f850		5400008c		BGT 4(PC)								
-  max_pool2d.go:44	0x10026f854		aa1f03ed		MOVD ZR, R13								
-  max_pool2d.go:44	0x10026f858		aa1f03e4		MOVD ZR, R4								
-  max_pool2d.go:44	0x10026f85c		14000018		JMP 24(PC)								
-  pool2d.go:83		0x10026f860		b6f8012a		TBZ $63, R10, 9(PC)							
-  pool2d.go:84		0x10026f864		cb0400ec		SUB R4, R7, R12								
-  pool2d.go:84		0x10026f868		b4000765		CBZ R5, 59(PC)								
-  pool2d.go:84		0x10026f86c		9ac50d8d		SDIV R5, R12, R13							
-  pool2d.go:85		0x10026f870		9ac50d9b		SDIV R5, R12, R27							
-  pool2d.go:85		0x10026f874		9b05b36c		MSUB R5, R12, R27, R12							
-  pool2d.go:85		0x10026f878		b400008c		CBZ R12, 4(PC)								
-  pool2d.go:86		0x10026f87c		910005ad		ADD $1, R13, R13							
-  pool2d.go:86		0x10026f880		14000002		JMP 2(PC)								
-  pool2d.go:90		0x10026f884		aa1f03ed		MOVD ZR, R13								
-  pool2d.go:90		0x10026f888		8b070107		ADD R7, R8, R7								
-  pool2d.go:90		0x10026f88c		cb0400e4		SUB R4, R7, R4								
-  pool2d.go:90		0x10026f890		b4000605		CBZ R5, 48(PC)								
-  max_pool2d.go:44	0x10026f894		f94013e7		MOVD 32(RSP), R7							
-  pool2d.go:90		0x10026f898		d1000484		SUB $1, R4, R4								
-  pool2d.go:90		0x10026f89c		9ac50c84		SDIV R5, R4, R4								
-  pool2d.go:90		0x10026f8a0		9100048c		ADD $1, R4, R12								
-  pool2d.go:90		0x10026f8a4		eb0c00ff		CMP R12, R7								
-  pool2d.go:91		0x10026f8a8		9a84d4e4		CSINC LE, R7, R4, R4							
-  pool2d.go:91		0x10026f8ac		eb0401bf		CMP R4, R13								
-  pool2d.go:90		0x10026f8b0		5400006b		BLT 3(PC)								
-  max_pool2d.go:44	0x10026f8b4		aa1f03ed		MOVD ZR, R13								
-  max_pool2d.go:44	0x10026f8b8		aa1f03e4		MOVD ZR, R4								
-  max_pool2d.go:45	0x10026f8bc		d503201f		NOOP									
-  max_pool2d.go:46	0x10026f8c0		d000057b		ADRP 712704(PC), R27							
-  max_pool2d.go:46	0x10026f8c4		bd470361		FMOVS 1792(R27), F1							
-  max_pool2d.go:46	0x10026f8c8		14000003		JMP 3(PC)								
-  max_pool2d.go:46	0x10026f8cc		910005ce		ADD $1, R14, R14							
-  max_pool2d.go:48	0x10026f8d0		aa0c03ed		MOVD R12, R13								
-  max_pool2d.go:46	0x10026f8d4		eb0301df		CMP R3, R14								
-  max_pool2d.go:46	0x10026f8d8		5400030a		BGE 24(PC)								
-  max_pool2d.go:47	0x10026f8dc		9b0e2567		MADD R14, R9, R11, R7							
-  max_pool2d.go:44	0x10026f8e0		aa0d03ec		MOVD R13, R12								
-  max_pool2d.go:48	0x10026f8e4		14000003		JMP 3(PC)								
-  max_pool2d.go:48	0x10026f8e8		910005ad		ADD $1, R13, R13							
-  max_pool2d.go:48	0x10026f8ec		1e204001		FMOVS F0, F1								
-  max_pool2d.go:48	0x10026f8f0		eb0401bf		CMP R4, R13								
-  max_pool2d.go:48	0x10026f8f4		54fffeca		BGE -10(PC)								
-  max_pool2d.go:49	0x10026f8f8		9b0d28af		MADD R13, R10, R5, R15							
-  max_pool2d.go:51	0x10026f8fc		a940c4d0		LDP 8(R6), (R16, R17)							
-  max_pool2d.go:51	0x10026f900		9b010a10		MADD R1, R2, R16, R16							
-  max_pool2d.go:51	0x10026f904		9b101e30		MADD R16, R7, R17, R16							
-  max_pool2d.go:51	0x10026f908		9b083e0f		MADD R8, R15, R16, R15							
-  max_pool2d.go:52	0x10026f90c		a9424410		LDP 32(R0), (R16, R17)							
-  max_pool2d.go:52	0x10026f910		eb0f023f		CMP R15, R17								
-  max_pool2d.go:52	0x10026f914		540001a9		BLS 13(PC)								
-  max_pool2d.go:52	0x10026f918		bc6f7a00		FMOVS (R16)(R15<<2), F0							
-  max_pool2d.go:53	0x10026f91c		1e202020		FCMPS F0, F1								
-  max_pool2d.go:53	0x10026f920		54fffe44		BMI -14(PC)								
-  math.go:38		0x10026f924		1e22c002		FCVTSD F0, F2								
-  bits.go:39		0x10026f928		1e622040		FCMPD F2, F2								
-  max_pool2d.go:53	0x10026f92c		54fffde1		BNE -17(PC)								
-  max_pool2d.go:53	0x10026f930		1e204020		FMOVS F1, F0								
-  max_pool2d.go:53	0x10026f934		17ffffed		JMP -19(PC)								
-  max_pool2d.go:58	0x10026f938		1e204020		FMOVS F1, F0								
-  max_pool2d.go:58	0x10026f93c		f85f83fd		MOVD -8(RSP), R29							
-  max_pool2d.go:58	0x10026f940		f84107fe		MOVD.P 16(RSP), R30							
-  max_pool2d.go:58	0x10026f944		d65f03c0		RET									
-  max_pool2d.go:52	0x10026f948		aa1103e0		MOVD R17, R0								
-  max_pool2d.go:52	0x10026f94c		97f85f75		CALL runtime.panicBounds(SB)						
-  pool2d.go:90		0x10026f950		97f752f8		CALL runtime.panicdivide(SB)						
-  pool2d.go:84		0x10026f954		97f752f7		CALL runtime.panicdivide(SB)						
-  max_pool2d.go:44	0x10026f958		97f85f72		CALL runtime.panicBounds(SB)						
-  pool2d.go:90		0x10026f95c		97f752f5		CALL runtime.panicdivide(SB)						
-  pool2d.go:84		0x10026f960		97f752f4		CALL runtime.panicdivide(SB)						
-  max_pool2d.go:43	0x10026f964		97f85f6f		CALL runtime.panicBounds(SB)						
-  max_pool2d.go:43	0x10026f968		d503201f		NOOP									
-  max_pool2d.go:32	0x10026f96c		a90607e0		STP (R0, R1), 96(RSP)							
-  max_pool2d.go:32	0x10026f970		a9070fe2		STP (R2, R3), 112(RSP)							
-  max_pool2d.go:32	0x10026f974		f90043e4		MOVD R4, 128(RSP)							
-  max_pool2d.go:32	0x10026f978		aa1e03e3		MOVD R30, R3								
-  max_pool2d.go:32	0x10026f97c		97f85725		CALL runtime.morestack_noctxt.abi0(SB)					
-  max_pool2d.go:32	0x10026f980		a94607e0		LDP 96(RSP), (R0, R1)							
-  max_pool2d.go:32	0x10026f984		a9470fe2		LDP 112(RSP), (R2, R3)							
-  max_pool2d.go:32	0x10026f988		f94043e4		MOVD 128(RSP), R4							
-  max_pool2d.go:32	0x10026f98c		17ffff7d		JMP github.com/itsmontoya/neuralnetwork/tensor.maxPool2DValue(SB)	
+  max_pool2d.go:32	0x10026f780		f9400b90		MOVD 16(R28), R16
+  max_pool2d.go:32	0x10026f784		eb3063ff		CMP R16, RSP
+  max_pool2d.go:32	0x10026f788		54000f29		BLS 121(PC)
+  max_pool2d.go:32	0x10026f78c		f81f0ffe		MOVD.W R30, -16(RSP)
+  max_pool2d.go:32	0x10026f790		f81f83fd		MOVD R29, -8(RSP)
+  max_pool2d.go:32	0x10026f794		d10023fd		SUB $8, RSP, R29
+  max_pool2d.go:41	0x10026f798		a9429be5		LDP 40(RSP), (R5, R6)
+  max_pool2d.go:41	0x10026f79c		9b037ca3		MUL R3, R5, R3
+  max_pool2d.go:41	0x10026f7a0		a9449fe5		LDP 72(RSP), (R5, R7)
+  max_pool2d.go:42	0x10026f7a4		9b047cc4		MUL R4, R6, R4
+  max_pool2d.go:43	0x10026f7a8		a940a006		LDP 8(R0), (R6, R8)
+  max_pool2d.go:41	0x10026f7ac		cb050069		SUB R5, R3, R9
+  max_pool2d.go:42	0x10026f7b0		cb07008a		SUB R7, R4, R10
+  max_pool2d.go:43	0x10026f7b4		f100091f		CMP $2, R8
+  max_pool2d.go:43	0x10026f7b8		54000d69		BLS 107(PC)
+  max_pool2d.go:43	0x10026f7bc		f9401feb		MOVD 56(RSP), R11
+  max_pool2d.go:43	0x10026f7c0		f94008cc		MOVD 16(R6), R12
+  pool2d.go:80		0x10026f7c4		b400006c		CBZ R12, 3(PC)
+  pool2d.go:80		0x10026f7c8		eb09019f		CMP R9, R12
+  pool2d.go:80		0x10026f7cc		5400008c		BGT 4(PC)
+  max_pool2d.go:43	0x10026f7d0		aa1f03ee		MOVD ZR, R14
+  max_pool2d.go:43	0x10026f7d4		aa1f03e3		MOVD ZR, R3
+  max_pool2d.go:43	0x10026f7d8		14000018		JMP 24(PC)
+  pool2d.go:83		0x10026f7dc		b6f80129		TBZ $63, R9, 9(PC)
+  pool2d.go:84		0x10026f7e0		cb0300ad		SUB R3, R5, R13
+  pool2d.go:84		0x10026f7e4		b4000beb		CBZ R11, 95(PC)
+  pool2d.go:84		0x10026f7e8		9acb0dae		SDIV R11, R13, R14
+  pool2d.go:85		0x10026f7ec		9acb0dbb		SDIV R11, R13, R27
+  pool2d.go:85		0x10026f7f0		9b0bb76d		MSUB R11, R13, R27, R13
+  pool2d.go:85		0x10026f7f4		b400008d		CBZ R13, 4(PC)
+  pool2d.go:86		0x10026f7f8		910005ce		ADD $1, R14, R14
+  pool2d.go:86		0x10026f7fc		14000002		JMP 2(PC)
+  pool2d.go:90		0x10026f800		aa1f03ee		MOVD ZR, R14
+  pool2d.go:90		0x10026f804		8b050185		ADD R5, R12, R5
+  pool2d.go:90		0x10026f808		cb0300a3		SUB R3, R5, R3
+  pool2d.go:90		0x10026f80c		b4000a8b		CBZ R11, 84(PC)
+  max_pool2d.go:43	0x10026f810		f9400fe5		MOVD 24(RSP), R5
+  pool2d.go:90		0x10026f814		d1000463		SUB $1, R3, R3
+  pool2d.go:90		0x10026f818		9acb0c63		SDIV R11, R3, R3
+  pool2d.go:90		0x10026f81c		9100046c		ADD $1, R3, R12
+  pool2d.go:90		0x10026f820		eb0c00bf		CMP R12, R5
+  pool2d.go:91		0x10026f824		9a83d4a3		CSINC LE, R5, R3, R3
+  pool2d.go:91		0x10026f828		eb0301df		CMP R3, R14
+  pool2d.go:90		0x10026f82c		5400006b		BLT 3(PC)
+  max_pool2d.go:43	0x10026f830		aa1f03ee		MOVD ZR, R14
+  max_pool2d.go:43	0x10026f834		aa1f03e3		MOVD ZR, R3
+  max_pool2d.go:44	0x10026f838		f1000d1f		CMP $3, R8
+  max_pool2d.go:44	0x10026f83c		540008e9		BLS 71(PC)
+  max_pool2d.go:44	0x10026f840		f94023e5		MOVD 64(RSP), R5
+  max_pool2d.go:44	0x10026f844		f9400cc8		MOVD 24(R6), R8
+  pool2d.go:80		0x10026f848		b4000068		CBZ R8, 3(PC)
+  pool2d.go:80		0x10026f84c		eb0a011f		CMP R10, R8
+  pool2d.go:80		0x10026f850		5400008c		BGT 4(PC)
+  max_pool2d.go:44	0x10026f854		aa1f03ed		MOVD ZR, R13
+  max_pool2d.go:44	0x10026f858		aa1f03e4		MOVD ZR, R4
+  max_pool2d.go:44	0x10026f85c		14000018		JMP 24(PC)
+  pool2d.go:83		0x10026f860		b6f8012a		TBZ $63, R10, 9(PC)
+  pool2d.go:84		0x10026f864		cb0400ec		SUB R4, R7, R12
+  pool2d.go:84		0x10026f868		b4000765		CBZ R5, 59(PC)
+  pool2d.go:84		0x10026f86c		9ac50d8d		SDIV R5, R12, R13
+  pool2d.go:85		0x10026f870		9ac50d9b		SDIV R5, R12, R27
+  pool2d.go:85		0x10026f874		9b05b36c		MSUB R5, R12, R27, R12
+  pool2d.go:85		0x10026f878		b400008c		CBZ R12, 4(PC)
+  pool2d.go:86		0x10026f87c		910005ad		ADD $1, R13, R13
+  pool2d.go:86		0x10026f880		14000002		JMP 2(PC)
+  pool2d.go:90		0x10026f884		aa1f03ed		MOVD ZR, R13
+  pool2d.go:90		0x10026f888		8b070107		ADD R7, R8, R7
+  pool2d.go:90		0x10026f88c		cb0400e4		SUB R4, R7, R4
+  pool2d.go:90		0x10026f890		b4000605		CBZ R5, 48(PC)
+  max_pool2d.go:44	0x10026f894		f94013e7		MOVD 32(RSP), R7
+  pool2d.go:90		0x10026f898		d1000484		SUB $1, R4, R4
+  pool2d.go:90		0x10026f89c		9ac50c84		SDIV R5, R4, R4
+  pool2d.go:90		0x10026f8a0		9100048c		ADD $1, R4, R12
+  pool2d.go:90		0x10026f8a4		eb0c00ff		CMP R12, R7
+  pool2d.go:91		0x10026f8a8		9a84d4e4		CSINC LE, R7, R4, R4
+  pool2d.go:91		0x10026f8ac		eb0401bf		CMP R4, R13
+  pool2d.go:90		0x10026f8b0		5400006b		BLT 3(PC)
+  max_pool2d.go:44	0x10026f8b4		aa1f03ed		MOVD ZR, R13
+  max_pool2d.go:44	0x10026f8b8		aa1f03e4		MOVD ZR, R4
+  max_pool2d.go:45	0x10026f8bc		d503201f		NOOP
+  max_pool2d.go:46	0x10026f8c0		d000057b		ADRP 712704(PC), R27
+  max_pool2d.go:46	0x10026f8c4		bd470361		FMOVS 1792(R27), F1
+  max_pool2d.go:46	0x10026f8c8		14000003		JMP 3(PC)
+  max_pool2d.go:46	0x10026f8cc		910005ce		ADD $1, R14, R14
+  max_pool2d.go:48	0x10026f8d0		aa0c03ed		MOVD R12, R13
+  max_pool2d.go:46	0x10026f8d4		eb0301df		CMP R3, R14
+  max_pool2d.go:46	0x10026f8d8		5400030a		BGE 24(PC)
+  max_pool2d.go:47	0x10026f8dc		9b0e2567		MADD R14, R9, R11, R7
+  max_pool2d.go:44	0x10026f8e0		aa0d03ec		MOVD R13, R12
+  max_pool2d.go:48	0x10026f8e4		14000003		JMP 3(PC)
+  max_pool2d.go:48	0x10026f8e8		910005ad		ADD $1, R13, R13
+  max_pool2d.go:48	0x10026f8ec		1e204001		FMOVS F0, F1
+  max_pool2d.go:48	0x10026f8f0		eb0401bf		CMP R4, R13
+  max_pool2d.go:48	0x10026f8f4		54fffeca		BGE -10(PC)
+  max_pool2d.go:49	0x10026f8f8		9b0d28af		MADD R13, R10, R5, R15
+  max_pool2d.go:51	0x10026f8fc		a940c4d0		LDP 8(R6), (R16, R17)
+  max_pool2d.go:51	0x10026f900		9b010a10		MADD R1, R2, R16, R16
+  max_pool2d.go:51	0x10026f904		9b101e30		MADD R16, R7, R17, R16
+  max_pool2d.go:51	0x10026f908		9b083e0f		MADD R8, R15, R16, R15
+  max_pool2d.go:52	0x10026f90c		a9424410		LDP 32(R0), (R16, R17)
+  max_pool2d.go:52	0x10026f910		eb0f023f		CMP R15, R17
+  max_pool2d.go:52	0x10026f914		540001a9		BLS 13(PC)
+  max_pool2d.go:52	0x10026f918		bc6f7a00		FMOVS (R16)(R15<<2), F0
+  max_pool2d.go:53	0x10026f91c		1e202020		FCMPS F0, F1
+  max_pool2d.go:53	0x10026f920		54fffe44		BMI -14(PC)
+  math.go:38		0x10026f924		1e22c002		FCVTSD F0, F2
+  bits.go:39		0x10026f928		1e622040		FCMPD F2, F2
+  max_pool2d.go:53	0x10026f92c		54fffde1		BNE -17(PC)
+  max_pool2d.go:53	0x10026f930		1e204020		FMOVS F1, F0
+  max_pool2d.go:53	0x10026f934		17ffffed		JMP -19(PC)
+  max_pool2d.go:58	0x10026f938		1e204020		FMOVS F1, F0
+  max_pool2d.go:58	0x10026f93c		f85f83fd		MOVD -8(RSP), R29
+  max_pool2d.go:58	0x10026f940		f84107fe		MOVD.P 16(RSP), R30
+  max_pool2d.go:58	0x10026f944		d65f03c0		RET
+  max_pool2d.go:52	0x10026f948		aa1103e0		MOVD R17, R0
+  max_pool2d.go:52	0x10026f94c		97f85f75		CALL runtime.panicBounds(SB)
+  pool2d.go:90		0x10026f950		97f752f8		CALL runtime.panicdivide(SB)
+  pool2d.go:84		0x10026f954		97f752f7		CALL runtime.panicdivide(SB)
+  max_pool2d.go:44	0x10026f958		97f85f72		CALL runtime.panicBounds(SB)
+  pool2d.go:90		0x10026f95c		97f752f5		CALL runtime.panicdivide(SB)
+  pool2d.go:84		0x10026f960		97f752f4		CALL runtime.panicdivide(SB)
+  max_pool2d.go:43	0x10026f964		97f85f6f		CALL runtime.panicBounds(SB)
+  max_pool2d.go:43	0x10026f968		d503201f		NOOP
+  max_pool2d.go:32	0x10026f96c		a90607e0		STP (R0, R1), 96(RSP)
+  max_pool2d.go:32	0x10026f970		a9070fe2		STP (R2, R3), 112(RSP)
+  max_pool2d.go:32	0x10026f974		f90043e4		MOVD R4, 128(RSP)
+  max_pool2d.go:32	0x10026f978		aa1e03e3		MOVD R30, R3
+  max_pool2d.go:32	0x10026f97c		97f85725		CALL runtime.morestack_noctxt.abi0(SB)
+  max_pool2d.go:32	0x10026f980		a94607e0		LDP 96(RSP), (R0, R1)
+  max_pool2d.go:32	0x10026f984		a9470fe2		LDP 112(RSP), (R2, R3)
+  max_pool2d.go:32	0x10026f988		f94043e4		MOVD 128(RSP), R4
+  max_pool2d.go:32	0x10026f98c		17ffff7d		JMP github.com/itsmontoya/neuralnetwork/tensor.maxPool2DValue(SB)

@@ -1,5 +1,9 @@
 # Standalone handoff for Codex Sol 6.1 in github.com/itsmontoya/neuralnetwork
 
+Historical handoff written against v0.10.1. Published v0.10.2 now includes the
+residual-column kernel; see the [integration results](v0.10.2/README.md) before
+using this prompt for further work.
+
 You are working inside `github.com/itsmontoya/neuralnetwork`. Investigate and
 implement one focused convolution optimization supported by fresh measurements.
 Read this repository's `AGENTS.md` and `STYLEGUIDE.md` first. Preserve its public

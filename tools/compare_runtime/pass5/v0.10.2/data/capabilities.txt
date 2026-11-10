@@ -1,0 +1,1 @@
+PASS: implemented table matches the runtime capability manifest

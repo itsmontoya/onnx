@@ -1,0 +1,232 @@
+[
+  {
+    "name": "fmt",
+    "command": [
+      "go",
+      "fmt",
+      "./..."
+    ],
+    "environment_overrides": {},
+    "exit_code": 0
+  },
+  {
+    "name": "tidy",
+    "command": [
+      "go",
+      "mod",
+      "tidy",
+      "-diff"
+    ],
+    "environment_overrides": {},
+    "exit_code": 0
+  },
+  {
+    "name": "capabilities",
+    "command": [
+      "go",
+      "run",
+      "./tools/capabilitiesgen"
+    ],
+    "environment_overrides": {
+      "CGO_ENABLED": "0"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "module-verify",
+    "command": [
+      "go",
+      "mod",
+      "verify"
+    ],
+    "environment_overrides": {},
+    "exit_code": 0
+  },
+  {
+    "name": "build",
+    "command": [
+      "go",
+      "build",
+      "./..."
+    ],
+    "environment_overrides": {},
+    "exit_code": 0
+  },
+  {
+    "name": "build-linux-amd64",
+    "command": [
+      "go",
+      "build",
+      "./..."
+    ],
+    "environment_overrides": {
+      "GOOS": "linux",
+      "GOARCH": "amd64",
+      "CGO_ENABLED": "0"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "vet",
+    "command": [
+      "go",
+      "vet",
+      "./..."
+    ],
+    "environment_overrides": {},
+    "exit_code": 0
+  },
+  {
+    "name": "test-default",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "./..."
+    ],
+    "environment_overrides": {},
+    "exit_code": 0
+  },
+  {
+    "name": "test-no-cgo",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "./..."
+    ],
+    "environment_overrides": {
+      "CGO_ENABLED": "0"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "test-purego",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "-tags=purego",
+      "./..."
+    ],
+    "environment_overrides": {
+      "CGO_ENABLED": "0"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "test-race",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "-race",
+      "./..."
+    ],
+    "environment_overrides": {},
+    "exit_code": 0
+  },
+  {
+    "name": "FuzzProtobufEntrypoints",
+    "command": [
+      "go",
+      "test",
+      "./internal/decode",
+      "-run",
+      "^$",
+      "-fuzz",
+      "^FuzzProtobufEntrypoints$",
+      "-fuzztime=3s",
+      "-parallel=2"
+    ],
+    "environment_overrides": {
+      "GOMAXPROCS": "2"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "FuzzTensorDecode",
+    "command": [
+      "go",
+      "test",
+      "./internal/decode",
+      "-run",
+      "^$",
+      "-fuzz",
+      "^FuzzTensorDecode$",
+      "-fuzztime=3s",
+      "-parallel=2"
+    ],
+    "environment_overrides": {
+      "GOMAXPROCS": "2"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "FuzzGraphReferences",
+    "command": [
+      "go",
+      "test",
+      "./internal/graph",
+      "-run",
+      "^$",
+      "-fuzz",
+      "^FuzzGraphReferences$",
+      "-fuzztime=3s",
+      "-parallel=2"
+    ],
+    "environment_overrides": {
+      "GOMAXPROCS": "2"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "FuzzShapeAttributePlanning",
+    "command": [
+      "go",
+      "test",
+      ".",
+      "-run",
+      "^$",
+      "-fuzz",
+      "^FuzzShapeAttributePlanning$",
+      "-fuzztime=3s",
+      "-parallel=2"
+    ],
+    "environment_overrides": {
+      "GOMAXPROCS": "2"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "test-comparison-policy",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools",
+      "-p",
+      "test_compare_runtime.py"
+    ],
+    "environment_overrides": {},
+    "exit_code": 0
+  },
+  {
+    "name": "test-backend-residual",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "-v",
+      "github.com/itsmontoya/neuralnetwork/tensor",
+      "-run",
+      "^Test_Conv2D_Residual"
+    ],
+    "environment_overrides": {
+      "CGO_ENABLED": "0"
+    },
+    "exit_code": 0
+  }
+]

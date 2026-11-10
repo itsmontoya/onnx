@@ -1,5 +1,9 @@
 # MNIST performance pass 5 — 2026-11-10
 
+This investigation records the v0.10.1 baseline. The subsequent
+[v0.10.2 upgrade and retest](v0.10.2/README.md) measures a 17.2% inference latency
+reduction from the published residual-column kernel and a 3.77× gap versus ORT.
+
 The highest-leverage next change is to extend ARM64 convolution acceleration to
 the columns that still use `tensor.conv2DFourChannels`. Geometry-matched timings
 put these columns at approximately **84.7 µs, or 42% of inference**. The second
@@ -357,7 +361,7 @@ Run the separate ORT configuration experiment with:
 python tools/compare_runtime/pass5/ort_diagnostics.py /tmp/onnx-pass5-repeat/ort
 ```
 
-To reproduce partition timings, copy the published backend to a writable
+To reproduce partition timings, copy published backend v0.10.1 to a writable
 temporary directory, copy `conv_paths_test.go.txt` into its `tensor/` directory
 as `pass5_diagnostic_test.go`, then build its test binary there with `GOWORK=off`.
 Do not modify the module cache or use this diagnostic copy for the baseline.

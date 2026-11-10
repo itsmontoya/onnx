@@ -1,0 +1,13 @@
+/private/tmp/onnx-v0.10.2-integration/before.test: go1.27.2
+	path	github.com/itsmontoya/onnx.test
+	mod	github.com/itsmontoya/onnx	(devel)
+	dep	github.com/itsmontoya/neuralnetwork	v0.10.1	h1:3dkabHz0YnFp++xvjEMaFGyehMhTeUWAQ+bscebdRrs=
+	dep	github.com/tphakala/simd	v1.3.0	h1:6DBkVfF/DEf/dnkfajbtu13+EZVReIIgIoUm2GNRs/k=
+	dep	golang.org/x/sys	v0.45.0	h1:dO4czNzziLiiXplLQgBCEpCvXQ3dnkn0SdaZSYdQ+FY=
+	dep	google.golang.org/protobuf	v1.36.12	h1:pJOKDDOyeXErUroCihFAd5LQuwXBSpVnKGrj5o/fwxc=
+	build	-buildmode=exe
+	build	-compiler=gc
+	build	CGO_ENABLED=0
+	build	GOARCH=arm64
+	build	GOOS=darwin
+	build	GOARM64=v8.0
