@@ -1,0 +1,22 @@
+File: onnx-mnist-before.test
+Type: alloc_space
+Time: 2026-11-09 14:29:27 PST
+Showing nodes accounting for 923.67MB, 98.63% of 936.50MB total
+Dropped 45 nodes (cum <= 4.68MB)
+Showing top 15 nodes out of 25
+      flat  flat%   sum%        cum   cum%
+  402.20MB 42.95% 42.95%   402.20MB 42.95%  github.com/itsmontoya/neuralnetwork/tensor.newTensor (inline)
+  200.88MB 21.45% 64.40%   200.88MB 21.45%  github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Float32Values
+  104.28MB 11.13% 75.53%   104.28MB 11.13%  github.com/itsmontoya/neuralnetwork/matrix.(*Matrix).Values
+  101.67MB 10.86% 86.39%   101.67MB 10.86%  github.com/itsmontoya/neuralnetwork/matrix.FromSlice
+   98.13MB 10.48% 96.87%    98.13MB 10.48%  github.com/itsmontoya/neuralnetwork/matrix.New
+    8.01MB  0.85% 97.72%     8.01MB  0.85%  github.com/itsmontoya/onnx.newCNNCall
+    7.50MB   0.8% 98.52%        9MB  0.96%  github.com/itsmontoya/onnx.newNumericalCall
+       1MB  0.11% 98.63%   878.06MB 93.76%  github.com/itsmontoya/onnx.(*evaluation).execute
+         0     0% 98.63%    55.61MB  5.94%  github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Clone
+         0     0% 98.63%   162.41MB 17.34%  github.com/itsmontoya/neuralnetwork/tensor.FromFloat32
+         0     0% 98.63%   238.29MB 25.45%  github.com/itsmontoya/neuralnetwork/tensor.New
+         0     0% 98.63%   303.08MB 32.36%  github.com/itsmontoya/neuralnetwork/tensor.ReLUInto (inline)
+         0     0% 98.63%   303.08MB 32.36%  github.com/itsmontoya/neuralnetwork/tensor.activationFloat32Into
+         0     0% 98.63%   934.17MB 99.75%  github.com/itsmontoya/onnx.(*Session).Run
+         0     0% 98.63%   119.72MB 12.78%  github.com/itsmontoya/onnx.(*cnnCall).run

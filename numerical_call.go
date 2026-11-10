@@ -159,10 +159,6 @@ func (c *numericalCall) patchRelu(ctx context.Context, output *tensor.Tensor) (o
 		return nil, err
 	}
 
-	if values, err = output.Float32Values(); err != nil {
-		return nil, err
-	}
-
 	for index, value := range input {
 		if index%1024 == 0 {
 			if err = ctx.Err(); err != nil {
@@ -171,11 +167,23 @@ func (c *numericalCall) patchRelu(ctx context.Context, output *tensor.Tensor) (o
 		}
 
 		if math.IsNaN(float64(value)) {
+			// Inputs without NaNs already have the correct destination result.
+			// Only materialize a corrected copy when NaN propagation needs it.
+			if values == nil {
+				if values, err = output.Float32Values(); err != nil {
+					return nil, err
+				}
+			}
+
 			values[index] = value
 		}
 	}
 	if err = ctx.Err(); err != nil {
 		return nil, err
+	}
+
+	if values == nil {
+		return output, nil
 	}
 
 	return tensor.FromFloat32(c.shape, values)

@@ -44,8 +44,10 @@ checks. Empty and nonfinite numerical edge policies are explicit in the
 The original RT-18 checks used **Go 1.27.2**, module language baseline **Go 1.26.1**,
 **neuralnetwork v0.7.0** at
 `6048452c57a0a293db4591cd2e2febd7d6b743a3` and **protobuf v1.36.12**.
-RT-18 changed no dependency. RT-16 now pins the public NN-13 source/pseudo-version
-recorded in go.mod/go.sum and its [handoff](handoff-rt16.md). Local checks
+RT-18 changed no dependency. RT-16 introduced the public NN-13 source/pseudo-version
+recorded in its [handoff](handoff-rt16.md). The current backend is v0.8.0;
+its verification and MNIST timings are recorded in the
+[performance report](performance/mnist/README.md). Local checks
 run on **Darwin/arm64**. The GitHub **Linux/amd64** workflow runs the full Go
 suite including bounded fuzzing and the new generated-table check. Hosted
 results and exact head revision are recorded on the stacked PR before handoff.

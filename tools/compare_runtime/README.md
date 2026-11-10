@@ -108,6 +108,19 @@ This single local run measured 1,900 calls per runtime, with ORT approximately
 thermal state, order and API overhead can affect results. This is a repeatable
 smoke comparison on one small network, not a general performance claim.
 
+After upgrading to published **neuralnetwork v0.8.0** and avoiding unnecessary
+ONNX ReLU output snapshots, the same settings on 2026-11-09 measured:
+
+| Runtime | Median / p95 |
+| --- | ---: |
+| Go | 689.58 / 772.90 µs |
+| ORT | 41.54 / 44.21 µs |
+
+All 19 cases and top-1 checks pass with the same maximum absolute error. The
+median gap is **16.60×**. The [profiling report](../../docs/performance/mnist/README.md)
+records allocation benchmarks, module identity, checks and the earlier baseline.
+The full new comparison is `.cache/compare-runtime/v0.8.0-report.json`.
+
 The comparison-policy tests run with the same optional Python environment:
 
 ```sh

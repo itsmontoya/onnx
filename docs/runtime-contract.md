@@ -39,9 +39,9 @@ The [IR](https://github.com/onnx/onnx/blob/v1.16.2/docs/IR.md) and
 are separate from operator schema selection. This source also defines newer IR
 and opsets, which this profile does not thereby accept.
 
-The numerical backend is **github.com/itsmontoya/neuralnetwork v0.7.1-0.20261109154142-a64fa687e269**, commit
-[`a64fa687e269c3a1bf3ac345434b46c8ed4a59fc`](https://github.com/itsmontoya/neuralnetwork/tree/a64fa687e269c3a1bf3ac345434b46c8ed4a59fc)
-(MIT). Its published [tensor contract](https://github.com/itsmontoya/neuralnetwork/blob/v0.7.0/docs/tensor-design.md)
+The numerical backend is **github.com/itsmontoya/neuralnetwork v0.8.0**, commit
+[`743e049ca9e4877de3c33c0969b17119b6f1491d`](https://github.com/itsmontoya/neuralnetwork/tree/743e049ca9e4877de3c33c0969b17119b6f1491d)
+(MIT). Its published [tensor contract](https://github.com/itsmontoya/neuralnetwork/blob/v0.8.0/docs/tensor-design.md)
 and [NN-13 integration](../NEEDS.md#nn-13-integration-2026-11-09) are normative for backend ownership;
 ONNX policies remain here. Do not use unpublished changes, a committed local
 `replace`, or another module's `internal` packages.
@@ -428,7 +428,7 @@ Minimum checked reservations (numeric bytes, excluding shape metadata) are:
 
 | Path | Scratch charge in addition to live inputs/destination |
 | --- | --- |
-| Relu | 6 times input bytes: three backend bridge buffers plus original destination, input snapshot and output snapshot while constructing the corrected owned result |
+| Relu | 6 times input bytes, retained as a conservative bound. v0.8.0 writes directly into the destination; ONNX snapshots the input and, only for NaNs, snapshots the output and constructs a corrected tensor. Without NaNs, return the existing destination. |
 | Sigmoid/Tanh | 3 times input bytes: input matrix, output matrix, copied values |
 | MatMul | CPU: one output-sized staging buffer, zero for an empty contraction. Metal fallback: full temporary output plus copied left/right matrices and two product-block buffers per batch, conservatively summed across batches. |
 | Gemm | CPU: one output-sized staging buffer, including empty contractions. Metal fallback: copied A/B, product matrix and copied values, plus transposed B when both transpose flags are set. |
