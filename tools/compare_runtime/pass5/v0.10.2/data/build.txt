@@ -1,1 +1,0 @@
-go: writing stat cache: open /Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/onnx/@v/v0.0.0-20261110173830-e13cbf844c31.info906353976.tmp: operation not permitted
