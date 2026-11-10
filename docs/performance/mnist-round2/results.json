@@ -1,0 +1,3575 @@
+{
+  "onnx_revision": "8823861325e3218a8b6dea78332d38c6d8ed2df5",
+  "patch_sha256": "98abc44818df84a0a64ef5449d7f57c815b2aedd51aff7b6ad179e6d3e05c612",
+  "source_hashes": {
+    "tensor/arithmetic.go": {
+      "before_sha256": "351144b3cd0daecd46f7e12d62f775dc74627094467b7ffb837606a6b269a46e",
+      "after_sha256": "0b54b96c556291b5e390410972275259f58d3a4fa31d294e9bdcf7c9394efe8d"
+    },
+    "tensor/conv2d.go": {
+      "before_sha256": "514d82c6029ce45bcd9666d4a18e6b30a60b878d377ffbfc7ee86aa53f98aa3b",
+      "after_sha256": "886dc17684757cca068e685ba9852717fd53b69fbb96e8a691361e388d5f94ae"
+    },
+    "tensor/conv2d_internal_test.go": {
+      "before_sha256": "cee29ed5d2d13e7fea9cfdbb3f7a8defab8cd7d25f808cb2f69fa5a3d56d28f8",
+      "after_sha256": "f0834acf22941b5e8b474035bade277ab836347eab42a04cbb7ede9089f3114c"
+    }
+  },
+  "module_files_sha256": {
+    "go.mod": "7d88a1a25c670421d23e078bb03aac1b346e9df63f887d643c06f33383fdfe2d",
+    "go.sum": "7dd2a8b0b587698dd585426f2727d257bf4de5b81b214c1b3f218938ed868765"
+  },
+  "go_outputs_bit_identical_across_19_cases": true,
+  "benchmarks": {
+    "before": {
+      "BenchmarkMNIST": {
+        "samples_ns": [
+          696025.0,
+          716521.0,
+          716884.0,
+          721258.0,
+          722289.0
+        ],
+        "bytes_per_op": 179504,
+        "allocs_per_op": 176,
+        "median_ns": 716884.0
+      },
+      "BenchmarkInference/mlp_batch_1/Warm": {
+        "samples_ns": [
+          3329.0,
+          3484.0,
+          3502.0,
+          3519.0,
+          3498.0
+        ],
+        "bytes_per_op": 4528,
+        "allocs_per_op": 78,
+        "median_ns": 3498.0
+      },
+      "BenchmarkInference/mlp_batch_3/Warm": {
+        "samples_ns": [
+          3434.0,
+          3596.0,
+          3596.0,
+          3613.0,
+          3603.0
+        ],
+        "bytes_per_op": 4712,
+        "allocs_per_op": 78,
+        "median_ns": 3596.0
+      },
+      "BenchmarkInference/shape_batch_1/Warm": {
+        "samples_ns": [
+          6131.0,
+          6424.0,
+          6467.0,
+          6435.0,
+          6468.0
+        ],
+        "bytes_per_op": 10928,
+        "allocs_per_op": 138,
+        "median_ns": 6435.0
+      },
+      "BenchmarkInference/shape_batch_3/Warm": {
+        "samples_ns": [
+          6189.0,
+          6469.0,
+          6576.0,
+          6510.0,
+          6539.0
+        ],
+        "bytes_per_op": 11320,
+        "allocs_per_op": 138,
+        "median_ns": 6510.0
+      },
+      "BenchmarkInference/cnn_batch_1/Warm": {
+        "samples_ns": [
+          6020.0,
+          6359.0,
+          6376.0,
+          6331.0,
+          6349.0
+        ],
+        "bytes_per_op": 8200,
+        "allocs_per_op": 116,
+        "median_ns": 6349.0
+      },
+      "BenchmarkInference/cnn_batch_3/Warm": {
+        "samples_ns": [
+          7939.0,
+          7405.0,
+          7464.0,
+          7464.0,
+          7492.0
+        ],
+        "bytes_per_op": 9256,
+        "allocs_per_op": 116,
+        "median_ns": 7464.0
+      }
+    },
+    "broadcast": {
+      "BenchmarkMNIST": {
+        "samples_ns": [
+          687058.0,
+          678775.0,
+          688590.0,
+          692429.0,
+          691653.0
+        ],
+        "bytes_per_op": 179440,
+        "allocs_per_op": 174,
+        "median_ns": 688590.0
+      },
+      "BenchmarkInference/mlp_batch_1/Warm": {
+        "samples_ns": [
+          3352.0,
+          3426.0,
+          3523.0,
+          3846.0,
+          3493.0
+        ],
+        "bytes_per_op": 4528,
+        "allocs_per_op": 78,
+        "median_ns": 3493.0
+      },
+      "BenchmarkInference/mlp_batch_3/Warm": {
+        "samples_ns": [
+          3552.0,
+          3568.0,
+          3598.0,
+          3575.0,
+          3624.0
+        ],
+        "bytes_per_op": 4712,
+        "allocs_per_op": 78,
+        "median_ns": 3575.0
+      },
+      "BenchmarkInference/shape_batch_1/Warm": {
+        "samples_ns": [
+          6236.0,
+          6315.0,
+          6563.0,
+          6492.0,
+          6528.0
+        ],
+        "bytes_per_op": 10928,
+        "allocs_per_op": 138,
+        "median_ns": 6492.0
+      },
+      "BenchmarkInference/shape_batch_3/Warm": {
+        "samples_ns": [
+          6349.0,
+          6414.0,
+          6503.0,
+          6478.0,
+          6535.0
+        ],
+        "bytes_per_op": 11320,
+        "allocs_per_op": 138,
+        "median_ns": 6478.0
+      },
+      "BenchmarkInference/cnn_batch_1/Warm": {
+        "samples_ns": [
+          6153.0,
+          6218.0,
+          6330.0,
+          6317.0,
+          6307.0
+        ],
+        "bytes_per_op": 8200,
+        "allocs_per_op": 116,
+        "median_ns": 6307.0
+      },
+      "BenchmarkInference/cnn_batch_3/Warm": {
+        "samples_ns": [
+          7219.0,
+          7388.0,
+          7487.0,
+          7451.0,
+          7482.0
+        ],
+        "bytes_per_op": 9256,
+        "allocs_per_op": 116,
+        "median_ns": 7451.0
+      }
+    },
+    "four": {
+      "BenchmarkMNIST": {
+        "samples_ns": [
+          471528.0,
+          460534.0,
+          466919.0,
+          469149.0,
+          468067.0
+        ],
+        "bytes_per_op": 179504,
+        "allocs_per_op": 176,
+        "median_ns": 468067.0
+      },
+      "BenchmarkInference/mlp_batch_1/Warm": {
+        "samples_ns": [
+          3382.0,
+          3439.0,
+          3434.0,
+          3534.0,
+          3477.0
+        ],
+        "bytes_per_op": 4528,
+        "allocs_per_op": 78,
+        "median_ns": 3439.0
+      },
+      "BenchmarkInference/mlp_batch_3/Warm": {
+        "samples_ns": [
+          3497.0,
+          3585.0,
+          3608.0,
+          3634.0,
+          3625.0
+        ],
+        "bytes_per_op": 4712,
+        "allocs_per_op": 78,
+        "median_ns": 3608.0
+      },
+      "BenchmarkInference/shape_batch_1/Warm": {
+        "samples_ns": [
+          6314.0,
+          6368.0,
+          6367.0,
+          6402.0,
+          6410.0
+        ],
+        "bytes_per_op": 10928,
+        "allocs_per_op": 138,
+        "median_ns": 6368.0
+      },
+      "BenchmarkInference/shape_batch_3/Warm": {
+        "samples_ns": [
+          6358.0,
+          6431.0,
+          6496.0,
+          6463.0,
+          6500.0
+        ],
+        "bytes_per_op": 11320,
+        "allocs_per_op": 138,
+        "median_ns": 6463.0
+      },
+      "BenchmarkInference/cnn_batch_1/Warm": {
+        "samples_ns": [
+          6138.0,
+          6265.0,
+          6346.0,
+          6290.0,
+          6297.0
+        ],
+        "bytes_per_op": 8200,
+        "allocs_per_op": 116,
+        "median_ns": 6290.0
+      },
+      "BenchmarkInference/cnn_batch_3/Warm": {
+        "samples_ns": [
+          7270.0,
+          7360.0,
+          7385.0,
+          7408.0,
+          7445.0
+        ],
+        "bytes_per_op": 9256,
+        "allocs_per_op": 116,
+        "median_ns": 7385.0
+      }
+    },
+    "after": {
+      "BenchmarkMNIST": {
+        "samples_ns": [
+          443119.0,
+          439197.0,
+          444320.0,
+          443175.0,
+          442537.0
+        ],
+        "bytes_per_op": 179440,
+        "allocs_per_op": 174,
+        "median_ns": 443119.0
+      },
+      "BenchmarkInference/mlp_batch_1/Warm": {
+        "samples_ns": [
+          3470.0,
+          3461.0,
+          3455.0,
+          3461.0,
+          3460.0
+        ],
+        "bytes_per_op": 4528,
+        "allocs_per_op": 78,
+        "median_ns": 3461.0
+      },
+      "BenchmarkInference/mlp_batch_3/Warm": {
+        "samples_ns": [
+          3518.0,
+          3596.0,
+          3994.0,
+          3670.0,
+          3632.0
+        ],
+        "bytes_per_op": 4712,
+        "allocs_per_op": 78,
+        "median_ns": 3632.0
+      },
+      "BenchmarkInference/shape_batch_1/Warm": {
+        "samples_ns": [
+          6345.0,
+          6379.0,
+          6399.0,
+          6481.0,
+          6433.0
+        ],
+        "bytes_per_op": 10928,
+        "allocs_per_op": 138,
+        "median_ns": 6399.0
+      },
+      "BenchmarkInference/shape_batch_3/Warm": {
+        "samples_ns": [
+          6370.0,
+          6457.0,
+          6511.0,
+          6543.0,
+          6621.0
+        ],
+        "bytes_per_op": 11320,
+        "allocs_per_op": 138,
+        "median_ns": 6511.0
+      },
+      "BenchmarkInference/cnn_batch_1/Warm": {
+        "samples_ns": [
+          6244.0,
+          6271.0,
+          6332.0,
+          6293.0,
+          6314.0
+        ],
+        "bytes_per_op": 8200,
+        "allocs_per_op": 116,
+        "median_ns": 6293.0
+      },
+      "BenchmarkInference/cnn_batch_3/Warm": {
+        "samples_ns": [
+          7340.0,
+          7428.0,
+          7466.0,
+          7481.0,
+          7477.0
+        ],
+        "bytes_per_op": 9256,
+        "allocs_per_op": 116,
+        "median_ns": 7466.0
+      }
+    }
+  },
+  "comparisons": {
+    "before": {
+      "format_version": 1,
+      "passed": true,
+      "model": {
+        "path": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/mnist-ir8-opset13.onnx",
+        "sha256": "310384d2500a063def1ed3ad5b448baeda1edd5a570f137cb82cb11b7c25c05d",
+        "ir_version": 8,
+        "opsets": {
+          "": 13
+        },
+        "nodes": 12,
+        "operators": [
+          "Add",
+          "Conv",
+          "MatMul",
+          "MaxPool",
+          "Relu",
+          "Reshape"
+        ]
+      },
+      "source": {
+        "url": "https://github.com/onnx/models/tree/4c46cd00fbdb7cd30b6c1c17ab54f2e1f4f7b177/validated/vision/classification/mnist",
+        "archive_url": "https://media.githubusercontent.com/media/onnx/models/4c46cd00fbdb7cd30b6c1c17ab54f2e1f4f7b177/validated/vision/classification/mnist/model/mnist-12.tar.gz",
+        "revision": "4c46cd00fbdb7cd30b6c1c17ab54f2e1f4f7b177",
+        "archive_sha256": "a53a59dcaca8804a0f6dfda9a3cf2e082979589391dbde73640b60684f1d24e9",
+        "model_sha256": "5c688690f8bacf667d4c2074af5ad0646ca328d7ab03eccf944a65b320171bdd",
+        "license": "MIT (MNIST model README)",
+        "license_url": "https://github.com/onnx/models/tree/4c46cd00fbdb7cd30b6c1c17ab54f2e1f4f7b177/validated/vision/classification/mnist/README.md#license",
+        "original_profile": {
+          "ir_version": 7,
+          "opsets": {
+            "": 12
+          },
+          "nodes": 12,
+          "operators": [
+            "Add",
+            "Conv",
+            "MatMul",
+            "MaxPool",
+            "Relu",
+            "Reshape"
+          ]
+        },
+        "conversion": "onnx.version_converter: opset 12 -> 13; IR header 7 -> 8",
+        "original_model": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/mnist-original.onnx",
+        "sample_input_sha256": "d44b08082c3ded89e081f699a9d604239818c805ee8b5d03cd80f338e641c720",
+        "sample_output_sha256": "153a5b1d96f9a544fc398f8c1837b994bbf5f26d3d12a7eff2ec63f7fb2317e1"
+      },
+      "inputs": {
+        "ones": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "c0acddaeb5e08ca7c6f0ab859e008b5ea5544cac1fe9eea8d644f87f071f9eab"
+          }
+        },
+        "random_000": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "176fa0b1e1ee7eddcbcea1ef7478755003e7ee7dcfae4b6cc3dc2805932c2820"
+          }
+        },
+        "random_001": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "8ae1c04f8f442f02d7f28c429fb89ea83e23aebb3e9310a7b9a137e6f51ec85f"
+          }
+        },
+        "random_002": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "dfefaf5cb13ad561f419a569fca6b817acaf23a9303cfc94dd54d907d6d004c0"
+          }
+        },
+        "random_003": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "00734f81a156ee0f0fa97beafa9a63b4d853fee4d03a798e8394a3c9a5113514"
+          }
+        },
+        "random_004": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "616ac4efa5d17440e682dc6c2ae12f4ec34cdc5670aa511e096d35125a5cfc25"
+          }
+        },
+        "random_005": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "6a4e3a56943ca9a4d8d31b1c1b6e536a7862c4a3961268f6524980137c07909c"
+          }
+        },
+        "random_006": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "6bdbb98df77b722da63fc5c00f82550f1b58f4165d464c4372dbbddc3c826399"
+          }
+        },
+        "random_007": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "8437d852784dbf81f6bc1f64979f0998a36228e2af3af154fc3d7527bd403057"
+          }
+        },
+        "random_008": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "d87876570c4a5b070004761581c385cb478d7f9e101e66234de300fde02cc8fe"
+          }
+        },
+        "random_009": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "ddb6214f4cd44dd7bb0eddcd8803af3606f7e7587ff95b29e0974718311fc664"
+          }
+        },
+        "random_010": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "2754bb8698278fe949707ebfebe22c0bd940aaa4983611ef00f042afb16c5e75"
+          }
+        },
+        "random_011": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "8ccaf6e0bf83d4dcd3d16b5a172a6d58e2ab4b10a5dd05cafff07e845ba563e1"
+          }
+        },
+        "random_012": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "32d9f3b55a7214737d0df76be2ec22ad32d24cf12dc6c0fc167a09014a821cfb"
+          }
+        },
+        "random_013": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "9912799b2c78c88426d7afb84bb0da3c45f18b5ae01f6c93741ede07d45e4d06"
+          }
+        },
+        "random_014": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "e9512622a3753782eaa7afa9b5ec4ff8b0b43186fe11c7a4f8e4f64b133c6a3a"
+          }
+        },
+        "random_015": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "7a8ae2cfb4ba02fbacd95d205d46770b6597f1bd3fe6e7bdf81a071cd7f19e0d"
+          }
+        },
+        "upstream": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "45aee9887638608634bd6d5da3a112f58166f6cab0bbaf552d028d61c3303561"
+          }
+        },
+        "zeros": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "b00cd820a573181c37db022786eec519e6440cc3643181e0449da9c3f8f3e271"
+          }
+        }
+      },
+      "results": [
+        {
+          "case": "ones",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 7.748603820800781e-07,
+            "mean_absolute_error": 2.920627593994141e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 6,
+          "ort_top1": 6,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3219408567,
+              3217421438,
+              3206515650,
+              1062517196,
+              3218361715,
+              1070412138,
+              1076949134,
+              3227139045,
+              1070597820,
+              3190171901
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3219408564,
+              3217421442,
+              3206515654,
+              1062517209,
+              3218361717,
+              1070412137,
+              1076949133,
+              3227139045,
+              1070597821,
+              3190171925
+            ]
+          }
+        },
+        {
+          "case": "random_000",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 4.172325134277344e-07,
+            "mean_absolute_error": 1.9837170839309692e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 5,
+          "ort_top1": 5,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3210453439,
+              1051106668,
+              1014204644,
+              1009815718,
+              1021578480,
+              1070120644,
+              3198421750,
+              3222722657,
+              1054479806,
+              3199563866
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3210453444,
+              1051106667,
+              1014204952,
+              1009815656,
+              1021578560,
+              1070120645,
+              3198421764,
+              3222722657,
+              1054479796,
+              3199563855
+            ]
+          }
+        },
+        {
+          "case": "random_001",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 4.172325134277344e-07,
+            "mean_absolute_error": 1.8030405044555664e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 5,
+          "ort_top1": 5,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1007333900,
+              3213106559,
+              3200452234,
+              1050930682,
+              3210864068,
+              1070383851,
+              1061615567,
+              3222758870,
+              1058953211,
+              3196447318
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1007334012,
+              3213106559,
+              3200452239,
+              1050930668,
+              3210864071,
+              1070383854,
+              1061615571,
+              3222758870,
+              1058953213,
+              3196447310
+            ]
+          }
+        },
+        {
+          "case": "random_002",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 9.5367431640625e-07,
+            "mean_absolute_error": 2.8833746910095217e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 5,
+          "ort_top1": 5,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3202812542,
+              3185833779,
+              1057015684,
+              1065033137,
+              3221419536,
+              1071303923,
+              1044725154,
+              3207818308,
+              1050467426,
+              3212500611
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3202812544,
+              3185833746,
+              1057015681,
+              1065033141,
+              3221419535,
+              1071303921,
+              1044725139,
+              3207818309,
+              1050467411,
+              3212500595
+            ]
+          }
+        },
+        {
+          "case": "random_003",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 3.5762786865234375e-07,
+            "mean_absolute_error": 9.462237358093261e-08,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 5,
+          "ort_top1": 5,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3208528464,
+              3192183832,
+              3207222056,
+              1043281639,
+              1050718750,
+              1066504528,
+              1054256456,
+              1023816321,
+              1053266820,
+              3210153024
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3208528464,
+              3192183842,
+              3207222057,
+              1043281630,
+              1050718752,
+              1066504527,
+              1054256456,
+              1023816303,
+              1053266832,
+              3210153024
+            ]
+          }
+        },
+        {
+          "case": "random_004",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 7.152557373046875e-07,
+            "mean_absolute_error": 2.0563602447509767e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 8,
+          "ort_top1": 8,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1063608141,
+              1039472564,
+              3204289378,
+              3209627408,
+              3205851081,
+              3201682890,
+              3199705972,
+              3220921307,
+              1067715894,
+              1058654778
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1063608144,
+              1039472560,
+              3204289374,
+              3209627401,
+              3205851082,
+              3201682898,
+              3199705996,
+              3220921308,
+              1067715895,
+              1058654779
+            ]
+          }
+        },
+        {
+          "case": "random_005",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 2.384185791015625e-07,
+            "mean_absolute_error": 1.6689300537109374e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 6,
+          "ort_top1": 6,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3212498838,
+              3215826418,
+              3207337468,
+              1065651936,
+              3217388441,
+              1069765788,
+              1073867612,
+              3220228969,
+              1069686219,
+              3205230743
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3212498835,
+              3215826420,
+              3207337467,
+              1065651935,
+              3217388439,
+              1069765790,
+              1073867611,
+              3220228968,
+              1069686220,
+              3205230745
+            ]
+          }
+        },
+        {
+          "case": "random_006",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 4.917383193969727e-07,
+            "mean_absolute_error": 2.8312206268310547e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 5,
+          "ort_top1": 5,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3212454000,
+              3204029460,
+              3220302002,
+              3199953966,
+              3194196101,
+              1071975930,
+              1066648614,
+              3198854994,
+              3154224208,
+              1042992077
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3212453992,
+              3204029475,
+              3220302004,
+              3199953978,
+              3194196068,
+              1071975928,
+              1066648614,
+              3198855005,
+              3154224144,
+              1042992090
+            ]
+          }
+        },
+        {
+          "case": "random_007",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 2.384185791015625e-07,
+            "mean_absolute_error": 1.2442469596862792e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 8,
+          "ort_top1": 8,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3206113942,
+              3183724605,
+              3217849641,
+              1061575421,
+              3219174624,
+              1067777493,
+              1068315456,
+              1046108698,
+              1069302395,
+              3221251440
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3206113940,
+              3183724586,
+              3217849640,
+              1061575418,
+              3219174624,
+              1067777492,
+              1068315458,
+              1046108692,
+              1069302395,
+              3221251441
+            ]
+          }
+        },
+        {
+          "case": "random_008",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 3.5762786865234375e-07,
+            "mean_absolute_error": 1.2516975402832032e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 6,
+          "ort_top1": 6,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3201287746,
+              3213046859,
+              3207814191,
+              1054875166,
+              3205475611,
+              1066758246,
+              1068679721,
+              3212961326,
+              1068485931,
+              3208065914
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3201287740,
+              3213046860,
+              3207814192,
+              1054875168,
+              3205475612,
+              1066758245,
+              1068679722,
+              3212961326,
+              1068485934,
+              3208065917
+            ]
+          }
+        },
+        {
+          "case": "random_009",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 3.948807716369629e-07,
+            "mean_absolute_error": 1.7806887626647948e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 4,
+          "ort_top1": 4,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1042626142,
+              3213147939,
+              3215712491,
+              1059324563,
+              1068195219,
+              1065155145,
+              3179017454,
+              3216536955,
+              1059330496,
+              3213812701
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1042626141,
+              3213147937,
+              3215712489,
+              1059324560,
+              1068195222,
+              1065155145,
+              3179017560,
+              3216536956,
+              1059330494,
+              3213812700
+            ]
+          }
+        },
+        {
+          "case": "random_010",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 4.76837158203125e-07,
+            "mean_absolute_error": 2.130866050720215e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 8,
+          "ort_top1": 8,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3201366774,
+              3206635000,
+              3212900964,
+              3207721153,
+              3123956992,
+              1057510777,
+              1063840867,
+              3204435050,
+              1068258838,
+              3204465654
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3201366770,
+              3206635004,
+              3212900965,
+              3207721155,
+              3123954688,
+              1057510777,
+              1063840875,
+              3204435065,
+              1068258841,
+              3204465652
+            ]
+          }
+        },
+        {
+          "case": "random_011",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 5.960464477539062e-07,
+            "mean_absolute_error": 2.2798776626586915e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 8,
+          "ort_top1": 8,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3190304634,
+              3209015944,
+              3201021467,
+              1055130353,
+              3186607830,
+              3208168861,
+              1057593169,
+              3211240481,
+              1065787904,
+              3188136124
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3190304632,
+              3209015941,
+              3201021487,
+              1055130352,
+              3186607850,
+              3208168855,
+              1057593173,
+              3211240479,
+              1065787906,
+              3188136147
+            ]
+          }
+        },
+        {
+          "case": "random_012",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 7.152557373046875e-07,
+            "mean_absolute_error": 2.250075340270996e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 9,
+          "ort_top1": 9,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3206398166,
+              3208787757,
+              1049680645,
+              1043842771,
+              3206297231,
+              1031857610,
+              3182784128,
+              3211653275,
+              1054437570,
+              1054653673
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3206398165,
+              3208787764,
+              1049680662,
+              1043842777,
+              3206297231,
+              1031857622,
+              3182784142,
+              3211653287,
+              1054437562,
+              1054653672
+            ]
+          }
+        },
+        {
+          "case": "random_013",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 4.76837158203125e-07,
+            "mean_absolute_error": 1.7732381820678711e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 8,
+          "ort_top1": 8,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3188615154,
+              3213057775,
+              3211787990,
+              3207592930,
+              1053468614,
+              1060054780,
+              1049351210,
+              3214784027,
+              1068909550,
+              3205700802
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3188615143,
+              3213057779,
+              3211787986,
+              3207592933,
+              1053468608,
+              1060054781,
+              1049351204,
+              3214784027,
+              1068909550,
+              3205700797
+            ]
+          }
+        },
+        {
+          "case": "random_014",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 3.5762786865234375e-07,
+            "mean_absolute_error": 1.7583370208740235e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 8,
+          "ort_top1": 8,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3206238504,
+              3207024812,
+              1064838729,
+              1063109308,
+              3199216362,
+              3174933192,
+              1050771560,
+              3207702715,
+              1065303124,
+              3214082049
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3206238503,
+              3207024815,
+              1064838726,
+              1063109306,
+              3199216367,
+              3174933112,
+              1050771554,
+              3207702717,
+              1065303130,
+              3214082048
+            ]
+          }
+        },
+        {
+          "case": "random_015",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 2.384185791015625e-07,
+            "mean_absolute_error": 1.1213123798370362e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 0,
+          "ort_top1": 0,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1059792484,
+              3196472389,
+              3177186660,
+              3203761307,
+              1044658455,
+              1040391792,
+              3199906798,
+              3200105374,
+              1027732941,
+              3211280616
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1059792487,
+              3196472393,
+              3177186640,
+              3203761315,
+              1044658463,
+              1040391792,
+              3199906790,
+              3200105378,
+              1027732950,
+              3211280616
+            ]
+          }
+        },
+        {
+          "case": "upstream",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 1.9073486328125e-05,
+            "mean_absolute_error": 8.96453857421875e-06,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "ort_vs_upstream_expected": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 3.814697265625e-05,
+            "mean_absolute_error": 1.2111663818359374e-05,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 3,
+          "ort_top1": 3,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3256102672,
+              3232761207,
+              1103303679,
+              1115353906,
+              1108218917,
+              1107785673,
+              3253253630,
+              1108872270,
+              3258206826,
+              3264163866
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3256102669,
+              3232761207,
+              1103303685,
+              1115353902,
+              1108218918,
+              1107785671,
+              3253253631,
+              1108872265,
+              3258206825,
+              3264163864
+            ]
+          }
+        },
+        {
+          "case": "zeros",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 5,
+          "ort_top1": 5,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3174546164,
+              1006588209,
+              1032550513,
+              1022735727,
+              3187765639,
+              1041208705,
+              3177345644,
+              3175761583,
+              1034727690,
+              3177145797
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3174546164,
+              1006588209,
+              1032550513,
+              1022735727,
+              3187765639,
+              1041208705,
+              3177345644,
+              3175761583,
+              1034727690,
+              3177145797
+            ]
+          }
+        }
+      ],
+      "comparison": {
+        "atol": 0.0001,
+        "rtol": 1e-05,
+        "float_policy": "abs(go - ort) <= atol + rtol * abs(ort); NaNs match; infinity signs match; signed zero ignored",
+        "int64_policy": "exact equality"
+      },
+      "timing": {
+        "warmup_per_case": 10,
+        "iterations_per_case": 100,
+        "go": {
+          "samples": 1900,
+          "median_us": 709.8125,
+          "p95_us": 770.7163499999999,
+          "minimum_us": 659.625
+        },
+        "ort": {
+          "samples": 1900,
+          "median_us": 44.125,
+          "p95_us": 44.875,
+          "minimum_us": 40.791
+        },
+        "go_load_ns": 1264167,
+        "go_session_ns": 167,
+        "ort_session_load_ns": 26195000,
+        "scope": "Session.Run / session.run with owned outputs; no build, process startup, model loading, input encoding or output serialization; runtimes measured sequentially"
+      },
+      "environment": {
+        "python": "3.9.6",
+        "numpy": "1.26.4",
+        "onnx": "1.16.2",
+        "onnxruntime": "1.19.2",
+        "protobuf": "4.25.3",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "processor": "arm",
+        "go": "go version go1.27.2 darwin/arm64",
+        "runtime_revision": "8823861325e3218a8b6dea78332d38c6d8ed2df5",
+        "working_tree_dirty": false,
+        "driver_sha256": "9f32bdc790f2b323c53ac2d8fa1a8f777be8daa8d9f73aac3cd32f6f63b2bdae",
+        "runner_sha256": {
+          "main.go": "9d1f4a83da63fd38ae8609ffc45b40d3bd81aa30b77d04085f7d4296a8832eec",
+          "run_result.go": "f1357afe5986ff398f752f9cdc7d7415eb32b0d13e7740c161ec63f1539bd64f",
+          "tensor_data.go": "e29a7e66c44068b91f73c200f5ad04aaf3230a47475966f3c6a3c4965cd200ac"
+        },
+        "go_flags": "",
+        "ort_providers": [
+          "CPUExecutionProvider"
+        ],
+        "ort_optimizations": "disabled",
+        "ort_threads": 1,
+        "gomaxprocs": 1,
+        "cgo_enabled": 0,
+        "seed": 0,
+        "random_cases": 16
+      },
+      "backend": {
+        "base_version": "v0.8.0",
+        "base_sum": "h1:8a3/N9yfGtgqQ+CukFbsJEUqbhLJ1KI92S7B5Iv0x+8=",
+        "patch_sha256": null,
+        "temporary_workspace": null
+      }
+    },
+    "after": {
+      "format_version": 1,
+      "passed": true,
+      "model": {
+        "path": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/mnist-ir8-opset13.onnx",
+        "sha256": "310384d2500a063def1ed3ad5b448baeda1edd5a570f137cb82cb11b7c25c05d",
+        "ir_version": 8,
+        "opsets": {
+          "": 13
+        },
+        "nodes": 12,
+        "operators": [
+          "Add",
+          "Conv",
+          "MatMul",
+          "MaxPool",
+          "Relu",
+          "Reshape"
+        ]
+      },
+      "source": {
+        "url": "https://github.com/onnx/models/tree/4c46cd00fbdb7cd30b6c1c17ab54f2e1f4f7b177/validated/vision/classification/mnist",
+        "archive_url": "https://media.githubusercontent.com/media/onnx/models/4c46cd00fbdb7cd30b6c1c17ab54f2e1f4f7b177/validated/vision/classification/mnist/model/mnist-12.tar.gz",
+        "revision": "4c46cd00fbdb7cd30b6c1c17ab54f2e1f4f7b177",
+        "archive_sha256": "a53a59dcaca8804a0f6dfda9a3cf2e082979589391dbde73640b60684f1d24e9",
+        "model_sha256": "5c688690f8bacf667d4c2074af5ad0646ca328d7ab03eccf944a65b320171bdd",
+        "license": "MIT (MNIST model README)",
+        "license_url": "https://github.com/onnx/models/tree/4c46cd00fbdb7cd30b6c1c17ab54f2e1f4f7b177/validated/vision/classification/mnist/README.md#license",
+        "original_profile": {
+          "ir_version": 7,
+          "opsets": {
+            "": 12
+          },
+          "nodes": 12,
+          "operators": [
+            "Add",
+            "Conv",
+            "MatMul",
+            "MaxPool",
+            "Relu",
+            "Reshape"
+          ]
+        },
+        "conversion": "onnx.version_converter: opset 12 -> 13; IR header 7 -> 8",
+        "original_model": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/mnist-original.onnx",
+        "sample_input_sha256": "d44b08082c3ded89e081f699a9d604239818c805ee8b5d03cd80f338e641c720",
+        "sample_output_sha256": "153a5b1d96f9a544fc398f8c1837b994bbf5f26d3d12a7eff2ec63f7fb2317e1"
+      },
+      "inputs": {
+        "ones": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "c0acddaeb5e08ca7c6f0ab859e008b5ea5544cac1fe9eea8d644f87f071f9eab"
+          }
+        },
+        "random_000": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "176fa0b1e1ee7eddcbcea1ef7478755003e7ee7dcfae4b6cc3dc2805932c2820"
+          }
+        },
+        "random_001": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "8ae1c04f8f442f02d7f28c429fb89ea83e23aebb3e9310a7b9a137e6f51ec85f"
+          }
+        },
+        "random_002": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "dfefaf5cb13ad561f419a569fca6b817acaf23a9303cfc94dd54d907d6d004c0"
+          }
+        },
+        "random_003": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "00734f81a156ee0f0fa97beafa9a63b4d853fee4d03a798e8394a3c9a5113514"
+          }
+        },
+        "random_004": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "616ac4efa5d17440e682dc6c2ae12f4ec34cdc5670aa511e096d35125a5cfc25"
+          }
+        },
+        "random_005": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "6a4e3a56943ca9a4d8d31b1c1b6e536a7862c4a3961268f6524980137c07909c"
+          }
+        },
+        "random_006": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "6bdbb98df77b722da63fc5c00f82550f1b58f4165d464c4372dbbddc3c826399"
+          }
+        },
+        "random_007": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "8437d852784dbf81f6bc1f64979f0998a36228e2af3af154fc3d7527bd403057"
+          }
+        },
+        "random_008": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "d87876570c4a5b070004761581c385cb478d7f9e101e66234de300fde02cc8fe"
+          }
+        },
+        "random_009": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "ddb6214f4cd44dd7bb0eddcd8803af3606f7e7587ff95b29e0974718311fc664"
+          }
+        },
+        "random_010": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "2754bb8698278fe949707ebfebe22c0bd940aaa4983611ef00f042afb16c5e75"
+          }
+        },
+        "random_011": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "8ccaf6e0bf83d4dcd3d16b5a172a6d58e2ab4b10a5dd05cafff07e845ba563e1"
+          }
+        },
+        "random_012": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "32d9f3b55a7214737d0df76be2ec22ad32d24cf12dc6c0fc167a09014a821cfb"
+          }
+        },
+        "random_013": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "9912799b2c78c88426d7afb84bb0da3c45f18b5ae01f6c93741ede07d45e4d06"
+          }
+        },
+        "random_014": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "e9512622a3753782eaa7afa9b5ec4ff8b0b43186fe11c7a4f8e4f64b133c6a3a"
+          }
+        },
+        "random_015": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "7a8ae2cfb4ba02fbacd95d205d46770b6597f1bd3fe6e7bdf81a071cd7f19e0d"
+          }
+        },
+        "upstream": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "45aee9887638608634bd6d5da3a112f58166f6cab0bbaf552d028d61c3303561"
+          }
+        },
+        "zeros": {
+          "Input3": {
+            "dtype": "float32",
+            "shape": [
+              1,
+              1,
+              28,
+              28
+            ],
+            "sha256": "b00cd820a573181c37db022786eec519e6440cc3643181e0449da9c3f8f3e271"
+          }
+        }
+      },
+      "results": [
+        {
+          "case": "ones",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 7.748603820800781e-07,
+            "mean_absolute_error": 2.920627593994141e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 6,
+          "ort_top1": 6,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3219408567,
+              3217421438,
+              3206515650,
+              1062517196,
+              3218361715,
+              1070412138,
+              1076949134,
+              3227139045,
+              1070597820,
+              3190171901
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3219408564,
+              3217421442,
+              3206515654,
+              1062517209,
+              3218361717,
+              1070412137,
+              1076949133,
+              3227139045,
+              1070597821,
+              3190171925
+            ]
+          }
+        },
+        {
+          "case": "random_000",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 4.172325134277344e-07,
+            "mean_absolute_error": 1.9837170839309692e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 5,
+          "ort_top1": 5,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3210453439,
+              1051106668,
+              1014204644,
+              1009815718,
+              1021578480,
+              1070120644,
+              3198421750,
+              3222722657,
+              1054479806,
+              3199563866
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3210453444,
+              1051106667,
+              1014204952,
+              1009815656,
+              1021578560,
+              1070120645,
+              3198421764,
+              3222722657,
+              1054479796,
+              3199563855
+            ]
+          }
+        },
+        {
+          "case": "random_001",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 4.172325134277344e-07,
+            "mean_absolute_error": 1.8030405044555664e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 5,
+          "ort_top1": 5,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1007333900,
+              3213106559,
+              3200452234,
+              1050930682,
+              3210864068,
+              1070383851,
+              1061615567,
+              3222758870,
+              1058953211,
+              3196447318
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1007334012,
+              3213106559,
+              3200452239,
+              1050930668,
+              3210864071,
+              1070383854,
+              1061615571,
+              3222758870,
+              1058953213,
+              3196447310
+            ]
+          }
+        },
+        {
+          "case": "random_002",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 9.5367431640625e-07,
+            "mean_absolute_error": 2.8833746910095217e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 5,
+          "ort_top1": 5,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3202812542,
+              3185833779,
+              1057015684,
+              1065033137,
+              3221419536,
+              1071303923,
+              1044725154,
+              3207818308,
+              1050467426,
+              3212500611
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3202812544,
+              3185833746,
+              1057015681,
+              1065033141,
+              3221419535,
+              1071303921,
+              1044725139,
+              3207818309,
+              1050467411,
+              3212500595
+            ]
+          }
+        },
+        {
+          "case": "random_003",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 3.5762786865234375e-07,
+            "mean_absolute_error": 9.462237358093261e-08,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 5,
+          "ort_top1": 5,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3208528464,
+              3192183832,
+              3207222056,
+              1043281639,
+              1050718750,
+              1066504528,
+              1054256456,
+              1023816321,
+              1053266820,
+              3210153024
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3208528464,
+              3192183842,
+              3207222057,
+              1043281630,
+              1050718752,
+              1066504527,
+              1054256456,
+              1023816303,
+              1053266832,
+              3210153024
+            ]
+          }
+        },
+        {
+          "case": "random_004",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 7.152557373046875e-07,
+            "mean_absolute_error": 2.0563602447509767e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 8,
+          "ort_top1": 8,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1063608141,
+              1039472564,
+              3204289378,
+              3209627408,
+              3205851081,
+              3201682890,
+              3199705972,
+              3220921307,
+              1067715894,
+              1058654778
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1063608144,
+              1039472560,
+              3204289374,
+              3209627401,
+              3205851082,
+              3201682898,
+              3199705996,
+              3220921308,
+              1067715895,
+              1058654779
+            ]
+          }
+        },
+        {
+          "case": "random_005",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 2.384185791015625e-07,
+            "mean_absolute_error": 1.6689300537109374e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 6,
+          "ort_top1": 6,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3212498838,
+              3215826418,
+              3207337468,
+              1065651936,
+              3217388441,
+              1069765788,
+              1073867612,
+              3220228969,
+              1069686219,
+              3205230743
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3212498835,
+              3215826420,
+              3207337467,
+              1065651935,
+              3217388439,
+              1069765790,
+              1073867611,
+              3220228968,
+              1069686220,
+              3205230745
+            ]
+          }
+        },
+        {
+          "case": "random_006",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 4.917383193969727e-07,
+            "mean_absolute_error": 2.8312206268310547e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 5,
+          "ort_top1": 5,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3212454000,
+              3204029460,
+              3220302002,
+              3199953966,
+              3194196101,
+              1071975930,
+              1066648614,
+              3198854994,
+              3154224208,
+              1042992077
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3212453992,
+              3204029475,
+              3220302004,
+              3199953978,
+              3194196068,
+              1071975928,
+              1066648614,
+              3198855005,
+              3154224144,
+              1042992090
+            ]
+          }
+        },
+        {
+          "case": "random_007",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 2.384185791015625e-07,
+            "mean_absolute_error": 1.2442469596862792e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 8,
+          "ort_top1": 8,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3206113942,
+              3183724605,
+              3217849641,
+              1061575421,
+              3219174624,
+              1067777493,
+              1068315456,
+              1046108698,
+              1069302395,
+              3221251440
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3206113940,
+              3183724586,
+              3217849640,
+              1061575418,
+              3219174624,
+              1067777492,
+              1068315458,
+              1046108692,
+              1069302395,
+              3221251441
+            ]
+          }
+        },
+        {
+          "case": "random_008",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 3.5762786865234375e-07,
+            "mean_absolute_error": 1.2516975402832032e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 6,
+          "ort_top1": 6,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3201287746,
+              3213046859,
+              3207814191,
+              1054875166,
+              3205475611,
+              1066758246,
+              1068679721,
+              3212961326,
+              1068485931,
+              3208065914
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3201287740,
+              3213046860,
+              3207814192,
+              1054875168,
+              3205475612,
+              1066758245,
+              1068679722,
+              3212961326,
+              1068485934,
+              3208065917
+            ]
+          }
+        },
+        {
+          "case": "random_009",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 3.948807716369629e-07,
+            "mean_absolute_error": 1.7806887626647948e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 4,
+          "ort_top1": 4,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1042626142,
+              3213147939,
+              3215712491,
+              1059324563,
+              1068195219,
+              1065155145,
+              3179017454,
+              3216536955,
+              1059330496,
+              3213812701
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1042626141,
+              3213147937,
+              3215712489,
+              1059324560,
+              1068195222,
+              1065155145,
+              3179017560,
+              3216536956,
+              1059330494,
+              3213812700
+            ]
+          }
+        },
+        {
+          "case": "random_010",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 4.76837158203125e-07,
+            "mean_absolute_error": 2.130866050720215e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 8,
+          "ort_top1": 8,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3201366774,
+              3206635000,
+              3212900964,
+              3207721153,
+              3123956992,
+              1057510777,
+              1063840867,
+              3204435050,
+              1068258838,
+              3204465654
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3201366770,
+              3206635004,
+              3212900965,
+              3207721155,
+              3123954688,
+              1057510777,
+              1063840875,
+              3204435065,
+              1068258841,
+              3204465652
+            ]
+          }
+        },
+        {
+          "case": "random_011",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 5.960464477539062e-07,
+            "mean_absolute_error": 2.2798776626586915e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 8,
+          "ort_top1": 8,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3190304634,
+              3209015944,
+              3201021467,
+              1055130353,
+              3186607830,
+              3208168861,
+              1057593169,
+              3211240481,
+              1065787904,
+              3188136124
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3190304632,
+              3209015941,
+              3201021487,
+              1055130352,
+              3186607850,
+              3208168855,
+              1057593173,
+              3211240479,
+              1065787906,
+              3188136147
+            ]
+          }
+        },
+        {
+          "case": "random_012",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 7.152557373046875e-07,
+            "mean_absolute_error": 2.250075340270996e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 9,
+          "ort_top1": 9,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3206398166,
+              3208787757,
+              1049680645,
+              1043842771,
+              3206297231,
+              1031857610,
+              3182784128,
+              3211653275,
+              1054437570,
+              1054653673
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3206398165,
+              3208787764,
+              1049680662,
+              1043842777,
+              3206297231,
+              1031857622,
+              3182784142,
+              3211653287,
+              1054437562,
+              1054653672
+            ]
+          }
+        },
+        {
+          "case": "random_013",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 4.76837158203125e-07,
+            "mean_absolute_error": 1.7732381820678711e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 8,
+          "ort_top1": 8,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3188615154,
+              3213057775,
+              3211787990,
+              3207592930,
+              1053468614,
+              1060054780,
+              1049351210,
+              3214784027,
+              1068909550,
+              3205700802
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3188615143,
+              3213057779,
+              3211787986,
+              3207592933,
+              1053468608,
+              1060054781,
+              1049351204,
+              3214784027,
+              1068909550,
+              3205700797
+            ]
+          }
+        },
+        {
+          "case": "random_014",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 3.5762786865234375e-07,
+            "mean_absolute_error": 1.7583370208740235e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 8,
+          "ort_top1": 8,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3206238504,
+              3207024812,
+              1064838729,
+              1063109308,
+              3199216362,
+              3174933192,
+              1050771560,
+              3207702715,
+              1065303124,
+              3214082049
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3206238503,
+              3207024815,
+              1064838726,
+              1063109306,
+              3199216367,
+              3174933112,
+              1050771554,
+              3207702717,
+              1065303130,
+              3214082048
+            ]
+          }
+        },
+        {
+          "case": "random_015",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 2.384185791015625e-07,
+            "mean_absolute_error": 1.1213123798370362e-07,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 0,
+          "ort_top1": 0,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1059792484,
+              3196472389,
+              3177186660,
+              3203761307,
+              1044658455,
+              1040391792,
+              3199906798,
+              3200105374,
+              1027732941,
+              3211280616
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              1059792487,
+              3196472393,
+              3177186640,
+              3203761315,
+              1044658463,
+              1040391792,
+              3199906790,
+              3200105378,
+              1027732950,
+              3211280616
+            ]
+          }
+        },
+        {
+          "case": "upstream",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 1.9073486328125e-05,
+            "mean_absolute_error": 8.96453857421875e-06,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "ort_vs_upstream_expected": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 3.814697265625e-05,
+            "mean_absolute_error": 1.2111663818359374e-05,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 3,
+          "ort_top1": 3,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3256102672,
+              3232761207,
+              1103303679,
+              1115353906,
+              1108218917,
+              1107785673,
+              3253253630,
+              1108872270,
+              3258206826,
+              3264163866
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3256102669,
+              3232761207,
+              1103303685,
+              1115353902,
+              1108218918,
+              1107785671,
+              3253253631,
+              1108872265,
+              3258206825,
+              3264163864
+            ]
+          }
+        },
+        {
+          "case": "zeros",
+          "output": "Plus214_Output_0",
+          "shape": [
+            1,
+            10
+          ],
+          "dtype": "float32",
+          "go_vs_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "converted_vs_original_ort": {
+            "passed": true,
+            "mismatched_elements": 0,
+            "max_absolute_error": 0.0,
+            "mean_absolute_error": 0.0,
+            "nonfinite_elements": 0
+          },
+          "go_top1": 5,
+          "ort_top1": 5,
+          "top1_agrees": true,
+          "go_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3174546164,
+              1006588209,
+              1032550513,
+              1022735727,
+              3187765639,
+              1041208705,
+              3177345644,
+              3175761583,
+              1034727690,
+              3177145797
+            ]
+          },
+          "ort_output": {
+            "name": "Plus214_Output_0",
+            "shape": [
+              1,
+              10
+            ],
+            "dtype": "float32",
+            "bits": [
+              3174546164,
+              1006588209,
+              1032550513,
+              1022735727,
+              3187765639,
+              1041208705,
+              3177345644,
+              3175761583,
+              1034727690,
+              3177145797
+            ]
+          }
+        }
+      ],
+      "comparison": {
+        "atol": 0.0001,
+        "rtol": 1e-05,
+        "float_policy": "abs(go - ort) <= atol + rtol * abs(ort); NaNs match; infinity signs match; signed zero ignored",
+        "int64_policy": "exact equality"
+      },
+      "timing": {
+        "warmup_per_case": 10,
+        "iterations_per_case": 100,
+        "go": {
+          "samples": 1900,
+          "median_us": 440.833,
+          "p95_us": 504.7256,
+          "minimum_us": 400.875
+        },
+        "ort": {
+          "samples": 1900,
+          "median_us": 44.708,
+          "p95_us": 45.792,
+          "minimum_us": 41.416
+        },
+        "go_load_ns": 2182833,
+        "go_session_ns": 459,
+        "ort_session_load_ns": 1375167,
+        "scope": "Session.Run / session.run with owned outputs; no build, process startup, model loading, input encoding or output serialization; runtimes measured sequentially"
+      },
+      "environment": {
+        "python": "3.9.6",
+        "numpy": "1.26.4",
+        "onnx": "1.16.2",
+        "onnxruntime": "1.19.2",
+        "protobuf": "4.25.3",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "processor": "arm",
+        "go": "go version go1.27.2 darwin/arm64",
+        "runtime_revision": "8823861325e3218a8b6dea78332d38c6d8ed2df5",
+        "working_tree_dirty": false,
+        "driver_sha256": "5c855926b1f8ea9fc600adc5fe21b8d59a56c7f70d439f796a345a8a46972e10",
+        "runner_sha256": {
+          "main.go": "9d1f4a83da63fd38ae8609ffc45b40d3bd81aa30b77d04085f7d4296a8832eec",
+          "run_result.go": "f1357afe5986ff398f752f9cdc7d7415eb32b0d13e7740c161ec63f1539bd64f",
+          "tensor_data.go": "e29a7e66c44068b91f73c200f5ad04aaf3230a47475966f3c6a3c4965cd200ac"
+        },
+        "go_flags": "",
+        "ort_providers": [
+          "CPUExecutionProvider"
+        ],
+        "ort_optimizations": "disabled",
+        "ort_threads": 1,
+        "gomaxprocs": 1,
+        "cgo_enabled": 0,
+        "seed": 0,
+        "random_cases": 16
+      },
+      "backend": {
+        "base_version": "v0.8.0",
+        "base_sum": "h1:8a3/N9yfGtgqQ+CukFbsJEUqbhLJ1KI92S7B5Iv0x+8=",
+        "patch_sha256": "98abc44818df84a0a64ef5449d7f57c815b2aedd51aff7b6ad179e6d3e05c612",
+        "temporary_workspace": "/tmp/onnx-profile-round2/go.work"
+      }
+    }
+  }
+}

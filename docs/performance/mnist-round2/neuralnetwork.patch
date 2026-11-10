@@ -1,0 +1,245 @@
+diff --git a/tensor/arithmetic.go b/tensor/arithmetic.go
+--- a/tensor/arithmetic.go
++++ b/tensor/arithmetic.go
+@@ -89,30 +89,34 @@
+ 
+ func broadcastFloat32Into(left, right, destination *Tensor, operation func(float32, float32) float32) (err error) {
+ 	var (
+-		outputStrides, leftStrides, rightStrides []int64
+-		leftOffset, rightOffset, coordinate      int64
+-		index, axis                              int
++		coordinates, leftStrides, rightStrides []int64
++		leftOffset, rightOffset                int64
++		index, axis                            int
+ 	)
+ 
+-	if outputStrides, err = contiguousStrides(destination.shape); err != nil {
+-		return err
+-	}
+ 	if leftStrides, err = broadcastStrides(left.shape, destination.shape); err != nil {
+ 		return err
+ 	}
++
+ 	if rightStrides, err = broadcastStrides(right.shape, destination.shape); err != nil {
+ 		return err
+ 	}
++
++	coordinates = make([]int64, len(destination.shape))
+ 	for index = range destination.floats {
+-		leftOffset, rightOffset = 0, 0
+-		for axis = range destination.shape {
+-			coordinate = int64(index) / outputStrides[axis] % destination.shape[axis]
+-			// Validated strides and broadcast dimensions bound each offset by
+-			// its input's checked payload length, including host-int conversion.
+-			leftOffset += coordinate * leftStrides[axis]
+-			rightOffset += coordinate * rightStrides[axis]
++		destination.floats[index] = operation(left.floats[int(leftOffset)], right.floats[int(rightOffset)])
++		for axis = len(coordinates) - 1; axis >= 0; axis-- {
++			coordinates[axis]++
++			if coordinates[axis] < destination.shape[axis] {
++				leftOffset += leftStrides[axis]
++				rightOffset += rightStrides[axis]
++				break
++			}
++
++			coordinates[axis] = 0
++			leftOffset -= (destination.shape[axis] - 1) * leftStrides[axis]
++			rightOffset -= (destination.shape[axis] - 1) * rightStrides[axis]
+ 		}
+-		destination.floats[index] = operation(left.floats[int(leftOffset)], right.floats[int(rightOffset)])
+ 	}
+ 	return nil
+ }
+diff --git a/tensor/conv2d.go b/tensor/conv2d.go
+--- a/tensor/conv2d.go
++++ b/tensor/conv2d.go
+@@ -84,6 +84,24 @@
+ 		for channel = 0; channel < int(destination.shape[1]); channel++ {
+ 			for row = 0; row < int(destination.shape[2]); row++ {
+ 				for col = 0; col < int(destination.shape[3]); col++ {
++					start := col*int(config.Strides[1]) - int(config.Pads[1])
++					if config.Dilations[1] == 1 && col+3 < int(destination.shape[3]) && start >= 0 &&
++						start+3*int(config.Strides[1])+(int(weights.shape[3])-1) < int(input.shape[3]) {
++						first, second, third, fourth := conv2DFourValues(input, weights, batch, channel, row, start, config)
++						if bias != nil {
++							first += bias.floats[channel]
++							second += bias.floats[channel]
++							third += bias.floats[channel]
++							fourth += bias.floats[channel]
++						}
++
++						values := destination.floats[offset : offset+4]
++						values[0], values[1], values[2], values[3] = first, second, third, fourth
++						col += 3
++						offset += 4
++						continue
++					}
++
+ 					value = conv2DValue(input, weights, batch, channel, row, col, config)
+ 					if bias != nil {
+ 						value += bias.floats[channel]
+@@ -156,3 +174,43 @@
+ 	}
+ 	return value
+ }
++
++// conv2DFourValues preserves each output's accumulation order while sharing
++// weights and geometry across four interior columns with unit width dilation.
++func conv2DFourValues(input, weights *Tensor, batch, channel, row, start int, config Conv2DConfig) (first, second, third, fourth float32) {
++	var (
++		channels    = int(weights.shape[1])
++		kernelH     = int(weights.shape[2])
++		kernelW     = int(weights.shape[3])
++		inputH      = int(input.shape[2])
++		inputW      = int(input.shape[3])
++		inputPlane  = inputH * inputW
++		kernelPlane = kernelH * kernelW
++		groupStart  = channel / int(weights.shape[0]/config.Groups) * channels
++		inputBase   = (batch*int(input.shape[1]) + groupStart) * inputPlane
++		weightBase  = channel * channels * kernelPlane
++		rowStart    = row*int(config.Strides[0]) - int(config.Pads[0])
++		stride      = int(config.Strides[1])
++	)
++
++	for inputChannel := 0; inputChannel < channels; inputChannel++ {
++		for kernelRow := 0; kernelRow < kernelH; kernelRow++ {
++			inputRow := rowStart + kernelRow*int(config.Dilations[0])
++			if inputRow < 0 || inputRow >= inputH {
++				continue
++			}
++
++			inputOffset := inputBase + inputChannel*inputPlane + inputRow*inputW + start
++			weightOffset := weightBase + inputChannel*kernelPlane + kernelRow*kernelW
++			inputValues := input.floats[inputOffset : inputOffset+3*stride+kernelW]
++			weightValues := weights.floats[weightOffset : weightOffset+kernelW]
++			for kernelCol, weight := range weightValues {
++				first += inputValues[kernelCol] * weight
++				second += inputValues[kernelCol+stride] * weight
++				third += inputValues[kernelCol+2*stride] * weight
++				fourth += inputValues[kernelCol+3*stride] * weight
++			}
++		}
++	}
++	return first, second, third, fourth
++}
+diff --git a/tensor/conv2d_internal_test.go b/tensor/conv2d_internal_test.go
+--- a/tensor/conv2d_internal_test.go
++++ b/tensor/conv2d_internal_test.go
+@@ -102,3 +102,117 @@
+ 		})
+ 	}
+ }
++
++func Test_Conv2D_FourColumns(t *testing.T) {
++	var (
++		unit     = Conv2DConfig{Strides: [2]int64{1, 1}, Dilations: [2]int64{1, 1}, Groups: 1}
++		strided  = unit
++		dilated  = unit
++		fallback = unit
++		padded   = unit
++		grouped  = unit
++	)
++
++	strided.Strides = [2]int64{2, 2}
++	dilated.Dilations[0] = 2
++	fallback.Dilations[1] = 2
++	padded.Pads = [4]int64{2, 3, 1, 4}
++	grouped.Groups = 2
++	tests := []struct {
++		name      string
++		input     []int64
++		weights   []int64
++		config    Conv2DConfig
++		bias      bool
++		nonfinite bool
++	}{
++		{name: "exact block", input: []int64{1, 1, 3, 6}, weights: []int64{1, 1, 3, 3}, config: unit},
++		{name: "multiple blocks and tail", input: []int64{2, 3, 5, 13}, weights: []int64{4, 3, 2, 3}, config: unit, bias: true},
++		{name: "one column tail", input: []int64{1, 2, 3, 11}, weights: []int64{2, 2, 2, 3}, config: unit},
++		{name: "two column tail", input: []int64{1, 2, 3, 12}, weights: []int64{2, 2, 2, 3}, config: unit},
++		{name: "short row fallback", input: []int64{1, 1, 3, 5}, weights: []int64{1, 1, 2, 3}, config: unit},
++		{name: "strided blocks", input: []int64{2, 2, 7, 22}, weights: []int64{3, 2, 2, 3}, config: strided, bias: true},
++		{name: "height dilation", input: []int64{1, 2, 8, 14}, weights: []int64{3, 2, 3, 2}, config: dilated},
++		{name: "width dilation fallback", input: []int64{1, 2, 4, 18}, weights: []int64{2, 2, 2, 3}, config: fallback},
++		{name: "padding and blocks", input: []int64{1, 2, 4, 14}, weights: []int64{2, 2, 3, 3}, config: padded, bias: true},
++		{name: "groups and batches", input: []int64{2, 4, 4, 14}, weights: []int64{6, 2, 2, 3}, config: grouped, bias: true},
++		{name: "pointwise", input: []int64{2, 3, 4, 12}, weights: []int64{2, 3, 1, 1}, config: unit},
++		{name: "nonfinite interior", input: []int64{1, 2, 3, 14}, weights: []int64{2, 2, 2, 3}, config: unit, nonfinite: true},
++		{name: "nonfinite padding", input: []int64{1, 2, 3, 14}, weights: []int64{2, 2, 2, 3}, config: padded, nonfinite: true},
++		{name: "empty height", input: []int64{1, 1, 0, 14}, weights: []int64{1, 1, 1, 2}, config: padded},
++		{name: "empty width", input: []int64{1, 1, 3, 0}, weights: []int64{1, 1, 1, 2}, config: padded},
++	}
++	for _, tt := range tests {
++		t.Run(tt.name, func(t *testing.T) {
++			var (
++				input, weights, bias, output *Tensor
++				shape                        []int64
++				offset                       int
++				err                          error
++			)
++
++			if input, err = New(Float32, tt.input); err != nil {
++				t.Fatal(err)
++			}
++
++			if weights, err = New(Float32, tt.weights); err != nil {
++				t.Fatal(err)
++			}
++
++			for index := range input.floats {
++				input.floats[index] = []float32{16777216, 1, -16777216, -3, 0.25, 2, -0.5}[index%7]
++			}
++			for index := range weights.floats {
++				weights.floats[index] = float32(index%5-2) * 0.5
++			}
++			if tt.nonfinite {
++				input.floats[0] = float32(math.Inf(1))
++				input.floats[4] = math.Float32frombits(0x80000000)
++				weights.floats[0] = float32(math.Inf(-1))
++				weights.floats[3] = float32(math.NaN())
++			}
++
++			if tt.bias {
++				if bias, err = New(Float32, []int64{tt.weights[0]}); err != nil {
++					t.Fatal(err)
++				}
++
++				for index := range bias.floats {
++					bias.floats[index] = float32(index-2) * 0.25
++				}
++			}
++
++			if shape, err = Conv2DShape(tt.input, tt.weights, tt.config); err != nil {
++				t.Fatal(err)
++			}
++
++			if output, err = New(Float32, shape); err != nil {
++				t.Fatal(err)
++			}
++
++			if err = Conv2DInto(input, weights, bias, output, tt.config); err != nil {
++				t.Fatal(err)
++			}
++
++			for batch := 0; batch < int(shape[0]); batch++ {
++				for channel := 0; channel < int(shape[1]); channel++ {
++					for row := 0; row < int(shape[2]); row++ {
++						for col := 0; col < int(shape[3]); col++ {
++							want := conv2DValue(input, weights, batch, channel, row, col, tt.config)
++							if bias != nil {
++								want += bias.floats[channel]
++							}
++
++							got := output.floats[offset]
++							if math.Float32bits(got) != math.Float32bits(want) && !(math.IsNaN(float64(got)) && math.IsNaN(float64(want))) {
++								t.Fatalf("output[%d] = %v (%08x), want %v (%08x)", offset, got, math.Float32bits(got), want, math.Float32bits(want))
++							}
++
++							offset++
++						}
++					}
++				}
++			}
++		})
++	}
++}
