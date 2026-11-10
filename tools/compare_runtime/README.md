@@ -121,6 +121,16 @@ median gap is **16.60×**. The [profiling report](../../docs/performance/mnist/R
 records allocation benchmarks, module identity, checks and the earlier baseline.
 The full new comparison is `.cache/compare-runtime/v0.8.0-report.json`.
 
+With published **neuralnetwork v0.9.0**, the unchanged driver measured Go at
+452.90 / 548.02 µs median / p95 and ORT at 44.62 / 46.25 µs on 2026-11-09,
+a **10.15×** median gap. All 19 cases and top-1 checks pass, with unchanged
+maximum absolute error and Go outputs bit-identical to v0.8.0. Five alternating
+Go benchmark repetitions measured medians of 734.70 µs for v0.8.0 and 451.01 µs
+for v0.9.0, about 39% lower latency. The
+[second profiling report](../../docs/performance/mnist-round2/README.md) records
+the published module identity, raw benchmark samples and validation.
+The full comparison is `.cache/compare-runtime/v0.9.0-report.json`.
+
 The comparison-policy tests run with the same optional Python environment:
 
 ```sh

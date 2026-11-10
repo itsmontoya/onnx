@@ -3,3 +3,4 @@ third_party/onnx/onnx.proto whitespace=-blank-at-eof
 
 # Unified diff context preserves whitespace after its leading space marker.
 docs/performance/mnist/neuralnetwork.patch whitespace=-blank-at-eol,-space-before-tab
+docs/performance/mnist-round2/neuralnetwork.patch whitespace=-blank-at-eol,-space-before-tab

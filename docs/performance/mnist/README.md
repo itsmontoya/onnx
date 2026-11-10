@@ -1,5 +1,9 @@
 # MNIST profiling and first optimizations
 
+The [second profiling pass](../mnist-round2/README.md) records the subsequent
+published v0.9.0 integration, about 39% lower MNIST latency and a 10.15× ORT
+median gap. The v0.8.0 measurements below remain historical evidence.
+
 Measured on 2026-11-09, Apple M3, macOS arm64, Go 1.27.2,
 `GOMAXPROCS=1`, `CGO_ENABLED=0`. The baseline is ONNX commit
 `ded47707065787c819849e7c33fae592f2d878d6`, with the new benchmark added.
@@ -8,7 +12,7 @@ The initial profiling used
 
 ## Published v0.8.0 follow-up
 
-This checkout now requires the published `neuralnetwork v0.8.0`, commit
+The first optimization pass upgraded to published `neuralnetwork v0.8.0`, commit
 `743e049ca9e4877de3c33c0969b17119b6f1491d`, which includes the convolution and
 direct ReLU changes below. The standard comparison driver ran unchanged, with
 `GOWORK=off` and no local replacement. The ONNX ReLU snapshot optimization is
