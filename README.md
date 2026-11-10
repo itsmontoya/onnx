@@ -1,13 +1,13 @@
 # onnx
 
 A Go-native ONNX inference runtime built on
-[`neuralnetwork` v0.10.0](https://github.com/itsmontoya/neuralnetwork/tree/v0.10.0).
+[`neuralnetwork` v0.10.1](https://github.com/itsmontoya/neuralnetwork/tree/v0.10.1).
 Load an `.onnx` model, bind named immutable tensors, and evaluate named outputs
 on the CPU with `CGO_ENABLED=0`, without Python or native runtime libraries.
 
 RT-01–RT-19 implement the documented subset: **IR 8, exactly one
 empty standard-domain import at exactly opset 13 or 17, dense float32/int64, serial CPU execution**.
-The [generated support table](docs/getting-started.md#implemented-capability-table)
+The [generated support table](CAPABILITIES.md)
 records 25 operators at import 13 and 26 at import 17, including float32
 LayerNormalization, with their dtype, rank, attribute and optional-slot
 restrictions. Branching, multiple named inputs/outputs, defaulted initializers,
@@ -36,21 +36,25 @@ go run ./tools/capabilitiesgen
 The initial clone/module download needs network. Cached builds and tests use
 checked-in models and typed reference values without network, protoc, Python,
 C/C++ inference libraries or an external service. The `purego` tag selects the
-portable backend CPU path. The module has a Go 1.26.1 language baseline and pins
-Go 1.27.2, `neuralnetwork` v0.10.0 in [go.mod](go.mod), and protobuf v1.36.12.
+portable backend CPU path. The module requires
+Go 1.27.2, `neuralnetwork` v0.10.1 in [go.mod](go.mod), and protobuf v1.36.12.
 
-[Getting started](docs/getting-started.md) covers the public APIs, named I/O,
+Detailed guides and historical reports below link to their last tracked
+versions; the `docs/` directory is no longer included in this repository.
+
+[Getting started](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/getting-started.md) covers the public APIs, named I/O,
 compatible model authoring/export checks, external weights and reproducible
-failure cases. [Development](docs/development.md) gives full verification and
+failure cases. [Development](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/development.md) gives full verification and
 optional regeneration commands.
 
 The optional [ONNX Runtime comparison tool](tools/compare_runtime/README.md)
 runs a pinned pretrained MNIST model through both runtimes, checks numerical
 and top-1 agreement, and records CPU inference timings. It also accepts other
 compatible local models with named NumPy inputs.
-The [MNIST profiling report](docs/performance/mnist-round3/README.md) records the
-v0.10.0 comparison and allocation measurements: 28.5% lower inference latency
-than v0.9.0 on the measured Apple M3, with a 7.33× ORT median gap on this model.
+With `neuralnetwork` v0.10.1, seven alternating benchmark pairs on Apple M3
+measure 35.7% lower MNIST inference latency than v0.10.0, with unchanged
+allocations. The [comparison results](tools/compare_runtime/README.md) record a
+fresh 4.64× median gap versus ORT and unchanged numerical agreement.
 
 ## Runtime contract
 
@@ -71,20 +75,20 @@ budgets, rather than a process RSS cap. Cancellation brackets synchronous
 backend/protobuf operations; a running kernel has no interruption or latency
 guarantee. External tensors require `Options.ExternalData` even for LoadFile.
 `DirectoryResolver` confines regular-file ranges on supported Go platforms;
-checksum metadata is unsupported. See the [runtime contract](docs/runtime-contract.md)
+checksum metadata is unsupported. See the [runtime contract](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/runtime-contract.md)
 for defaults, accounting, platform restrictions and exact numerical policies.
 
 ## Compatibility evidence and release status
 
-[Fixture provenance](docs/release-checklist.md#reference-evidence) records actual
+[Fixture provenance](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/release-checklist.md#reference-evidence) records actual
 reference comparisons and exceptions. M1–M4 examples, offline comparisons,
 resource/lifecycle tests and bounded fuzz targets pass. Empty-value, pooling
 and BatchNormalization evaluator/ORT differences remain explicit; skipped tests
-never count as support. The [RT-16 report](docs/performance/rt16/README.md)
+never count as support. The [RT-16 report](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/performance/rt16/README.md)
 records fixed-graph storage savings and latency tradeoffs. No general performance
 or numerical error bound is claimed.
 
-The [release checklist](docs/release-checklist.md) records checks and known gaps.
+The [release checklist](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/release-checklist.md) records checks and known gaps.
 **There is no project LICENSE.** Maintainers must decide and document licensing
 for runtime source and original fixtures before public release. The included
 [third-party notices](third_party/README.md) cover their identified upstream
@@ -96,11 +100,11 @@ tag is a separate maintainer action; RT-18 does not publish one.
 Read [AGENTS.md](AGENTS.md), [STYLEGUIDE.md](STYLEGUIDE.md) and
 [ROADMAP.md](ROADMAP.md). [TODO.md](TODO.md) gives the sequential task order;
 [NEEDS.md](NEEDS.md) records the pinned backend and published handoffs.
-The [RT-17 handoff](docs/handoff-rt17.md) records the schema audit, actual
+The [RT-17 handoff](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-rt17.md) records the schema audit, actual
 unmodified PyTorch 2.2.2 IR-8/opset-17 MLP export and validation.
-[RT-16](docs/handoff-rt16.md) records measured call-local storage reuse. Future
-model-selected work extends coverage beyond [RT-19’s audited corpus and first normalization set](docs/handoff-rt19.md).
-The [compatibility report](docs/model-compatibility.md) and independent task files
+[RT-16](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-rt16.md) records measured call-local storage reuse. Future
+model-selected work extends coverage beyond [RT-19’s audited corpus and first normalization set](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-rt19.md).
+The [compatibility report](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/model-compatibility.md) and independent task files
 keep unselected families explicit. Backend kernel availability does not broaden runtime compatibility.
 
 Preserve [the PR template](.github/PULL_REQUEST_TEMPLATE.md) and record exact

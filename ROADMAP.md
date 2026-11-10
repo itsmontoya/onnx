@@ -45,11 +45,11 @@ its measured compatible CPU product bridge/workspace and ownership contract.
 [NEEDS.md](NEEDS.md) records this pin and the original v0.7.0 release audit.
 NN-01–NN-13 are implemented; the ignored library backlog is not a release API.
 
-RT-11/RT-12 supplied the [runtime inputs](docs/handoff-nn13.md) that resolved
-NN-13's original blocker. [RT-16](docs/handoff-rt16.md) consumes its public
+RT-11/RT-12 supplied the [runtime inputs](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-nn13.md) that resolved
+NN-13's original blocker. [RT-16](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-rt16.md) consumes its public
 source/report without local replacements and records before/after measurements
 and conservative storage reuse. The November 8
-[blocker assessment](docs/blocker-rt16.md) remains historical evidence with a
+[blocker assessment](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/blocker-rt16.md) remains historical evidence with a
 resolution note. No optimization tag or PR merge is implied. Existing NN
 dependencies identify implemented contracts, and backend kernel tests alone do
 not establish ONNX runtime compatibility.
@@ -1080,7 +1080,7 @@ Changed files: [examples/inference/main.go](examples/inference/main.go),
 [inference_integration_test.go](inference_integration_test.go),
 [tools/check_inference.py](tools/check_inference.py), the two models, 12 named
 TensorProto values, provenance and guide under [testdata/inference](testdata/inference/README.md),
-[getting started](docs/getting-started.md), [integration report](docs/integration-rt11.md),
+[getting started](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/getting-started.md), [integration report](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/integration-rt11.md),
 README, TODO, NEEDS, development/runtime-contract documentation and this roadmap.
 The example uses actual `LoadFile(ctx, path, Options{})`, `Model.Metadata`,
 `Model.NewSession`, `NewFloat32(shape, values)`,
@@ -1190,7 +1190,7 @@ and [testdata/m2](testdata/m2/README.md) add exact typed fixtures; existing
 inference/conformance/profile tools and documentation track current statuses.
 The public example gains `-graph shape`; [inference_benchmark_test.go](inference_benchmark_test.go)
 provides Load/First/Warm benchmarks. README, TODO, NEEDS, runtime/development/
-getting-started guides and the [NN-13 handoff](docs/handoff-nn13.md) record the
+getting-started guides and the [NN-13 handoff](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-nn13.md) record the
 implemented contracts and unchanged copying baseline.
 
 All eight M2 schema-13 operators execute with float32/int64 data as applicable.
@@ -1244,7 +1244,7 @@ One shared session runs both batches; separate sessions start concurrently;
 retained outputs compare after later runs/Close. Omitted Squeeze also changes
 rank correctly through batches 1 → 3 → 1 without stale state.
 
-The [NN-13 handoff](docs/handoff-nn13.md) links the published measurement plan,
+The [NN-13 handoff](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-nn13.md) links the published measurement plan,
 accessible runtime/backend revisions, model and every named input/output hash,
 regeneration, examples and runnable baseline commands. Existing MLP SHA-256 is
 unchanged: `04df066d0a12b0e6ddf2ba89e9e452768939a745ddd574cfb39780d0e14c06f9`;
@@ -1392,7 +1392,7 @@ updated conformance provenance:
 `bd1b7d7d8659ef7289207d33772d0651226f5df7cc5b6639a4800a404e69849e`.
 M1/M2 and prior inference model/value bytes remain unchanged. Their exact
 provenance hashes, every named CNN input/output hash, commands and reference
-restrictions are in [the integration report](docs/integration-rt13.md). Pinned
+restrictions are in [the integration report](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/integration-rt13.md). Pinned
 Python 3.9.6 / ONNX 1.16.2 source
 `3bf92c03a9f27eba3bda1e5b9e63ea20ec213557` / NumPy 1.26.4 /
 protobuf 4.25.3 / ORT 1.19.2 reproduces all fixtures. Ordinary Go tests remain
@@ -1447,7 +1447,7 @@ verification policy against the pinned
 from RT-13 base `00253078fd95fc0314cac252143a3c5efb8d4b6b`. Initial implementation
 `a60003498c18b6f479d2279f9981ffc0e1bd1597` and fixture/example
 `f8713414ccb9ec3d5480706d6d749fc9fd9206ba` are separate focused commits. The
-[integration report](docs/integration-rt14.md) records exact APIs, changed
+[integration report](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/integration-rt14.md) records exact APIs, changed
 components, checks, platform limits and all artifact hashes. Backend remains
 neuralnetwork v0.7.0 (`6048452c57a0a293db4591cd2e2febd7d6b743a3`), protobuf
 v1.36.12, toolchain Go 1.27.2, language baseline Go 1.26.1 and ONNX v1.16.2
@@ -1552,7 +1552,7 @@ already returned owned outputs and immutable constants. Allocation accounting
 tests include intermediates and scratch, not just final tensor sizes. All
 documented default limits and cancellation promises have direct tests.
 
-**Handoff (2026-11-08):** [The RT-15 audit](docs/hardening-rt15.md) records the
+**Handoff (2026-11-08):** [The RT-15 audit](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/hardening-rt15.md) records the
 full limit/test map, allocation evidence, exact cancellation granularity and
 fuzz scope. Base is RT-14 `cdcfb6fdb86e7331587670c83389d6c9558540ba`;
 implementation/test revision is
@@ -1612,7 +1612,7 @@ are reproducible. The release checklist captures passing tests, reference
 comparisons, and known gaps; no skipped tests are advertised as support. Do not
 call the package fully ONNX-compliant or imply compatibility with every model.
 
-**Handoff (2026-11-08):** [The RT-18 handoff](docs/handoff-rt18.md) records
+**Handoff (2026-11-08):** [The RT-18 handoff](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-rt18.md) records
 implementation/documentation revision
 `928496894ca25fa0dd2edbca939abb9081e54a72`, based on RT-15
 `3a5b5b3baa0bb1bce1e6a7d378157ab2f1c8aac0`. README, usage/development/contract
@@ -1621,7 +1621,7 @@ limits/cancellation, errors, external resolution, export origins and restriction
 `go run ./tools/capabilitiesgen` checks the generated support table directly from
 the same embedded Capabilities records used by validation; `-write` regenerates
 it, Python inference checking delegates to it, and CI checks drift without Python.
-The [release checklist](docs/release-checklist.md) and
+The [release checklist](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/release-checklist.md) and
 [third-party notices](third_party/README.md) retain actual reference exceptions,
 pinned dependency/license texts and honest release gaps. No project LICENSE
 exists; choosing it and original-fixture licensing, merging, and publishing a
@@ -1663,8 +1663,8 @@ aliases, changing batch sizes, cancellation, and concurrent sessions still pass
 golden/race tests. Memory reuse never changes previously returned outputs. Keep
 optimizations only with demonstrated benefit or a documented memory objective.
 
-**Completion (2026-11-09):** The [RT-16 handoff](docs/handoff-rt16.md) and
-[measurement report](docs/performance/rt16/README.md) consume public NN-13 source
+**Completion (2026-11-09):** The [RT-16 handoff](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-rt16.md) and
+[measurement report](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/performance/rt16/README.md) consume public NN-13 source
 `a64fa687e269c3a1bf3ac345434b46c8ed4a59fc` and record repeated default/purego
 MLP/CNN/shape Parse/Load/First/Warm samples, actual numeric copies/allocations,
 conservative payload bounds, reservation high-water and profile cross-checks.
@@ -1679,7 +1679,7 @@ coverage pass; hosted checks are recorded on the follow-up PR. The original
 working stack is merged; this optimization remains separately reviewable.
 
 **Historical handoff (2026-11-08): blocked, not complete at that time.** The
-[RT-16 dependency assessment](docs/blocker-rt16.md) rechecked live backend
+[RT-16 dependency assessment](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/blocker-rt16.md) rechecked live backend
 releases, tags, main, PR #114 and its tracked handoff. All published backend
 paths still resolve to pinned v0.7.0
 `6048452c57a0a293db4591cd2e2febd7d6b743a3`; NN-13 has no published
@@ -1715,7 +1715,7 @@ graphs whose semantics differ by version. Version rejection remains deterministi
 and the machine-readable manifest lists tested intervals/restrictions. The
 runtime never silently converts opsets or invokes an external converter.
 
-**Handoff (2026-11-08):** [The RT-17 handoff](docs/handoff-rt17.md) records
+**Handoff (2026-11-08):** [The RT-17 handoff](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-rt17.md) records
 implementation `5840f3ed99e43d04bbfef36a890d7e44862c5c30`, stacked on RT-16
 blocker revision `e801cf3cdc1d75d0f82319da03fa229147d208fb`. Exactly one new
 profile is implemented: IR 8, empty domain, import 17. The audit compares all 25
@@ -1768,7 +1768,7 @@ handoff-ready implementation task. The first implemented set passes isolated
 and model-level reference checks. Unselected features remain explicit gaps,
 and adding coverage does not weaken existing validation.
 
-**Handoff (2026-11-08):** [The RT-19 handoff](docs/handoff-rt19.md) records
+**Handoff (2026-11-08):** [The RT-19 handoff](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-rt19.md) records
 implementation `1744afa991a88468aeff708c8b0a12e19a9df405` and final scalar-staging
 reservation `a1b83943dae6fe38b2435a6f4ab73fb792961422`, stacked on RT-17
 `4ded3992742ff4dfa33f12c3c7122544e1f6d503`. The audited corpus preserves 33

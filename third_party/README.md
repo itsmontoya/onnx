@@ -34,13 +34,13 @@ normalization helper graphs have no redistribution grant or project license.
 ## Go runtime dependencies
 
 License copies below are byte-identical to the LICENSE in each pinned downloaded
-Go module; neuralnetwork v0.10.0 was rechecked on 2026-11-09. Module zip/content and
+Go module; neuralnetwork v0.10.1 was rechecked on 2026-11-10. Module zip/content and
 module-file checksums remain in [go.sum](../go.sum). No dependencies, replacements
 or backend changes were introduced for RT-18.
 
 | Module | Version | Primary upstream license | Included text |
 | --- | --- | --- | --- |
-| github.com/itsmontoya/neuralnetwork | v0.10.0, commit `1ea5263a7e7910aafbfe91695393f8b3382c6536` | [MIT, copyright 2026 Josh Montoya](https://github.com/itsmontoya/neuralnetwork/blob/1ea5263a7e7910aafbfe91695393f8b3382c6536/LICENSE) | [neuralnetwork-LICENSE](licenses/neuralnetwork-LICENSE) |
+| github.com/itsmontoya/neuralnetwork | v0.10.1, commit `ea17b585c42264ca85a637705608c284b80464bc` | [MIT, copyright 2026 Josh Montoya](https://github.com/itsmontoya/neuralnetwork/blob/ea17b585c42264ca85a637705608c284b80464bc/LICENSE) | [neuralnetwork-LICENSE](licenses/neuralnetwork-LICENSE) |
 | google.golang.org/protobuf | v1.36.12 | [BSD 3-Clause, copyright 2018 The Go Authors](https://github.com/protocolbuffers/protobuf-go/blob/v1.36.12/LICENSE) | [protobuf-LICENSE](licenses/protobuf-LICENSE) |
 | github.com/tphakala/simd (indirect) | v1.3.0 | [MIT, copyright 2025 Tomi P. Hakala](https://github.com/tphakala/simd/blob/v1.3.0/LICENSE) | [simd-LICENSE](licenses/simd-LICENSE) |
 | golang.org/x/sys (indirect) | v0.45.0 | [BSD 3-Clause, copyright 2009 The Go Authors](https://cs.opensource.google/go/x/sys/+/v0.45.0:LICENSE) | [x-sys-LICENSE](licenses/x-sys-LICENSE) |
@@ -48,7 +48,7 @@ or backend changes were introduced for RT-18.
 The selected **Go 1.27.2** toolchain's BSD 3-Clause text is included as
 [go-LICENSE](licenses/go-LICENSE), copied from that toolchain's root LICENSE;
 [the upstream source](https://cs.opensource.google/go/go/+/refs/tags/go1.27.2:LICENSE)
-is the primary notice. The module language baseline is Go 1.26.1. Go's source
+is the primary notice. The module language baseline is Go 1.27.2. Go's source
 files retain any more specific embedded notices; review the actual artifacts
 when deciding what to redistribute. A `purego` build does not change the module
 versions pinned in go.mod.
@@ -62,7 +62,7 @@ versions pinned in go.mod.
 
 Recheck with `go mod verify`, `go list -m all` and
 `shasum -a 256 third_party/licenses/*`. To compare a license copy directly, use
-`cmp third_party/licenses/neuralnetwork-LICENSE "$(go env GOMODCACHE)/github.com/itsmontoya/neuralnetwork@v0.10.0/LICENSE"`
+`cmp third_party/licenses/neuralnetwork-LICENSE "$(go env GOMODCACHE)/github.com/itsmontoya/neuralnetwork@v0.10.1/LICENSE"`
 and the corresponding paths for the other modules. The module graph also retains
 checksums for upstream testing dependencies; that does not make those packages
 runtime imports. Inspect the target build with `go list -deps ./...`.
@@ -73,7 +73,7 @@ protoc 33.2 and protoc-gen-go v1.36.12 generate bindings; Python 3.9.6, ONNX
 1.16.2, NumPy 1.26.4, Python protobuf 4.25.3 and ORT 1.19.2 generate/check reference
 fixtures. They are not runtime dependencies and their packages/binaries are not
 vendored here. Their versions and actual observations are recorded in each
-[fixture provenance set](../docs/release-checklist.md#reference-evidence).
+[fixture provenance set](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/release-checklist.md#reference-evidence).
 If distributing development tooling itself, inspect the corresponding upstream
 release notices separately. ONNX Apache-2.0 attribution remains included for the
 upstream schema and copied test artifacts even though normal users need no

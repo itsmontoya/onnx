@@ -25,7 +25,7 @@ operator-set serialization schema, are not needed to decode ModelProto or
 TensorProto and are not included. The source defines newer features and versions
 than this runtime supports; successful wire decoding does not accept them.
 
-The [generation instructions](../../docs/development.md#regeneration) use
+The [generation instructions](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/development.md#regeneration) use
 protoc **33.2** (generated version string **6.33.2**) and
 protoc-gen-go **v1.36.12**. The Go package mapping is supplied as a compiler
 option so this vendored source remains byte-identical to upstream. Generated

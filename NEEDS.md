@@ -18,7 +18,7 @@ publishes NN-13's measured CPU product bridge/workspace; the runtime pins source
 [report and ownership contract](https://github.com/itsmontoya/neuralnetwork/blob/458b64d18a2e974a1bd51313d040060a85f1f70a/docs/performance/nn13/README.md)
 record actual copy/allocation measurements, conservative numeric-payload bounds,
 normal/purego/cgo-disabled/race compatibility and Metal coherence checks.
-The [RT-16 handoff](docs/handoff-rt16.md) consumes that revision and completes
+The [RT-16 handoff](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-rt16.md) consumes that revision and completes
 runtime storage measurement/reuse. No newer release tag or optimization merge
 is claimed. The v0.7.0 assessment below is historical release evidence.
 
@@ -38,15 +38,15 @@ see [the fixture guide](testdata/conformance/README.md). RT-13 implements the
 bounded M3 CNN subset; primitive ONNX reduction adapters remain deferred. RT-12 implements the M2
 shape adapters with the reference exceptions below.
 RT-11 demonstrates this working M1 runtime with original MLP and two-input/
-two-output branching models at batches 1 and 3. The [integration report](docs/integration-rt11.md)
+two-output branching models at batches 1 and 3. The [integration report](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/integration-rt11.md)
 records reference comparisons, provenance/hashes, lifecycle/concurrent-session
 checks and exact supported restrictions. RT-12 adds a shape-heavy graph at both batch sizes and supplies the
-[accessible runtime handoff](docs/handoff-nn13.md) needed to resume NN-13. RT-14 adds explicit external weights, RT-15 hardens
+[accessible runtime handoff](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-nn13.md) needed to resume NN-13. RT-14 adds explicit external weights, RT-15 hardens
 resource/lifecycle behavior, and RT-18 documents the M1–M4 subset and
-[release checks](docs/release-checklist.md). RT-17 adds exactly IR 8/opset 17
-with [audited schema adapters and a real PyTorch export](docs/handoff-rt17.md);
+[release checks](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/release-checklist.md). RT-17 adds exactly IR 8/opset 17
+with [audited schema adapters and a real PyTorch export](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-rt17.md);
 the original opset-13 profile is preserved. RT-19 consumes published NN-12
-ReduceMean/Sqrt/arithmetic internally for [fused float32 LayerNormalization-17](docs/tasks/layer-normalization.md).
+ReduceMean/Sqrt/arithmetic internally for [fused float32 LayerNormalization-17](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/tasks/layer-normalization.md).
 No primitive ONNX reduction/math adapters or backend revisions are introduced.
 
 The library's `NEEDS.md` is ignored and is not included in the release tree.
@@ -95,7 +95,7 @@ or disagreement must not count as a passing compatibility case.
 ### RT-12 inputs for NN-13
 
 RT-11 and RT-12 use the released copying backend and provide the
-[runtime source/fixture handoff](docs/handoff-nn13.md), including reproducible
+[runtime source/fixture handoff](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-nn13.md), including reproducible
 MLP and shape-heavy graphs, named inputs/expected outputs and batches 1 and 3. NN-13 can then measure the unchanged
 baseline, select a justified bridge/workspace change, and report before/after
 latency, allocations, copied bytes, and peak live memory with ownership/race

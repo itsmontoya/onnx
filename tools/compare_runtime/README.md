@@ -117,7 +117,7 @@ ONNX ReLU output snapshots, the same settings on 2026-11-09 measured:
 | ORT | 41.54 / 44.21 µs |
 
 All 19 cases and top-1 checks pass with the same maximum absolute error. The
-median gap is **16.60×**. The [profiling report](../../docs/performance/mnist/README.md)
+median gap is **16.60×**. The [profiling report](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/performance/mnist/README.md)
 records allocation benchmarks, module identity, checks and the earlier baseline.
 The full new comparison is `.cache/compare-runtime/v0.8.0-report.json`.
 
@@ -127,7 +127,7 @@ a **10.15×** median gap. All 19 cases and top-1 checks pass, with unchanged
 maximum absolute error and Go outputs bit-identical to v0.8.0. Five alternating
 Go benchmark repetitions measured medians of 734.70 µs for v0.8.0 and 451.01 µs
 for v0.9.0, about 39% lower latency. The
-[second profiling report](../../docs/performance/mnist-round2/README.md) records
+[second profiling report](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/performance/mnist-round2/README.md) records
 the published module identity, raw benchmark samples and validation.
 The full comparison is `.cache/compare-runtime/v0.9.0-report.json`.
 
@@ -137,9 +137,44 @@ a **7.33×** median gap. All 19 numerical and top-1 checks pass, with unchanged
 maximum absolute error and Go outputs bit-identical to v0.9.0. Seven alternating
 Go benchmark pairs measured medians of 433.70 µs for v0.9.0 and 310.14 µs for
 v0.10.0, about 28.5% lower latency with unchanged allocations. The
-[third profiling report](../../docs/performance/mnist-round3/README.md) records
+[third profiling report](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/performance/mnist-round3/README.md) records
 the published module identity, raw measurements and validation. The full
 comparison is `.cache/compare-runtime/v0.10.0-report.json`.
+
+On 2026-11-10, upgrading to published **neuralnetwork v0.10.1**, commit
+`ea17b585c42264ca85a637705608c284b80464bc`, measures Go at **194.50 / 277.72 µs**
+median / p95 and ORT at **41.96 / 47.50 µs**, a **4.64×** median gap. All 19
+numerical and top-1 cases pass, including the original/adapted-model and upstream
+expected-output checks. Maximum absolute error remains `1.9073486328125e-5`;
+all Go output bits and model/input hashes match the fresh v0.10.0 baseline.
+
+Seven alternating precompiled benchmark pairs, reversing order each repetition,
+measure `BenchmarkMNIST` at **311.059 µs/op** for v0.10.0 and **200.054 µs/op**
+for v0.10.1: **35.7% lower latency / 1.55× faster**, with unchanged
+**179440 B/op / 174 allocations**. Baseline samples span 305.389–326.451 µs;
+new samples span 196.647–202.179 µs. Each sample runs for 700 ms, using
+`GOWORK=off`, `CGO_ENABLED=0`, `GOARM64=v8.0`, and `GOMAXPROCS=1`, on Apple M3
+with Go 1.27.2 and the same pinned Python packages. No tests, builds or profiles
+run concurrently with those measurements. The backend's new interior
+convolution tile is specific to ARM64 builds without `purego`; portable builds
+retain their prior path.
+
+The six small warm fixtures show median increases of 1.1–3.1% in five alternating
+200 ms samples, with unchanged allocations. Longer seven-pair 700 ms checks of
+the batch-three MLP and CNN show increases of 2.48% and 2.47%, respectively
+(about 0.09 µs and 0.18 µs). The cause of these small regressions was not isolated;
+the large MNIST gain does not establish a performance improvement for every graph.
+
+The additional 131 archived numerical probes produce bit-identical outputs
+through v0.10.0, v0.10.1 and v0.10.1 `purego`. Default, cgo-disabled, `purego`
+and race suites, bounded fuzzing and comparison-policy tests pass. The full
+comparison is `.cache/compare-runtime/v0.10.1-report.json`; local raw validation
+and benchmark logs are in `/private/tmp/onnx-v0.10.1-integration/`.
+
+The optional `BenchmarkMNISTNodes` isolates prepared operators and ReLU
+correction costs using real intermediate tensors. Its `04_ConvRotatingWorkingSet`
+subbenchmarks rotate independent tensor sets to diagnose cache sensitivity;
+they are separate experiments from the unchanged end-to-end `BenchmarkMNIST`.
 
 The comparison-policy tests run with the same optional Python environment:
 
