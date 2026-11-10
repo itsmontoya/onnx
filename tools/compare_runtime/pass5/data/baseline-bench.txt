@@ -1,0 +1,14 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNIST 	    5922	    200256 ns/op	  179440 B/op	     174 allocs/op
+BenchmarkMNIST 	    6133	    196486 ns/op	  179440 B/op	     174 allocs/op
+BenchmarkMNIST 	    6080	    202945 ns/op	  179440 B/op	     174 allocs/op
+BenchmarkMNIST 	    6064	    199826 ns/op	  179440 B/op	     174 allocs/op
+BenchmarkMNIST 	    5856	    200554 ns/op	  179440 B/op	     174 allocs/op
+BenchmarkMNIST 	    6121	    202797 ns/op	  179440 B/op	     174 allocs/op
+BenchmarkMNIST 	    5841	    201927 ns/op	  179440 B/op	     174 allocs/op
+BenchmarkMNIST 	    5967	    204138 ns/op	  179440 B/op	     174 allocs/op
+BenchmarkMNIST 	    5878	    204426 ns/op	  179440 B/op	     174 allocs/op
+PASS

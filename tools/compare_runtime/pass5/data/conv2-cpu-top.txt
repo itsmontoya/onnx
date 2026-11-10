@@ -1,0 +1,33 @@
+File: baseline.test
+Type: cpu
+Time: 2026-11-10 07:45:13 PST
+Duration: 8.40s, Total samples = 6.23s (74.15%)
+Showing nodes accounting for 6.05s, 97.11% of 6.23s total
+Dropped 32 nodes (cum <= 0.03s)
+      flat  flat%   sum%        cum   cum%
+     4.27s 68.54% 68.54%      4.30s 69.02%  github.com/itsmontoya/neuralnetwork/tensor.conv2DFourChannels
+     0.98s 15.73% 84.27%      0.98s 15.73%  github.com/itsmontoya/neuralnetwork/tensor.conv2DInteriorTile
+     0.45s  7.22% 91.49%      0.45s  7.22%  runtime.madvise
+     0.15s  2.41% 93.90%      1.13s 18.14%  github.com/itsmontoya/neuralnetwork/tensor.conv2DFourByFour
+     0.13s  2.09% 95.99%      5.56s 89.25%  github.com/itsmontoya/neuralnetwork/tensor.conv2DChannelBlocksInto
+     0.03s  0.48% 96.47%      0.04s  0.64%  runtime.(*timer).updateHeap
+     0.02s  0.32% 96.79%      0.04s  0.64%  runtime.casgstatus
+     0.02s  0.32% 97.11%      0.16s  2.57%  runtime.schedule
+         0     0% 97.11%      5.58s 89.57%  github.com/itsmontoya/neuralnetwork/tensor.Conv2DInto
+         0     0% 97.11%      5.56s 89.25%  github.com/itsmontoya/neuralnetwork/tensor.conv2DValuesInto
+         0     0% 97.11%      5.58s 89.57%  github.com/itsmontoya/onnx.(*cnnCall).run
+         0     0% 97.11%      5.58s 89.57%  github.com/itsmontoya/onnx.BenchmarkMNISTNodes.func3
+         0     0% 97.11%      0.47s  7.54%  runtime.(*mheap).alloc.func1
+         0     0% 97.11%      0.47s  7.54%  runtime.(*mheap).allocSpan
+         0     0% 97.11%      0.08s  1.28%  runtime.(*timers).check
+         0     0% 97.11%      0.05s   0.8%  runtime.(*timers).run
+         0     0% 97.11%      0.11s  1.77%  runtime.findRunnable
+         0     0% 97.11%      0.19s  3.05%  runtime.gopreempt_m (inline)
+         0     0% 97.11%      0.19s  3.05%  runtime.goschedImpl
+         0     0% 97.11%      0.16s  2.57%  runtime.morestack
+         0     0% 97.11%      0.19s  3.05%  runtime.newstack
+         0     0% 97.11%      0.45s  7.22%  runtime.sysUsed (inline)
+         0     0% 97.11%      0.45s  7.22%  runtime.sysUsedOS (inline)
+         0     0% 97.11%      0.47s  7.54%  runtime.systemstack
+         0     0% 97.11%      5.58s 89.57%  testing.(*B).run1.func1
+         0     0% 97.11%      5.58s 89.57%  testing.(*B).runN

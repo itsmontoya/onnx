@@ -1,0 +1,22 @@
+File: baseline.test
+Type: inuse_space
+Time: 2026-11-10 07:42:23 PST
+Showing nodes accounting for 170.19kB, 87.23% of 195.09kB total
+Dropped 112 nodes (cum <= 0.97kB)
+Showing top 15 nodes out of 116
+      flat  flat%   sum%        cum   cum%
+   39.02kB 20.00% 20.00%    50.06kB 25.66%  google.golang.org/protobuf/internal/filedesc.(*Message).unmarshalFull
+   24.17kB 12.39% 32.39%    51.62kB 26.46%  google.golang.org/protobuf/internal/impl.fieldInfoForList
+   20.33kB 10.42% 42.81%    20.33kB 10.42%  reflect.compiledTypelinks
+   17.56kB  9.00% 51.81%    23.83kB 12.21%  google.golang.org/protobuf/internal/impl.(*MessageInfo).makeCoderMethods
+   14.75kB  7.56% 59.37%    17.28kB  8.86%  google.golang.org/protobuf/internal/impl.fieldInfoForScalar
+   13.74kB  7.04% 66.41%   145.30kB 74.48%  google.golang.org/protobuf/internal/impl.(*MessageInfo).makeKnownFieldsFunc
+    7.23kB  3.71% 70.12%     7.23kB  3.71%  google.golang.org/protobuf/internal/strs.(*Builder).grow (inline)
+    5.88kB  3.01% 73.13%        6kB  3.08%  google.golang.org/protobuf/internal/impl.fieldInfoForMessage
+    5.69kB  2.92% 76.05%     5.86kB  3.00%  google.golang.org/protobuf/internal/impl.fieldInfoForOneof
+    5.19kB  2.66% 78.71%     5.19kB  2.66%  google.golang.org/protobuf/internal/impl.(*MessageInfo).makeStructInfo
+    3.59kB  1.84% 80.55%     3.59kB  1.84%  internal/sync.newIndirectNode[go.shape.interface {},go.shape.interface {}] (inline)
+    3.52kB  1.81% 82.36%    10.71kB  5.49%  encoding/json/v2.makeStructFields
+    3.52kB  1.80% 84.16%     6.89kB  3.53%  encoding/json/v2.makeStructFields.func3
+    3.14kB  1.61% 85.77%     3.75kB  1.92%  google.golang.org/protobuf/internal/filedesc.(*Enum).unmarshalFull
+    2.86kB  1.47% 87.23%     2.86kB  1.47%  internal/sync.newEntryNode[go.shape.interface {},go.shape.interface {}] (inline)

@@ -1,0 +1,200 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/itsmontoya/onnx
+cpu: Apple M3
+BenchmarkMNISTNodes/00_Conv         	   19897	     18182 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/00_Conv
+    mnist_diagnostic_benchmark_test.go:91: input=[1 1 28 28] output=[1 8 28 28] conv={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1} pool={Kernel:[5 5] Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/00_Conv         	   19902	     18158 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/00_Conv
+    mnist_diagnostic_benchmark_test.go:91: input=[1 1 28 28] output=[1 8 28 28] conv={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1} pool={Kernel:[5 5] Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/00_Conv         	   19842	     18194 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/00_Conv
+    mnist_diagnostic_benchmark_test.go:91: input=[1 1 28 28] output=[1 8 28 28] conv={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1} pool={Kernel:[5 5] Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/00_Conv         	   19662	     18286 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/00_Conv
+    mnist_diagnostic_benchmark_test.go:91: input=[1 1 28 28] output=[1 8 28 28] conv={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1} pool={Kernel:[5 5] Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/00_Conv         	   19756	     18209 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/00_Conv
+    mnist_diagnostic_benchmark_test.go:91: input=[1 1 28 28] output=[1 8 28 28] conv={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1} pool={Kernel:[5 5] Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/01_Add          	   20409	     17560 ns/op	     216 B/op	       7 allocs/op
+--- BENCH: BenchmarkMNISTNodes/01_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 8 28 28] output=[1 8 28 28]
+BenchmarkMNISTNodes/01_Add          	   20547	     17527 ns/op	     216 B/op	       7 allocs/op
+--- BENCH: BenchmarkMNISTNodes/01_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 8 28 28] output=[1 8 28 28]
+BenchmarkMNISTNodes/01_Add          	   20547	     17549 ns/op	     216 B/op	       7 allocs/op
+--- BENCH: BenchmarkMNISTNodes/01_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 8 28 28] output=[1 8 28 28]
+BenchmarkMNISTNodes/01_Add          	   20517	     17568 ns/op	     216 B/op	       7 allocs/op
+--- BENCH: BenchmarkMNISTNodes/01_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 8 28 28] output=[1 8 28 28]
+BenchmarkMNISTNodes/01_Add          	   20500	     17550 ns/op	     216 B/op	       7 allocs/op
+--- BENCH: BenchmarkMNISTNodes/01_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 8 28 28] output=[1 8 28 28]
+BenchmarkMNISTNodes/02_Relu/WithCorrection         	   32184	     11122 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu/WithCorrection         	   31711	     11265 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu/WithCorrection         	   32437	     11166 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu/WithCorrection         	   32008	     11152 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu/WithCorrection         	   32263	     11113 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu/BackendOnly            	   85221	      4287 ns/op	       0 B/op	       0 allocs/op
+BenchmarkMNISTNodes/02_Relu/BackendOnly            	   84654	      4281 ns/op	       0 B/op	       0 allocs/op
+BenchmarkMNISTNodes/02_Relu/BackendOnly            	   83164	      4278 ns/op	       0 B/op	       0 allocs/op
+BenchmarkMNISTNodes/02_Relu/BackendOnly            	   85633	      4267 ns/op	       0 B/op	       0 allocs/op
+BenchmarkMNISTNodes/02_Relu/BackendOnly            	   86757	      4227 ns/op	       0 B/op	       0 allocs/op
+BenchmarkMNISTNodes/02_Relu/ONNXCorrectionOnly     	   52599	      6808 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu/ONNXCorrectionOnly     	   52375	      6805 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu/ONNXCorrectionOnly     	   52958	      6840 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu/ONNXCorrectionOnly     	   52488	      6838 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/02_Relu/ONNXCorrectionOnly     	   52938	      6780 ns/op	   27264 B/op	       1 allocs/op
+BenchmarkMNISTNodes/03_MaxPool                     	   22508	     16052 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/03_MaxPool
+    mnist_diagnostic_benchmark_test.go:91: input=[1 8 28 28] output=[1 8 14 14] conv={Strides:[2 2] Dilations:[1 1] Pads:[0 0 0 0] Groups:1} pool={Kernel:[2 2] Strides:[2 2] Dilations:[1 1] Pads:[0 0 0 0] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/03_MaxPool                     	   22293	     16096 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/03_MaxPool
+    mnist_diagnostic_benchmark_test.go:91: input=[1 8 28 28] output=[1 8 14 14] conv={Strides:[2 2] Dilations:[1 1] Pads:[0 0 0 0] Groups:1} pool={Kernel:[2 2] Strides:[2 2] Dilations:[1 1] Pads:[0 0 0 0] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/03_MaxPool                     	   22395	     16087 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/03_MaxPool
+    mnist_diagnostic_benchmark_test.go:91: input=[1 8 28 28] output=[1 8 14 14] conv={Strides:[2 2] Dilations:[1 1] Pads:[0 0 0 0] Groups:1} pool={Kernel:[2 2] Strides:[2 2] Dilations:[1 1] Pads:[0 0 0 0] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/03_MaxPool                     	   22339	     16159 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/03_MaxPool
+    mnist_diagnostic_benchmark_test.go:91: input=[1 8 28 28] output=[1 8 14 14] conv={Strides:[2 2] Dilations:[1 1] Pads:[0 0 0 0] Groups:1} pool={Kernel:[2 2] Strides:[2 2] Dilations:[1 1] Pads:[0 0 0 0] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/03_MaxPool                     	   22262	     16152 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/03_MaxPool
+    mnist_diagnostic_benchmark_test.go:91: input=[1 8 28 28] output=[1 8 14 14] conv={Strides:[2 2] Dilations:[1 1] Pads:[0 0 0 0] Groups:1} pool={Kernel:[2 2] Strides:[2 2] Dilations:[1 1] Pads:[0 0 0 0] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/04_Conv                        	    3722	    100052 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_Conv
+    mnist_diagnostic_benchmark_test.go:91: input=[1 8 14 14] output=[1 16 14 14] conv={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1} pool={Kernel:[5 5] Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/04_Conv                        	    3542	    100288 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_Conv
+    mnist_diagnostic_benchmark_test.go:91: input=[1 8 14 14] output=[1 16 14 14] conv={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1} pool={Kernel:[5 5] Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/04_Conv                        	    3559	    100693 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_Conv
+    mnist_diagnostic_benchmark_test.go:91: input=[1 8 14 14] output=[1 16 14 14] conv={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1} pool={Kernel:[5 5] Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/04_Conv                        	    3631	    100181 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_Conv
+    mnist_diagnostic_benchmark_test.go:91: input=[1 8 14 14] output=[1 16 14 14] conv={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1} pool={Kernel:[5 5] Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/04_Conv                        	    3662	    100990 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_Conv
+    mnist_diagnostic_benchmark_test.go:91: input=[1 8 14 14] output=[1 16 14 14] conv={Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] Groups:1} pool={Kernel:[5 5] Strides:[1 1] Dilations:[1 1] Pads:[2 2 2 2] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0001Sets         	    3738	     99972 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0001Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=31616
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0001Sets         	    3609	    100610 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0001Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=31616
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0001Sets         	    3532	    100188 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0001Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=31616
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0001Sets         	    3519	    100147 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0001Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=31616
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0001Sets         	    3705	     99767 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0001Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=31616
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0064Sets         	    3730	    100824 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0064Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=2023424
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0064Sets         	    3518	    100920 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0064Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=2023424
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0064Sets         	    3549	    100853 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0064Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=2023424
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0064Sets         	    3603	    100922 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0064Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=2023424
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0064Sets         	    3530	    100880 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/0064Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=2023424
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/1024Sets         	    3648	    101275 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/1024Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=32374784
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/1024Sets         	    3627	    101311 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/1024Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=32374784
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/1024Sets         	    3528	    100824 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/1024Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=32374784
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/1024Sets         	    3604	    101278 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/1024Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=32374784
+BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/1024Sets         	    3716	    100547 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/04_ConvRotatingWorkingSet/1024Sets
+    mnist_diagnostic_benchmark_test.go:197: independent payload bytes=32374784
+BenchmarkMNISTNodes/05_Add                                     	   43632	      8305 ns/op	     216 B/op	       7 allocs/op
+--- BENCH: BenchmarkMNISTNodes/05_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 16 14 14] output=[1 16 14 14]
+BenchmarkMNISTNodes/05_Add                                     	   43642	      8291 ns/op	     216 B/op	       7 allocs/op
+--- BENCH: BenchmarkMNISTNodes/05_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 16 14 14] output=[1 16 14 14]
+BenchmarkMNISTNodes/05_Add                                     	   43437	      8284 ns/op	     216 B/op	       7 allocs/op
+--- BENCH: BenchmarkMNISTNodes/05_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 16 14 14] output=[1 16 14 14]
+BenchmarkMNISTNodes/05_Add                                     	   43623	      8286 ns/op	     216 B/op	       7 allocs/op
+--- BENCH: BenchmarkMNISTNodes/05_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 16 14 14] output=[1 16 14 14]
+BenchmarkMNISTNodes/05_Add                                     	   43561	      8282 ns/op	     216 B/op	       7 allocs/op
+--- BENCH: BenchmarkMNISTNodes/05_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 16 14 14] output=[1 16 14 14]
+BenchmarkMNISTNodes/06_Relu/WithCorrection                     	   64228	      5616 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu/WithCorrection                     	   64424	      5605 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu/WithCorrection                     	   64281	      5650 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu/WithCorrection                     	   64258	      5639 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu/WithCorrection                     	   63552	      5662 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu/BackendOnly                        	  173266	      2049 ns/op	       0 B/op	       0 allocs/op
+BenchmarkMNISTNodes/06_Relu/BackendOnly                        	  178851	      2049 ns/op	       0 B/op	       0 allocs/op
+BenchmarkMNISTNodes/06_Relu/BackendOnly                        	  176772	      2054 ns/op	       0 B/op	       0 allocs/op
+BenchmarkMNISTNodes/06_Relu/BackendOnly                        	  171921	      2070 ns/op	       0 B/op	       0 allocs/op
+BenchmarkMNISTNodes/06_Relu/BackendOnly                        	  173358	      2085 ns/op	       0 B/op	       0 allocs/op
+BenchmarkMNISTNodes/06_Relu/ONNXCorrectionOnly                 	  100273	      3560 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu/ONNXCorrectionOnly                 	  100297	      3551 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu/ONNXCorrectionOnly                 	  102765	      3571 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu/ONNXCorrectionOnly                 	  102196	      3530 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/06_Relu/ONNXCorrectionOnly                 	  101762	      3563 ns/op	   13568 B/op	       1 allocs/op
+BenchmarkMNISTNodes/07_MaxPool                                 	   77070	      4753 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/07_MaxPool
+    mnist_diagnostic_benchmark_test.go:91: input=[1 16 14 14] output=[1 16 4 4] conv={Strides:[3 3] Dilations:[1 1] Pads:[0 0 0 0] Groups:1} pool={Kernel:[3 3] Strides:[3 3] Dilations:[1 1] Pads:[0 0 0 0] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/07_MaxPool                                 	   75019	      4756 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/07_MaxPool
+    mnist_diagnostic_benchmark_test.go:91: input=[1 16 14 14] output=[1 16 4 4] conv={Strides:[3 3] Dilations:[1 1] Pads:[0 0 0 0] Groups:1} pool={Kernel:[3 3] Strides:[3 3] Dilations:[1 1] Pads:[0 0 0 0] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/07_MaxPool                                 	   75663	      4746 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/07_MaxPool
+    mnist_diagnostic_benchmark_test.go:91: input=[1 16 14 14] output=[1 16 4 4] conv={Strides:[3 3] Dilations:[1 1] Pads:[0 0 0 0] Groups:1} pool={Kernel:[3 3] Strides:[3 3] Dilations:[1 1] Pads:[0 0 0 0] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/07_MaxPool                                 	   76944	      4777 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/07_MaxPool
+    mnist_diagnostic_benchmark_test.go:91: input=[1 16 14 14] output=[1 16 4 4] conv={Strides:[3 3] Dilations:[1 1] Pads:[0 0 0 0] Groups:1} pool={Kernel:[3 3] Strides:[3 3] Dilations:[1 1] Pads:[0 0 0 0] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/07_MaxPool                                 	   74506	      4756 ns/op	      32 B/op	       1 allocs/op
+--- BENCH: BenchmarkMNISTNodes/07_MaxPool
+    mnist_diagnostic_benchmark_test.go:91: input=[1 16 14 14] output=[1 16 4 4] conv={Strides:[3 3] Dilations:[1 1] Pads:[0 0 0 0] Groups:1} pool={Kernel:[3 3] Strides:[3 3] Dilations:[1 1] Pads:[0 0 0 0] CeilMode:false CountIncludePad:false}
+BenchmarkMNISTNodes/10_MatMul                                  	  212233	      1724 ns/op	     144 B/op	       3 allocs/op
+--- BENCH: BenchmarkMNISTNodes/10_MatMul
+    mnist_diagnostic_benchmark_test.go:106: left=[1 256] output=[1 10]
+BenchmarkMNISTNodes/10_MatMul                                  	  213420	      1725 ns/op	     144 B/op	       3 allocs/op
+--- BENCH: BenchmarkMNISTNodes/10_MatMul
+    mnist_diagnostic_benchmark_test.go:106: left=[1 256] output=[1 10]
+BenchmarkMNISTNodes/10_MatMul                                  	  210768	      1711 ns/op	     144 B/op	       3 allocs/op
+--- BENCH: BenchmarkMNISTNodes/10_MatMul
+    mnist_diagnostic_benchmark_test.go:106: left=[1 256] output=[1 10]
+BenchmarkMNISTNodes/10_MatMul                                  	  213454	      1713 ns/op	     144 B/op	       3 allocs/op
+--- BENCH: BenchmarkMNISTNodes/10_MatMul
+    mnist_diagnostic_benchmark_test.go:106: left=[1 256] output=[1 10]
+BenchmarkMNISTNodes/10_MatMul                                  	  211699	      1730 ns/op	     144 B/op	       3 allocs/op
+--- BENCH: BenchmarkMNISTNodes/10_MatMul
+    mnist_diagnostic_benchmark_test.go:106: left=[1 256] output=[1 10]
+BenchmarkMNISTNodes/11_Add                                     	 1720263	       209.3 ns/op	     352 B/op	       8 allocs/op
+--- BENCH: BenchmarkMNISTNodes/11_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 10] output=[1 10]
+BenchmarkMNISTNodes/11_Add                                     	 1657638	       215.4 ns/op	     352 B/op	       8 allocs/op
+--- BENCH: BenchmarkMNISTNodes/11_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 10] output=[1 10]
+BenchmarkMNISTNodes/11_Add                                     	 1702365	       211.1 ns/op	     352 B/op	       8 allocs/op
+--- BENCH: BenchmarkMNISTNodes/11_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 10] output=[1 10]
+BenchmarkMNISTNodes/11_Add                                     	 1713139	       210.5 ns/op	     352 B/op	       8 allocs/op
+--- BENCH: BenchmarkMNISTNodes/11_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 10] output=[1 10]
+BenchmarkMNISTNodes/11_Add                                     	 1702020	       211.1 ns/op	     352 B/op	       8 allocs/op
+--- BENCH: BenchmarkMNISTNodes/11_Add
+    mnist_diagnostic_benchmark_test.go:106: left=[1 10] output=[1 10]
+PASS

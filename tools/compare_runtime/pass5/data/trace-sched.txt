@@ -1,0 +1,33 @@
+Type: delay
+Showing nodes accounting for 377.47ms, 96.01% of 393.17ms total
+Dropped 23 nodes (cum <= 1.97ms)
+      flat  flat%   sum%        cum   cum%
+  279.10ms 70.99% 70.99%   279.10ms 70.99%  runtime.systemstack_switch
+   98.19ms 24.97% 95.96%    98.19ms 24.97%  runtime.goschedIfBusy
+    0.18ms 0.046% 96.01%   177.37ms 45.11%  runtime.mallocgcSmallNoscan
+         0     0% 96.01%    56.64ms 14.41%  github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Clone
+         0     0% 96.01%    22.03ms  5.60%  github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Float32Values
+         0     0% 96.01%    56.64ms 14.41%  github.com/itsmontoya/neuralnetwork/tensor.FromFloat32
+         0     0% 96.01%   200.55ms 51.01%  github.com/itsmontoya/neuralnetwork/tensor.New
+         0     0% 96.01%   257.19ms 65.42%  github.com/itsmontoya/neuralnetwork/tensor.newTensor
+         0     0% 96.01%   279.62ms 71.12%  github.com/itsmontoya/onnx.(*Session).Run
+         0     0% 96.01%   154.14ms 39.20%  github.com/itsmontoya/onnx.(*cnnCall).run
+         0     0% 96.01%    56.64ms 14.41%  github.com/itsmontoya/onnx.(*evaluation).bind
+         0     0% 96.01%    56.64ms 14.41%  github.com/itsmontoya/onnx.(*evaluation).cloneConstant
+         0     0% 96.01%   222.98ms 56.71%  github.com/itsmontoya/onnx.(*evaluation).execute
+         0     0% 96.01%   279.62ms 71.12%  github.com/itsmontoya/onnx.(*evaluation).run
+         0     0% 96.01%    22.03ms  5.60%  github.com/itsmontoya/onnx.(*numericalCall).patchRelu
+         0     0% 96.01%    44.18ms 11.24%  github.com/itsmontoya/onnx.(*numericalCall).run
+         0     0% 96.01%    24.66ms  6.27%  github.com/itsmontoya/onnx.(*shapeCall).run
+         0     0% 96.01%   279.62ms 71.12%  github.com/itsmontoya/onnx.BenchmarkMNIST
+         0     0% 96.01%    56.64ms 14.41%  github.com/itsmontoya/onnx/internal/graph.(*Constant).Clone
+         0     0% 96.01%    98.19ms 24.97%  runtime.bgsweep
+         0     0% 96.01%   101.85ms 25.90%  runtime.deductAssistCredit
+         0     0% 96.01%   101.85ms 25.90%  runtime.gcAssistAlloc
+         0     0% 96.01%   101.94ms 25.93%  runtime.gcMarkDone
+         0     0% 96.01%   101.94ms 25.93%  runtime.gcMarkTermination
+         0     0% 96.01%   177.23ms 45.08%  runtime.gcStart
+         0     0% 96.01%   279.22ms 71.02%  runtime.makeslice
+         0     0% 96.01%   279.22ms 71.02%  runtime.mallocgc
+         0     0% 96.01%   279.67ms 71.13%  testing.(*B).run1.func1
+         0     0% 96.01%   279.67ms 71.13%  testing.(*B).runN

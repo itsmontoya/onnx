@@ -1,0 +1,43 @@
+File: baseline.test
+Type: cpu
+Time: 2026-11-10 07:42:07 PST
+Duration: 15.09s, Total samples = 13.64s (90.40%)
+Showing nodes accounting for 13.10s, 96.04% of 13.64s total
+Dropped 84 nodes (cum <= 0.07s)
+Showing top 35 nodes out of 40
+      flat  flat%   sum%        cum   cum%
+         0     0%     0%     11.35s 83.21%  runtime.systemstack
+    11.02s 80.79% 80.79%     11.02s 80.79%  runtime.kevent
+         0     0% 80.79%     11.02s 80.79%  runtime.netpoll
+         0     0% 80.79%     11.02s 80.79%  runtime.startTheWorldWithSema
+         0     0% 80.79%      9.28s 68.04%  runtime.gcStart.func4
+         0     0% 80.79%      2.17s 15.91%  github.com/itsmontoya/onnx.(*Session).Run
+         0     0% 80.79%      2.17s 15.91%  github.com/itsmontoya/onnx.(*evaluation).run
+         0     0% 80.79%      2.17s 15.91%  github.com/itsmontoya/onnx.BenchmarkMNIST
+         0     0% 80.79%      2.17s 15.91%  testing.(*B).run1.func1
+         0     0% 80.79%      2.17s 15.91%  testing.(*B).runN
+         0     0% 80.79%      2.15s 15.76%  github.com/itsmontoya/onnx.(*evaluation).execute
+         0     0% 80.79%      1.74s 12.76%  runtime.gcMarkTermination.func3
+         0     0% 80.79%      1.56s 11.44%  github.com/itsmontoya/onnx.(*cnnCall).run
+         0     0% 80.79%      1.23s  9.02%  github.com/itsmontoya/neuralnetwork/tensor.Conv2DInto
+     0.05s  0.37% 81.16%      1.22s  8.94%  github.com/itsmontoya/neuralnetwork/tensor.conv2DChannelBlocksInto
+         0     0% 81.16%      1.22s  8.94%  github.com/itsmontoya/neuralnetwork/tensor.conv2DValuesInto
+     0.89s  6.52% 87.68%      0.90s  6.60%  github.com/itsmontoya/neuralnetwork/tensor.conv2DFourChannels
+         0     0% 87.68%      0.56s  4.11%  github.com/itsmontoya/onnx.(*numericalCall).run
+         0     0% 87.68%      0.40s  2.93%  github.com/itsmontoya/neuralnetwork/tensor.AddInto (inline)
+         0     0% 87.68%      0.40s  2.93%  github.com/itsmontoya/neuralnetwork/tensor.binaryFloat32Into
+     0.31s  2.27% 89.96%      0.39s  2.86%  github.com/itsmontoya/neuralnetwork/tensor.broadcastFloat32Into
+     0.04s  0.29% 90.25%      0.29s  2.13%  github.com/itsmontoya/neuralnetwork/tensor.MaxPool2DInto
+         0     0% 90.25%      0.28s  2.05%  runtime.(*mheap).alloc.func1
+         0     0% 90.25%      0.28s  2.05%  runtime.(*mheap).allocSpan
+     0.28s  2.05% 92.30%      0.28s  2.05%  runtime.madvise
+         0     0% 92.30%      0.28s  2.05%  runtime.sysUsed (inline)
+         0     0% 92.30%      0.28s  2.05%  runtime.sysUsedOS (inline)
+     0.06s  0.44% 92.74%      0.27s  1.98%  github.com/itsmontoya/neuralnetwork/tensor.conv2DFourByFour
+     0.15s  1.10% 93.84%      0.25s  1.83%  github.com/itsmontoya/neuralnetwork/tensor.maxPool2DValue
+     0.21s  1.54% 95.38%      0.21s  1.54%  github.com/itsmontoya/neuralnetwork/tensor.conv2DInteriorTile
+     0.01s 0.073% 95.45%      0.13s  0.95%  runtime.newstack
+         0     0% 95.45%      0.11s  0.81%  runtime.gopreempt_m (inline)
+         0     0% 95.45%      0.11s  0.81%  runtime.goschedImpl
+     0.08s  0.59% 96.04%      0.10s  0.73%  github.com/itsmontoya/onnx.(*numericalCall).patchRelu
+         0     0% 96.04%      0.10s  0.73%  runtime.morestack

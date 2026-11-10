@@ -1,0 +1,72 @@
+[
+  {
+    "repeat": 1,
+    "binary": "baseline",
+    "us": 194.74
+  },
+  {
+    "repeat": 1,
+    "binary": "diagnostic",
+    "us": 197.592
+  },
+  {
+    "repeat": 2,
+    "binary": "diagnostic",
+    "us": 199.369
+  },
+  {
+    "repeat": 2,
+    "binary": "baseline",
+    "us": 198.449
+  },
+  {
+    "repeat": 3,
+    "binary": "baseline",
+    "us": 198.138
+  },
+  {
+    "repeat": 3,
+    "binary": "diagnostic",
+    "us": 198.244
+  },
+  {
+    "repeat": 4,
+    "binary": "diagnostic",
+    "us": 199.85
+  },
+  {
+    "repeat": 4,
+    "binary": "baseline",
+    "us": 202.151
+  },
+  {
+    "repeat": 5,
+    "binary": "baseline",
+    "us": 202.048
+  },
+  {
+    "repeat": 5,
+    "binary": "diagnostic",
+    "us": 204.245
+  },
+  {
+    "repeat": 6,
+    "binary": "diagnostic",
+    "us": 201.428
+  },
+  {
+    "repeat": 6,
+    "binary": "baseline",
+    "us": 203.545
+  },
+  {
+    "repeat": 7,
+    "binary": "baseline",
+    "us": 203.635
+  },
+  {
+    "repeat": 7,
+    "binary": "diagnostic",
+    "us": 202.993
+  }
+]

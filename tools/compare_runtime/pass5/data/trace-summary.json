@@ -1,0 +1,40 @@
+{
+  "trace_duration_ms": 211.409793,
+  "ranges": {
+    "stop-the-world (start trace)": {
+      "count": 1,
+      "total_ms": 0.000704,
+      "max_ms": 0.000704
+    },
+    "stop-the-world (GC sweep termination)": {
+      "count": 48,
+      "total_ms": 0.7246080000000001,
+      "max_ms": 0.02304
+    },
+    "GC concurrent mark phase": {
+      "count": 48,
+      "total_ms": 71.13497600000001,
+      "max_ms": 1.845952
+    },
+    "stop-the-world (GC mark termination)": {
+      "count": 48,
+      "total_ms": 0.751168,
+      "max_ms": 0.045184
+    },
+    "stop-the-world (read mem stats)": {
+      "count": 6,
+      "total_ms": 0.091968,
+      "max_ms": 0.025152
+    },
+    "GC mark assist": {
+      "count": 357,
+      "total_ms": 10.72479999999999,
+      "max_ms": 0.059456
+    },
+    "GC incremental sweep": {
+      "count": 2563,
+      "total_ms": 0.8014719999999816,
+      "max_ms": 0.008384
+    }
+  }
+}

@@ -1,0 +1,38 @@
+File: baseline.test
+Type: cpu
+Time: 2026-11-10 07:45:21 PST
+Duration: 3.64s, Total samples = 3.10s (85.25%)
+Showing nodes accounting for 2.99s, 96.45% of 3.10s total
+Dropped 26 nodes (cum <= 0.02s)
+Showing top 30 nodes out of 34
+      flat  flat%   sum%        cum   cum%
+     0.87s 28.06% 28.06%      0.87s 28.06%  runtime.madvise
+     0.78s 25.16% 53.23%      0.78s 25.16%  github.com/itsmontoya/neuralnetwork/tensor.conv2DFourChannels
+     0.61s 19.68% 72.90%      0.61s 19.68%  github.com/itsmontoya/neuralnetwork/tensor.conv2DInteriorTile
+     0.53s 17.10% 90.00%      1.14s 36.77%  github.com/itsmontoya/neuralnetwork/tensor.conv2DFourByFour
+     0.14s  4.52% 94.52%      2.06s 66.45%  github.com/itsmontoya/neuralnetwork/tensor.conv2DChannelBlocksInto
+     0.02s  0.65% 95.16%      0.03s  0.97%  runtime.(*mspan).init
+     0.02s  0.65% 95.81%      0.02s  0.65%  runtime.runqputbatch
+     0.01s  0.32% 96.13%      2.16s 69.68%  github.com/itsmontoya/onnx.(*cnnCall).run
+     0.01s  0.32% 96.45%      0.92s 29.68%  runtime.(*mheap).alloc.func1
+         0     0% 96.45%      2.15s 69.35%  github.com/itsmontoya/neuralnetwork/tensor.Conv2DInto
+         0     0% 96.45%      0.09s  2.90%  github.com/itsmontoya/neuralnetwork/tensor.Conv2DShape
+         0     0% 96.45%      2.06s 66.45%  github.com/itsmontoya/neuralnetwork/tensor.conv2DValuesInto
+         0     0% 96.45%      2.16s 69.68%  github.com/itsmontoya/onnx.BenchmarkMNISTNodes.func3
+         0     0% 96.45%      0.06s  1.94%  runtime.(*mcache).nextFree
+         0     0% 96.45%      0.06s  1.94%  runtime.(*mcache).refill
+         0     0% 96.45%      0.06s  1.94%  runtime.(*mcentral).cacheSpan
+         0     0% 96.45%      0.06s  1.94%  runtime.(*mcentral).grow
+         0     0% 96.45%      0.05s  1.61%  runtime.(*mheap).alloc
+         0     0% 96.45%      0.91s 29.35%  runtime.(*mheap).allocSpan
+         0     0% 96.45%      0.03s  0.97%  runtime.(*mheap).initSpan
+         0     0% 96.45%      0.05s  1.61%  runtime.findRunnable
+         0     0% 96.45%      0.07s  2.26%  runtime.gopreempt_m (inline)
+         0     0% 96.45%      0.07s  2.26%  runtime.goschedImpl
+         0     0% 96.45%      0.02s  0.65%  runtime.mProf_Malloc
+         0     0% 96.45%      0.08s  2.58%  runtime.mallocgcSmallNoScanSC4
+         0     0% 96.45%      0.07s  2.26%  runtime.morestack
+         0     0% 96.45%      0.07s  2.26%  runtime.newstack
+         0     0% 96.45%      0.02s  0.65%  runtime.profilealloc
+         0     0% 96.45%      0.06s  1.94%  runtime.schedule
+         0     0% 96.45%      0.87s 28.06%  runtime.sysUsed (inline)

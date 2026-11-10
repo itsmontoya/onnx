@@ -1,0 +1,10 @@
+{
+  "Version": "v0.10.1",
+  "Time": "2026-11-10T15:19:05Z",
+  "Origin": {
+    "VCS": "git",
+    "URL": "https://github.com/itsmontoya/neuralnetwork",
+    "Hash": "ea17b585c42264ca85a637705608c284b80464bc",
+    "Ref": "refs/tags/v0.10.1"
+  }
+}
