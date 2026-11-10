@@ -8,6 +8,7 @@ import (
 
 	"github.com/itsmontoya/neuralnetwork/tensor"
 	"github.com/itsmontoya/onnx/internal/onnxpb"
+	"github.com/itsmontoya/onnx/internal/operators"
 )
 
 func numericalInputs(t *testing.T, wire *onnxpb.ModelProto) (inputs map[string]*Tensor) {
@@ -117,5 +118,86 @@ func TestNumericalScratchOverflow(t *testing.T) {
 
 	if _, err := sumScratch(math.MaxInt64, 1); !errors.Is(err, ErrLimit) {
 		t.Fatal(err)
+	}
+}
+
+func TestNumericalCallReluDestination(t *testing.T) {
+	tests := []struct {
+		name        string
+		values      []float32
+		want        []float32
+		destination bool
+	}{
+		{
+			name:        "finite",
+			values:      []float32{-2, 0, 3},
+			want:        []float32{0, 0, 3},
+			destination: true,
+		},
+		{
+			name:        "infinities and negative zero",
+			values:      []float32{float32(math.Inf(-1)), float32(math.Inf(1)), math.Float32frombits(0x80000000)},
+			want:        []float32{0, float32(math.Inf(1)), 0},
+			destination: true,
+		},
+		{
+			name:   "multiple NaNs",
+			values: []float32{math.Float32frombits(0x7fc00001), -2, math.Float32frombits(0xffc00002), 3},
+			want:   []float32{math.Float32frombits(0x7fc00001), 0, math.Float32frombits(0xffc00002), 3},
+		},
+		{
+			name:        "empty",
+			destination: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var (
+				limits              Limits
+				call                *numericalCall
+				destination, output *tensor.Tensor
+				err                 error
+			)
+
+			input := floatTensor(t, []int64{int64(len(tt.values))}, tt.values)
+			if limits, err = (Limits{}).normalized(); err != nil {
+				t.Fatal(err)
+			}
+
+			if call, err = newNumericalCall(operators.Step{Operator: "Relu"}, []*tensor.Tensor{input.value}, limits); err != nil {
+				t.Fatal(err)
+			}
+
+			if destination, err = tensor.New(Float32, call.shape); err != nil {
+				t.Fatal(err)
+			}
+
+			if output, err = call.run(context.Background(), destination); err != nil {
+				t.Fatal(err)
+			}
+
+			if (output == destination) != tt.destination {
+				t.Fatalf("returned destination = %t, want %t", output == destination, tt.destination)
+			}
+
+			var actual, unchanged []float32
+			if actual, err = output.Float32Values(); err != nil {
+				t.Fatal(err)
+			}
+
+			if unchanged, err = input.Float32Values(); err != nil {
+				t.Fatal(err)
+			}
+
+			for index, want := range tt.want {
+				if math.Float32bits(actual[index]) != math.Float32bits(want) {
+					t.Fatalf("output[%d] = %08x, want %08x", index, math.Float32bits(actual[index]), math.Float32bits(want))
+				}
+
+				if math.Float32bits(unchanged[index]) != math.Float32bits(tt.values[index]) {
+					t.Fatalf("input[%d] changed", index)
+				}
+			}
+		})
 	}
 }
