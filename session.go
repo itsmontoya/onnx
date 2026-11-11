@@ -25,7 +25,8 @@ type Session struct {
 // Run binds all required/defaulted inputs and executes every node serially.
 // Input tensors are immutable; callers must not change inputs or options during
 // the call. Cancellation is checked around synchronous copies and every node,
-// during runtime loops and before publication, with no in-kernel interruption.
+// during runtime loops and before publication. ReLU also polls between chunks;
+// other synchronous kernels run to completion without interruption.
 func (s *Session) Run(ctx context.Context, inputs map[string]*Tensor, options RunOptions) (outputs []NamedTensor, err error) {
 	if s == nil {
 		return nil, ErrInvalidArgument

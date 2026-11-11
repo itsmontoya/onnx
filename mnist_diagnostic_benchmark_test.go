@@ -131,10 +131,18 @@ func BenchmarkMNISTNodes(b *testing.B) {
 					}
 				}
 			})
+			node.Run("PreservingBackendOnly", func(kernel *testing.B) {
+				kernel.ReportAllocs()
+				for kernel.Loop() {
+					if _, nodeErr = tensor.ReLUPreservingNaNInto(ctx, inputs[0], output); nodeErr != nil {
+						kernel.Fatal(nodeErr)
+					}
+				}
+			})
 			node.Run("ONNXCorrectionOnly", func(correction *testing.B) {
 				correction.ReportAllocs()
 				for correction.Loop() {
-					if _, nodeErr = numerical.patchRelu(ctx, output); nodeErr != nil {
+					if _, nodeErr = legacyReluCorrection(ctx, inputs[0], output, numerical.shape); nodeErr != nil {
 						correction.Fatal(nodeErr)
 					}
 				}

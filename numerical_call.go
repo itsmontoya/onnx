@@ -2,6 +2,7 @@ package onnx
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 	"slices"
@@ -110,6 +111,10 @@ func (c *numericalCall) run(ctx context.Context, destination *tensor.Tensor) (ou
 		}
 	}
 
+	if c.step.Operator == "Relu" && c.bytes != 0 {
+		return c.runPreservingRelu(ctx, out)
+	}
+
 	left := c.inputs[0]
 	switch c.step.Operator {
 	case "Add":
@@ -146,47 +151,43 @@ func (c *numericalCall) run(ctx context.Context, destination *tensor.Tensor) (ou
 		return nil, err
 	}
 
-	if c.step.Operator == "Relu" && c.bytes != 0 {
-		return c.patchRelu(ctx, out)
-	}
-
 	return out, nil
 }
 
-func (c *numericalCall) patchRelu(ctx context.Context, output *tensor.Tensor) (out *tensor.Tensor, err error) {
-	var input, values []float32
-	if input, err = c.inputs[0].Float32Values(); err != nil {
+// runPreservingRelu retains the legacy private destination on NaNs and
+// cancellation without snapshotting finite inputs. Scratch charging is unchanged.
+func (c *numericalCall) runPreservingRelu(ctx context.Context, destination *tensor.Tensor) (out *tensor.Tensor, err error) {
+	var (
+		hasNaN     bool
+		restoreErr error
+	)
+
+	if hasNaN, err = tensor.ReLUPreservingNaNInto(ctx, c.inputs[0], destination); err != nil {
+		if !errors.Is(err, context.Canceled) && !errors.Is(err, context.DeadlineExceeded) {
+			return nil, fmt.Errorf("%w: kernel: %w", ErrInvalidModel, err)
+		}
+
+		// Cancellation previously followed a complete legacy kernel. Restore
+		// that state even when the context-aware traversal stopped early.
+		if restoreErr = tensor.ReLUInto(c.inputs[0], destination); restoreErr != nil {
+			return nil, fmt.Errorf("%w: restore ReLU destination: %w", ErrInvalidModel, restoreErr)
+		}
+
 		return nil, err
 	}
 
-	for index, value := range input {
-		if index%1024 == 0 {
-			if err = ctx.Err(); err != nil {
-				return nil, err
-			}
-		}
-
-		if math.IsNaN(float64(value)) {
-			// Inputs without NaNs already have the correct destination result.
-			// Only materialize a corrected copy when NaN propagation needs it.
-			if values == nil {
-				if values, err = output.Float32Values(); err != nil {
-					return nil, err
-				}
-			}
-
-			values[index] = value
-		}
-	}
-	if err = ctx.Err(); err != nil {
-		return nil, err
+	if !hasNaN {
+		return destination, nil
 	}
 
-	if values == nil {
-		return output, nil
+	// NaNs still return independent storage and leave the supplied destination
+	// with the legacy NaN-to-zero result, including if cloning fails.
+	out, err = destination.Clone()
+	if restoreErr = tensor.ReLUInto(c.inputs[0], destination); restoreErr != nil {
+		return nil, fmt.Errorf("%w: restore ReLU destination: %w", ErrInvalidModel, restoreErr)
 	}
 
-	return tensor.FromFloat32(c.shape, values)
+	return out, err
 }
 
 func checkedScratch(bytes, count int64) (total int64, err error) {
