@@ -1,7 +1,7 @@
 # onnx
 
 A Go-native ONNX inference runtime built on
-[`neuralnetwork` v0.10.4](https://github.com/itsmontoya/neuralnetwork/tree/v0.10.4).
+[`neuralnetwork` v0.10.5](https://github.com/itsmontoya/neuralnetwork/tree/v0.10.5).
 Load an `.onnx` model, bind named immutable tensors, and evaluate named outputs
 on the CPU with `CGO_ENABLED=0`, without Python or native runtime libraries.
 
@@ -36,7 +36,7 @@ The initial clone/module download needs network. Cached builds and tests use
 checked-in models and typed reference values without network, protoc, Python,
 C/C++ inference libraries or an external service. The `purego` tag selects the
 portable backend CPU path. The module requires
-Go 1.27.2, `neuralnetwork` v0.10.4 in [go.mod](go.mod), and protobuf v1.36.12.
+Go 1.27.2, `neuralnetwork` v0.10.5 in [go.mod](go.mod), and protobuf v1.36.12.
 
 Detailed guides and historical reports below link to their last tracked
 versions; the `docs/` and `tools/` directories are no longer included in this repository.
@@ -50,31 +50,33 @@ The archived [ONNX Runtime comparison tool](https://github.com/itsmontoya/onnx/b
 runs a pinned pretrained MNIST model through both runtimes, checks numerical
 and top-1 agreement, and records CPU inference timings. It also accepts other
 compatible local models with named NumPy inputs.
-With published `neuralnetwork` **v0.10.4**, seven alternating precompiled
+With published `neuralnetwork` **v0.10.5**, seven alternating precompiled
 benchmark pairs on Apple M3 (Go 1.27.2, `CGO_ENABLED=0`, `GOMAXPROCS=1`,
-`GOARM64=v8.0`) measure **144.422 → 125.644 µs/op** versus v0.10.3:
-**13.0% lower MNIST latency**, with unchanged **179,440 B/op / 174 allocations**.
-Samples span 141.940–150.267 µs before and 124.096–130.709 µs after, with
-sample CVs of 1.90% and 1.99%. The median paired latency reduction is 13.0%,
-with individual reductions of 10.2–13.4%.
+`GOARM64=v8.0`) measure **122.242 → 95.324 µs/op** versus v0.10.4:
+**22.0% lower MNIST latency**, with unchanged **179,440 B/op / 174 allocations**.
+Samples span 120.772–131.718 µs before and 92.977–105.846 µs after, with
+sample CVs of 3.01% and 4.57%. All samples are retained. The median paired
+latency reduction is 23.0%, with individual reductions of 13.4–26.5%.
 
-The backend's ARM64 residual convolution tiles share weights across two to four
-columns, including padded boundaries and interior tails. The second prepared
-Conv falls **67.912 → 47.690 µs (29.8% lower latency)**; the first remains
-approximately 16.3 µs. Other prepared operators retain similar timings.
+The backend's eight-filter ARM64 convolution tiles share input loads and row
+geometry, writing results directly into destination planes without new numerical
+workspace. The first prepared Conv falls **16.472 → 7.831 µs** and the second
+**47.564 → 27.255 µs**. Acceleration applies to eligible normal ARM64 builds;
+`purego`, race and other architectures retain the existing paths. Other prepared
+operators retain similar timings.
 The unchanged 19-case comparison, repeated seven times per version, measures
-Go at **147.042 → 128.167 µs**, versus ORT at **44.500 → 44.417 µs**:
-a **3.30× → 2.89×** median gap. ORT uses one thread, sequential execution and
+Go at **128.333 → 98.855 µs**, versus ORT at **44.583 → 44.375 µs**:
+a **2.88× → 2.23×** median gap. ORT uses one thread, sequential execution and
 disabled graph optimization. Each case retains ten warmups and 100 timed calls;
 the Go benchmark uses a separate deterministic input. These are workload- and
 hardware-specific results, not a general performance guarantee.
 
-All numerical and top-1 checks pass; outputs remain bit-identical to v0.10.3.
-An additional 131 archived probes also match bit for bit across v0.10.3,
-v0.10.4 and v0.10.4 `purego`. Fresh profiles confirm the residual SIMD path is
-selected. Convolution remains the largest measured cost: its two prepared
-calls total about 63.9 µs after the upgrade, approximately 51% of inference.
-Pooling is the next largest operator family at approximately 17%. Default,
+All numerical and top-1 checks pass; outputs remain bit-identical to v0.10.4.
+An additional 131 archived probes also match bit for bit across v0.10.4,
+v0.10.5 and v0.10.5 `purego`. Fresh profiles confirm the eight-filter SIMD paths
+are selected. Convolution remains the largest measured cost: its two prepared
+calls total about 35.1 µs after the upgrade, approximately 37% of inference.
+Pooling is the next largest operator family at approximately 22%. Default,
 cgo-disabled, `purego` and race suites, bounded fuzzing, and module/build checks
 validate the integration. No ONNX API, operator coverage, numerical tolerance
 or model-specific branch changed.
