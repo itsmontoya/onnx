@@ -1,7 +1,7 @@
 # onnx
 
 A Go-native ONNX inference runtime built on
-[`neuralnetwork` v0.10.6](https://github.com/itsmontoya/neuralnetwork/tree/v0.10.6).
+[`neuralnetwork` v0.10.7](https://github.com/itsmontoya/neuralnetwork/tree/v0.10.7).
 Load an `.onnx` model, bind named immutable tensors, and evaluate named outputs
 on the CPU with `CGO_ENABLED=0`, without Python or native runtime libraries.
 
@@ -36,7 +36,7 @@ The initial clone/module download needs network. Cached builds and tests use
 checked-in models and typed reference values without network, protoc, Python,
 C/C++ inference libraries or an external service. The `purego` tag selects the
 portable backend CPU path. The module requires
-Go 1.27.2, `neuralnetwork` v0.10.6 in [go.mod](go.mod), and protobuf v1.36.12.
+Go 1.27.2, `neuralnetwork` v0.10.7 in [go.mod](go.mod), and protobuf v1.36.12.
 
 Detailed guides and historical reports below link to their last tracked
 versions; the `docs/` and `tools/` directories are no longer included in this repository.
@@ -50,37 +50,43 @@ The archived [ONNX Runtime comparison tool](https://github.com/itsmontoya/onnx/b
 runs a pinned pretrained MNIST model through both runtimes, checks numerical
 and top-1 agreement, and records CPU inference timings. It also accepts other
 compatible local models with named NumPy inputs.
-With published `neuralnetwork` **v0.10.6**, seven alternating precompiled
+With published `neuralnetwork` **v0.10.7**, seven alternating precompiled
 benchmark pairs on Apple M3 (Go 1.27.2, `CGO_ENABLED=0`, `GOMAXPROCS=1`,
-`GOARM64=v8.0`) measure **96.008 → 80.355 µs/op** versus v0.10.5:
-**16.3% lower MNIST latency**, with unchanged **179,440 B/op / 174 allocations**.
-Samples span 94.580–96.976 µs before and 77.847–83.440 µs after, with
-sample CVs of 0.88% and 2.33%. All samples are retained. The median paired
-latency reduction is 16.6%, with individual reductions of 13.1–18.6%.
+`GOARM64=v8.0`) measure **78.538 → 69.651 µs/op** versus v0.10.6:
+**11.3% lower MNIST latency**. Allocations fall **179,440 → 138,608 B/op**
+and **174 → 172 allocations/op**. Samples span 77.593–79.486 µs before and
+68.226–80.504 µs after, with sample CVs of 1.03% and 5.95%. All samples,
+including the noisy candidate run, are retained. Median paired saving is
+9.367 µs; individual savings range from −1.078 to 9.774 µs.
 
-The backend's portable MaxPool fast path hoists row/plane geometry and unrolls
-complete unpadded 2×2/3×3 windows with unit dilation and floor geometry. It
-preserves row-major NaN priority and signed-zero ties, with the generic path
-retained for other geometries. It applies to normal, `purego` and race builds
-without new scratch, SIMD assembly, threads or public APIs. The first prepared
-Pool falls **16.240 → 2.555 µs** and the second **4.786 → 0.996 µs**.
-Convolution and corrected ReLU timings remain similar.
+The runtime uses the new portable, context-aware `ReLUPreservingNaNInto` backend
+operation for nonempty ReLU. Finite inputs avoid the copying NaN correction;
+the two prepared activations fall **16.716 → 7.377 µs**, with zero prepared
+allocations. Original NaN sign, payload and signaling bits, positive-zero rules,
+infinities, input ownership and destination validation remain intact. NaN
+results still return independent storage and restore the supplied private
+destination's legacy NaN-to-zero values. Cancellation restores that same
+complete legacy destination before returning the original context error.
+Empty ReLU and conservative workspace/live-limit checks are unchanged.
 
 The unchanged 19-case comparison, repeated seven times per version, measures
-Go at **100.146 → 76.729 µs**, versus ORT at **44.500 → 44.333 µs**:
-a **2.25× → 1.73×** median gap. ORT uses one thread, sequential execution and
-disabled graph optimization. Each case retains ten warmups and 100 timed calls;
-the Go benchmark uses a separate deterministic input. These are workload- and
-hardware-specific results, not a general performance guarantee.
+Go at **75.729 → 68.042 µs**, versus ORT at **44.375 / 44.750 µs**:
+a **1.71× → 1.52×** median gap and **10.2% lower Go latency**. ORT uses
+sequential execution, one intra-op and one inter-op thread, and disabled graph
+optimization. Each case retains ten warmups and 100 timed calls. The ordinary
+Go benchmark uses a separate deterministic input. Median within-run Go p95 is
+136.375 → 122.881 µs. These are workload- and hardware-specific observations,
+not general performance or tail-latency guarantees.
 
-All numerical and top-1 checks pass; outputs remain bit-identical to v0.10.5.
-An additional 131 archived probes also match bit for bit across v0.10.5,
-v0.10.6 and v0.10.6 `purego`. Fresh profiles confirm the small-window pool path
-is selected. Its two prepared calls total about 3.55 µs, approximately 4.4%
-of inference. Convolution and corrected ReLU are now the largest operator
-families at about 44% and 21%. Default, cgo-disabled, `purego` and race suites,
-bounded fuzzing, and module/build checks validate the integration. No ONNX API,
-operator coverage, numerical tolerance or model-specific branch changed.
+All 266 comparison case executions pass numerical, top-1, original/conversion
+and upstream checks. Outputs remain bit-identical to v0.10.6; maximum Go/ORT
+absolute error remains 1.9073486328125e-5 with unchanged tolerances. Added tests
+cover 112 bitwise shape/pattern cases and cancellation/deadline boundaries,
+including private destination state, output ownership, validation precedence,
+aliases, scalars and empties. Default, cgo-disabled, `purego`, race and
+`purego`+race suites, bounded fuzzing, vet and module/build checks validate the
+integration. No ONNX public API, operator coverage, Conv/Pool kernel or
+model-specific branch changed. This builds on v0.10.6's portable MaxPool path.
 
 The archived [comparison results](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md),
 [fifth-pass investigation](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/pass5/README.md) and
@@ -103,8 +109,10 @@ reusable. Errors preserve classifications, structured diagnostics and causes.
 
 `Options.Limits` supplies finite logical load/tensor/live/workspace/session
 budgets, rather than a process RSS cap. Cancellation brackets synchronous
-backend/protobuf operations; a running kernel has no interruption or latency
-guarantee. External tensors require `Options.ExternalData` even for LoadFile.
+backend/protobuf operations; ReLU also polls between chunks of at most 1,024
+elements and restores its legacy private destination on cancellation. Polling
+does not guarantee cancellation latency; other kernels run to completion.
+External tensors require `Options.ExternalData` even for LoadFile.
 `DirectoryResolver` confines regular-file ranges on supported Go platforms;
 checksum metadata is unsupported. See the [runtime contract](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/runtime-contract.md)
 for defaults, accounting, platform restrictions and exact numerical policies.
