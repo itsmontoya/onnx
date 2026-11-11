@@ -3,7 +3,9 @@ package onnx
 import (
 	"context"
 	"errors"
+	"fmt"
 	"math"
+	"math/rand"
 	"testing"
 
 	"github.com/itsmontoya/neuralnetwork/tensor"
@@ -146,6 +148,11 @@ func TestNumericalCallReluDestination(t *testing.T) {
 			want:   []float32{math.Float32frombits(0x7fc00001), 0, math.Float32frombits(0xffc00002), 3},
 		},
 		{
+			name:   "signaling NaNs and payloads",
+			values: []float32{math.Float32frombits(0x7f801234), math.Float32frombits(0xff805678), math.Float32frombits(0x7fffffff)},
+			want:   []float32{math.Float32frombits(0x7f801234), math.Float32frombits(0xff805678), math.Float32frombits(0x7fffffff)},
+		},
+		{
 			name:        "empty",
 			destination: true,
 		},
@@ -180,12 +187,16 @@ func TestNumericalCallReluDestination(t *testing.T) {
 				t.Fatalf("returned destination = %t, want %t", output == destination, tt.destination)
 			}
 
-			var actual, unchanged []float32
+			var actual, unchanged, supplied []float32
 			if actual, err = output.Float32Values(); err != nil {
 				t.Fatal(err)
 			}
 
 			if unchanged, err = input.Float32Values(); err != nil {
+				t.Fatal(err)
+			}
+
+			if supplied, err = destination.Float32Values(); err != nil {
 				t.Fatal(err)
 			}
 
@@ -196,6 +207,448 @@ func TestNumericalCallReluDestination(t *testing.T) {
 
 				if math.Float32bits(unchanged[index]) != math.Float32bits(tt.values[index]) {
 					t.Fatalf("input[%d] changed", index)
+				}
+
+				wantDestination := math.Float32bits(want)
+				if math.IsNaN(float64(want)) {
+					wantDestination = 0
+				}
+
+				if math.Float32bits(supplied[index]) != wantDestination {
+					t.Fatalf("destination[%d] = %08x, want %08x", index, math.Float32bits(supplied[index]), wantDestination)
+				}
+			}
+			if !tt.destination {
+				var replacement *tensor.Tensor
+				values := make([]float32, len(tt.values))
+				for index := range values {
+					values[index] = 91
+				}
+				if replacement, err = tensor.FromFloat32(call.shape, values); err != nil {
+					t.Fatal(err)
+				}
+
+				if err = tensor.ReLUInto(replacement, destination); err != nil {
+					t.Fatal(err)
+				}
+
+				if actual, err = output.Float32Values(); err != nil {
+					t.Fatal(err)
+				}
+
+				for index, want := range tt.want {
+					if math.Float32bits(actual[index]) != math.Float32bits(want) {
+						t.Fatalf("output[%d] changed after destination reuse", index)
+					}
+				}
+			}
+		})
+	}
+}
+
+// TestNumericalCallReluBits checks the adapter against the original float-value
+// rule, independently of the new backend's integer-bit classification.
+func TestNumericalCallReluBits(t *testing.T) {
+	var (
+		bits   = []uint32{0, 0x80000000, 0x7f800000, 0xff800000, 0x7fc01234, 0xffc05678, 0x7f801234, 0xff805678, 0x7fffffff, 0xffffffff, 0x3f800000, 0xbf800000, 1, 0x80000001}
+		limits Limits
+		err    error
+	)
+
+	if limits, err = (Limits{}).normalized(); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, count := range []int{0, 1, 2, 3, 7, 14, 31, 32, 33, 42, 1023, 1024, 1025, 3136, 6272, 8193} {
+		for _, pattern := range []string{"Finite", "Mixed", "RandomBits", "AllNaN", "FirstNaN", "MiddleNaN", "LastNaN"} {
+			t.Run(fmt.Sprintf("%d_%s", count, pattern), func(t *testing.T) {
+				var (
+					values                     = make([]float32, count)
+					random                     = rand.New(rand.NewSource(int64(count)))
+					input, destination, output *tensor.Tensor
+					call                       *numericalCall
+					actual, unchanged          []float32
+					probeErr                   error
+				)
+
+				for index := range values {
+					valueBits := math.Float32bits(float32(index%17) - 8)
+					switch pattern {
+					case "Mixed":
+						valueBits = bits[index%len(bits)]
+					case "RandomBits":
+						valueBits = random.Uint32()
+					case "AllNaN":
+						valueBits = bits[4+index%6]
+					}
+					if pattern == "FirstNaN" && index == 0 || pattern == "MiddleNaN" && index == count/2 || pattern == "LastNaN" && index == count-1 {
+						valueBits = 0xff801234
+					}
+
+					values[index] = math.Float32frombits(valueBits)
+				}
+				shape := []int64{int64(count)}
+				if count == 1 {
+					shape = nil
+				} else if count == 0 && pattern == "Mixed" {
+					shape = []int64{2, 0, 3}
+				} else if count == 42 {
+					shape = []int64{2, 3, 7}
+				}
+
+				if input, probeErr = tensor.FromFloat32(shape, values); probeErr != nil {
+					t.Fatal(probeErr)
+				}
+
+				if destination, probeErr = tensor.New(Float32, input.Shape()); probeErr != nil {
+					t.Fatal(probeErr)
+				}
+
+				if call, probeErr = newNumericalCall(operators.Step{Operator: "Relu"}, []*tensor.Tensor{input}, limits); probeErr != nil {
+					t.Fatal(probeErr)
+				}
+
+				if output, probeErr = call.run(context.Background(), destination); probeErr != nil {
+					t.Fatal(probeErr)
+				}
+
+				if actual, probeErr = output.Float32Values(); probeErr != nil {
+					t.Fatal(probeErr)
+				}
+
+				if unchanged, probeErr = input.Float32Values(); probeErr != nil {
+					t.Fatal(probeErr)
+				}
+
+				for index, value := range values {
+					inputBits := math.Float32bits(value)
+					var want uint32
+					if value > 0 || math.IsNaN(float64(value)) {
+						want = inputBits
+					}
+
+					if math.Float32bits(actual[index]) != want || math.Float32bits(unchanged[index]) != inputBits {
+						t.Fatalf("index=%d input=%08x actual=%08x want=%08x unchanged=%08x", index, inputBits, math.Float32bits(actual[index]), want, math.Float32bits(unchanged[index]))
+					}
+				}
+			})
+		}
+	}
+}
+
+// legacyReluCorrection retains the old copying repair as a test/benchmark oracle.
+func legacyReluCorrection(ctx context.Context, source, output *tensor.Tensor, shape []int64) (out *tensor.Tensor, err error) {
+	var input, values []float32
+	if input, err = source.Float32Values(); err != nil {
+		return nil, err
+	}
+
+	for index, value := range input {
+		if index%1024 == 0 {
+			if err = ctx.Err(); err != nil {
+				return nil, err
+			}
+		}
+
+		if math.IsNaN(float64(value)) {
+			// Inputs without NaNs already have the correct destination result.
+			// Only materialize a corrected copy when NaN propagation needs it.
+			if values == nil {
+				if values, err = output.Float32Values(); err != nil {
+					return nil, err
+				}
+			}
+
+			values[index] = value
+		}
+	}
+	if err = ctx.Err(); err != nil {
+		return nil, err
+	}
+
+	if values == nil {
+		return output, nil
+	}
+
+	return tensor.FromFloat32(shape, values)
+}
+
+func TestNumericalCallReluCancellationDestination(t *testing.T) {
+	for _, cause := range []error{context.Canceled, context.DeadlineExceeded} {
+		for _, size := range []int{0, 1, 1023, 1024, 1025, 2049, 6272, 8193} {
+			for _, nan := range []bool{false, true} {
+				checks := 2
+				if size > 0 {
+					checks = 3 + (size+1023)/1024
+				}
+
+				for boundary := 1; boundary <= checks+1; boundary++ {
+					t.Run(fmt.Sprintf("%v/%d/nan%t/check%d", cause, size, nan, boundary), func(t *testing.T) {
+						var (
+							values                = make([]float32, size)
+							before                = make([]float32, size)
+							input, output, legacy *tensor.Tensor
+							actual, original      []float32
+							want                  []float32
+							call                  *numericalCall
+							limits                Limits
+							err                   error
+						)
+
+						for index := range values {
+							values[index] = float32(index%17) - 8
+							before[index] = 91
+							if nan && index%7 == 0 {
+								values[index] = math.Float32frombits(0xff801234)
+							}
+						}
+
+						if input, err = tensor.FromFloat32([]int64{int64(size)}, values); err != nil {
+							t.Fatal(err)
+						}
+
+						if output, err = tensor.FromFloat32(input.Shape(), before); err != nil {
+							t.Fatal(err)
+						}
+
+						if legacy, err = tensor.New(Float32, input.Shape()); err != nil {
+							t.Fatal(err)
+						}
+
+						if err = tensor.ReLUInto(input, legacy); err != nil {
+							t.Fatal(err)
+						}
+
+						if want, err = legacy.Float32Values(); err != nil {
+							t.Fatal(err)
+						}
+
+						if limits, err = (Limits{}).normalized(); err != nil {
+							t.Fatal(err)
+						}
+
+						if call, err = newNumericalCall(operators.Step{Operator: "Relu"}, []*tensor.Tensor{input}, limits); err != nil {
+							t.Fatal(err)
+						}
+
+						ctx := newCancelContext(boundary)
+						defer ctx.cancel()
+						var runContext context.Context = ctx
+						if cause == context.DeadlineExceeded {
+							runContext = newDeadlineContext(ctx)
+						}
+
+						result, runErr := call.run(runContext, output)
+						if boundary <= checks {
+							if result != nil || runErr != cause || errors.Is(runErr, ErrInvalidModel) || ctx.checks != boundary {
+								t.Fatalf("checks=%d result=%v err=%v", ctx.checks, result, runErr)
+							}
+						} else {
+							if runErr != nil || ctx.checks != checks || (result == output) != (!nan || size == 0) {
+								t.Fatalf("checks=%d same=%t err=%v", ctx.checks, result == output, runErr)
+							}
+
+							var reference *tensor.Tensor
+							if reference, err = legacyReluCorrection(context.Background(), input, legacy, call.shape); err != nil {
+								t.Fatal(err)
+							}
+
+							checkNumericalReluBits(t, result, reference)
+							// Reuse the supplied destination after success. Any NaN result
+							// must own its storage independently of that destination.
+							if result != output {
+								if err = tensor.ReLUInto(legacy, output); err != nil {
+									t.Fatal(err)
+								}
+
+								checkNumericalReluBits(t, result, reference)
+							}
+						}
+
+						if boundary == 1 {
+							want = before
+						}
+
+						if actual, err = output.Float32Values(); err != nil {
+							t.Fatal(err)
+						}
+
+						if original, err = input.Float32Values(); err != nil {
+							t.Fatal(err)
+						}
+
+						for index := range values {
+							if math.Float32bits(actual[index]) != math.Float32bits(want[index]) || math.Float32bits(original[index]) != math.Float32bits(values[index]) {
+								t.Fatalf("index=%d destination=%08x want=%08x input=%08x original=%08x", index, math.Float32bits(actual[index]), math.Float32bits(want[index]), math.Float32bits(original[index]), math.Float32bits(values[index]))
+							}
+						}
+					})
+				}
+			}
+		}
+	}
+}
+
+func checkNumericalReluBits(t *testing.T, actual, expected *tensor.Tensor) {
+	t.Helper()
+	var (
+		got, want []float32
+		err       error
+	)
+
+	if got, err = actual.Float32Values(); err != nil {
+		t.Fatal(err)
+	}
+
+	if want, err = expected.Float32Values(); err != nil {
+		t.Fatal(err)
+	}
+
+	for index, value := range want {
+		if math.Float32bits(got[index]) != math.Float32bits(value) {
+			t.Fatalf("index=%d got=%08x want=%08x", index, math.Float32bits(got[index]), math.Float32bits(value))
+		}
+	}
+}
+
+func TestNumericalCallReluValidationPrecedence(t *testing.T) {
+	var (
+		input, wrongShape *tensor.Tensor
+		limits            Limits
+		call              *numericalCall
+		err               error
+	)
+
+	if input, err = tensor.FromFloat32(nil, []float32{2}); err != nil {
+		t.Fatal(err)
+	}
+
+	if wrongShape, err = tensor.FromFloat32([]int64{1}, []float32{91}); err != nil {
+		t.Fatal(err)
+	}
+
+	if limits, err = (Limits{}).normalized(); err != nil {
+		t.Fatal(err)
+	}
+
+	if call, err = newNumericalCall(operators.Step{Operator: "Relu"}, []*tensor.Tensor{input}, limits); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, boundary := range []int{1, 2} {
+		ctx := newCancelContext(boundary)
+		defer ctx.cancel()
+		out, runErr := call.run(ctx, wrongShape)
+		if out != nil || ctx.checks != 1 || boundary == 1 && runErr != context.Canceled || boundary == 2 && !errors.Is(runErr, ErrInvalidModel) {
+			t.Fatalf("boundary=%d checks=%d out=%v err=%v", boundary, ctx.checks, out, runErr)
+		}
+
+		var values []float32
+		if values, err = wrongShape.Float32Values(); err != nil {
+			t.Fatal(err)
+		}
+
+		if values[0] != 91 {
+			t.Fatal("validation changed destination")
+		}
+	}
+}
+
+func TestNumericalCallReluValidation(t *testing.T) {
+	var (
+		limits                              Limits
+		input, wrongShape, wrongType, empty *tensor.Tensor
+		call, emptyCall                     *numericalCall
+		invalid                             tensor.Tensor
+		err                                 error
+	)
+
+	if limits, err = (Limits{}).normalized(); err != nil {
+		t.Fatal(err)
+	}
+
+	if input, err = tensor.FromFloat32([]int64{3}, []float32{-1, 2, math.Float32frombits(0xff801234)}); err != nil {
+		t.Fatal(err)
+	}
+
+	if wrongShape, err = tensor.FromFloat32([]int64{1, 3}, []float32{91, 92, 93}); err != nil {
+		t.Fatal(err)
+	}
+
+	if wrongType, err = tensor.FromInt64([]int64{3}, []int64{91, 92, 93}); err != nil {
+		t.Fatal(err)
+	}
+
+	if empty, err = tensor.FromFloat32([]int64{2, 0, 3}, nil); err != nil {
+		t.Fatal(err)
+	}
+
+	if call, err = newNumericalCall(operators.Step{Operator: "Relu"}, []*tensor.Tensor{input}, limits); err != nil {
+		t.Fatal(err)
+	}
+
+	if emptyCall, err = newNumericalCall(operators.Step{Operator: "Relu"}, []*tensor.Tensor{empty}, limits); err != nil {
+		t.Fatal(err)
+	}
+
+	shallow := *input
+	emptyShallow := *empty
+	tests := []struct {
+		name        string
+		call        *numericalCall
+		destination *tensor.Tensor
+	}{
+		{"shape", call, wrongShape},
+		{"dtype", call, wrongType},
+		{"invalid", call, &invalid},
+		{"alias", call, input},
+		{"shallow alias", call, &shallow},
+		{"empty alias", emptyCall, empty},
+		{"empty shallow alias", emptyCall, &emptyShallow},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var (
+				before   []float32
+				integers []int64
+			)
+
+			if tt.destination.DataType() == Float32 {
+				if before, err = tt.destination.Float32Values(); err != nil {
+					t.Fatal(err)
+				}
+			} else if tt.destination.DataType() == Int64 {
+				if integers, err = tt.destination.Int64Values(); err != nil {
+					t.Fatal(err)
+				}
+			}
+
+			output, runErr := tt.call.run(context.Background(), tt.destination)
+			if output != nil || !errors.Is(runErr, ErrInvalidModel) {
+				t.Fatalf("output=%v error=%v", output, runErr)
+			}
+
+			if before != nil {
+				var actual []float32
+				if actual, err = tt.destination.Float32Values(); err != nil {
+					t.Fatal(err)
+				}
+
+				for index, value := range before {
+					if math.Float32bits(actual[index]) != math.Float32bits(value) {
+						t.Fatal("destination changed on validation error")
+					}
+				}
+			} else if integers != nil {
+				var actual []int64
+				if actual, err = tt.destination.Int64Values(); err != nil {
+					t.Fatal(err)
+				}
+
+				for index, value := range integers {
+					if actual[index] != value {
+						t.Fatal("destination changed on validation error")
+					}
 				}
 			}
 		})
