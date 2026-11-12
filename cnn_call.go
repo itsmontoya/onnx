@@ -23,24 +23,21 @@ func newCNNCall(step operators.Step, inputs []*tensor.Tensor, limits Limits) (ou
 
 		shapes[slot] = append([]int64{}, input.Shape()...)
 	}
-	if c.shape, c.conv, c.pool, err = step.CNN.Shape(step.Operator, shapes); err != nil {
-		return nil, fmt.Errorf("%w: CNN shape: %w", ErrInvalidModel, err)
-	}
-
-	if len(c.shape) > limits.MaxRank {
-		return nil, fmt.Errorf("%w: CNN output rank", ErrLimit)
-	}
-
-	for _, size := range c.shape {
-		if size > limits.MaxDimension {
-			return nil, fmt.Errorf("%w: CNN output dimension", ErrLimit)
-		}
-	}
-	if _, c.bytes, err = tensor.ValidateShape(c.shape, Float32); err != nil {
-		return nil, fmt.Errorf("%w: CNN output: %w", ErrLimit, err)
+	if err = c.plan(shapes, limits); err != nil {
+		return nil, err
 	}
 
 	return &c, nil
+}
+
+func newPreparedCNNCall(step operators.Step, shapes [][]int64, limits Limits) (out *cnnCall) {
+	var c cnnCall
+	c.step = step
+	if c.plan(shapes, limits) != nil {
+		return nil
+	}
+
+	return &c
 }
 
 // cnnCall uses the released direct Into loops: no numerical accessor copies,
@@ -52,6 +49,27 @@ type cnnCall struct {
 	conv   tensor.Conv2DConfig
 	pool   tensor.Pool2DConfig
 	bytes  int64
+}
+
+func (c *cnnCall) plan(shapes [][]int64, limits Limits) (err error) {
+	if c.shape, c.conv, c.pool, err = c.step.CNN.Shape(c.step.Operator, shapes); err != nil {
+		return fmt.Errorf("%w: CNN shape: %w", ErrInvalidModel, err)
+	}
+
+	if len(c.shape) > limits.MaxRank {
+		return fmt.Errorf("%w: CNN output rank", ErrLimit)
+	}
+
+	for _, size := range c.shape {
+		if size > limits.MaxDimension {
+			return fmt.Errorf("%w: CNN output dimension", ErrLimit)
+		}
+	}
+	if _, c.bytes, err = tensor.ValidateShape(c.shape, Float32); err != nil {
+		return fmt.Errorf("%w: CNN output: %w", ErrLimit, err)
+	}
+
+	return nil
 }
 
 func (c *cnnCall) run(ctx context.Context, destination *tensor.Tensor) (out *tensor.Tensor, err error) {

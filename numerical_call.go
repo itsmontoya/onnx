@@ -19,52 +19,43 @@ func newNumericalCall(step operators.Step, inputs []*tensor.Tensor, limits Limit
 			return nil, fmt.Errorf("%w: numerical input must be float32", ErrInvalidModel)
 		}
 	}
-	var right []int64
+	var (
+		right []int64
+		bias  []int64
+	)
+
 	left := inputs[0].Shape()
 	if len(inputs) > 1 {
 		right = inputs[1].Shape()
 	}
 
-	switch step.Operator {
-	case "Add", "Sub", "Mul", "Div":
-		c.shape, err = tensor.BroadcastShape(left, right)
-	case "MatMul":
-		c.shape, err = tensor.MatMulShape(left, right)
-	case "Gemm":
-		c.shape, err = tensor.GemmShape(left, right, step.Gemm)
-		if err == nil && len(inputs) > 2 && inputs[2] != nil {
-			err = tensor.ValidateBroadcastTo(inputs[2].Shape(), c.shape)
-		}
-	case "Relu", "Sigmoid", "Tanh":
-		c.shape = left
-	case "Softmax":
-		c.shape = left
-		_, err = tensor.NormalizeAxis(step.Axis, len(left))
-	default:
-		return nil, fmt.Errorf("%w: missing numerical handler", ErrUnsupported)
-	}
-	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrInvalidModel, err)
+	if len(inputs) > 2 && inputs[2] != nil {
+		bias = inputs[2].Shape()
 	}
 
-	if len(c.shape) > limits.MaxRank {
-		return nil, fmt.Errorf("%w: numerical output rank", ErrLimit)
-	}
-
-	for _, size := range c.shape {
-		if size > limits.MaxDimension {
-			return nil, fmt.Errorf("%w: numerical output dimension", ErrLimit)
-		}
-	}
-	if _, c.bytes, err = tensor.ValidateShape(c.shape, Float32); err != nil {
-		return nil, fmt.Errorf("%w: numerical output: %w", ErrLimit, err)
-	}
-
-	if c.workspace, err = c.scratch(left, right); err != nil {
+	if err = c.plan(left, right, bias, len(inputs) > 2 && inputs[2] != nil, limits); err != nil {
 		return nil, err
 	}
 
 	return &c, nil
+}
+
+func newPreparedNumericalCall(step operators.Step, shapes [][]int64, limits Limits) (out *numericalCall) {
+	var (
+		c     numericalCall
+		right []int64
+	)
+
+	c.step = step
+	if len(shapes) > 1 {
+		right = shapes[1]
+	}
+
+	if c.plan(shapes[0], right, nil, false, limits) != nil {
+		return nil
+	}
+
+	return &c
 }
 
 // numericalCall audits the pinned kernel paths before numerical allocation.
@@ -75,6 +66,49 @@ type numericalCall struct {
 	shape     []int64
 	bytes     int64
 	workspace int64
+}
+
+func (c *numericalCall) plan(left, right, bias []int64, hasBias bool, limits Limits) (err error) {
+	switch c.step.Operator {
+	case "Add", "Sub", "Mul", "Div":
+		c.shape, err = tensor.BroadcastShape(left, right)
+	case "MatMul":
+		c.shape, err = tensor.MatMulShape(left, right)
+	case "Gemm":
+		c.shape, err = tensor.GemmShape(left, right, c.step.Gemm)
+		if err == nil && hasBias {
+			err = tensor.ValidateBroadcastTo(bias, c.shape)
+		}
+	case "Relu", "Sigmoid", "Tanh":
+		c.shape = left
+	case "Softmax":
+		c.shape = left
+		_, err = tensor.NormalizeAxis(c.step.Axis, len(left))
+	default:
+		return fmt.Errorf("%w: missing numerical handler", ErrUnsupported)
+	}
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrInvalidModel, err)
+	}
+
+	if len(c.shape) > limits.MaxRank {
+		return fmt.Errorf("%w: numerical output rank", ErrLimit)
+	}
+
+	for _, size := range c.shape {
+		if size > limits.MaxDimension {
+			return fmt.Errorf("%w: numerical output dimension", ErrLimit)
+		}
+	}
+	if _, c.bytes, err = tensor.ValidateShape(c.shape, Float32); err != nil {
+		return fmt.Errorf("%w: numerical output: %w", ErrLimit, err)
+	}
+
+	if c.workspace, err = c.scratch(left, right); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (c *numericalCall) scratch(left, right []int64) (bytes int64, err error) {
