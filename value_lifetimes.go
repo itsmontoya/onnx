@@ -61,6 +61,10 @@ func (l *valueLifetimes) aliases(ctx context.Context, plan *executionPlan) (err 
 		if step.Operator == "Constant" {
 			l.pinned[step.Outputs[0]] = true
 		}
+
+		if step.Index >= 0 && step.Index < len(plan.calls) && plan.calls[step.Index] != nil && plan.calls[step.Index].retained != nil {
+			l.pinned[step.Outputs[0]] = true
+		}
 	}
 
 	return nil
