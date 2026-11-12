@@ -30,13 +30,12 @@ the report's Python/NumPy/ONNX/ORT versions. Set `ONNX_REFERENCE_PYTHON`,
 retain the original measurement environment. Run commands sequentially from the
 repository root, without simultaneous performance processes.
 
-The comparison harness is archived at commit `c2d5123`; its Python driver is
-byte-identical to the one measured here. If absent in a fresh checkout, restore
-only the four harness source files into the ignored tools directory:
-
-```sh
-git archive c2d5123 tools/compare_runtime.py tools/compare_runtime/runner.go tools/compare_runtime/run_result.go tools/compare_runtime/tensor_data.go | tar -x
-```
+The exact measured comparison driver and Go runner are included at
+`tools/compare_runtime.py` and `tools/compare_runtime/{runner,run_result,tensor_data}.go`.
+Their bytes match the source fingerprints in summary.json. The Python driver also
+matches archived commit `c2d5123`; the current Go runner uses separate files for
+its types. No benchmark logic or timing boundary was changed when preserving
+these files for replay.
 
 Prepare the pinned model with the existing driver before running benchmark
 binaries. This preliminary report is outside the seven-pair measurement set.

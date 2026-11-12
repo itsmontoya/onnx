@@ -211,6 +211,8 @@ absolute error remains **1.9073486328125e-5** with unchanged tolerances.
 The [committed evidence](tools/compare_runtime/pass14/README.md) contains lossless
 individual timings/output bits, benchmark logs, node-profile samples, validation
 commands and source fingerprints. Large binaries/profiles remain outside git.
+The exact existing driver and Go runner are also preserved unchanged so a clean
+checkout can replay the measurements without reconstructing archived file layouts.
 
 ## 9. Prediction audit
 
