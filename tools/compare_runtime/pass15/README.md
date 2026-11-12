@@ -4,8 +4,10 @@ Read [PERFORMANCE_PASS15.md](../../../PERFORMANCE_PASS15.md) for the full report
 including the allocation ledger, alternative descriptor and latency limitations.
 
 The selected production change is neuralnetwork commit
-`647e0c8ef3c93d90707df5077046346cd658f68e`. ONNX's go.mod remains on released
-v0.10.8. Temporary module files select the candidate without changing that file.
+`647e0c8ef3c93d90707df5077046346cd658f68e`. The original investigation kept
+ONNX's go.mod on v0.10.8 and selected the candidate with temporary module files.
+ONNX now uses released v0.10.9; [release validation](release/README.md) preserves
+the fresh published-module comparison separately.
 The standalone [backend.patch.gz](backend.patch.gz) applies to `be95e90` and contains
 only the selected implementation, tests and benchmark extensions.
 

@@ -39,8 +39,10 @@ def flags(variant):
 
 def prepare():
     for variant in ['control', 'candidate']:
-        (OUT/(variant+'.mod')).write_bytes((ROOT/'go.mod').read_bytes())
-        (OUT/(variant+'.sum')).write_bytes((ROOT/'go.sum').read_bytes())
+        for suffix in ['mod','sum']:
+            payload = (subprocess.check_output(['git','show','a73fd4b:go.'+suffix],cwd=ROOT)
+                       if variant == 'control' else (ROOT/('go.'+suffix)).read_bytes())
+            (OUT/(variant+'.'+suffix)).write_bytes(payload)
         if variant == 'candidate':
             command('candidate-replace', ['go', 'mod', 'edit', flags(variant),
                     '-replace=github.com/itsmontoya/neuralnetwork='+str(BACKEND)])

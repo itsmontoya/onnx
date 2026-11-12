@@ -1,5 +1,10 @@
 # Performance Optimization Pass 15 — Broadcast Metadata Ownership
 
+Released integration: ONNX now uses **neuralnetwork v0.10.9**, containing this
+change. See [the released-module validation](PERFORMANCE_PASS15_RELEASE.md) for
+fresh comparisons and checks. The sections below preserve the original local
+investigation and its separately measured results.
+
 2026-11-12, Apple M3. The selected backend change removes **448 B / 15
 allocations per inference**: **93,322 B / 88 objects → 92,874 B / 73 objects**.
 All 22 original Add allocations are accounted for. Seven remaining allocations
@@ -13,11 +18,13 @@ the fixed-policy latency result is not a durable speedup guarantee.
 
 Production code is in neuralnetwork commit
 `647e0c8ef3c93d90707df5077046346cd658f68e`, on local branch
-`optimization-pass-15`. ONNX production source and its released v0.10.8 dependency
-remain unchanged. Integration was tested through separate temporary module files,
+`optimization-pass-15`. During this investigation, ONNX production source and its
+released v0.10.8 dependency remained unchanged. Integration was tested through
+separate temporary module files,
 first against an isolated checkout and then against the identical sibling source.
-This is a validated, unreleased backend candidate; no release or remote publication
-was performed. The scripts, patch, diagnostic overlays and lossless evidence are
+This initially validated an unreleased backend candidate. The later v0.10.9
+integration is documented separately above. The scripts, patch, diagnostic overlays
+and lossless evidence are
 in [the Pass 15 evidence directory](tools/compare_runtime/pass15/README.md).
 
 ## 1. Baseline

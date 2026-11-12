@@ -106,10 +106,11 @@ improvement, with **42.417 µs ORT / 1.3001×** after the change. Allocation rem
 the earlier local experiment and records correctness, portability and raw evidence.
 
 [Performance Pass 15](PERFORMANCE_PASS15.md) accounts for Add's 22 allocations
-and validates an unreleased backend metadata change: **93,322 → 92,874 B/op**,
-**88 → 73 allocs/op**, with no new public API or retained plan state. The report
-separates fixed-policy latency movement, a latency-neutral ramp and a static
-descriptor alternative. The released dependency remains v0.10.8.
+and removes 15 metadata allocations with no new public API or retained plan state.
+The [released v0.10.9 integration](PERFORMANCE_PASS15_RELEASE.md) reproduces
+**93,322 → 92,874 B/op / 88 → 73 allocs/op**. Seven fresh fixed-policy pairs
+measure **55.417 → 54.750 µs Go**, with **42.375 µs ORT / 1.2920×**. The reports
+separate latency variance, reference movement and the static descriptor alternative.
 
 The archived [comparison results](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md),
 [fifth-pass investigation](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/pass5/README.md) and
