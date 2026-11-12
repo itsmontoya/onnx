@@ -63,13 +63,14 @@ func newPreparedCall(ctx context.Context, step operators.Step, values []operator
 	return &p
 }
 
-// preparedCall contains immutable geometry, never invocation arguments. Every
+// preparedCall contains immutable geometry/results, never invocation arguments. Every
 // input's concrete Info is checked by bind/checkValue before a consumer runs.
 // That existing validation is the guard; deferred shapes use the dynamic path.
 type preparedCall struct {
 	cnn       *cnnCall
 	numerical *numericalCall
 	shape     *shapeCall
+	retained  *tensor.Tensor
 }
 
 func (p *preparedCall) run(e *evaluation, inputs []*tensor.Tensor) (out *tensor.Tensor, err error) {
@@ -112,6 +113,15 @@ func (p *preparedCall) run(e *evaluation, inputs []*tensor.Tensor) (out *tensor.
 
 		if destination, err = e.storage.destination(call.dataType, call.shape, call.bytes, 0); err != nil {
 			return nil, err
+		}
+
+		if p.retained != nil {
+			// Retain the eliminated synchronous copy's two context boundaries.
+			if err = e.ctx.Err(); err != nil {
+				return nil, err
+			}
+
+			return p.retained, e.ctx.Err()
 		}
 
 		return call.run(e.ctx, destination)

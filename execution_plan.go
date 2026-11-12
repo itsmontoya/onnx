@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/itsmontoya/neuralnetwork/tensor"
 	"github.com/itsmontoya/onnx/internal/graph"
 	"github.com/itsmontoya/onnx/internal/operators"
 )
@@ -70,11 +71,11 @@ func newExecutionPlan(ctx context.Context, compiled *operators.Plan, limits Limi
 	}
 
 	p.loadBytes += lifetimeBytes + int64(len(p.steps))*8
-	if p.lifetimes, err = newValueLifetimes(ctx, &p); err != nil {
+	if err = p.prepareCalls(ctx); err != nil {
 		return nil, err
 	}
 
-	if err = p.prepareCalls(ctx); err != nil {
+	if p.lifetimes, err = newValueLifetimes(ctx, &p); err != nil {
 		return nil, err
 	}
 
@@ -157,7 +158,124 @@ func (p *executionPlan) prepareCalls(ctx context.Context) (err error) {
 		p.loadBytes += bytes
 		p.callBytes += bytes
 	}
+	return p.prepareReshapes(ctx, constants)
+}
+
+func (p *executionPlan) prepareReshapes(ctx context.Context, constants []*graph.Constant) (err error) {
+	if constants == nil {
+		return ctx.Err()
+	}
+
+	var liveBudget int64 = -1
+	for position, call := range p.calls {
+		if err = ctx.Err(); err != nil {
+			return err
+		}
+
+		if call == nil || call.shape == nil {
+			continue
+		}
+
+		source := constants[p.steps[position].Inputs[0]]
+		if source == nil {
+			continue
+		}
+
+		if liveBudget < 0 {
+			liveBudget = p.preparedLiveBudget(ctx)
+		}
+
+		liveBudget -= p.prepareReshape(ctx, call, source, liveBudget)
+	}
 	return ctx.Err()
+}
+
+// preparedLiveBudget bounds all value slots and publication copies together,
+// even when their actual lifetimes do not overlap. Unknown signatures decline
+// optional payload preparation. This preserves previous tight Run limits without
+// adding a runtime fallback or discounting physically resident prepared payload.
+func (p *executionPlan) preparedLiveBudget(ctx context.Context) (available int64) {
+	for _, step := range p.steps {
+		// Normalization also reserves optional, unpublished statistics tensors.
+		// Their storage is not represented by the named value slots below.
+		if ctx.Err() != nil || step.Operator == "LayerNormalization" {
+			return 0
+		}
+	}
+	available = p.limits.MaxLiveBytes - p.residentBytes
+	if available < p.limits.MaxWorkspaceBytes {
+		return 0
+	}
+
+	available -= p.limits.MaxWorkspaceBytes
+	for _, value := range p.values {
+		if ctx.Err() != nil || !value.Info.ShapeKnown || value.Info.DataType == Invalid {
+			return 0
+		}
+
+		_, bytes, shapeErr := tensor.ValidateShape(nil, value.Info.DataType)
+		if shapeErr != nil {
+			return 0
+		}
+
+		for _, dimension := range value.Info.Dimensions {
+			if ctx.Err() != nil || dimension.Kind != graph.FixedDimension || dimension.Value < 0 {
+				return 0
+			}
+
+			if dimension.Value != 0 && bytes > available/dimension.Value {
+				return 0
+			}
+
+			bytes *= dimension.Value
+		}
+		// Binding reserves a supplied/defaulted input before checking its
+		// declaration. Cover invalid signatures too, preserving error priority.
+		if value.Input {
+			bytes = p.limits.MaxTensorBytes
+		}
+
+		if bytes > available {
+			return 0
+		}
+
+		available -= bytes
+		if _, output := p.outputNames[value.Name]; output {
+			if bytes > available {
+				return 0
+			}
+
+			available -= bytes
+		}
+	}
+	return available
+}
+
+func (p *executionPlan) prepareReshape(ctx context.Context, call *preparedCall, source *graph.Constant, liveBudget int64) (retainedBytes int64) {
+	shape := *call.shape
+	bytes := shape.bytes
+	// Charge the owned shape and the backend's temporary resolved-shape copy
+	// as load work, as well as the persistent numerical payload.
+	metadata := int64(len(shape.shape)) * 16
+	available := p.limits.MaxLoadBytes - p.loadBytes
+	if bytes > liveBudget || bytes > p.limits.MaxTensorBytes || shape.workspace > p.limits.MaxWorkspaceBytes || metadata > available || bytes > available-metadata {
+		return 0
+	}
+
+	shape.inputs = []*tensor.Tensor{source.Borrow()}
+	var (
+		retained *tensor.Tensor
+		err      error
+	)
+
+	if retained, err = shape.run(ctx, nil); err != nil {
+		return 0
+	}
+
+	call.retained = retained
+	p.loadBytes += bytes + metadata
+	p.residentBytes += bytes
+	return bytes
 }
 
 func (p *executionPlan) acquire() (err error) {
