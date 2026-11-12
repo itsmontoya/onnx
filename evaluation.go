@@ -131,7 +131,7 @@ func (e *evaluation) bind(inputs map[string]*Tensor) (err error) {
 				return operationError("run", err, value.Name)
 			}
 		} else if value.Default != nil {
-			if backend, err = e.cloneConstant(value.Default); err != nil {
+			if backend, err = e.constantValue(value.Default); err != nil {
 				return operationError("run", err, value.Name)
 			}
 		} else {
@@ -163,7 +163,7 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 	case "Identity":
 		backend = e.storage.values[step.Inputs[0]]
 	case "Constant":
-		if backend, err = e.cloneConstant(step.Constant); err != nil {
+		if backend, err = e.constantValue(step.Constant); err != nil {
 			return err
 		}
 	default:
@@ -361,22 +361,21 @@ func (e *evaluation) checkInfo(info graph.ValueInfo, dataType DataType, shape []
 	return nil
 }
 
-func (e *evaluation) cloneConstant(constant *graph.Constant) (out *tensor.Tensor, err error) {
+func (e *evaluation) constantValue(constant *graph.Constant) (out *tensor.Tensor, err error) {
 	if err = e.ctx.Err(); err != nil {
 		return nil, err
 	}
 
-	// Released tensor.Clone copies directly into its owned destination.
-	// There is no numerical accessor/staging buffer beyond the live copy.
+	// Sources and Constant outputs (including Identity aliases) are pinned by
+	// the lifetime plan and cannot become writable destinations. Keep the legacy
+	// logical reservation so live/workspace limit behavior remains unchanged,
+	// even though the decoded resident payload now serves both roles.
 	if err = e.storage.reserve(constant.ByteSize(), 0); err != nil {
 		return nil, err
 	}
 
 	defer e.budget.releaseWorkspace()
-	if out, err = constant.Clone(); err != nil {
-		return nil, fmt.Errorf("clone model constant: %w", err)
-	}
-
+	out = constant.Borrow()
 	if err = e.ctx.Err(); err != nil {
 		return nil, err
 	}

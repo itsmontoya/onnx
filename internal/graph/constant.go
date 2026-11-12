@@ -50,10 +50,9 @@ func newAttributeConstant(ctx context.Context, decoder *decode.TensorDecoder, at
 	return &c, nil
 }
 
-// Constant owns a decoded tensor without exposing a writable backend pointer.
-// Clone allocates for a future consumer, which must reserve that copy in its own
-// budget before calling. Typed accessors also copy; consumers reserve those
-// snapshots before inspecting immutable payloads.
+// Constant owns an immutable decoded tensor. Execution may borrow it only as a
+// read-only source; writable consumers must Clone and budget the copy first.
+// Typed accessors also copy and require budgeted snapshots.
 type Constant struct {
 	name      string
 	docString string
@@ -90,3 +89,8 @@ func (c *Constant) Int64Values() (values []int64, err error) { return c.value.In
 
 // Clone returns independent backend storage for a budgeted consumer.
 func (c *Constant) Clone() (out *tensor.Tensor, err error) { return c.value.Clone() }
+
+// Borrow returns the retained tensor for read-only execution. Consumers must
+// never write to it, use it as a destination, or place it in reusable storage.
+// Keeping the returned pointer retains its storage independently of the graph.
+func (c *Constant) Borrow() (out *tensor.Tensor) { return c.value }

@@ -88,6 +88,15 @@ aliases, scalars and empties. Default, cgo-disabled, `purego`, race and
 integration. No ONNX public API, operator coverage, Conv/Pool kernel or
 model-specific branch changed. This builds on v0.10.6's portable MaxPool path.
 
+[Performance Pass 11](PERFORMANCE_PASS11.md) reuses decoded constants as
+read-only inputs while preserving overrides, output copies and conservative
+memory reservations. Seven alternating fixed-policy pairs measure
+**69.084 → 65.813 µs Go**, with **44.750 µs ORT / 1.471×** after the change:
+**4.73% lower Go latency**. Allocations fall **138,608 → 112,763 B/op** and
+**172 → 140 allocations/op**, with no additional persistent payload or
+preparation step. The report records variance, initialization measurements,
+23 passing checks, 532 comparison cases and the remaining optimization ledger.
+
 The archived [comparison results](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md),
 [fifth-pass investigation](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/pass5/README.md) and
 [v0.10.2 validation](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/pass5/v0.10.2/README.md)
