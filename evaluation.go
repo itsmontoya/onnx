@@ -178,6 +178,14 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 				inputs[slot] = e.storage.values[valueIndex]
 			}
 		}
+		if step.Index >= 0 && step.Index < len(e.plan.calls) && e.plan.calls[step.Index] != nil {
+			if backend, err = e.plan.calls[step.Index].run(e, inputs); err != nil {
+				return err
+			}
+
+			break
+		}
+
 		if operators.IsCNNOperator(step.Operator) {
 			var cnn *cnnCall
 			if cnn, err = newCNNCall(step, inputs, e.plan.limits); err != nil {

@@ -74,6 +74,10 @@ func newExecutionPlan(ctx context.Context, compiled *operators.Plan, limits Limi
 		return nil, err
 	}
 
+	if err = p.prepareCalls(ctx); err != nil {
+		return nil, err
+	}
+
 	return &p, nil
 }
 
@@ -93,6 +97,67 @@ type executionPlan struct {
 	outputIndices []int
 	outputNames   map[string]int
 	lifetimes     *valueLifetimes
+	calls         []*preparedCall
+	callBytes     int64
+}
+
+func (p *executionPlan) prepareCalls(ctx context.Context) (err error) {
+	var constants []*graph.Constant
+	for position, step := range p.steps {
+		if err = ctx.Err(); err != nil {
+			return err
+		}
+
+		if !operators.IsCNNOperator(step.Operator) && !preparedNumericalOperator(step.Operator) && step.Operator != "Reshape" {
+			continue
+		}
+
+		// Bound copied scalar metadata/configs (512 bytes), all input shapes,
+		// output shape and Reshape target before allocating preparation state.
+		bytes, available := int64(512), p.limits.MaxLoadBytes-p.loadBytes
+		if available < bytes || int64(p.limits.MaxRank) > (available-bytes)/16 {
+			continue
+		}
+
+		bytes += int64(p.limits.MaxRank) * 16
+		for _, index := range step.Inputs {
+			if index >= 0 {
+				rank := int64(len(p.values[index].Info.Dimensions))
+				if rank > (available-bytes)/8 {
+					bytes = available + 1
+					break
+				}
+
+				bytes += rank * 8
+			}
+		}
+		if bytes > available {
+			continue
+		}
+
+		var target *graph.Constant
+		if step.Operator == "Reshape" {
+			if constants == nil {
+				if constants, err = preparedCallConstants(ctx, p.values, p.steps); err != nil {
+					return err
+				}
+			}
+			target = constants[step.Inputs[1]]
+		}
+		call := newPreparedCall(ctx, step, p.values, target, p.limits)
+		if call == nil {
+			continue
+		}
+
+		if p.calls == nil {
+			p.calls = make([]*preparedCall, len(p.steps))
+		}
+
+		p.calls[position] = call
+		p.loadBytes += bytes
+		p.callBytes += bytes
+	}
+	return ctx.Err()
 }
 
 func (p *executionPlan) acquire() (err error) {

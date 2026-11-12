@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/itsmontoya/neuralnetwork/tensor"
+	"github.com/itsmontoya/onnx/internal/graph"
 	"github.com/itsmontoya/onnx/internal/operators"
 )
 
@@ -39,6 +40,29 @@ func newShapeCall(step operators.Step, inputs []*tensor.Tensor, limits Limits) (
 	return &c, nil
 }
 
+func newPreparedReshapeCall(ctx context.Context, step operators.Step, left []int64, dataType DataType, target *graph.Constant, limits Limits) (out *shapeCall) {
+	if target == nil || target.DataType() != Int64 || target.Rank() != 1 || target.Borrow().Len() > int64(limits.MaxRank) {
+		return nil
+	}
+
+	var (
+		c   shapeCall
+		err error
+	)
+
+	c.step, c.limits = step, limits
+	c.dataType, c.workspace = dataType, target.ByteSize()
+	if c.axes, err = target.Int64Values(); err != nil {
+		return nil
+	}
+
+	if err = c.planShape(ctx, left); err != nil {
+		return nil
+	}
+
+	return &c
+}
+
 // shapeCall reserves accessor staging before planning, then the complete
 // destination before allocation. Released transforms/indexing copy directly
 // into destinations and allocate no additional numerical scratch.
@@ -67,6 +91,10 @@ func (c *shapeCall) plan(ctx context.Context) (err error) {
 		}
 	}
 
+	return c.planShape(ctx, left)
+}
+
+func (c *shapeCall) planShape(ctx context.Context, left []int64) (err error) {
 	switch c.step.Operator {
 	case "Shape":
 		start, end := operators.ShapeRange(c.step, len(left))
