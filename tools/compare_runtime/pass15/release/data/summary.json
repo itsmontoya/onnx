@@ -1,0 +1,829 @@
+{
+  "control": {
+    "timing": {
+      "go": {
+        "median": 55.417,
+        "minimum": 54.479,
+        "maximum": 55.459,
+        "cv_pct": 0.7398478242964123,
+        "values": [
+          55.458,
+          54.708,
+          55.417,
+          55.459,
+          55.2705,
+          55.4375,
+          54.479
+        ]
+      },
+      "ort": {
+        "median": 42.5,
+        "minimum": 41.333,
+        "maximum": 44.542,
+        "cv_pct": 3.083605626890401,
+        "values": [
+          41.333,
+          42.459,
+          41.916,
+          42.5,
+          44.167,
+          44.542,
+          44.541
+        ]
+      }
+    },
+    "ratio": 1.303929411764706,
+    "ramp": {
+      "median": 56.363,
+      "minimum": 55.387,
+      "maximum": 60.552,
+      "cv_pct": 3.669718973514425,
+      "values": [
+        56.363,
+        55.761,
+        58.86,
+        60.552,
+        55.387,
+        55.407,
+        59.055
+      ],
+      "bytes": 93322,
+      "allocs": 88
+    },
+    "nodes": {
+      "BenchmarkMNISTNodes/00_Conv": {
+        "median": 7772.0,
+        "minimum": 7758.0,
+        "maximum": 7883.0,
+        "cv_pct": 0.661529256840071,
+        "values": [
+          7772.0,
+          7758.0,
+          7765.0,
+          7784.0,
+          7883.0
+        ],
+        "bytes": 32,
+        "allocs": 1
+      },
+      "BenchmarkMNISTNodes/01_Add": {
+        "median": 2044.0,
+        "minimum": 2023.0,
+        "maximum": 2059.0,
+        "cv_pct": 0.8156635464733456,
+        "values": [
+          2059.0,
+          2044.0,
+          2025.0,
+          2055.0,
+          2023.0
+        ],
+        "bytes": 216,
+        "allocs": 7
+      },
+      "BenchmarkMNISTNodes/02_Relu/WithCorrection": {
+        "median": 872.0,
+        "minimum": 870.3,
+        "maximum": 874.1,
+        "cv_pct": 0.18037455290703638,
+        "values": [
+          872.0,
+          870.3,
+          870.4,
+          872.4,
+          874.1
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/02_Relu/BackendOnly": {
+        "median": 4267.0,
+        "minimum": 4254.0,
+        "maximum": 4316.0,
+        "cv_pct": 0.6581172164893859,
+        "values": [
+          4267.0,
+          4316.0,
+          4261.0,
+          4254.0,
+          4306.0
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/02_Relu/PreservingBackendOnly": {
+        "median": 877.9,
+        "minimum": 874.2,
+        "maximum": 1011.0,
+        "cv_pct": 6.5117143201888625,
+        "values": [
+          1011.0,
+          891.6,
+          876.1,
+          874.2,
+          877.9
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/02_Relu/ONNXCorrectionOnly": {
+        "median": 6827.0,
+        "minimum": 6775.0,
+        "maximum": 7016.0,
+        "cv_pct": 1.3709006694893657,
+        "values": [
+          7016.0,
+          6827.0,
+          6775.0,
+          6845.0,
+          6809.0
+        ],
+        "bytes": 27264,
+        "allocs": 1
+      },
+      "BenchmarkMNISTNodes/03_MaxPool": {
+        "median": 2525.0,
+        "minimum": 2469.0,
+        "maximum": 2837.0,
+        "cv_pct": 5.725057884021794,
+        "values": [
+          2469.0,
+          2520.0,
+          2525.0,
+          2837.0,
+          2534.0
+        ],
+        "bytes": 32,
+        "allocs": 1
+      },
+      "BenchmarkMNISTNodes/04_Conv": {
+        "median": 27222.0,
+        "minimum": 27142.0,
+        "maximum": 27291.0,
+        "cv_pct": 0.23537141292122357,
+        "values": [
+          27142.0,
+          27142.0,
+          27222.0,
+          27233.0,
+          27291.0
+        ],
+        "bytes": 32,
+        "allocs": 1
+      },
+      "BenchmarkMNISTNodes/05_Add": {
+        "median": 1303.0,
+        "minimum": 1287.0,
+        "maximum": 1307.0,
+        "cv_pct": 0.6114323000877339,
+        "values": [
+          1305.0,
+          1307.0,
+          1303.0,
+          1287.0,
+          1299.0
+        ],
+        "bytes": 216,
+        "allocs": 7
+      },
+      "BenchmarkMNISTNodes/06_Relu/WithCorrection": {
+        "median": 456.4,
+        "minimum": 453.7,
+        "maximum": 459.2,
+        "cv_pct": 0.44856984555987817,
+        "values": [
+          459.2,
+          453.7,
+          456.4,
+          457.7,
+          456.0
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/06_Relu/BackendOnly": {
+        "median": 2043.0,
+        "minimum": 2035.0,
+        "maximum": 2063.0,
+        "cv_pct": 0.5631298002692703,
+        "values": [
+          2035.0,
+          2063.0,
+          2053.0,
+          2043.0,
+          2038.0
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/06_Relu/PreservingBackendOnly": {
+        "median": 452.0,
+        "minimum": 451.5,
+        "maximum": 453.8,
+        "cv_pct": 0.2081432934577652,
+        "values": [
+          451.5,
+          453.1,
+          453.8,
+          452.0,
+          452.0
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/06_Relu/ONNXCorrectionOnly": {
+        "median": 3499.0,
+        "minimum": 3483.0,
+        "maximum": 3524.0,
+        "cv_pct": 0.42435943866667925,
+        "values": [
+          3524.0,
+          3496.0,
+          3483.0,
+          3502.0,
+          3499.0
+        ],
+        "bytes": 13568,
+        "allocs": 1
+      },
+      "BenchmarkMNISTNodes/07_MaxPool": {
+        "median": 973.9,
+        "minimum": 962.7,
+        "maximum": 978.7,
+        "cv_pct": 0.6173358320461876,
+        "values": [
+          973.9,
+          978.7,
+          975.3,
+          972.5,
+          962.7
+        ],
+        "bytes": 32,
+        "allocs": 1
+      },
+      "BenchmarkMNISTNodes/10_MatMul": {
+        "median": 1696.0,
+        "minimum": 1691.0,
+        "maximum": 1712.0,
+        "cv_pct": 0.5137019007744638,
+        "values": [
+          1696.0,
+          1696.0,
+          1691.0,
+          1707.0,
+          1712.0
+        ],
+        "bytes": 144,
+        "allocs": 3
+      },
+      "BenchmarkMNISTNodes/11_Add": {
+        "median": 206.3,
+        "minimum": 205.0,
+        "maximum": 207.7,
+        "cv_pct": 0.4840502585366121,
+        "values": [
+          207.7,
+          205.0,
+          206.6,
+          206.3,
+          205.8
+        ],
+        "bytes": 352,
+        "allocs": 8
+      }
+    },
+    "node_sums_us": {
+      "Conv": 34.994,
+      "Add": 3.5533,
+      "Relu": 1.3284,
+      "MaxPool": 3.4989,
+      "MatMul": 1.696
+    },
+    "load": {
+      "BenchmarkMNISTPreparation/LoadBytes": {
+        "median": 382106.0,
+        "minimum": 378400.0,
+        "maximum": 387529.0,
+        "cv_pct": 0.9536913097124886,
+        "values": [
+          382106.0,
+          379005.0,
+          382758.0,
+          378400.0,
+          387529.0
+        ],
+        "bytes": 345317,
+        "allocs": 2563
+      },
+      "BenchmarkMNISTPreparation/Session": {
+        "median": 26.15,
+        "minimum": 26.07,
+        "maximum": 26.37,
+        "cv_pct": 0.43356543273567133,
+        "values": [
+          26.14,
+          26.37,
+          26.15,
+          26.07,
+          26.15
+        ],
+        "bytes": 24,
+        "allocs": 1
+      }
+    },
+    "module": {
+      "Path": "github.com/itsmontoya/neuralnetwork",
+      "Version": "v0.10.8",
+      "Time": "2026-11-12T18:41:09Z",
+      "Dir": "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.8",
+      "GoMod": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.8.mod",
+      "GoVersion": "1.26.1",
+      "Sum": "h1:J/ont78/Q9d0OzzemUem6yNw0cI1gIt7Pi3sCF5Qjas=",
+      "GoModSum": "h1:4ha7jggW7cxuYy1EIaGUvn6aLe8NBt8BLOYm4to6y+Y="
+    }
+  },
+  "candidate": {
+    "timing": {
+      "go": {
+        "median": 54.75,
+        "minimum": 53.4375,
+        "maximum": 55.292,
+        "cv_pct": 1.2884742678093795,
+        "values": [
+          55.292,
+          54.8125,
+          53.4375,
+          55.0835,
+          54.292,
+          53.688,
+          54.75
+        ]
+      },
+      "ort": {
+        "median": 42.375,
+        "minimum": 41.667,
+        "maximum": 44.709,
+        "cv_pct": 2.9205771708715114,
+        "values": [
+          41.667,
+          42.375,
+          41.917,
+          42.208,
+          44.709,
+          44.583,
+          43.25
+        ]
+      }
+    },
+    "ratio": 1.2920353982300885,
+    "ramp": {
+      "median": 55.486,
+      "minimum": 54.903,
+      "maximum": 59.228,
+      "cv_pct": 2.6590841603920374,
+      "values": [
+        56.107,
+        54.903,
+        55.626,
+        55.061,
+        59.228,
+        55.486,
+        55.387
+      ],
+      "bytes": 92874,
+      "allocs": 73
+    },
+    "nodes": {
+      "BenchmarkMNISTNodes/00_Conv": {
+        "median": 7785.0,
+        "minimum": 7766.0,
+        "maximum": 7806.0,
+        "cv_pct": 0.18826987601738057,
+        "values": [
+          7806.0,
+          7788.0,
+          7766.0,
+          7785.0,
+          7778.0
+        ],
+        "bytes": 32,
+        "allocs": 1
+      },
+      "BenchmarkMNISTNodes/01_Add": {
+        "median": 1960.0,
+        "minimum": 1942.0,
+        "maximum": 1964.0,
+        "cv_pct": 0.44354719177911744,
+        "values": [
+          1964.0,
+          1942.0,
+          1960.0,
+          1961.0,
+          1955.0
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/02_Relu/WithCorrection": {
+        "median": 877.3,
+        "minimum": 873.7,
+        "maximum": 972.1,
+        "cv_pct": 4.770455574682293,
+        "values": [
+          879.1,
+          873.7,
+          972.1,
+          877.3,
+          876.5
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/02_Relu/BackendOnly": {
+        "median": 4291.0,
+        "minimum": 4257.0,
+        "maximum": 4323.0,
+        "cv_pct": 0.6033025661454621,
+        "values": [
+          4323.0,
+          4291.0,
+          4295.0,
+          4267.0,
+          4257.0
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/02_Relu/PreservingBackendOnly": {
+        "median": 870.8,
+        "minimum": 868.2,
+        "maximum": 878.4,
+        "cv_pct": 0.5126447260602065,
+        "values": [
+          876.1,
+          868.2,
+          869.2,
+          870.8,
+          878.4
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/02_Relu/ONNXCorrectionOnly": {
+        "median": 6928.0,
+        "minimum": 6884.0,
+        "maximum": 6964.0,
+        "cv_pct": 0.45896200474696114,
+        "values": [
+          6964.0,
+          6928.0,
+          6933.0,
+          6884.0,
+          6896.0
+        ],
+        "bytes": 27264,
+        "allocs": 1
+      },
+      "BenchmarkMNISTNodes/03_MaxPool": {
+        "median": 2487.0,
+        "minimum": 2475.0,
+        "maximum": 2501.0,
+        "cv_pct": 0.4579908463941506,
+        "values": [
+          2478.0,
+          2497.0,
+          2475.0,
+          2487.0,
+          2501.0
+        ],
+        "bytes": 32,
+        "allocs": 1
+      },
+      "BenchmarkMNISTNodes/04_Conv": {
+        "median": 27219.0,
+        "minimum": 27170.0,
+        "maximum": 27264.0,
+        "cv_pct": 0.14287504622926694,
+        "values": [
+          27264.0,
+          27191.0,
+          27219.0,
+          27248.0,
+          27170.0
+        ],
+        "bytes": 32,
+        "allocs": 1
+      },
+      "BenchmarkMNISTNodes/05_Add": {
+        "median": 1195.0,
+        "minimum": 1190.0,
+        "maximum": 1205.0,
+        "cv_pct": 0.51244555288351,
+        "values": [
+          1195.0,
+          1205.0,
+          1190.0,
+          1195.0,
+          1190.0
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/06_Relu/WithCorrection": {
+        "median": 456.3,
+        "minimum": 454.9,
+        "maximum": 457.7,
+        "cv_pct": 0.291362435596366,
+        "values": [
+          456.3,
+          457.7,
+          454.9,
+          455.2,
+          457.7
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/06_Relu/BackendOnly": {
+        "median": 2051.0,
+        "minimum": 2049.0,
+        "maximum": 2070.0,
+        "cv_pct": 0.4315255397648969,
+        "values": [
+          2059.0,
+          2051.0,
+          2070.0,
+          2049.0,
+          2050.0
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/06_Relu/PreservingBackendOnly": {
+        "median": 451.8,
+        "minimum": 451.1,
+        "maximum": 456.0,
+        "cv_pct": 0.44844548491035163,
+        "values": [
+          451.7,
+          453.9,
+          456.0,
+          451.8,
+          451.1
+        ],
+        "bytes": 0,
+        "allocs": 0
+      },
+      "BenchmarkMNISTNodes/06_Relu/ONNXCorrectionOnly": {
+        "median": 3541.0,
+        "minimum": 3529.0,
+        "maximum": 3549.0,
+        "cv_pct": 0.23145182146839682,
+        "values": [
+          3549.0,
+          3541.0,
+          3541.0,
+          3529.0,
+          3549.0
+        ],
+        "bytes": 13568,
+        "allocs": 1
+      },
+      "BenchmarkMNISTNodes/07_MaxPool": {
+        "median": 971.8,
+        "minimum": 969.4,
+        "maximum": 981.1,
+        "cv_pct": 0.4637217507003251,
+        "values": [
+          971.5,
+          981.1,
+          969.4,
+          971.8,
+          973.2
+        ],
+        "bytes": 32,
+        "allocs": 1
+      },
+      "BenchmarkMNISTNodes/10_MatMul": {
+        "median": 1686.0,
+        "minimum": 1674.0,
+        "maximum": 1689.0,
+        "cv_pct": 0.3693701701697136,
+        "values": [
+          1689.0,
+          1686.0,
+          1689.0,
+          1683.0,
+          1674.0
+        ],
+        "bytes": 144,
+        "allocs": 3
+      },
+      "BenchmarkMNISTNodes/11_Add": {
+        "median": 196.1,
+        "minimum": 195.3,
+        "maximum": 197.1,
+        "cv_pct": 0.3363311055143491,
+        "values": [
+          197.1,
+          195.8,
+          195.3,
+          196.2,
+          196.1
+        ],
+        "bytes": 336,
+        "allocs": 7
+      }
+    },
+    "node_sums_us": {
+      "Conv": 35.004000000000005,
+      "Add": 3.3511,
+      "Relu": 1.3336000000000001,
+      "MaxPool": 3.4588,
+      "MatMul": 1.686
+    },
+    "load": {
+      "BenchmarkMNISTPreparation/LoadBytes": {
+        "median": 378295.0,
+        "minimum": 376877.0,
+        "maximum": 385078.0,
+        "cv_pct": 0.8949325232707984,
+        "values": [
+          379029.0,
+          376901.0,
+          376877.0,
+          378295.0,
+          385078.0
+        ],
+        "bytes": 345318,
+        "allocs": 2563
+      },
+      "BenchmarkMNISTPreparation/Session": {
+        "median": 26.12,
+        "minimum": 26.06,
+        "maximum": 26.18,
+        "cv_pct": 0.17252075855519797,
+        "values": [
+          26.18,
+          26.09,
+          26.13,
+          26.06,
+          26.12
+        ],
+        "bytes": 24,
+        "allocs": 1
+      }
+    },
+    "module": {
+      "Path": "github.com/itsmontoya/neuralnetwork",
+      "Version": "v0.10.9",
+      "Time": "2026-11-12T22:04:41Z",
+      "Dir": "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.9",
+      "GoMod": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.9.mod",
+      "GoVersion": "1.26.1",
+      "Sum": "h1:kmfxkbiZZ8fbw0cxCxvar2nfYJ2Bx6kci/QUNH0w6oQ=",
+      "GoModSum": "h1:4ha7jggW7cxuYy1EIaGUvn6aLe8NBt8BLOYm4to6y+Y="
+    }
+  },
+  "saving_us": 0.6670000000000016,
+  "saving_pct": 1.2036017828464218,
+  "paired_savings_us": {
+    "median": 0.3755000000000024,
+    "minimum": -0.2710000000000008,
+    "maximum": 1.9795000000000016,
+    "cv_pct": null,
+    "values": [
+      0.16599999999999682,
+      -0.10450000000000159,
+      1.9795000000000016,
+      0.3755000000000024,
+      0.9784999999999968,
+      1.7494999999999976,
+      -0.2710000000000008
+    ]
+  },
+  "roadmap": {
+    "1.25": {
+      "target_us": 52.96875,
+      "remaining_us": 1.78125
+    },
+    "1.1": {
+      "target_us": 46.612500000000004,
+      "remaining_us": 8.137499999999996
+    }
+  },
+  "max_absolute_error": 1.9073486328125e-05,
+  "go_outputs_bit_identical": true,
+  "integration_commit": "3b37416360c1ef9ef98c8bf38f011897d334bb58",
+  "environment": {
+    "go": "go version go1.27.2 darwin/arm64",
+    "macos": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.2\nBuildVersion:\t\t25F84\n",
+    "kernel": "Darwin Joshs-MacBook-Air.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:19:21 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T8122 arm64\n",
+    "hardware": {
+      "chip_type": "Apple M3",
+      "machine_model": "Mac15,13",
+      "physical_memory": "24 GB",
+      "number_processors": "proc 8:4:4:0"
+    },
+    "performance_environment": {
+      "CGO_ENABLED": "0",
+      "GOMAXPROCS": "1",
+      "GOWORK": "off",
+      "GOARM64": "v8.0",
+      "GOFLAGS": "",
+      "GOCACHE": "/private/tmp/onnx-pass6/go-cache"
+    },
+    "onnx_sha": "a73fd4bfd3f3b0494194d1e6a45bf88173f74ec9",
+    "release_sha": "740a244bf56214bb3443a69287a2d800674620e4"
+  },
+  "release-provenance": {
+    "Path": "github.com/itsmontoya/neuralnetwork",
+    "Version": "v0.10.9",
+    "Info": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.9.info",
+    "GoMod": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.9.mod",
+    "Zip": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.9.zip",
+    "Dir": "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.9",
+    "Sum": "h1:kmfxkbiZZ8fbw0cxCxvar2nfYJ2Bx6kci/QUNH0w6oQ=",
+    "GoModSum": "h1:4ha7jggW7cxuYy1EIaGUvn6aLe8NBt8BLOYm4to6y+Y=",
+    "Origin": {
+      "VCS": "git",
+      "URL": "https://github.com/itsmontoya/neuralnetwork",
+      "Hash": "740a244bf56214bb3443a69287a2d800674620e4",
+      "Ref": "refs/tags/v0.10.9"
+    }
+  },
+  "source-identity": {
+    "arithmetic.go": "0123aa8f83bf1be88bf3ceff1fb586349e2dca2382c4342f5accfc187721f013",
+    "broadcast.go": "e5f7e3899ef839069e53148b916a6917664036c4cf09260cb697d25677469ab4",
+    "broadcast_add.go": "3bbd938b953b7a4a6613ede2e886fa25259abf0e5010a974ce2eaa727b1cfb1c",
+    "destination.go": "b2b18308397dfd81ac27d5ab097f37584101620e5a0e0ff14820a75de3d19c56"
+  },
+  "ort_node_sums_us": {
+    "Reshape": {
+      "median": 0.537,
+      "minimum": 0.51,
+      "maximum": 1.294,
+      "cv_pct": 57.033726656502,
+      "values": [
+        1.294,
+        0.51,
+        0.537
+      ]
+    },
+    "Conv": {
+      "median": 36.067,
+      "minimum": 35.754,
+      "maximum": 38.071,
+      "cv_pct": 3.4319454983753492,
+      "values": [
+        38.071,
+        36.067,
+        35.754
+      ]
+    },
+    "Add": {
+      "median": 2.453,
+      "minimum": 2.434,
+      "maximum": 3.094,
+      "cv_pct": 14.121782336787108,
+      "values": [
+        3.094,
+        2.453,
+        2.434
+      ]
+    },
+    "Relu": {
+      "median": 2.008,
+      "minimum": 1.857,
+      "maximum": 2.019,
+      "cv_pct": 4.615358108846508,
+      "values": [
+        2.019,
+        2.008,
+        1.857
+      ]
+    },
+    "MaxPool": {
+      "median": 3.016,
+      "minimum": 3.0140000000000002,
+      "maximum": 3.1310000000000002,
+      "cv_pct": 2.1934318266399906,
+      "values": [
+        3.1310000000000002,
+        3.0140000000000002,
+        3.016
+      ]
+    },
+    "MatMul": {
+      "median": 1.004,
+      "minimum": 1.002,
+      "maximum": 1.036,
+      "cv_pct": 1.8815368864239577,
+      "values": [
+        1.036,
+        1.004,
+        1.002
+      ]
+    }
+  }
+}
