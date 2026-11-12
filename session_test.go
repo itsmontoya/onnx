@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"os"
 	"reflect"
 	"slices"
 	"strings"
@@ -758,6 +759,157 @@ func TestSessionReuseIndependentConcurrentRuns(t *testing.T) {
 	for repeat := 0; repeat < 2; repeat++ {
 		if err := <-finished; err != nil {
 			t.Fatal(err)
+		}
+	}
+}
+
+func TestSessionRetainedDefaultsAcrossConcurrentOverridesAndClose(t *testing.T) {
+	wire := modelWire(t, "sessions/branch_defaults")
+	bits := []float32{math.Float32frombits(0x7fc12345), math.Float32frombits(0x80000000)}
+	wire.Graph.Initializer[0].RawData = nil
+	wire.Graph.Initializer[0].FloatData = bits
+	model := loadedModel(t, modelBytes(t, wire), Options{Limits: Limits{MaxSessions: 2}})
+	first, second := modelSession(t, model), modelSession(t, model)
+	source := model.plan.values[model.plan.indices["weight"]].Default.Borrow()
+	input := floatTensor(t, []int64{1, 2}, []float32{1, 2})
+	if err := model.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	finished := make(chan error, 2)
+	for index, session := range []*Session{first, second} {
+		go func() {
+			var (
+				err      error
+				override *Tensor
+				outputs  []NamedTensor
+			)
+
+			values := []float32{float32(index + 3), float32(index + 5)}
+			if override, err = NewFloat32([]int64{1, 2}, values); err != nil {
+				finished <- err
+				return
+			}
+
+			for repeat := 0; repeat < 100; repeat++ {
+				inputs := map[string]*Tensor{"x": input}
+				expected := bits
+				if repeat%2 != 0 {
+					inputs["weight"], expected = override, values
+				}
+
+				if outputs, err = session.Run(context.Background(), inputs, RunOptions{Outputs: []string{"weight_out"}}); err != nil {
+					finished <- err
+					return
+				}
+
+				var actual []float32
+				if actual, err = outputs[0].Tensor.Float32Values(); err != nil {
+					finished <- err
+					return
+				}
+
+				for element, want := range expected {
+					if math.Float32bits(actual[element]) != math.Float32bits(want) {
+						finished <- fmt.Errorf("session %d run %d default/override changed", index, repeat)
+						return
+					}
+				}
+				if outputs[0].Tensor.value == source || outputs[0].Tensor.value == override.value {
+					finished <- fmt.Errorf("session %d published borrowed storage", index)
+					return
+				}
+
+				if err = tensor.AddInto(input.value, input.value, outputs[0].Tensor.value); err != nil {
+					finished <- err
+					return
+				}
+			}
+			finished <- nil
+		}()
+	}
+	for count := 0; count < 2; count++ {
+		if err := <-finished; err != nil {
+			t.Fatal(err)
+		}
+	}
+	assertFloats(t, &Tensor{value: source}, []int64{1, 2}, bits)
+}
+
+func TestSessionMNISTRetainedConstantsStayBitwiseUnchanged(t *testing.T) {
+	var (
+		ctx   = context.Background()
+		model *Model
+		err   error
+	)
+
+	if model, err = LoadFile(ctx, ".cache/compare-runtime/mnist-ir8-opset13.onnx", Options{}); errors.Is(err, os.ErrNotExist) {
+		t.Skip("prepare the MNIST model with tools/compare_runtime.py")
+	} else if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Cleanup(func() {
+		if closeErr := model.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
+	})
+	session := modelSession(t, model)
+	plan := model.plan
+	snapshots := make([]*tensor.Tensor, len(plan.values))
+	for index, value := range plan.values {
+		if value.Default != nil {
+			if snapshots[index], err = value.Default.Clone(); err != nil {
+				t.Fatal(err)
+			}
+		}
+	}
+	for repeat := 0; repeat < 8; repeat++ {
+		values := make([]float32, 784)
+		for index := range values {
+			values[index] = float32(index%256)/255 - float32(repeat%3)
+		}
+		if repeat%2 != 0 {
+			values[repeat] = math.Float32frombits(0x7fc12345)
+		}
+
+		input := floatTensor(t, []int64{1, 1, 28, 28}, values)
+		if _, err = session.Run(ctx, map[string]*Tensor{"Input3": input}, RunOptions{}); err != nil {
+			t.Fatal(err)
+		}
+
+		for index, snapshot := range snapshots {
+			if snapshot == nil {
+				continue
+			}
+
+			source := plan.values[index].Default.Borrow()
+			if !slices.Equal(source.Shape(), snapshot.Shape()) {
+				t.Fatalf("initializer %q shape changed", plan.values[index].Name)
+			}
+
+			if source.DataType() == Float32 {
+				var expected []float32
+				if expected, err = snapshot.Float32Values(); err != nil {
+					t.Fatal(err)
+				}
+
+				assertFloats(t, &Tensor{value: source}, snapshot.Shape(), expected)
+				continue
+			}
+
+			var actual, expected []int64
+			if actual, err = source.Int64Values(); err != nil {
+				t.Fatal(err)
+			}
+
+			if expected, err = snapshot.Int64Values(); err != nil {
+				t.Fatal(err)
+			}
+
+			if !slices.Equal(actual, expected) {
+				t.Fatalf("initializer %q integers changed", plan.values[index].Name)
+			}
 		}
 	}
 }
