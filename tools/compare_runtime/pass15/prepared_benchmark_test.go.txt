@@ -1,0 +1,89 @@
+package onnx
+
+import (
+	"context"
+	"fmt"
+	"github.com/itsmontoya/neuralnetwork/tensor"
+	"reflect"
+	"testing"
+)
+
+var pass15Descriptor *tensor.Pass15AddPlan
+
+func BenchmarkPass15Descriptor(b *testing.B) {
+	var (
+		model   *Model
+		session *Session
+		input   *Tensor
+		run     *evaluation
+		err     error
+	)
+	ctx := context.Background()
+	if model, err = LoadFile(ctx, ".cache/compare-runtime/mnist-ir8-opset13.onnx", Options{}); err != nil {
+		b.Fatal(err)
+	}
+	defer model.Close()
+	if session, err = model.NewSession(); err != nil {
+		b.Fatal(err)
+	}
+	defer session.Close()
+	values := make([]float32, 784)
+	for index := range values {
+		values[index] = float32(index%256) / 255
+	}
+	if input, err = NewFloat32([]int64{1, 1, 28, 28}, values); err != nil {
+		b.Fatal(err)
+	}
+	if run, err = newEvaluation(ctx, session.plan); err != nil {
+		b.Fatal(err)
+	}
+	if err = run.bind(map[string]*Tensor{"Input3": input}); err != nil {
+		b.Fatal(err)
+	}
+	for _, step := range session.plan.steps {
+		if err = run.execute(step); err != nil {
+			b.Fatal(err)
+		}
+		if step.Operator != "Add" {
+			continue
+		}
+		inputs := []*tensor.Tensor{run.storage.values[step.Inputs[0]], run.storage.values[step.Inputs[1]]}
+		output := run.storage.values[step.Outputs[0]]
+		for _, prepared := range []bool{false, true} {
+			call := *session.plan.calls[step.Index].numerical
+			call.inputs = inputs
+			if call.add == nil {
+				b.Fatal("descriptor missing")
+			}
+			if !prepared {
+				call.add = nil
+			}
+			b.Run(fmt.Sprintf("%02d/prepared=%v", step.Index, prepared), func(node *testing.B) {
+				node.ReportAllocs()
+				for node.Loop() {
+					if _, err = call.run(ctx, output); err != nil {
+						node.Fatal(err)
+					}
+				}
+			})
+		}
+	}
+}
+
+func BenchmarkPass15DescriptorInit(b *testing.B) {
+	shapes := [][][]int64{
+		{{1, 8, 28, 28}, {8, 1, 1}},
+		{{1, 16, 14, 14}, {16, 1, 1}},
+		{{1, 10}, {1, 10}},
+	}
+	var err error
+	b.Logf("descriptor size=%d", reflect.TypeOf(tensor.Pass15AddPlan{}).Size())
+	b.ReportAllocs()
+	for b.Loop() {
+		for _, pair := range shapes {
+			if pass15Descriptor, err = tensor.NewPass15AddPlan(pair[0], pair[1]); err != nil {
+				b.Fatal(err)
+			}
+		}
+	}
+}
