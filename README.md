@@ -59,8 +59,8 @@ and **174 → 172 allocations/op**. Samples span 77.593–79.486 µs before and
 including the noisy candidate run, are retained. Median paired saving is
 9.367 µs; individual savings range from −1.078 to 9.774 µs.
 
-The runtime uses the new portable, context-aware `ReLUPreservingNaNInto` backend
-operation for nonempty ReLU. Finite inputs avoid the copying NaN correction;
+The v0.10.7 integration introduced the context-aware `ReLUPreservingNaNInto`
+backend operation for nonempty ReLU. Finite inputs avoid the copying NaN correction;
 the two prepared activations fall **16.716 → 7.377 µs**, with zero prepared
 allocations. Original NaN sign, payload and signaling bits, positive-zero rules,
 infinities, input ownership and destination validation remain intact. NaN
@@ -96,6 +96,14 @@ memory reservations. Seven alternating fixed-policy pairs measure
 **172 → 140 allocations/op**, with no additional persistent payload or
 preparation step. The report records variance, initialization measurements,
 23 passing checks, 532 comparison cases and the remaining optimization ledger.
+
+[Performance Pass 14](PERFORMANCE_PASS14.md) integrates published `neuralnetwork`
+**v0.10.8**, adding ARM64 integer SIMD for preserving ReLU while retaining the
+portable fallback and exact NaN/cancellation behavior. Seven alternating
+fixed-policy pairs on Apple M3 measure **61.5415 → 55.1455 µs Go**, a **10.39%**
+improvement, with **42.417 µs ORT / 1.3001×** after the change. Allocation remains
+**93,322 B/op / 88 allocs/op**. The report separates the fresh ORT reference from
+the earlier local experiment and records correctness, portability and raw evidence.
 
 The archived [comparison results](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md),
 [fifth-pass investigation](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/pass5/README.md) and
