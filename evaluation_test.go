@@ -2,14 +2,112 @@ package onnx
 
 import (
 	"context"
+	"errors"
 	"math"
 	"slices"
+	"strings"
 	"testing"
 
 	"github.com/itsmontoya/neuralnetwork/tensor"
+	"github.com/itsmontoya/onnx/internal/graph"
 	"github.com/itsmontoya/onnx/internal/onnxpb"
+	"github.com/itsmontoya/onnx/internal/operators"
 	"google.golang.org/protobuf/proto"
 )
+
+func TestEvaluationCheckValueActualMetadataAndDeclarations(t *testing.T) {
+	var (
+		fixed = graph.Dimension{Kind: graph.FixedDimension, Value: 2}
+		first = graph.Dimension{Kind: graph.SymbolicDimension, Symbol: "first"}
+		last  = graph.Dimension{Kind: graph.SymbolicDimension, Symbol: "last"}
+	)
+
+	tests := []struct {
+		name         string
+		actualType   DataType
+		shape        []int64
+		info         graph.ValueInfo
+		declarations []graph.ValueInfo
+		wantError    string
+		wantSymbols  map[string]int64
+	}{
+		{
+			name: "original symbols and inferred fixed shape", actualType: Float32, shape: []int64{2},
+			info: graph.ValueInfo{DataType: Float32, ShapeKnown: true, Dimensions: []graph.Dimension{fixed}},
+			declarations: []graph.ValueInfo{
+				{DataType: Float32, ShapeKnown: true, Dimensions: []graph.Dimension{first}},
+				{DataType: Float32, ShapeKnown: true, Dimensions: []graph.Dimension{last}},
+			},
+			wantSymbols: map[string]int64{"first": 2, "last": 2},
+		},
+		{
+			name: "empty symbolic tensor", actualType: Int64, shape: []int64{0},
+			info:         graph.ValueInfo{DataType: Int64},
+			declarations: []graph.ValueInfo{{ShapeKnown: true, Dimensions: []graph.Dimension{first}}},
+			wantSymbols:  map[string]int64{"first": 0},
+		},
+		{
+			name: "scalar with unknown dtype declarations", actualType: Float32,
+			info:         graph.ValueInfo{ShapeKnown: true},
+			declarations: []graph.ValueInfo{{}, {ShapeKnown: true}},
+		},
+		{
+			name: "actual dtype violates original declaration", actualType: Int64, shape: []int64{2},
+			info:         graph.ValueInfo{DataType: Int64},
+			declarations: []graph.ValueInfo{{DataType: Float32}}, wantError: "dtype",
+		},
+		{
+			name: "actual dtype violates inferred info", actualType: Int64, shape: []int64{2},
+			info:         graph.ValueInfo{DataType: Float32},
+			declarations: []graph.ValueInfo{{DataType: Int64}, {DataType: Int64}}, wantError: "dtype",
+		},
+		{
+			name: "original rank error precedes inferred dtype error", actualType: Float32, shape: []int64{2},
+			info:         graph.ValueInfo{DataType: Int64},
+			declarations: []graph.ValueInfo{{DataType: Float32, ShapeKnown: true}}, wantError: "rank",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var (
+				backend *tensor.Tensor
+				err     error
+				run     = evaluation{
+					ctx:     context.Background(),
+					plan:    &executionPlan{limits: Limits{MaxRank: 4, MaxDimension: 8}},
+					symbols: make(map[string]int64),
+				}
+			)
+
+			if backend, err = tensor.New(tt.actualType, tt.shape); err != nil {
+				t.Fatal(err)
+			}
+
+			err = run.checkValue(operators.Value{Info: tt.info, Declarations: tt.declarations}, backend, ErrInvalidArgument)
+			if tt.wantError != "" {
+				if !errors.Is(err, ErrInvalidArgument) || !strings.Contains(err.Error(), tt.wantError) {
+					t.Fatalf("validation error: %v, want %s", err, tt.wantError)
+				}
+
+				return
+			}
+
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if len(run.symbols) != len(tt.wantSymbols) {
+				t.Fatalf("symbol bindings: %v, want %v", run.symbols, tt.wantSymbols)
+			}
+
+			for symbol, size := range tt.wantSymbols {
+				if actual, exists := run.symbols[symbol]; !exists || actual != size {
+					t.Fatalf("symbol %s: %d, %t, want %d", symbol, actual, exists, size)
+				}
+			}
+		})
+	}
+}
 
 func TestEvaluationArgumentsOptionalAndWideCalls(t *testing.T) {
 	tests := []struct {

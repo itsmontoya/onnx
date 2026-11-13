@@ -1,0 +1,43 @@
+package onnx
+
+import (
+	"encoding/json"
+	"testing"
+
+	"github.com/itsmontoya/neuralnetwork/matrix"
+	"github.com/itsmontoya/neuralnetwork/tensor"
+)
+
+// TestPass20Counter runs only in a serial, instrumented diagnostic binary.
+// Instrumented latency is never used as performance evidence.
+func TestPass20Counter(t *testing.T) {
+	f := newPass19Fixture(t)
+	f.warm(t)
+	for range 2 {
+		clear(tensor.Pass20Counts)
+		clear(tensor.Pass20Sites)
+		clear(matrix.Pass20Counts)
+		if _, err := f.session.Run(f.ctx, f.inputs, RunOptions{}); err != nil {
+			t.Fatal(err)
+		}
+
+		counts, err := json.Marshal(tensor.Pass20Counts)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		t.Logf("COUNTS %s", counts)
+		sites, err := json.Marshal(tensor.Pass20Sites)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		t.Logf("SITES %s", sites)
+		counts, err = json.Marshal(matrix.Pass20Counts)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		t.Logf("MATRIX %s", counts)
+	}
+}

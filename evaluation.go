@@ -340,13 +340,14 @@ func (e *evaluation) checkValue(value operators.Value, backend *tensor.Tensor, k
 
 	// Inference can refine away a symbol or unknown axis. Original declarations
 	// still constrain that concrete value and bind symbols for the entire run.
+	dataType := backend.DataType()
 	for _, declaration := range value.Declarations {
-		if err = e.checkInfo(declaration, backend.DataType(), shape, kind); err != nil {
+		if err = e.checkInfo(declaration, dataType, shape, kind); err != nil {
 			return err
 		}
 	}
 
-	return e.checkInfo(value.Info, backend.DataType(), shape, kind)
+	return e.checkInfo(value.Info, dataType, shape, kind)
 }
 
 func (e *evaluation) checkInfo(info graph.ValueInfo, dataType DataType, shape []int64, kind error) (err error) {
