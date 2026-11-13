@@ -1,0 +1,4540 @@
+[
+  {
+    "name": "module",
+    "command": [
+      "go",
+      "list",
+      "-m",
+      "-json",
+      "github.com/itsmontoya/neuralnetwork"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.006529500242322683
+  },
+  {
+    "name": "publication",
+    "command": [
+      "go",
+      "mod",
+      "download",
+      "-json",
+      "github.com/itsmontoya/neuralnetwork@v0.10.10"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.006001042202115059
+  },
+  {
+    "name": "hardware",
+    "command": [
+      "system_profiler",
+      "SPHardwareDataType",
+      "-json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.17848104098811746
+  },
+  {
+    "name": "go-version",
+    "command": [
+      "go",
+      "version"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.00778616638854146
+  },
+  {
+    "name": "macos",
+    "command": [
+      "sw_vers"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.008624500129371881
+  },
+  {
+    "name": "kernel",
+    "command": [
+      "uname",
+      "-a"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0024566249921917915
+  },
+  {
+    "name": "onnx-head",
+    "command": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.011723916977643967
+  },
+  {
+    "name": "modules",
+    "command": [
+      "go",
+      "list",
+      "-m",
+      "all"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.008935917168855667
+  },
+  {
+    "name": "build",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.704915332607925
+  },
+  {
+    "name": "build-info",
+    "command": [
+      "go",
+      "version",
+      "-m",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.007493666838854551
+  },
+  {
+    "name": "branch",
+    "command": [
+      "git",
+      "branch",
+      "--show-current"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.010127250105142593
+  },
+  {
+    "name": "python-environment",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "-c",
+      "import sys,numpy,onnx,onnxruntime; print(sys.version); print(dict(numpy=numpy.__version__,onnx=onnx.__version__,ort=onnxruntime.__version__))"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.40345995919778943
+  },
+  {
+    "name": "baseline-ramp-1",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.9871605411171913
+  },
+  {
+    "name": "baseline-comparison-1-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline-comparison-1.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.221727415919304
+  },
+  {
+    "name": "baseline-ramp-2",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6066016661934555
+  },
+  {
+    "name": "baseline-comparison-2-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline-comparison-2.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.103853499982506
+  },
+  {
+    "name": "baseline-ramp-3",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6051012501120567
+  },
+  {
+    "name": "baseline-comparison-3-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline-comparison-3.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.1742954161018133
+  },
+  {
+    "name": "baseline-ramp-4",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.63595400005579
+  },
+  {
+    "name": "baseline-comparison-4-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline-comparison-4.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0734612909145653
+  },
+  {
+    "name": "baseline-ramp-5",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6049556252546608
+  },
+  {
+    "name": "baseline-comparison-5-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline-comparison-5.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0899856663309038
+  },
+  {
+    "name": "baseline-ramp-6",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.605876374989748
+  },
+  {
+    "name": "baseline-comparison-6-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline-comparison-6.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0792434997856617
+  },
+  {
+    "name": "baseline-ramp-7",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6049760417081416
+  },
+  {
+    "name": "baseline-comparison-7-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline-comparison-7.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0821460420265794
+  },
+  {
+    "name": "format-context_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/context_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.009418041910976171
+  },
+  {
+    "name": "format-fixture_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/fixture_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0030212923884391785
+  },
+  {
+    "name": "format-benchmark_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/benchmark_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0031380830332636833
+  },
+  {
+    "name": "build-control",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.3869635830633342
+  },
+  {
+    "name": "retention",
+    "command": [
+      "./.cache/compare-runtime/pass19/control.test",
+      "-test.run=^TestPass19Retention$",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.43795266607776284
+  },
+  {
+    "name": "repeat",
+    "command": [
+      "./.cache/compare-runtime/pass19/control.test",
+      "-test.run=^TestPass19Repeat$",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.00631491607055068
+  },
+  {
+    "name": "state",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19State$",
+      "-test.benchtime=100ms",
+      "-test.count=7",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 4.288187209051102
+  },
+  {
+    "name": "alloc-run",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=1000x",
+      "-test.memprofile=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/mem.pprof",
+      "-test.memprofilerate=1"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.12555149989202619
+  },
+  {
+    "name": "alloc_space",
+    "command": [
+      "go",
+      "tool",
+      "pprof",
+      "-top",
+      "-nodecount=100",
+      "-sample_index=alloc_space",
+      "-focus=onnx.*Session.*Run",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/mem.pprof"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3380485000088811
+  },
+  {
+    "name": "alloc_space-sites",
+    "command": [
+      "go",
+      "tool",
+      "pprof",
+      "-list=.",
+      "-sample_index=alloc_space",
+      "-focus=onnx.*Session.*Run",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/mem.pprof"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.13611912494525313
+  },
+  {
+    "name": "alloc_objects",
+    "command": [
+      "go",
+      "tool",
+      "pprof",
+      "-top",
+      "-nodecount=100",
+      "-sample_index=alloc_objects",
+      "-focus=onnx.*Session.*Run",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/mem.pprof"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.1358100832439959
+  },
+  {
+    "name": "alloc_objects-sites",
+    "command": [
+      "go",
+      "tool",
+      "pprof",
+      "-list=.",
+      "-sample_index=alloc_objects",
+      "-focus=onnx.*Session.*Run",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/mem.pprof"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.13742450019344687
+  },
+  {
+    "name": "nodes",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNISTNodes/(00_Conv|01_Add|02_Relu/WithCorrection|03_MaxPool|04_Conv$|05_Add|06_Relu/WithCorrection|07_MaxPool|10_MatMul|11_Add)$",
+      "-test.benchtime=200ms",
+      "-test.count=7",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 13.539871540851891
+  },
+  {
+    "name": "pipeline",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNISTPipeline$",
+      "-test.benchtime=200ms",
+      "-test.count=7",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 3.419001332949847
+  },
+  {
+    "name": "cpu-run",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=5s",
+      "-test.cpuprofile=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/cpu.pprof"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 6.188169582746923
+  },
+  {
+    "name": "cpu-top",
+    "command": [
+      "go",
+      "tool",
+      "pprof",
+      "-top",
+      "-nodecount=70",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/baseline.test",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/cpu.pprof"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.147941957693547
+  },
+  {
+    "name": "format-context_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/context_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0034228330478072166
+  },
+  {
+    "name": "format-fixture_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/fixture_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0032033328898251057
+  },
+  {
+    "name": "format-benchmark_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/benchmark_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.003244249615818262
+  },
+  {
+    "name": "build-control",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.3825837913900614
+  },
+  {
+    "name": "retention-final",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^TestPass19Retention$",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.4431113749742508
+  },
+  {
+    "name": "repeat-final",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^TestPass19Repeat$",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0061571672558784485
+  },
+  {
+    "name": "state-final",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19State$",
+      "-test.benchtime=100ms",
+      "-test.count=7",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 4.312832042109221
+  },
+  {
+    "name": "prepared",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Prepared$",
+      "-test.benchtime=200ms",
+      "-test.count=7",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 20.289963833987713
+  },
+  {
+    "name": "parts",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Parts$",
+      "-test.benchtime=200ms",
+      "-test.count=7",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 21.95617837505415
+  },
+  {
+    "name": "build-control",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.1538141672499478
+  },
+  {
+    "name": "repeat-control",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^TestPass19Repeat$",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.14497445756569505
+  },
+  {
+    "name": "format-arguments-evaluation.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments-evaluation.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.006110417190939188
+  },
+  {
+    "name": "build-arguments",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.4163554580882192
+  },
+  {
+    "name": "repeat-arguments",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^TestPass19Repeat$",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.32848620787262917
+  },
+  {
+    "name": "format-no-publication-evaluation.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-publication-evaluation.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.008870250079780817
+  },
+  {
+    "name": "build-no-publication",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-publication-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-publication.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.4459310830570757
+  },
+  {
+    "name": "format-shell-cnn_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell-cnn_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.009341415949165821
+  },
+  {
+    "name": "format-shell-shape_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell-shape_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0043225837871432304
+  },
+  {
+    "name": "format-shell-numerical_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell-numerical_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.003833459224551916
+  },
+  {
+    "name": "build-shell",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.4398624165914953
+  },
+  {
+    "name": "format-direct-retention-destination_storage.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention-destination_storage.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.004465417005121708
+  },
+  {
+    "name": "build-direct-retention",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.4096748330630362
+  },
+  {
+    "name": "repeat-direct-retention",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention.test",
+      "-test.run=^TestPass19Repeat$",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.31872325018048286
+  },
+  {
+    "name": "format-no-output-validation-evaluation.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-output-validation-evaluation.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0074449582025408745
+  },
+  {
+    "name": "build-no-output-validation",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-output-validation-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-output-validation.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.48738708300516
+  },
+  {
+    "name": "format-no-onnx-context-prepared_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-prepared_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.003653542138636112
+  },
+  {
+    "name": "format-no-onnx-context-cnn_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-cnn_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0031812088564038277
+  },
+  {
+    "name": "format-no-onnx-context-evaluation.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-evaluation.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0035089999437332153
+  },
+  {
+    "name": "format-no-onnx-context-value_lifetimes.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-value_lifetimes.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.003198416903614998
+  },
+  {
+    "name": "format-no-onnx-context-shape_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-shape_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0031594159081578255
+  },
+  {
+    "name": "format-no-onnx-context-directory_resolver.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-directory_resolver.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.003023624885827303
+  },
+  {
+    "name": "format-no-onnx-context-numerical_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-numerical_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0031587923876941204
+  },
+  {
+    "name": "format-no-onnx-context-normalization_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-normalization_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0032930001616477966
+  },
+  {
+    "name": "format-no-onnx-context-model.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-model.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.002987249754369259
+  },
+  {
+    "name": "format-no-onnx-context-directory_source.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-directory_source.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.003009708132594824
+  },
+  {
+    "name": "format-no-onnx-context-execution_plan.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-execution_plan.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0033708331175148487
+  },
+  {
+    "name": "build-no-onnx-context",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 1,
+    "elapsed_s": 0.19533129129558802
+  },
+  {
+    "name": "build-control",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.5657848329283297
+  },
+  {
+    "name": "repeat-control",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^TestPass19Repeat$",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.31842658296227455
+  },
+  {
+    "name": "format-arguments-evaluation.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments-evaluation.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.011513208039104939
+  },
+  {
+    "name": "build-arguments",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.383135833311826
+  },
+  {
+    "name": "repeat-arguments",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^TestPass19Repeat$",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3130244999192655
+  },
+  {
+    "name": "format-no-publication-evaluation.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-publication-evaluation.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.007945208810269833
+  },
+  {
+    "name": "build-no-publication",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-publication-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-publication.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.3895347500219941
+  },
+  {
+    "name": "format-shell-cnn_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell-cnn_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.003595875110477209
+  },
+  {
+    "name": "format-shell-shape_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell-shape_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0033158748410642147
+  },
+  {
+    "name": "format-shell-numerical_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell-numerical_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.004458417184650898
+  },
+  {
+    "name": "build-shell",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.4020569999702275
+  },
+  {
+    "name": "format-direct-retention-destination_storage.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention-destination_storage.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.006006916984915733
+  },
+  {
+    "name": "build-direct-retention",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.390252749901265
+  },
+  {
+    "name": "repeat-direct-retention",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention.test",
+      "-test.run=^TestPass19Repeat$",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.32226675003767014
+  },
+  {
+    "name": "format-no-output-validation-evaluation.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-output-validation-evaluation.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.008412499912083149
+  },
+  {
+    "name": "build-no-output-validation",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-output-validation-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-output-validation.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.4216551673598588
+  },
+  {
+    "name": "format-no-onnx-context-prepared_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-prepared_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.003717999905347824
+  },
+  {
+    "name": "format-no-onnx-context-cnn_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-cnn_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0032405839301645756
+  },
+  {
+    "name": "format-no-onnx-context-evaluation.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-evaluation.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0034058336168527603
+  },
+  {
+    "name": "format-no-onnx-context-shape_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-shape_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0034822500310838223
+  },
+  {
+    "name": "format-no-onnx-context-numerical_call.go",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-numerical_call.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0032518329098820686
+  },
+  {
+    "name": "build-no-onnx-context",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.3880181671120226
+  },
+  {
+    "name": "control-ablation-1",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.40123654203489423
+  },
+  {
+    "name": "arguments-ablation-1",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3649705830030143
+  },
+  {
+    "name": "no-publication-ablation-1",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-publication.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6512637082487345
+  },
+  {
+    "name": "shell-ablation-1",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6717431670986116
+  },
+  {
+    "name": "direct-retention-ablation-1",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3672864995896816
+  },
+  {
+    "name": "no-output-validation-ablation-1",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-output-validation.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6465524169616401
+  },
+  {
+    "name": "no-onnx-context-ablation-1",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6531187919899821
+  },
+  {
+    "name": "no-onnx-context-ablation-2",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3747355001978576
+  },
+  {
+    "name": "no-output-validation-ablation-2",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-output-validation.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.37990837497636676
+  },
+  {
+    "name": "direct-retention-ablation-2",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.378627167083323
+  },
+  {
+    "name": "shell-ablation-2",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3819902502000332
+  },
+  {
+    "name": "no-publication-ablation-2",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-publication.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3645197916775942
+  },
+  {
+    "name": "arguments-ablation-2",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3668670831248164
+  },
+  {
+    "name": "control-ablation-2",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.37557445792481303
+  },
+  {
+    "name": "control-ablation-3",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3646768326871097
+  },
+  {
+    "name": "arguments-ablation-3",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.37700337497517467
+  },
+  {
+    "name": "no-publication-ablation-3",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-publication.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.36563504207879305
+  },
+  {
+    "name": "shell-ablation-3",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3798100003041327
+  },
+  {
+    "name": "direct-retention-ablation-3",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.37910808390006423
+  },
+  {
+    "name": "no-output-validation-ablation-3",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-output-validation.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.37151920795440674
+  },
+  {
+    "name": "no-onnx-context-ablation-3",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.37515674997121096
+  },
+  {
+    "name": "no-onnx-context-ablation-4",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.37257600016891956
+  },
+  {
+    "name": "no-output-validation-ablation-4",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-output-validation.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.36749208392575383
+  },
+  {
+    "name": "direct-retention-ablation-4",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.37160066701471806
+  },
+  {
+    "name": "shell-ablation-4",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.38467333326116204
+  },
+  {
+    "name": "no-publication-ablation-4",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-publication.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3610077081248164
+  },
+  {
+    "name": "arguments-ablation-4",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.4156659166328609
+  },
+  {
+    "name": "control-ablation-4",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.362419290933758
+  },
+  {
+    "name": "control-ablation-5",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.369463583920151
+  },
+  {
+    "name": "arguments-ablation-5",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.36615837505087256
+  },
+  {
+    "name": "no-publication-ablation-5",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-publication.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3677499173209071
+  },
+  {
+    "name": "shell-ablation-5",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.38587054098024964
+  },
+  {
+    "name": "direct-retention-ablation-5",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.376886417157948
+  },
+  {
+    "name": "no-output-validation-ablation-5",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-output-validation.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3674989999271929
+  },
+  {
+    "name": "no-onnx-context-ablation-5",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3648280003108084
+  },
+  {
+    "name": "no-onnx-context-ablation-6",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.37044224981218576
+  },
+  {
+    "name": "no-output-validation-ablation-6",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-output-validation.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3655202081426978
+  },
+  {
+    "name": "direct-retention-ablation-6",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3632977497763932
+  },
+  {
+    "name": "shell-ablation-6",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.37561833299696445
+  },
+  {
+    "name": "no-publication-ablation-6",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-publication.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.36976304184645414
+  },
+  {
+    "name": "arguments-ablation-6",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.36281049996614456
+  },
+  {
+    "name": "control-ablation-6",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.36512362537905574
+  },
+  {
+    "name": "format-next-context_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/context_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.004088083282113075
+  },
+  {
+    "name": "format-next-fixture_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/fixture_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.004416417330503464
+  },
+  {
+    "name": "format-next-benchmark_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/benchmark_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.004464166704565287
+  },
+  {
+    "name": "format-next-backend_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/backend_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.003569624852389097
+  },
+  {
+    "name": "control-ablation-7",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.46044866694137454
+  },
+  {
+    "name": "arguments-ablation-7",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.37067612493410707
+  },
+  {
+    "name": "no-publication-ablation-7",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-publication.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.36472800001502037
+  },
+  {
+    "name": "shell-ablation-7",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/shell.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3764843330718577
+  },
+  {
+    "name": "direct-retention-ablation-7",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/direct-retention.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.36715600034222007
+  },
+  {
+    "name": "no-output-validation-ablation-7",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-output-validation.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3759343330748379
+  },
+  {
+    "name": "no-onnx-context-ablation-7",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=300ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3672416671179235
+  },
+  {
+    "name": "format-backend-fixture",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/backend_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.003697291947901249
+  },
+  {
+    "name": "build-backend",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/backend-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/backend.test",
+      "./tensor"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/backend-reference",
+    "exit_code": 0,
+    "elapsed_s": 2.307939417194575
+  },
+  {
+    "name": "backend-diagnostic-checks",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/backend.test",
+      "-test.run=^TestPass(16|17)",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.27971754176542163
+  },
+  {
+    "name": "backend-components",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/backend.test",
+      "-test.run=^$",
+      "-test.bench=BenchmarkPass16(MatMul|Add)|BenchmarkPass17Pool|BenchmarkPass19Geometry",
+      "-test.benchtime=150ms",
+      "-test.count=7",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 35.374346875119954
+  },
+  {
+    "name": "focused-control-ramp-1",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6056558340787888
+  },
+  {
+    "name": "focused-control-comparison-1-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-control-comparison-1.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.310665249824524
+  },
+  {
+    "name": "focused-arguments-ramp-1",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6057392079383135
+  },
+  {
+    "name": "focused-arguments-comparison-1-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-arguments-comparison-1.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.3826568331569433
+  },
+  {
+    "name": "focused-arguments-ramp-2",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6051960838958621
+  },
+  {
+    "name": "focused-arguments-comparison-2-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-arguments-comparison-2.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0685894582420588
+  },
+  {
+    "name": "focused-control-ramp-2",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.605488708242774
+  },
+  {
+    "name": "focused-control-comparison-2-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-control-comparison-2.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.065944000147283
+  },
+  {
+    "name": "focused-control-ramp-3",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6052686660550535
+  },
+  {
+    "name": "focused-control-comparison-3-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-control-comparison-3.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.1098924996331334
+  },
+  {
+    "name": "focused-arguments-ramp-3",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6058729579672217
+  },
+  {
+    "name": "focused-arguments-comparison-3-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-arguments-comparison-3.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.088068624958396
+  },
+  {
+    "name": "focused-arguments-ramp-4",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6058041672222316
+  },
+  {
+    "name": "focused-arguments-comparison-4-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-arguments-comparison-4.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0827127499505877
+  },
+  {
+    "name": "focused-control-ramp-4",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6054490003734827
+  },
+  {
+    "name": "focused-control-comparison-4-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-control-comparison-4.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.086434249766171
+  },
+  {
+    "name": "focused-control-ramp-5",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6056980830617249
+  },
+  {
+    "name": "focused-control-comparison-5-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-control-comparison-5.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0934637081809342
+  },
+  {
+    "name": "focused-arguments-ramp-5",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6061632498167455
+  },
+  {
+    "name": "focused-arguments-comparison-5-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-arguments-comparison-5.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0696001253090799
+  },
+  {
+    "name": "focused-arguments-ramp-6",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6058962922543287
+  },
+  {
+    "name": "focused-arguments-comparison-6-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-arguments-comparison-6.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0459132501855493
+  },
+  {
+    "name": "focused-control-ramp-6",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6054903329350054
+  },
+  {
+    "name": "focused-control-comparison-6-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-control-comparison-6.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.098530000075698
+  },
+  {
+    "name": "focused-control-ramp-7",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.534470709040761
+  },
+  {
+    "name": "focused-control-comparison-7-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-control-comparison-7.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0920249167829752
+  },
+  {
+    "name": "focused-arguments-ramp-7",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Run$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.605723834130913
+  },
+  {
+    "name": "focused-arguments-comparison-7-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/focused-arguments-comparison-7.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0450992919504642
+  },
+  {
+    "name": "format-corrected-context_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/context_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0032824156805872917
+  },
+  {
+    "name": "format-corrected-fixture_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/fixture_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0029584169387817383
+  },
+  {
+    "name": "format-corrected-benchmark_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/benchmark_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0032422905787825584
+  },
+  {
+    "name": "format-corrected-backend_test.go.txt",
+    "command": [
+      "gofmt",
+      "-w",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/backend_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.00294737471267581
+  },
+  {
+    "name": "build-control",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.4630589997395873
+  },
+  {
+    "name": "ledger",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^TestPass19Ledger$",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.4442793340422213
+  },
+  {
+    "name": "parts-corrected",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Parts$",
+      "-test.benchtime=200ms",
+      "-test.count=7",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 22.115775791928172
+  },
+  {
+    "name": "backend-corrected-build",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/backend-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/backend-corrected.test",
+      "./tensor"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/backend-reference",
+    "exit_code": 0,
+    "elapsed_s": 1.2515257080085576
+  },
+  {
+    "name": "backend-geometry-corrected",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/backend-corrected.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Geometry$",
+      "-test.benchtime=200ms",
+      "-test.count=7",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 6.9948581252247095
+  },
+  {
+    "name": "ort-profile",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/ort_profile.py"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.9797010417096317
+  },
+  {
+    "name": "escape-control",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-gcflags=github.com/itsmontoya/onnx=-m=2",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/escape-control.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.4733471251092851
+  },
+  {
+    "name": "escape-arguments",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments-overlay.json",
+      "-gcflags=github.com/itsmontoya/onnx=-m=2",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/escape-arguments.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.5530062075704336
+  },
+  {
+    "name": "objdump-control",
+    "command": [
+      "go",
+      "tool",
+      "objdump",
+      "-s",
+      "onnx.\\(\\*(evaluation|destinationStorage|preparedCall)\\).(execute|get|run)$",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/control.test"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.13300254102796316
+  },
+  {
+    "name": "objdump-arguments",
+    "command": [
+      "go",
+      "tool",
+      "objdump",
+      "-s",
+      "onnx.\\(\\*(evaluation|destinationStorage|preparedCall)\\).(execute|get|run)$",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/arguments.test"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.08961108280345798
+  },
+  {
+    "name": "merged-production-source",
+    "command": [
+      "git",
+      "show",
+      "2445b7920781d6cd91e6635749f6e023044a979b:evaluation.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.012206375133246183
+  },
+  {
+    "name": "build-production-merged",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.372523041907698
+  },
+  {
+    "name": "build-production-candidate",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.3766972082667053
+  },
+  {
+    "name": "production-merged-ramp-1",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.904895834159106
+  },
+  {
+    "name": "production-merged-comparison-1-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-merged-comparison-1.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.1212437078356743
+  },
+  {
+    "name": "production-candidate-ramp-1",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.882297582924366
+  },
+  {
+    "name": "production-candidate-comparison-1-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-candidate-comparison-1.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.3875063750892878
+  },
+  {
+    "name": "production-candidate-ramp-2",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6055545411072671
+  },
+  {
+    "name": "production-candidate-comparison-2-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-candidate-comparison-2.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0483458330854774
+  },
+  {
+    "name": "production-merged-ramp-2",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6049169581383467
+  },
+  {
+    "name": "production-merged-comparison-2-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-merged-comparison-2.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0729920421727002
+  },
+  {
+    "name": "production-merged-ramp-3",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6097628339193761
+  },
+  {
+    "name": "production-merged-comparison-3-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-merged-comparison-3.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.1353113329969347
+  },
+  {
+    "name": "production-candidate-ramp-3",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6052133329212666
+  },
+  {
+    "name": "production-candidate-comparison-3-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-candidate-comparison-3.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0852000419981778
+  },
+  {
+    "name": "production-candidate-ramp-4",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6052649170160294
+  },
+  {
+    "name": "production-candidate-comparison-4-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-candidate-comparison-4.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0886990828439593
+  },
+  {
+    "name": "production-merged-ramp-4",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6056602499447763
+  },
+  {
+    "name": "production-merged-comparison-4-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-merged-comparison-4.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0985430418513715
+  },
+  {
+    "name": "production-merged-ramp-5",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6050435421057045
+  },
+  {
+    "name": "production-merged-comparison-5-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-merged-comparison-5.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0816098749637604
+  },
+  {
+    "name": "production-candidate-ramp-5",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6051688329316676
+  },
+  {
+    "name": "production-candidate-comparison-5-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-candidate-comparison-5.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0818163752555847
+  },
+  {
+    "name": "production-candidate-ramp-6",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.604930458124727
+  },
+  {
+    "name": "production-candidate-comparison-6-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-candidate-comparison-6.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0770061668008566
+  },
+  {
+    "name": "production-merged-ramp-6",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6053577498532832
+  },
+  {
+    "name": "production-merged-comparison-6-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-merged-comparison-6.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.136832875199616
+  },
+  {
+    "name": "production-merged-ramp-7",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6059096250683069
+  },
+  {
+    "name": "production-merged-comparison-7-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-merged-comparison-7.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged-overlay.json"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.104389250278473
+  },
+  {
+    "name": "production-candidate-ramp-7",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=500ms",
+      "-test.count=1",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.6049197916872799
+  },
+  {
+    "name": "production-candidate-comparison-7-run",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/production-candidate-comparison-7.json"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.060195832978934
+  },
+  {
+    "name": "test-default",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "./..."
+    ],
+    "environment": {
+      "CGO_ENABLED": "1",
+      "GOMAXPROCS": "2"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 7.465528124943376
+  },
+  {
+    "name": "test-no-cgo",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "./..."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 12.761115999892354
+  },
+  {
+    "name": "test-purego",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "-tags=purego",
+      "./..."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 14.274882624857128
+  },
+  {
+    "name": "test-race",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "-race",
+      "./..."
+    ],
+    "environment": {
+      "CGO_ENABLED": "1",
+      "GOMAXPROCS": "2"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 15.069456540979445
+  },
+  {
+    "name": "test-purego-race",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "-race",
+      "-tags=purego",
+      "./..."
+    ],
+    "environment": {
+      "CGO_ENABLED": "1",
+      "GOMAXPROCS": "2"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 15.137858209200203
+  },
+  {
+    "name": "vet",
+    "command": [
+      "go",
+      "vet",
+      "./..."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.44483183277770877
+  },
+  {
+    "name": "verify",
+    "command": [
+      "go",
+      "mod",
+      "verify"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.38523833313956857
+  },
+  {
+    "name": "tidy",
+    "command": [
+      "go",
+      "mod",
+      "tidy",
+      "-diff"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.10658604186028242
+  },
+  {
+    "name": "lifecycle-details",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "-v",
+      "-run=TestDestinationStorage",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.8848357498645782
+  },
+  {
+    "name": "build-darwin-arm64",
+    "command": [
+      "go",
+      "build",
+      "-tags=",
+      "./..."
+    ],
+    "environment": {
+      "GOOS": "darwin",
+      "GOARCH": "arm64"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0348829589784145
+  },
+  {
+    "name": "build-darwin-arm64-purego",
+    "command": [
+      "go",
+      "build",
+      "-tags=purego",
+      "./..."
+    ],
+    "environment": {
+      "GOOS": "darwin",
+      "GOARCH": "arm64"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0003829579800367
+  },
+  {
+    "name": "build-darwin-amd64",
+    "command": [
+      "go",
+      "build",
+      "-tags=",
+      "./..."
+    ],
+    "environment": {
+      "GOOS": "darwin",
+      "GOARCH": "amd64"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.4383118748664856
+  },
+  {
+    "name": "build-darwin-amd64-purego",
+    "command": [
+      "go",
+      "build",
+      "-tags=purego",
+      "./..."
+    ],
+    "environment": {
+      "GOOS": "darwin",
+      "GOARCH": "amd64"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.156621417030692
+  },
+  {
+    "name": "build-linux-arm64",
+    "command": [
+      "go",
+      "build",
+      "-tags=",
+      "./..."
+    ],
+    "environment": {
+      "GOOS": "linux",
+      "GOARCH": "arm64"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.3358145840466022
+  },
+  {
+    "name": "build-linux-arm64-purego",
+    "command": [
+      "go",
+      "build",
+      "-tags=purego",
+      "./..."
+    ],
+    "environment": {
+      "GOOS": "linux",
+      "GOARCH": "arm64"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.0631224578246474
+  },
+  {
+    "name": "build-linux-amd64",
+    "command": [
+      "go",
+      "build",
+      "-tags=",
+      "./..."
+    ],
+    "environment": {
+      "GOOS": "linux",
+      "GOARCH": "amd64"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.3718795841559768
+  },
+  {
+    "name": "build-linux-amd64-purego",
+    "command": [
+      "go",
+      "build",
+      "-tags=purego",
+      "./..."
+    ],
+    "environment": {
+      "GOOS": "linux",
+      "GOARCH": "amd64"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.088556416798383
+  },
+  {
+    "name": "build-windows-amd64",
+    "command": [
+      "go",
+      "build",
+      "-tags=",
+      "./..."
+    ],
+    "environment": {
+      "GOOS": "windows",
+      "GOARCH": "amd64"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.3604972921311855
+  },
+  {
+    "name": "build-windows-amd64-purego",
+    "command": [
+      "go",
+      "build",
+      "-tags=purego",
+      "./..."
+    ],
+    "environment": {
+      "GOOS": "windows",
+      "GOARCH": "amd64"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.093773958273232
+  },
+  {
+    "name": "build-linux-386",
+    "command": [
+      "go",
+      "build",
+      "-tags=",
+      "./..."
+    ],
+    "environment": {
+      "GOOS": "linux",
+      "GOARCH": "386"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.285921874921769
+  },
+  {
+    "name": "build-linux-386-purego",
+    "command": [
+      "go",
+      "build",
+      "-tags=purego",
+      "./..."
+    ],
+    "environment": {
+      "GOOS": "linux",
+      "GOARCH": "386"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.8616433748975396
+  },
+  {
+    "name": "fuzz-FuzzProtobufEntrypoints",
+    "command": [
+      "go",
+      "test",
+      "./internal/decode",
+      "-run=^$",
+      "-fuzz=^FuzzProtobufEntrypoints$",
+      "-fuzztime=3s",
+      "-parallel=2"
+    ],
+    "environment": {
+      "GOMAXPROCS": "2"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 4.942438500002027
+  },
+  {
+    "name": "fuzz-FuzzTensorDecode",
+    "command": [
+      "go",
+      "test",
+      "./internal/decode",
+      "-run=^$",
+      "-fuzz=^FuzzTensorDecode$",
+      "-fuzztime=3s",
+      "-parallel=2"
+    ],
+    "environment": {
+      "GOMAXPROCS": "2"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 4.482960791792721
+  },
+  {
+    "name": "candidate-alloc-run",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkMNIST$",
+      "-test.benchtime=1000x",
+      "-test.memprofile=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate-mem.pprof",
+      "-test.memprofilerate=1"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.13899316592141986
+  },
+  {
+    "name": "candidate-alloc_space",
+    "command": [
+      "go",
+      "tool",
+      "pprof",
+      "-top",
+      "-nodecount=70",
+      "-sample_index=alloc_space",
+      "-focus=onnx.*Session.*Run",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate-mem.pprof"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.32487875036895275
+  },
+  {
+    "name": "candidate-alloc_objects",
+    "command": [
+      "go",
+      "tool",
+      "pprof",
+      "-top",
+      "-nodecount=70",
+      "-sample_index=alloc_objects",
+      "-focus=onnx.*Session.*Run",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate-mem.pprof"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.14301408315077424
+  },
+  {
+    "name": "candidate-escape",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-gcflags=github.com/itsmontoya/onnx=-m=2",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate-escape.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.8638896252959967
+  },
+  {
+    "name": "candidate-objdump",
+    "command": [
+      "go",
+      "tool",
+      "objdump",
+      "-s",
+      "onnx.\\(\\*evaluation\\).(execute|normalize|nodeArguments)$",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.10322954226285219
+  },
+  {
+    "name": "fuzz-FuzzGraphReferences",
+    "command": [
+      "go",
+      "test",
+      "./internal/graph",
+      "-run=^$",
+      "-fuzz=^FuzzGraphReferences$",
+      "-fuzztime=3s",
+      "-parallel=2"
+    ],
+    "environment": {
+      "GOMAXPROCS": "2"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 4.546082082670182
+  },
+  {
+    "name": "fuzz-FuzzShapeAttributePlanning",
+    "command": [
+      "go",
+      "test",
+      ".",
+      "-run=^$",
+      "-fuzz=^FuzzShapeAttributePlanning$",
+      "-fuzztime=3s",
+      "-parallel=2"
+    ],
+    "environment": {
+      "GOMAXPROCS": "2"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 5.063601417001337
+  },
+  {
+    "name": "purego-comparison",
+    "command": [
+      "/private/tmp/neuralnetwork-onnx-reference/bin/python",
+      "tools/compare_runtime.py",
+      "--report",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/purego-comparison.json"
+    ],
+    "environment": {
+      "GOFLAGS": "-tags=purego"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.6632517082616687
+  },
+  {
+    "name": "onnx-metal-sandbox-serialized",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "-p=1",
+      "-v",
+      "-tags=metal",
+      "./..."
+    ],
+    "environment": {
+      "CGO_ENABLED": "1",
+      "GOMAXPROCS": "2"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 14.632377166301012
+  },
+  {
+    "name": "backend-metal-sandbox-serialized",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "-p=1",
+      "-v",
+      "-tags=metal",
+      "./..."
+    ],
+    "environment": {
+      "CGO_ENABLED": "1",
+      "GOMAXPROCS": "2"
+    },
+    "cwd": "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.10",
+    "exit_code": 0,
+    "elapsed_s": 12.450494249816984
+  },
+  {
+    "name": "onnx-metal-host-serialized",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "-p=1",
+      "-v",
+      "-tags=metal",
+      "./..."
+    ],
+    "environment": {
+      "CGO_ENABLED": "1",
+      "GOMAXPROCS": "2"
+    },
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 13.163473666179925
+  },
+  {
+    "name": "backend-metal-host-serialized",
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "-p=1",
+      "-v",
+      "-tags=metal",
+      "./..."
+    ],
+    "environment": {
+      "CGO_ENABLED": "1",
+      "GOMAXPROCS": "2"
+    },
+    "cwd": "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.10",
+    "exit_code": 0,
+    "elapsed_s": 11.36219858424738
+  },
+  {
+    "name": "backend-metal-host-stress",
+    "command": [
+      "go",
+      "test",
+      "-count=5",
+      "-v",
+      "-tags=metal",
+      "-run=^Test_SequentialResidentLongRunningMixedStress$",
+      "./model"
+    ],
+    "environment": {
+      "CGO_ENABLED": "1",
+      "GOMAXPROCS": "2"
+    },
+    "cwd": "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.10",
+    "exit_code": 0,
+    "elapsed_s": 1.184587917290628
+  },
+  {
+    "name": "context-backend-count",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/no-onnx-context.test",
+      "-test.run=^TestPass19Repeat$",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.022868958301842213
+  },
+  {
+    "name": "candidate-parts-build",
+    "command": [
+      "go",
+      "test",
+      "-c",
+      "-overlay=/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate-parts-overlay.json",
+      "-o",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate-parts.test",
+      "."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.345498625189066
+  },
+  {
+    "name": "candidate-retention-repeat-ledger",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate-parts.test",
+      "-test.run=^TestPass19",
+      "-test.v"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.5866055423393846
+  },
+  {
+    "name": "candidate-state",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate-parts.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19State$",
+      "-test.benchtime=100ms",
+      "-test.count=7",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 4.310531958006322
+  },
+  {
+    "name": "candidate-arguments",
+    "command": [
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate-parts.test",
+      "-test.run=^$",
+      "-test.bench=^BenchmarkPass19Parts$/^Arguments$",
+      "-test.benchtime=200ms",
+      "-test.count=7",
+      "-test.benchmem"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 1.6858991249464452
+  },
+  {
+    "name": "format-final",
+    "command": [
+      "gofmt",
+      "-l",
+      "blocking_context_test.go",
+      "cancel_context_test.go",
+      "capabilities.go",
+      "capabilities_test.go",
+      "capability.go",
+      "capability_arity.go",
+      "capability_attribute.go",
+      "cnn_call.go",
+      "cnn_call_test.go",
+      "conformance_artifact_test.go",
+      "conformance_case_test.go",
+      "conformance_comparison_test.go",
+      "conformance_suite_test.go",
+      "conformance_value_test.go",
+      "corpus_model_test.go",
+      "corpus_suite_test.go",
+      "data_type.go",
+      "deadline_context_test.go",
+      "dependency_test.go",
+      "destination_storage.go",
+      "destination_storage_test.go",
+      "dimension.go",
+      "dimension_kind.go",
+      "directory_resolver.go",
+      "directory_resolver_test.go",
+      "directory_source.go",
+      "directory_source_test.go",
+      "doc.go",
+      "error.go",
+      "error_test.go",
+      "errors.go",
+      "evaluation.go",
+      "evaluation_test.go",
+      "examples/external/main.go",
+      "examples/external/memory_resolver.go",
+      "examples/inference/main.go",
+      "examples/normalization/main.go",
+      "execution_plan.go",
+      "external_data_resolver.go",
+      "external_integration_test.go",
+      "inference_benchmark_test.go",
+      "inference_integration_test.go",
+      "internal/capability/arity.go",
+      "internal/capability/attribute.go",
+      "internal/capability/record.go",
+      "internal/decode/cancel_context_test.go",
+      "internal/decode/doc.go",
+      "internal/decode/errors.go",
+      "internal/decode/external_data_resolver.go",
+      "internal/decode/external_range.go",
+      "internal/decode/external_range_test.go",
+      "internal/decode/limits.go",
+      "internal/decode/limits_test.go",
+      "internal/decode/payload.go",
+      "internal/decode/payload_test.go",
+      "internal/decode/protobuf.go",
+      "internal/decode/protobuf_fuzz_test.go",
+      "internal/decode/protobuf_test.go",
+      "internal/decode/range_reader_test.go",
+      "internal/decode/range_resolver_test.go",
+      "internal/decode/tensor_decoder.go",
+      "internal/decode/tensor_decoder_fuzz_test.go",
+      "internal/decode/tensor_decoder_test.go",
+      "internal/decode/tensor_limits.go",
+      "internal/decode/tensor_limits_test.go",
+      "internal/decode/test_reader_test.go",
+      "internal/graph/annotation.go",
+      "internal/graph/attribute.go",
+      "internal/graph/attribute_kind.go",
+      "internal/graph/attribute_test.go",
+      "internal/graph/builder.go",
+      "internal/graph/cancel_context_test.go",
+      "internal/graph/constant.go",
+      "internal/graph/constant_test.go",
+      "internal/graph/dimension.go",
+      "internal/graph/dimension_kind.go",
+      "internal/graph/doc.go",
+      "internal/graph/errors.go",
+      "internal/graph/graph.go",
+      "internal/graph/graph_fuzz_test.go",
+      "internal/graph/graph_test.go",
+      "internal/graph/limits.go",
+      "internal/graph/limits_test.go",
+      "internal/graph/metadata.go",
+      "internal/graph/metadata_read.go",
+      "internal/graph/node.go",
+      "internal/graph/property.go",
+      "internal/graph/validation.go",
+      "internal/graph/value.go",
+      "internal/graph/value_info.go",
+      "internal/onnxpb/attribute_proto.pb.go",
+      "internal/onnxpb/attribute_proto_attribute_type.pb.go",
+      "internal/onnxpb/doc.go",
+      "internal/onnxpb/function_proto.pb.go",
+      "internal/onnxpb/graph_proto.pb.go",
+      "internal/onnxpb/is_tensor_shape_proto_dimension_value.pb.go",
+      "internal/onnxpb/is_type_proto_value.pb.go",
+      "internal/onnxpb/model_proto.pb.go",
+      "internal/onnxpb/node_proto.pb.go",
+      "internal/onnxpb/operator_set_id_proto.pb.go",
+      "internal/onnxpb/operator_status.pb.go",
+      "internal/onnxpb/schema.pb.go",
+      "internal/onnxpb/sparse_tensor_proto.pb.go",
+      "internal/onnxpb/string_string_entry_proto.pb.go",
+      "internal/onnxpb/tensor_annotation.pb.go",
+      "internal/onnxpb/tensor_proto.pb.go",
+      "internal/onnxpb/tensor_proto_data_location.pb.go",
+      "internal/onnxpb/tensor_proto_data_type.pb.go",
+      "internal/onnxpb/tensor_proto_segment.pb.go",
+      "internal/onnxpb/tensor_shape_proto.pb.go",
+      "internal/onnxpb/tensor_shape_proto_dimension.pb.go",
+      "internal/onnxpb/tensor_shape_proto_dimension_dim_param.pb.go",
+      "internal/onnxpb/tensor_shape_proto_dimension_dim_value.pb.go",
+      "internal/onnxpb/training_info_proto.pb.go",
+      "internal/onnxpb/type_proto.pb.go",
+      "internal/onnxpb/type_proto_map.pb.go",
+      "internal/onnxpb/type_proto_map_type.pb.go",
+      "internal/onnxpb/type_proto_optional.pb.go",
+      "internal/onnxpb/type_proto_optional_type.pb.go",
+      "internal/onnxpb/type_proto_sequence.pb.go",
+      "internal/onnxpb/type_proto_sequence_type.pb.go",
+      "internal/onnxpb/type_proto_sparse_tensor.pb.go",
+      "internal/onnxpb/type_proto_sparse_tensor_type.pb.go",
+      "internal/onnxpb/type_proto_tensor.pb.go",
+      "internal/onnxpb/type_proto_tensor_type.pb.go",
+      "internal/onnxpb/value_info_proto.pb.go",
+      "internal/onnxpb/version.pb.go",
+      "internal/operators/cancel_context_test.go",
+      "internal/operators/cnn_config.go",
+      "internal/operators/cnn_config_test.go",
+      "internal/operators/cnn_planner.go",
+      "internal/operators/compiler.go",
+      "internal/operators/limits.go",
+      "internal/operators/normalization.go",
+      "internal/operators/plan.go",
+      "internal/operators/plan_test.go",
+      "internal/operators/registry.go",
+      "internal/operators/registry_test.go",
+      "internal/operators/shape_inference.go",
+      "internal/operators/shape_planner.go",
+      "internal/operators/shape_rules.go",
+      "internal/operators/shape_rules_test.go",
+      "internal/operators/step.go",
+      "internal/operators/step_test.go",
+      "internal/operators/validation.go",
+      "internal/operators/value.go",
+      "internal/profile/profile.go",
+      "internal/runtimeerror/error.go",
+      "internal/runtimeerror/error_test.go",
+      "internal/runtimeerror/errors.go",
+      "limits.go",
+      "limits_test.go",
+      "load_reader_test.go",
+      "m1_integration_test.go",
+      "m2_integration_test.go",
+      "m3_integration_test.go",
+      "metadata.go",
+      "mnist_benchmark_test.go",
+      "mnist_diagnostic_benchmark_test.go",
+      "mnist_pipeline_benchmark_test.go",
+      "mnist_preparation_benchmark_test.go",
+      "model.go",
+      "model_test.go",
+      "named_tensor.go",
+      "normalization_call.go",
+      "normalization_call_test.go",
+      "normalization_integration_test.go",
+      "numerical_call.go",
+      "numerical_call_test.go",
+      "numerical_product_host.go",
+      "numerical_product_metal.go",
+      "options.go",
+      "planning_fuzz_test.go",
+      "prepared_call.go",
+      "prepared_call_benchmark_test.go",
+      "prepared_call_test.go",
+      "run_budget.go",
+      "run_budget_test.go",
+      "run_options.go",
+      "run_storage.go",
+      "run_storage_test.go",
+      "session.go",
+      "session_test.go",
+      "shape_call.go",
+      "shape_call_test.go",
+      "tensor.go",
+      "tensor_internal_test.go",
+      "tensor_test.go",
+      "test_resolver_test.go",
+      "tools/compare_runtime/run_result.go",
+      "tools/compare_runtime/runner.go",
+      "tools/compare_runtime/tensor_data.go",
+      "value_info.go",
+      "value_info_test.go",
+      "value_lifetimes.go",
+      "value_lifetimes_test.go",
+      "version_profile_test.go",
+      "weight_resolver_test.go",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/context_test.go.txt",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/fixture_test.go.txt",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/benchmark_test.go.txt",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/backend_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.07001333311200142
+  },
+  {
+    "name": "python-syntax",
+    "command": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-m",
+      "py_compile",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/backend.py",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/checks.py",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/diagnostics.py",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/final_checks.py",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/measure.py",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/ort_profile.py",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/summarize.py"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.040098334196954966
+  },
+  {
+    "name": "diff-check-final",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.014092749916017056
+  },
+  {
+    "name": "changed-files-final",
+    "command": [
+      "git",
+      "diff",
+      "--name-only"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.012594291009008884
+  },
+  {
+    "name": "final-build-info-merged",
+    "command": [
+      "go",
+      "version",
+      "-m",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged.test"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.008268916979432106
+  },
+  {
+    "name": "final-build-info-candidate",
+    "command": [
+      "go",
+      "version",
+      "-m",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.007425582967698574
+  },
+  {
+    "name": "production-commit",
+    "command": [
+      "git",
+      "log",
+      "-1",
+      "--format=%H",
+      "--",
+      "evaluation.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.01060608308762312
+  },
+  {
+    "name": "format-final",
+    "command": [
+      "gofmt",
+      "-l",
+      "blocking_context_test.go",
+      "cancel_context_test.go",
+      "capabilities.go",
+      "capabilities_test.go",
+      "capability.go",
+      "capability_arity.go",
+      "capability_attribute.go",
+      "cnn_call.go",
+      "cnn_call_test.go",
+      "conformance_artifact_test.go",
+      "conformance_case_test.go",
+      "conformance_comparison_test.go",
+      "conformance_suite_test.go",
+      "conformance_value_test.go",
+      "corpus_model_test.go",
+      "corpus_suite_test.go",
+      "data_type.go",
+      "deadline_context_test.go",
+      "dependency_test.go",
+      "destination_storage.go",
+      "destination_storage_test.go",
+      "dimension.go",
+      "dimension_kind.go",
+      "directory_resolver.go",
+      "directory_resolver_test.go",
+      "directory_source.go",
+      "directory_source_test.go",
+      "doc.go",
+      "error.go",
+      "error_test.go",
+      "errors.go",
+      "evaluation.go",
+      "evaluation_test.go",
+      "examples/external/main.go",
+      "examples/external/memory_resolver.go",
+      "examples/inference/main.go",
+      "examples/normalization/main.go",
+      "execution_plan.go",
+      "external_data_resolver.go",
+      "external_integration_test.go",
+      "inference_benchmark_test.go",
+      "inference_integration_test.go",
+      "internal/capability/arity.go",
+      "internal/capability/attribute.go",
+      "internal/capability/record.go",
+      "internal/decode/cancel_context_test.go",
+      "internal/decode/doc.go",
+      "internal/decode/errors.go",
+      "internal/decode/external_data_resolver.go",
+      "internal/decode/external_range.go",
+      "internal/decode/external_range_test.go",
+      "internal/decode/limits.go",
+      "internal/decode/limits_test.go",
+      "internal/decode/payload.go",
+      "internal/decode/payload_test.go",
+      "internal/decode/protobuf.go",
+      "internal/decode/protobuf_fuzz_test.go",
+      "internal/decode/protobuf_test.go",
+      "internal/decode/range_reader_test.go",
+      "internal/decode/range_resolver_test.go",
+      "internal/decode/tensor_decoder.go",
+      "internal/decode/tensor_decoder_fuzz_test.go",
+      "internal/decode/tensor_decoder_test.go",
+      "internal/decode/tensor_limits.go",
+      "internal/decode/tensor_limits_test.go",
+      "internal/decode/test_reader_test.go",
+      "internal/graph/annotation.go",
+      "internal/graph/attribute.go",
+      "internal/graph/attribute_kind.go",
+      "internal/graph/attribute_test.go",
+      "internal/graph/builder.go",
+      "internal/graph/cancel_context_test.go",
+      "internal/graph/constant.go",
+      "internal/graph/constant_test.go",
+      "internal/graph/dimension.go",
+      "internal/graph/dimension_kind.go",
+      "internal/graph/doc.go",
+      "internal/graph/errors.go",
+      "internal/graph/graph.go",
+      "internal/graph/graph_fuzz_test.go",
+      "internal/graph/graph_test.go",
+      "internal/graph/limits.go",
+      "internal/graph/limits_test.go",
+      "internal/graph/metadata.go",
+      "internal/graph/metadata_read.go",
+      "internal/graph/node.go",
+      "internal/graph/property.go",
+      "internal/graph/validation.go",
+      "internal/graph/value.go",
+      "internal/graph/value_info.go",
+      "internal/onnxpb/attribute_proto.pb.go",
+      "internal/onnxpb/attribute_proto_attribute_type.pb.go",
+      "internal/onnxpb/doc.go",
+      "internal/onnxpb/function_proto.pb.go",
+      "internal/onnxpb/graph_proto.pb.go",
+      "internal/onnxpb/is_tensor_shape_proto_dimension_value.pb.go",
+      "internal/onnxpb/is_type_proto_value.pb.go",
+      "internal/onnxpb/model_proto.pb.go",
+      "internal/onnxpb/node_proto.pb.go",
+      "internal/onnxpb/operator_set_id_proto.pb.go",
+      "internal/onnxpb/operator_status.pb.go",
+      "internal/onnxpb/schema.pb.go",
+      "internal/onnxpb/sparse_tensor_proto.pb.go",
+      "internal/onnxpb/string_string_entry_proto.pb.go",
+      "internal/onnxpb/tensor_annotation.pb.go",
+      "internal/onnxpb/tensor_proto.pb.go",
+      "internal/onnxpb/tensor_proto_data_location.pb.go",
+      "internal/onnxpb/tensor_proto_data_type.pb.go",
+      "internal/onnxpb/tensor_proto_segment.pb.go",
+      "internal/onnxpb/tensor_shape_proto.pb.go",
+      "internal/onnxpb/tensor_shape_proto_dimension.pb.go",
+      "internal/onnxpb/tensor_shape_proto_dimension_dim_param.pb.go",
+      "internal/onnxpb/tensor_shape_proto_dimension_dim_value.pb.go",
+      "internal/onnxpb/training_info_proto.pb.go",
+      "internal/onnxpb/type_proto.pb.go",
+      "internal/onnxpb/type_proto_map.pb.go",
+      "internal/onnxpb/type_proto_map_type.pb.go",
+      "internal/onnxpb/type_proto_optional.pb.go",
+      "internal/onnxpb/type_proto_optional_type.pb.go",
+      "internal/onnxpb/type_proto_sequence.pb.go",
+      "internal/onnxpb/type_proto_sequence_type.pb.go",
+      "internal/onnxpb/type_proto_sparse_tensor.pb.go",
+      "internal/onnxpb/type_proto_sparse_tensor_type.pb.go",
+      "internal/onnxpb/type_proto_tensor.pb.go",
+      "internal/onnxpb/type_proto_tensor_type.pb.go",
+      "internal/onnxpb/value_info_proto.pb.go",
+      "internal/onnxpb/version.pb.go",
+      "internal/operators/cancel_context_test.go",
+      "internal/operators/cnn_config.go",
+      "internal/operators/cnn_config_test.go",
+      "internal/operators/cnn_planner.go",
+      "internal/operators/compiler.go",
+      "internal/operators/limits.go",
+      "internal/operators/normalization.go",
+      "internal/operators/plan.go",
+      "internal/operators/plan_test.go",
+      "internal/operators/registry.go",
+      "internal/operators/registry_test.go",
+      "internal/operators/shape_inference.go",
+      "internal/operators/shape_planner.go",
+      "internal/operators/shape_rules.go",
+      "internal/operators/shape_rules_test.go",
+      "internal/operators/step.go",
+      "internal/operators/step_test.go",
+      "internal/operators/validation.go",
+      "internal/operators/value.go",
+      "internal/profile/profile.go",
+      "internal/runtimeerror/error.go",
+      "internal/runtimeerror/error_test.go",
+      "internal/runtimeerror/errors.go",
+      "limits.go",
+      "limits_test.go",
+      "load_reader_test.go",
+      "m1_integration_test.go",
+      "m2_integration_test.go",
+      "m3_integration_test.go",
+      "metadata.go",
+      "mnist_benchmark_test.go",
+      "mnist_diagnostic_benchmark_test.go",
+      "mnist_pipeline_benchmark_test.go",
+      "mnist_preparation_benchmark_test.go",
+      "model.go",
+      "model_test.go",
+      "named_tensor.go",
+      "normalization_call.go",
+      "normalization_call_test.go",
+      "normalization_integration_test.go",
+      "numerical_call.go",
+      "numerical_call_test.go",
+      "numerical_product_host.go",
+      "numerical_product_metal.go",
+      "options.go",
+      "planning_fuzz_test.go",
+      "prepared_call.go",
+      "prepared_call_benchmark_test.go",
+      "prepared_call_test.go",
+      "run_budget.go",
+      "run_budget_test.go",
+      "run_options.go",
+      "run_storage.go",
+      "run_storage_test.go",
+      "session.go",
+      "session_test.go",
+      "shape_call.go",
+      "shape_call_test.go",
+      "tensor.go",
+      "tensor_internal_test.go",
+      "tensor_test.go",
+      "test_resolver_test.go",
+      "tools/compare_runtime/run_result.go",
+      "tools/compare_runtime/runner.go",
+      "tools/compare_runtime/tensor_data.go",
+      "value_info.go",
+      "value_info_test.go",
+      "value_lifetimes.go",
+      "value_lifetimes_test.go",
+      "version_profile_test.go",
+      "weight_resolver_test.go",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/context_test.go.txt",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/fixture_test.go.txt",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/benchmark_test.go.txt",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/backend_test.go.txt"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.07224033307284117
+  },
+  {
+    "name": "python-syntax",
+    "command": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-m",
+      "py_compile",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/backend.py",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/checks.py",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/diagnostics.py",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/final_checks.py",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/measure.py",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/ort_profile.py",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/pass19/summarize.py"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.04089799989014864
+  },
+  {
+    "name": "diff-check-final",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.013774750288575888
+  },
+  {
+    "name": "changed-files-final",
+    "command": [
+      "git",
+      "diff",
+      "--name-only"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.01284116692841053
+  },
+  {
+    "name": "production-scope",
+    "command": [
+      "git",
+      "diff",
+      "--name-only",
+      "2445b7920781d6cd91e6635749f6e023044a979b",
+      "--",
+      "*.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.011103749740868807
+  },
+  {
+    "name": "fmt",
+    "command": [
+      "go",
+      "fmt",
+      "./..."
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.13084329199045897
+  },
+  {
+    "name": "final-build-info-merged",
+    "command": [
+      "go",
+      "version",
+      "-m",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/merged.test"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.007205459289252758
+  },
+  {
+    "name": "final-build-info-candidate",
+    "command": [
+      "go",
+      "version",
+      "-m",
+      "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/pass19/candidate.test"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.0067792912013828754
+  },
+  {
+    "name": "production-commit",
+    "command": [
+      "git",
+      "log",
+      "-1",
+      "--format=%H",
+      "--",
+      "evaluation.go"
+    ],
+    "environment": {},
+    "cwd": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx",
+    "exit_code": 0,
+    "elapsed_s": 0.010994832962751389
+  }
+]

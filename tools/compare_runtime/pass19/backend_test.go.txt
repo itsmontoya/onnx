@@ -1,0 +1,44 @@
+package tensor
+
+import (
+	"runtime"
+	"testing"
+)
+
+// BenchmarkPass19Geometry measures current backend shape work separately from
+// arithmetic. It changes no backend source or validation contract.
+func BenchmarkPass19Geometry(b *testing.B) {
+	for _, mode := range []string{"Conv00Shape", "Conv04Shape", "Reshape08Complete", "Reshape08Shape"} {
+		b.Run(mode, func(part *testing.B) {
+			var (
+				input         = pass16Tensor(part, []int64{1, 16, 4, 4}, 3)
+				output        = pass16Tensor(part, []int64{1, 256}, 0)
+				config        = Conv2DConfig{Strides: [2]int64{1, 1}, Dilations: [2]int64{1, 1}, Pads: [4]int64{2, 2, 2, 2}, Groups: 1}
+				firstInput    = []int64{1, 1, 28, 28}
+				firstWeights  = []int64{8, 1, 5, 5}
+				secondInput   = []int64{1, 8, 14, 14}
+				secondWeights = []int64{16, 8, 5, 5}
+				shape         []int64
+				err           error
+			)
+
+			part.ReportAllocs()
+			for part.Loop() {
+				switch mode {
+				case "Conv00Shape":
+					shape, err = Conv2DShape(firstInput, firstWeights, config)
+				case "Conv04Shape":
+					shape, err = Conv2DShape(secondInput, secondWeights, config)
+				case "Reshape08Complete":
+					err = ReshapeInto(input, output)
+				case "Reshape08Shape":
+					shape, err = ReshapeShape(input.shape, output.shape)
+				}
+				if err != nil {
+					part.Fatal(err)
+				}
+			}
+			runtime.KeepAlive(shape)
+		})
+	}
+}

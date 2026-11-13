@@ -1,0 +1,14 @@
+package onnx
+
+import "context"
+
+// pass19Context counts actual Err calls while preserving the parent's behavior.
+type pass19Context struct {
+	context.Context
+	checks int
+}
+
+func (c *pass19Context) Err() (err error) {
+	c.checks++
+	return c.Context.Err()
+}

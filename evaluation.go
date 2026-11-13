@@ -28,11 +28,12 @@ func newEvaluation(ctx context.Context, plan *executionPlan) (out *evaluation, e
 // evaluation owns call-local values and symbols. Static alias/consumer groups
 // allow conservative reuse without changing returned-output ownership.
 type evaluation struct {
-	ctx     context.Context
-	plan    *executionPlan
-	budget  *runBudget
-	storage runStorage
-	symbols map[string]int64
+	ctx       context.Context
+	plan      *executionPlan
+	budget    *runBudget
+	storage   runStorage
+	symbols   map[string]int64
+	arguments [3]*tensor.Tensor
 }
 
 func (e *evaluation) run(inputs map[string]*Tensor, options RunOptions) (outputs []NamedTensor, err error) {
@@ -170,7 +171,7 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 		}
 	default:
 		var call *numericalCall
-		inputs := make([]*tensor.Tensor, len(step.Inputs))
+		inputs := e.nodeArguments(len(step.Inputs))
 		for slot, valueIndex := range step.Inputs {
 			if err = e.ctx.Err(); err != nil {
 				return err
@@ -269,7 +270,7 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 }
 
 func (e *evaluation) normalize(step operators.Step) (err error) {
-	inputs := make([]*tensor.Tensor, len(step.Inputs))
+	inputs := e.nodeArguments(len(step.Inputs))
 	for slot, index := range step.Inputs {
 		if index >= 0 {
 			inputs[slot] = e.storage.values[index]
@@ -307,6 +308,18 @@ func (e *evaluation) normalize(step operators.Step) (err error) {
 		e.storage.values[index] = outputs[slot]
 	}
 	return nil
+}
+
+// nodeArguments reuses invocation-local storage while handlers run synchronously.
+// Clearing preserves omitted optional inputs after a preceding wider call.
+func (e *evaluation) nodeArguments(count int) (inputs []*tensor.Tensor) {
+	if count > len(e.arguments) {
+		return make([]*tensor.Tensor, count)
+	}
+
+	inputs = e.arguments[:count]
+	clear(inputs)
+	return inputs
 }
 
 func (e *evaluation) checkValue(value operators.Value, backend *tensor.Tensor, kind error) (err error) {
