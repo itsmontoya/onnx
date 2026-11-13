@@ -1,0 +1,125 @@
+package onnx
+
+import (
+	"context"
+	"testing"
+
+	"github.com/itsmontoya/neuralnetwork/tensor"
+)
+
+func newPass19Fixture(tb testing.TB) (out *pass19Fixture) {
+	var (
+		f     pass19Fixture
+		input *Tensor
+		err   error
+	)
+
+	f.ctx = context.Background()
+	if f.model, err = LoadFile(f.ctx, ".cache/compare-runtime/mnist-ir8-opset13.onnx", Options{}); err != nil {
+		tb.Fatal(err)
+	}
+
+	tb.Cleanup(func() { _ = f.model.Close() })
+	if f.session, err = f.model.NewSession(); err != nil {
+		tb.Fatal(err)
+	}
+
+	tb.Cleanup(func() { _ = f.session.Close() })
+	values := make([]float32, 784)
+	for index := range values {
+		values[index] = float32(index%256) / 255
+	}
+	if input, err = NewFloat32([]int64{1, 1, 28, 28}, values); err != nil {
+		tb.Fatal(err)
+	}
+
+	f.inputs = map[string]*Tensor{"Input3": input}
+	return &f
+}
+
+// pass19Fixture captures the merged Session's retained and intra-Run topology.
+// It is local to each serial benchmark; no diagnostic globals enter a plan.
+type pass19Fixture struct {
+	ctx     context.Context
+	model   *Model
+	session *Session
+	inputs  map[string]*Tensor
+	calls   []func() error
+	indices []int
+	outputs []*tensor.Tensor
+	args    [][]*tensor.Tensor
+}
+
+func (f *pass19Fixture) evaluation(tb testing.TB) (run *evaluation) {
+	var err error
+	if run, err = newEvaluation(f.ctx, f.session.plan); err != nil {
+		tb.Fatal(err)
+	}
+
+	run.storage.destinations = &f.session.destinations
+	run.budget.live += f.session.destinations.bytes
+	return run
+}
+
+func (f *pass19Fixture) warm(tb testing.TB) {
+	for range 10 {
+		if _, err := f.session.Run(f.ctx, f.inputs, RunOptions{}); err != nil {
+			tb.Fatal(err)
+		}
+	}
+}
+
+func (f *pass19Fixture) capture(tb testing.TB) (run *evaluation) {
+	f.warm(tb)
+	run = f.evaluation(tb)
+	var err error
+	if err = run.bind(f.inputs); err != nil {
+		tb.Fatal(err)
+	}
+
+	for position, step := range f.session.plan.steps {
+		arguments := make([]*tensor.Tensor, len(step.Inputs))
+		for slot, index := range step.Inputs {
+			if index >= 0 {
+				arguments[slot] = run.storage.values[index]
+			}
+		}
+		if err = run.execute(step); err != nil {
+			tb.Fatal(err)
+		}
+
+		destination := run.storage.values[step.Outputs[0]]
+		prepared := f.session.plan.calls[step.Index]
+		f.outputs = append(f.outputs, destination)
+		f.args = append(f.args, arguments)
+		if prepared.retained == nil {
+			f.indices = append(f.indices, position)
+			switch {
+			case prepared.cnn != nil:
+				call := *prepared.cnn
+				call.inputs = arguments
+				f.calls = append(f.calls, func() (callErr error) {
+					_, callErr = call.run(f.ctx, destination)
+					return callErr
+				})
+			case prepared.numerical != nil:
+				call := *prepared.numerical
+				call.inputs = arguments
+				f.calls = append(f.calls, func() (callErr error) {
+					_, callErr = call.run(f.ctx, destination)
+					return callErr
+				})
+			default:
+				call := *prepared.shape
+				call.inputs = arguments
+				f.calls = append(f.calls, func() (callErr error) {
+					_, callErr = call.run(f.ctx, destination)
+					return callErr
+				})
+			}
+		}
+		run.storage.after(position)
+	}
+	run.storage.trim()
+	return run
+}
