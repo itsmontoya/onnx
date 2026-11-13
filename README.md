@@ -1,179 +1,306 @@
 # onnx
 
-A Go-native ONNX inference runtime built on
-[`neuralnetwork` v0.10.7](https://github.com/itsmontoya/neuralnetwork/tree/v0.10.7).
-Load an `.onnx` model, bind named immutable tensors, and evaluate named outputs
-on the CPU with `CGO_ENABLED=0`, without Python or native runtime libraries.
+A Go-native ONNX inference runtime. Load an `.onnx` model, supply named tensors,
+and read named outputs on the CPU, without Python, cgo, or native runtime libraries.
+The numerical backend is
+[`neuralnetwork` v0.10.10](https://github.com/itsmontoya/neuralnetwork/tree/v0.10.10).
 
-RT-01–RT-19 implement the documented subset: **IR 8, exactly one
-empty standard-domain import at exactly opset 13 or 17, dense float32/int64, serial CPU execution**.
-The [generated support table](CAPABILITIES.md)
-records 25 operators at import 13 and 26 at import 17, including float32
-LayerNormalization, with their dtype, rank, attribute and optional-slot
-restrictions. Branching, multiple named inputs/outputs, defaulted initializers,
-symbolic leading input batches, scalar/empty tensors, runtime shape subgraphs,
-NCHW 2D CNNs and explicitly resolved external weights are implemented.
-Compatibility with arbitrary ONNX models is not claimed.
+The latest recorded MNIST comparison measures **50.917 µs for Go versus
+44.667 µs for ONNX Runtime (ORT)** on Apple M3: **1.14× ORT latency**.
+ORT graph optimizations are disabled in this comparison.
+See [performance and progression](#performance-vs-onnx-runtime) for the workload,
+settings, and history.
 
-## Run inference
+## Install
 
-Install Go 1.27.2, then run from the repository root:
+Requires **Go 1.27.2** or later, as specified in [go.mod](go.mod).
+
+```sh
+go get github.com/itsmontoya/onnx
+```
+
+Build with `CGO_ENABLED=0` to keep deployment free of cgo dependencies.
+The optional `purego` build tag selects the portable CPU backend instead of
+architecture-specific acceleration.
+
+## Try it
+
+From a checkout of this repository:
 
 ```sh
 go mod download
 CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 1
-CGO_ENABLED=0 go run ./examples/inference -graph mlp -batch 3
-CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 1
-CGO_ENABLED=0 go run ./examples/inference -graph cnn -batch 3
-CGO_ENABLED=0 go run ./examples/inference -graph exported -batch 3
-CGO_ENABLED=0 go run ./examples/external -batch 3
-CGO_ENABLED=0 go run ./examples/normalization
+```
+
+This loads a checked-in MLP, creates a session, and prints its input metadata and
+output probabilities. Models and reference values for the examples are included;
+after the initial module download, these examples run offline.
+
+## Use from Go
+
+This complete example uses the same MLP and one input row, `[1, 2]`. Run it with
+the repository root as the working directory so the fixture path resolves.
+For your own model, replace the path, input name, shape, and values to match
+`model.Metadata()`.
+
+```go
+package main
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"log"
+
+	"github.com/itsmontoya/onnx"
+)
+
+func main() {
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run() (err error) {
+	var (
+		ctx     = context.Background()
+		model   *onnx.Model
+		session *onnx.Session
+		input   *onnx.Tensor
+		outputs []onnx.NamedTensor
+		values  []float32
+	)
+
+	if model, err = onnx.LoadFile(ctx, "testdata/inference/models/mlp.onnx", onnx.Options{}); err != nil {
+		return fmt.Errorf("load model: %w", err)
+	}
+
+	defer func() { err = errors.Join(err, model.Close()) }()
+	if session, err = model.NewSession(); err != nil {
+		return fmt.Errorf("create session: %w", err)
+	}
+
+	defer func() { err = errors.Join(err, session.Close()) }()
+	if input, err = onnx.NewFloat32([]int64{1, 2}, []float32{1, 2}); err != nil {
+		return fmt.Errorf("create input: %w", err)
+	}
+
+	if outputs, err = session.Run(ctx, map[string]*onnx.Tensor{"features": input}, onnx.RunOptions{}); err != nil {
+		return fmt.Errorf("run inference: %w", err)
+	}
+
+	if values, err = outputs[0].Tensor.Float32Values(); err != nil {
+		return fmt.Errorf("read probabilities: %w", err)
+	}
+
+	fmt.Printf("%s %v = %.6f\n", outputs[0].Name, outputs[0].Tensor.Shape(), values)
+	return nil
+}
+```
+
+Output:
+
+```text
+probabilities [1 2] = [0.968477 0.031523]
+```
+
+`Load` accepts an `io.Reader`; `LoadBytes` accepts model bytes. `NewFloat32` and
+`NewInt64` copy row-major values and shapes. A tensor's value count must match
+its concrete shape. Typed output accessors also return copies.
+
+Use `model.Metadata().Inputs` and `.Outputs` to inspect names, types, dimensions,
+and defaulted inputs. Input names are the keys in the map passed to `Run`.
+An omitted defaulted input uses its initializer; supplying it overrides that
+default within the declared type and shape.
+
+`RunOptions{}` returns all declared outputs in declaration order. To select
+outputs in a particular order, pass their names:
+
+```go
+outputs, err = session.Run(ctx, inputs, onnx.RunOptions{
+	Outputs: []string{"probabilities"},
+})
+```
+
+Selecting fewer outputs still executes the whole graph. Results own independent
+storage and remain valid after later runs or closing the session and model.
+
+### Reuse models and sessions
+
+Load a model once and reuse its session for repeated inference. Eligible static
+graphs reuse bounded private destinations after the first call; dynamic geometry
+uses ordinary allocation. Each session permits one active run. Use separate
+sessions from the same model for concurrent requests; overlapping `Run` or `Close`
+on one session returns `ErrBusy` immediately.
+
+Close sessions when finished to release their retained storage and session slots.
+`Model.Close` prevents new sessions; existing sessions remain usable until closed.
+Failed or cancelled runs publish no partial outputs and leave the session reusable.
+Pass a context to loading and inference for cancellation. Most synchronous kernels
+complete before cancellation is observed; ReLU also checks between chunks.
+
+## More examples
+
+Run these commands from the repository root with `CGO_ENABLED=0`:
+
+| Example | Command | Demonstrates |
+| --- | --- | --- |
+| Batched MLP | `go run ./examples/inference -graph mlp -batch 3` | Symbolic leading batch dimension |
+| Branching graph | `go run ./examples/inference -graph branch -batch 3` | Multiple named inputs and outputs |
+| Shape subgraph | `go run ./examples/inference -graph shape -batch 3` | Runtime shape operations and int64 outputs |
+| CNN | `go run ./examples/inference -graph cnn -batch 3` | NCHW convolution and pooling |
+| PyTorch export | `go run ./examples/inference -graph exported -batch 3` | Unmodified compatible IR-8/opset-17 MLP export |
+| External weights | `go run ./examples/external -batch 3` | Explicit external-data resolver |
+| Layer normalization | `go run ./examples/normalization` | Upstream opset-17 normalization model |
+
+The source is in [examples/inference](examples/inference/main.go),
+[examples/external](examples/external/main.go), and
+[examples/normalization](examples/normalization/main.go).
+
+External weights require `Options.ExternalData`, including with `LoadFile`.
+Use `NewDirectoryResolver` for weights beneath an explicitly chosen directory,
+or implement `ExternalDataResolver` for your storage. The resolver remains
+caller-owned; close a directory resolver after loading. `LoadFile` never infers
+permission to read neighboring weight files.
+
+## Compatible models
+
+The supported profile is **IR 8**, exactly one empty standard-domain import at
+**opset 13 or 17**, dense **float32/int64** tensors, and serial CPU execution.
+The [capability table](CAPABILITIES.md) lists 25 operators at opset 13 and 26 at
+opset 17, with exact dtype, rank, attribute, and optional-slot restrictions.
+
+Supported graphs include MLPs, branching, multiple named inputs/outputs,
+symbolic leading batches, scalar/empty tensors, runtime shape subgraphs,
+NCHW 2D CNNs, and float32 LayerNormalization at opset 17. Check the capability
+table before exporting or choosing a model; support for a backend kernel alone
+does not establish model compatibility. Arbitrary ONNX models are not supported.
+
+`Options{}` selects finite resource limits. Configure `Options.Limits` when you
+need explicit load, tensor, live-memory, workspace, or session budgets. These
+are logical runtime budgets rather than process RSS limits. See the archived
+[runtime contract](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/runtime-contract.md)
+for accounting and numerical policies, including pooling and normalization
+reference differences.
+
+## Performance vs ONNX Runtime
+
+The latest [Pass 20 measurements](PERFORMANCE_PASS20.md) compare the same pinned
+pretrained MNIST CNN and named inputs on **Apple M3, macOS arm64, Go 1.27.2**,
+using `neuralnetwork` v0.10.10 and **ORT 1.19.2 CPUExecutionProvider**.
+
+| Runtime | Median inference latency | Range of seven report medians |
+| --- | ---: | ---: |
+| Go `onnx` | **50.917 µs** | 50.750–51.438 µs |
+| ONNX Runtime | **44.667 µs** | 41.708–45.042 µs |
+
+Go takes **6.250 µs more per inference**, about **14.0% higher latency**, under
+these settings. Go uses `CGO_ENABLED=0`, `GOMAXPROCS=1`, and `GOARM64=v8.0`,
+without the `purego` tag. ORT uses sequential execution, one intra-op and one
+inter-op thread, and **disabled graph optimizations**. This compares the fixed
+graph through Go and Python APIs; it does not measure ORT's fully optimized
+deployment configuration or general model performance.
+
+Each report includes 19 inputs: the upstream vector, zeros, ones, and sixteen
+seeded random inputs of shape `[1,1,28,28]`. Each case has ten warmups and 100
+timed calls per runtime, including owned outputs. Building, loading, input
+preparation, and serialization are outside timing. The table uses the median of
+seven per-report medians. All numerical, top-1, original/converted-model, and
+upstream reference checks pass; maximum Go/ORT absolute error is
+`1.9073486328125e-5` with `atol=1e-4`, `rtol=1e-5`.
+
+A separate ordinary Go benchmark records **1,265 B/op and 24 allocs/op** after
+warmup. It uses a different deterministic input and timing scope; its latency
+is not substituted into the ORT comparison. Static MNIST sessions retain
+**83,664 bytes of logical destination payload** after first use, plus metadata.
+That retention reduces recurring allocations and increases cold-call cost;
+[Pass 18](PERFORMANCE_PASS18.md) records the memory and lifecycle tradeoff.
+
+### Performance progression
+
+Recorded Go latency has fallen from **1,187.81 µs to 50.917 µs**, about **23.3×**
+across these historical observations. The table shows selected milestones on
+the same MNIST workload and fixed comparison policy. Early entries are single
+comparison runs; entries from v0.10.5 onward summarize repeated comparisons.
+Each row retains its own contemporaneous ORT reference. Hardware state, variance,
+and ORT movement affect the ratios across these separate experiments.
+Go / ORT divides the two latency medians; lower is better. Backend version labels
+below refer to `neuralnetwork`.
+
+| Milestone / evidence | Go median (µs) | ORT median (µs) | Go / ORT |
+| --- | ---: | ---: | ---: |
+| [Initial CPU baseline][early-comparison] | 1,187.810 | 41.790 | 28.42× |
+| [v0.8.0 integration][early-comparison] | 689.580 | 41.540 | 16.60× |
+| [v0.9.0 integration][early-comparison] | 452.900 | 44.620 | 10.15× |
+| [v0.10.0 integration][early-comparison] | 324.210 | 44.210 | 7.33× |
+| [v0.10.2 integration][early-comparison] | 161.810 | 42.960 | 3.77× |
+| [v0.10.5: convolution tiles][v0105-results] | 98.855 | 44.375 | 2.23× |
+| [v0.10.7: preserving ReLU][v0107-results] | 68.042 | 44.750 | 1.52× |
+| [Pass 11: reuse decoded constants](PERFORMANCE_PASS11.md) | 65.813 | 44.750 | 1.47× |
+| [Pass 12: prepare call metadata](PERFORMANCE_PASS12.md) | 62.792 | 44.833 | 1.40× |
+| [Pass 13: retain constant Reshape](PERFORMANCE_PASS13.md) | 61.750 | 44.167 | 1.40× |
+| [Pass 14: v0.10.8 ARM64 ReLU](PERFORMANCE_PASS14.md) | 55.146 | 42.417 | 1.30× |
+| [Pass 15: v0.10.9 broadcast metadata](PERFORMANCE_PASS15_RELEASE.md) | 54.750 | 42.375 | 1.29× |
+| [Pass 16: v0.10.10 Add adapter](PERFORMANCE_PASS16_RELEASE.md) | 54.625 | 42.084 | 1.30× |
+| [Pass 18: retain static destinations](PERFORMANCE_PASS18.md) | 51.333 | 44.209 | 1.16× |
+| [Pass 19: reuse node arguments](PERFORMANCE_PASS19.md) | 50.917 | 44.375 | 1.15× |
+| [Pass 20: reuse actual dtype](PERFORMANCE_PASS20.md) | **50.917** | **44.667** | **1.14×** |
+
+[early-comparison]: https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md#timing-and-observed-result
+[v0105-results]: https://github.com/itsmontoya/onnx/blob/58ee8a1/README.md
+[v0107-results]: https://github.com/itsmontoya/onnx/blob/3441c84/README.md
+
+[Pass 17](PERFORMANCE_PASS17.md) was an investigation without a production change.
+The reports preserve before/after measurements, allocation counts, variance,
+correctness checks, and rejected experiments. Small timing changes in Passes 15,
+16, 19, and 20 should be read with their recorded variance; allocation reductions
+and changes in ORT's reference timing are reported separately.
+
+### Run benchmarks
+
+Benchmark the checked-in inference fixtures without Python or downloads:
+
+```sh
+CGO_ENABLED=0 GOMAXPROCS=1 go test . -run '^$' -bench '^BenchmarkInference$' -benchmem
+```
+
+For the recorded MNIST workload, the comparison driver and Go runner are
+[archived at this revision](https://github.com/itsmontoya/onnx/tree/c2d5123/tools/compare_runtime).
+The top-level `tools/compare_runtime.py`, runner, and requirements file are no
+longer tracked. The archived [setup and usage guide](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md)
+describes fixture preparation and ORT configuration; use those tool files with
+the current runtime to compare current code. The
+[Pass 20 evidence](tools/compare_runtime/pass20/README.md) retains raw samples,
+fingerprints, summaries, and replay scripts, which also require the archived driver.
+
+Once `.cache/compare-runtime/mnist-ir8-opset13.onnx` is prepared, run the separate
+ordinary Go benchmark:
+
+```sh
+CGO_ENABLED=0 GOMAXPROCS=1 go test . -run '^$' -bench '^BenchmarkMNIST$' -benchmem
+```
+
+This benchmark skips when the optional model is absent. Its results alone do not
+reproduce the 19-case Go/ORT comparison above.
+
+## Development and project status
+
+Run the offline test suites after downloading Go modules:
+
+```sh
 CGO_ENABLED=0 go test ./...
 CGO_ENABLED=0 go test -tags=purego ./...
 ```
 
-The initial clone/module download needs network. Cached builds and tests use
-checked-in models and typed reference values without network, protoc, Python,
-C/C++ inference libraries or an external service. The `purego` tag selects the
-portable backend CPU path. The module requires
-Go 1.27.2, `neuralnetwork` v0.10.7 in [go.mod](go.mod), and protobuf v1.36.12.
+Read [AGENTS.md](AGENTS.md), [STYLEGUIDE.md](STYLEGUIDE.md), and the
+[PR template](.github/PULL_REQUEST_TEMPLATE.md) before contributing.
+[ROADMAP.md](ROADMAP.md), [TODO.md](TODO.md), and [NEEDS.md](NEEDS.md) record
+planned work and backend handoffs. Detailed older guides remain archived:
+[getting started](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/getting-started.md),
+[development](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/development.md), and
+[release checklist and fixture provenance](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/release-checklist.md).
 
-Detailed guides and historical reports below link to their last tracked
-versions; the `docs/` and `tools/` directories are no longer included in this repository.
-
-[Getting started](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/getting-started.md) covers the public APIs, named I/O,
-compatible model authoring/export checks, external weights and reproducible
-failure cases. [Development](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/development.md) gives full verification and
-optional regeneration commands.
-
-The archived [ONNX Runtime comparison tool](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md)
-runs a pinned pretrained MNIST model through both runtimes, checks numerical
-and top-1 agreement, and records CPU inference timings. It also accepts other
-compatible local models with named NumPy inputs.
-With published `neuralnetwork` **v0.10.7**, seven alternating precompiled
-benchmark pairs on Apple M3 (Go 1.27.2, `CGO_ENABLED=0`, `GOMAXPROCS=1`,
-`GOARM64=v8.0`) measure **78.538 → 69.651 µs/op** versus v0.10.6:
-**11.3% lower MNIST latency**. Allocations fall **179,440 → 138,608 B/op**
-and **174 → 172 allocations/op**. Samples span 77.593–79.486 µs before and
-68.226–80.504 µs after, with sample CVs of 1.03% and 5.95%. All samples,
-including the noisy candidate run, are retained. Median paired saving is
-9.367 µs; individual savings range from −1.078 to 9.774 µs.
-
-The v0.10.7 integration introduced the context-aware `ReLUPreservingNaNInto`
-backend operation for nonempty ReLU. Finite inputs avoid the copying NaN correction;
-the two prepared activations fall **16.716 → 7.377 µs**, with zero prepared
-allocations. Original NaN sign, payload and signaling bits, positive-zero rules,
-infinities, input ownership and destination validation remain intact. NaN
-results still return independent storage and restore the supplied private
-destination's legacy NaN-to-zero values. Cancellation restores that same
-complete legacy destination before returning the original context error.
-Empty ReLU and conservative workspace/live-limit checks are unchanged.
-
-The unchanged 19-case comparison, repeated seven times per version, measures
-Go at **75.729 → 68.042 µs**, versus ORT at **44.375 / 44.750 µs**:
-a **1.71× → 1.52×** median gap and **10.2% lower Go latency**. ORT uses
-sequential execution, one intra-op and one inter-op thread, and disabled graph
-optimization. Each case retains ten warmups and 100 timed calls. The ordinary
-Go benchmark uses a separate deterministic input. Median within-run Go p95 is
-136.375 → 122.881 µs. These are workload- and hardware-specific observations,
-not general performance or tail-latency guarantees.
-
-All 266 comparison case executions pass numerical, top-1, original/conversion
-and upstream checks. Outputs remain bit-identical to v0.10.6; maximum Go/ORT
-absolute error remains 1.9073486328125e-5 with unchanged tolerances. Added tests
-cover 112 bitwise shape/pattern cases and cancellation/deadline boundaries,
-including private destination state, output ownership, validation precedence,
-aliases, scalars and empties. Default, cgo-disabled, `purego`, race and
-`purego`+race suites, bounded fuzzing, vet and module/build checks validate the
-integration. No ONNX public API, operator coverage, Conv/Pool kernel or
-model-specific branch changed. This builds on v0.10.6's portable MaxPool path.
-
-[Performance Pass 11](PERFORMANCE_PASS11.md) reuses decoded constants as
-read-only inputs while preserving overrides, output copies and conservative
-memory reservations. Seven alternating fixed-policy pairs measure
-**69.084 → 65.813 µs Go**, with **44.750 µs ORT / 1.471×** after the change:
-**4.73% lower Go latency**. Allocations fall **138,608 → 112,763 B/op** and
-**172 → 140 allocations/op**, with no additional persistent payload or
-preparation step. The report records variance, initialization measurements,
-23 passing checks, 532 comparison cases and the remaining optimization ledger.
-
-[Performance Pass 14](PERFORMANCE_PASS14.md) integrates published `neuralnetwork`
-**v0.10.8**, adding ARM64 integer SIMD for preserving ReLU while retaining the
-portable fallback and exact NaN/cancellation behavior. Seven alternating
-fixed-policy pairs on Apple M3 measure **61.5415 → 55.1455 µs Go**, a **10.39%**
-improvement, with **42.417 µs ORT / 1.3001×** after the change. Allocation remains
-**93,322 B/op / 88 allocs/op**. The report separates the fresh ORT reference from
-the earlier local experiment and records correctness, portability and raw evidence.
-
-[Performance Pass 15](PERFORMANCE_PASS15.md) accounts for Add's 22 allocations
-and removes 15 metadata allocations with no new public API or retained plan state.
-The [released v0.10.9 integration](PERFORMANCE_PASS15_RELEASE.md) reproduces
-**93,322 → 92,874 B/op / 88 → 73 allocs/op**. Seven fresh fixed-policy pairs
-measure **55.417 → 54.750 µs Go**, with **42.375 µs ORT / 1.2920×**. The reports
-separate latency variance, reference movement and the static descriptor alternative.
-
-The archived [comparison results](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md),
-[fifth-pass investigation](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/pass5/README.md) and
-[v0.10.2 validation](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/pass5/v0.10.2/README.md)
-retain the earlier measurements and profiling evidence.
-
-## Runtime contract
-
-`Load`, `LoadBytes` and `LoadFile` publish immutable shared Models. Create a
-Session with `Model.NewSession`, then call `Session.Run` with named tensors.
-Requested outputs own independent storage and survive later runs and Close;
-constructors and typed accessors copy. Input/initializer overlap supplies an
-overridable default within the declared input type/shape contract.
-
-One session permits one active run; overlapping Run/Close returns `ErrBusy`.
-Separate sessions can run concurrently. `Model.Close` prevents new sessions;
-existing sessions remain usable. All nodes execute even when requesting fewer
-outputs. Failed/cancelled runs publish no partial outputs and leave the session
-reusable. Errors preserve classifications, structured diagnostics and causes.
-
-`Options.Limits` supplies finite logical load/tensor/live/workspace/session
-budgets, rather than a process RSS cap. Eligible static graphs retain a bounded
-set of private exact-shape destinations per Session. Retained logical payload is
-charged to live limits in addition to the original invocation reservations;
-insufficient headroom and dynamic geometry use ordinary allocation. Session.Close
-releases that storage. See [Pass 18](PERFORMANCE_PASS18.md) for measured memory and
-latency costs. Cancellation brackets synchronous
-backend/protobuf operations; ReLU also polls between chunks of at most 1,024
-elements and restores its legacy private destination on cancellation. Polling
-does not guarantee cancellation latency; other kernels run to completion.
-External tensors require `Options.ExternalData` even for LoadFile.
-`DirectoryResolver` confines regular-file ranges on supported Go platforms;
-checksum metadata is unsupported. See the [runtime contract](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/runtime-contract.md)
-for defaults, accounting, platform restrictions and exact numerical policies.
-
-## Compatibility evidence and release status
-
-[Fixture provenance](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/release-checklist.md#reference-evidence) records actual
-reference comparisons and exceptions. M1–M4 examples, offline comparisons,
-resource/lifecycle tests and bounded fuzz targets pass. Empty-value, pooling
-and BatchNormalization evaluator/ORT differences remain explicit; skipped tests
-never count as support. The [RT-16 report](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/performance/rt16/README.md)
-records fixed-graph storage savings and latency tradeoffs. No general performance
-or numerical error bound is claimed.
-
-The [release checklist](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/release-checklist.md) records checks and known gaps.
-**There is no project LICENSE.** Maintainers must decide and document licensing
-for runtime source and original fixtures before public release. The included
+**There is no project LICENSE.** Runtime source and original fixtures still need
+a maintainer licensing decision before public release. Existing
 [third-party notices](third_party/README.md) cover their identified upstream
-artifacts and dependencies; fixture origin alone is not a license. Publishing a
-tag is a separate maintainer action; RT-18 does not publish one.
-
-## Contributing and next work
-
-Read [AGENTS.md](AGENTS.md), [STYLEGUIDE.md](STYLEGUIDE.md) and
-[ROADMAP.md](ROADMAP.md). [TODO.md](TODO.md) gives the sequential task order;
-[NEEDS.md](NEEDS.md) records the pinned backend and published handoffs.
-The [RT-17 handoff](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-rt17.md) records the schema audit, actual
-unmodified PyTorch 2.2.2 IR-8/opset-17 MLP export and validation.
-[RT-16](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-rt16.md) records measured call-local storage reuse. Future
-model-selected work extends coverage beyond [RT-19’s audited corpus and first normalization set](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-rt19.md).
-The [compatibility report](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/model-compatibility.md) and independent task files
-keep unselected families explicit. Backend kernel availability does not broaden runtime compatibility.
-
-Preserve [the PR template](.github/PULL_REQUEST_TEMPLATE.md) and record exact
-revisions, APIs, checks and limitations in task handoffs.
+artifacts and dependencies.
