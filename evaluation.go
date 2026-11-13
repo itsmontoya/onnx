@@ -61,6 +61,7 @@ func (e *evaluation) run(inputs map[string]*Tensor, options RunOptions) (outputs
 		if err = e.ctx.Err(); err != nil {
 			return nil, e.nodeError(step, err)
 		}
+
 		e.storage.after(position)
 	}
 	e.storage.trim()
@@ -158,6 +159,7 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 	}
 
 	var backend *tensor.Tensor
+	e.storage.slot, e.storage.fresh = -1, false
 
 	switch step.Operator {
 	case "Identity":
@@ -179,6 +181,7 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 			}
 		}
 		if step.Index >= 0 && step.Index < len(e.plan.calls) && e.plan.calls[step.Index] != nil {
+			e.storage.slot = step.Index
 			if backend, err = e.plan.calls[step.Index].run(e, inputs); err != nil {
 				return err
 			}
@@ -255,6 +258,10 @@ func (e *evaluation) execute(step operators.Step) (err error) {
 	index := step.Outputs[0]
 	if err = e.checkValue(e.plan.values[index], backend, ErrInvalidModel); err != nil {
 		return operationError("run", err, e.plan.values[index].Name)
+	}
+
+	if e.storage.fresh {
+		e.storage.destinations.keep(e.storage.slot, backend, e.budget)
 	}
 
 	e.storage.values[index] = backend

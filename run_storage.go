@@ -14,13 +14,17 @@ func newRunStorage(lifetimes *valueLifetimes, budget *runBudget) (out runStorage
 }
 
 // runStorage keeps one disjoint private destination for reuse within a call.
-// The candidate remains charged until borrowed or dropped; none survives Run.
+// The candidate keeps its invocation charge until borrowed or dropped. Optional
+// Session retention has a separate residency charge that retirement never releases.
 type runStorage struct {
-	lifetimes *valueLifetimes
-	budget    *runBudget
-	values    []*tensor.Tensor
-	free      *tensor.Tensor
-	reuses    int
+	lifetimes    *valueLifetimes
+	budget       *runBudget
+	values       []*tensor.Tensor
+	free         *tensor.Tensor
+	reuses       int
+	destinations *destinationStorage
+	slot         int
+	fresh        bool
 }
 
 func (s *runStorage) destination(dataType DataType, shape []int64, bytes, workspace int64) (out *tensor.Tensor, err error) {
@@ -44,6 +48,11 @@ func (s *runStorage) destination(dataType DataType, shape []int64, bytes, worksp
 		return nil, err
 	}
 
+	if out = s.destinations.get(s.slot, dataType, shape); out != nil {
+		return out, nil
+	}
+
+	s.fresh = true
 	return nil, nil
 }
 

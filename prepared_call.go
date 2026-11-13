@@ -96,6 +96,9 @@ func (p *preparedCall) run(e *evaluation, inputs []*tensor.Tensor) (out *tensor.
 	default:
 		call := *p.shape
 		call.inputs = inputs
+		if p.retained != nil {
+			e.storage.slot = -1
+		}
 		if err = e.storage.reserve(0, call.workspace); err != nil {
 			return nil, err
 		}

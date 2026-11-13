@@ -79,27 +79,30 @@ func newExecutionPlan(ctx context.Context, compiled *operators.Plan, limits Limi
 		return nil, err
 	}
 
+	p.destinationLimit = p.destinationBudget(ctx)
 	return &p, nil
 }
 
 type executionPlan struct {
-	mu            sync.Mutex
-	sessions      int
-	limits        Limits
-	loadBytes     int64
-	residentBytes int64
-	metadata      Metadata
-	inputs        []graph.ValueInfo
-	outputs       []graph.ValueInfo
-	values        []operators.Value
-	steps         []operators.Step
-	indices       map[string]int
-	inputIndices  map[string]int
-	outputIndices []int
-	outputNames   map[string]int
-	lifetimes     *valueLifetimes
-	calls         []*preparedCall
-	callBytes     int64
+	mu                 sync.Mutex
+	sessions           int
+	limits             Limits
+	loadBytes          int64
+	residentBytes      int64
+	metadata           Metadata
+	inputs             []graph.ValueInfo
+	outputs            []graph.ValueInfo
+	values             []operators.Value
+	steps              []operators.Step
+	indices            map[string]int
+	inputIndices       map[string]int
+	outputIndices      []int
+	outputNames        map[string]int
+	lifetimes          *valueLifetimes
+	calls              []*preparedCall
+	callBytes          int64
+	destinationLimit   int64
+	destinationMinimum int64
 }
 
 func (p *executionPlan) prepareCalls(ctx context.Context) (err error) {
@@ -143,8 +146,10 @@ func (p *executionPlan) prepareCalls(ctx context.Context) (err error) {
 					return err
 				}
 			}
+
 			target = constants[step.Inputs[1]]
 		}
+
 		call := newPreparedCall(ctx, step, p.values, target, p.limits)
 		if call == nil {
 			continue
@@ -313,4 +318,78 @@ func publicInfos(ctx context.Context, infos []graph.ValueInfo) (out []ValueInfo,
 		}
 	}
 	return out, nil
+}
+
+// destinationBudget declines retention unless all allocation geometry is static
+// and its extra residency fits beside a conservative complete-Run reservation.
+func (p *executionPlan) destinationBudget(ctx context.Context) (bytes int64) {
+	available := p.preparedLiveBudget(ctx)
+	for position, step := range p.steps {
+		if ctx.Err() != nil {
+			return 0
+		}
+
+		if step.Operator == "Identity" || step.Operator == "Constant" {
+			continue
+		}
+
+		if position >= len(p.calls) || p.calls[position] == nil {
+			return 0
+		}
+
+		call := p.calls[position]
+		var (
+			shape    []int64
+			dataType = Float32
+			size     int64
+		)
+
+		switch step.Operator {
+		case "Conv", "MaxPool":
+			if call.cnn == nil {
+				return 0
+			}
+
+			shape, size = call.cnn.shape, call.cnn.bytes
+		case "Add", "Relu", "MatMul":
+			if call.numerical == nil {
+				return 0
+			}
+
+			shape, size = call.numerical.shape, call.numerical.bytes
+		case "Reshape":
+			if call.shape == nil {
+				return 0
+			}
+
+			shape, size, dataType = call.shape.shape, call.shape.bytes, call.shape.dataType
+		default:
+			return 0
+		}
+		// Check actual prepared geometry before using declared sizes as a bound.
+		info := p.values[step.Outputs[0]].Info
+		if !info.ShapeKnown || info.DataType != dataType || len(info.Dimensions) != len(shape) {
+			return 0
+		}
+
+		for axis, dimension := range info.Dimensions {
+			if dimension.Kind != graph.FixedDimension || dimension.Value != shape[axis] {
+				return 0
+			}
+		}
+		if call.retained != nil {
+			continue
+		}
+
+		if size > p.limits.MaxTensorBytes || size > available-bytes {
+			return 0
+		}
+
+		bytes += size
+	}
+	if bytes > 0 {
+		p.destinationMinimum = p.limits.MaxLiveBytes - available + bytes
+	}
+
+	return bytes
 }

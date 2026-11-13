@@ -132,7 +132,12 @@ outputs. Failed/cancelled runs publish no partial outputs and leave the session
 reusable. Errors preserve classifications, structured diagnostics and causes.
 
 `Options.Limits` supplies finite logical load/tensor/live/workspace/session
-budgets, rather than a process RSS cap. Cancellation brackets synchronous
+budgets, rather than a process RSS cap. Eligible static graphs retain a bounded
+set of private exact-shape destinations per Session. Retained logical payload is
+charged to live limits in addition to the original invocation reservations;
+insufficient headroom and dynamic geometry use ordinary allocation. Session.Close
+releases that storage. See [Pass 18](PERFORMANCE_PASS18.md) for measured memory and
+latency costs. Cancellation brackets synchronous
 backend/protobuf operations; ReLU also polls between chunks of at most 1,024
 elements and restores its legacy private destination on cancellation. Polling
 does not guarantee cancellation latency; other kernels run to completion.

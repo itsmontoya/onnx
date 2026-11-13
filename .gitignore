@@ -12,3 +12,5 @@
 !/tools/compare_runtime/pass16/
 !/tools/compare_runtime/pass17/
 /tools/compare_runtime/pass17/__pycache__/
+!/tools/compare_runtime/pass18/
+/tools/compare_runtime/pass18/__pycache__/
