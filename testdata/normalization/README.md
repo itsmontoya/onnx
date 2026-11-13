@@ -2,9 +2,9 @@
 
 [provenance.json](provenance.json) has **28 executed cases**: 19 unchanged
 Apache-2.0 upstream models from [the corpus](../corpus/README.md) and nine
-original, test-only helper graphs. Original graphs have no separate
-redistribution license; the repository has no project LICENSE. The exporter
-framework's license is not used to license original artifacts.
+original, test-only helper graphs. See the project [LICENSE](../../LICENSE)
+for the original graphs. The exporter framework's license is not used to
+license original artifacts.
 
 The 19 upstream cases agree with independent NumPy centered population variance,
 ONNX 1.16.2's evaluator and ORT 1.19.2. They cover all positive/negative axes of

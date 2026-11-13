@@ -40,10 +40,10 @@ each shaped `[batch,2]`.
 
 This is one tested original module, not a model-corpus survey or universal
 PyTorch compatibility claim. The optional exporter is BSD-3-Clause licensed;
-no exporter implementation or third-party model/weights are copied. This
-repository has no LICENSE and the original module/fixtures have no separately
-declared license. An exporter tool license does not license these original
-artifacts. No Go runtime dependency or backend version changes.
+no exporter implementation or third-party model/weights are copied. See the
+project [LICENSE](../../LICENSE) for the original module/fixtures.
+An exporter tool license does not license these original artifacts.
+No Go runtime dependency or backend version changes.
 
 ## Offline cases and observations
 

@@ -185,7 +185,7 @@ reference differences.
 
 ## Performance vs ONNX Runtime
 
-The latest [Pass 20 measurements](PERFORMANCE_PASS20.md) compare the same pinned
+The archived [Pass 20 measurements](https://github.com/itsmontoya/onnx/blob/ffc64b74c79167e64ca2354785bc5e3338640127/PERFORMANCE_PASS20.md) compare the same pinned
 pretrained MNIST CNN and named inputs on **Apple M3, macOS arm64, Go 1.27.2**,
 using `neuralnetwork` v0.10.10 and **ORT 1.19.2 CPUExecutionProvider**.
 
@@ -214,7 +214,7 @@ warmup. It uses a different deterministic input and timing scope; its latency
 is not substituted into the ORT comparison. Static MNIST sessions retain
 **83,664 bytes of logical destination payload** after first use, plus metadata.
 That retention reduces recurring allocations and increases cold-call cost;
-[Pass 18](PERFORMANCE_PASS18.md) records the memory and lifecycle tradeoff.
+[Pass 18](https://github.com/itsmontoya/onnx/blob/ffc64b74c79167e64ca2354785bc5e3338640127/PERFORMANCE_PASS18.md) records the memory and lifecycle tradeoff.
 
 ### Performance progression
 
@@ -236,22 +236,22 @@ below refer to `neuralnetwork`.
 | [v0.10.2 integration][early-comparison] | 161.810 | 42.960 | 3.77× |
 | [v0.10.5: convolution tiles][v0105-results] | 98.855 | 44.375 | 2.23× |
 | [v0.10.7: preserving ReLU][v0107-results] | 68.042 | 44.750 | 1.52× |
-| [Pass 11: reuse decoded constants](PERFORMANCE_PASS11.md) | 65.813 | 44.750 | 1.47× |
-| [Pass 12: prepare call metadata](PERFORMANCE_PASS12.md) | 62.792 | 44.833 | 1.40× |
-| [Pass 13: retain constant Reshape](PERFORMANCE_PASS13.md) | 61.750 | 44.167 | 1.40× |
-| [Pass 14: v0.10.8 ARM64 ReLU](PERFORMANCE_PASS14.md) | 55.146 | 42.417 | 1.30× |
-| [Pass 15: v0.10.9 broadcast metadata](PERFORMANCE_PASS15_RELEASE.md) | 54.750 | 42.375 | 1.29× |
-| [Pass 16: v0.10.10 Add adapter](PERFORMANCE_PASS16_RELEASE.md) | 54.625 | 42.084 | 1.30× |
-| [Pass 18: retain static destinations](PERFORMANCE_PASS18.md) | 51.333 | 44.209 | 1.16× |
-| [Pass 19: reuse node arguments](PERFORMANCE_PASS19.md) | 50.917 | 44.375 | 1.15× |
-| [Pass 20: reuse actual dtype](PERFORMANCE_PASS20.md) | **50.917** | **44.667** | **1.14×** |
+| [Pass 11: reuse decoded constants](https://github.com/itsmontoya/onnx/blob/ffc64b74c79167e64ca2354785bc5e3338640127/PERFORMANCE_PASS11.md) | 65.813 | 44.750 | 1.47× |
+| [Pass 12: prepare call metadata](https://github.com/itsmontoya/onnx/blob/ffc64b74c79167e64ca2354785bc5e3338640127/PERFORMANCE_PASS12.md) | 62.792 | 44.833 | 1.40× |
+| [Pass 13: retain constant Reshape](https://github.com/itsmontoya/onnx/blob/ffc64b74c79167e64ca2354785bc5e3338640127/PERFORMANCE_PASS13.md) | 61.750 | 44.167 | 1.40× |
+| [Pass 14: v0.10.8 ARM64 ReLU](https://github.com/itsmontoya/onnx/blob/ffc64b74c79167e64ca2354785bc5e3338640127/PERFORMANCE_PASS14.md) | 55.146 | 42.417 | 1.30× |
+| [Pass 15: v0.10.9 broadcast metadata](https://github.com/itsmontoya/onnx/blob/ffc64b74c79167e64ca2354785bc5e3338640127/PERFORMANCE_PASS15_RELEASE.md) | 54.750 | 42.375 | 1.29× |
+| [Pass 16: v0.10.10 Add adapter](https://github.com/itsmontoya/onnx/blob/ffc64b74c79167e64ca2354785bc5e3338640127/PERFORMANCE_PASS16_RELEASE.md) | 54.625 | 42.084 | 1.30× |
+| [Pass 18: retain static destinations](https://github.com/itsmontoya/onnx/blob/ffc64b74c79167e64ca2354785bc5e3338640127/PERFORMANCE_PASS18.md) | 51.333 | 44.209 | 1.16× |
+| [Pass 19: reuse node arguments](https://github.com/itsmontoya/onnx/blob/ffc64b74c79167e64ca2354785bc5e3338640127/PERFORMANCE_PASS19.md) | 50.917 | 44.375 | 1.15× |
+| [Pass 20: reuse actual dtype](https://github.com/itsmontoya/onnx/blob/ffc64b74c79167e64ca2354785bc5e3338640127/PERFORMANCE_PASS20.md) | **50.917** | **44.667** | **1.14×** |
 
 [early-comparison]: https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md#timing-and-observed-result
 [v0105-results]: https://github.com/itsmontoya/onnx/blob/58ee8a1/README.md
 [v0107-results]: https://github.com/itsmontoya/onnx/blob/3441c84/README.md
 
-[Pass 17](PERFORMANCE_PASS17.md) was an investigation without a production change.
-The reports preserve before/after measurements, allocation counts, variance,
+[Pass 17](https://github.com/itsmontoya/onnx/blob/ffc64b74c79167e64ca2354785bc5e3338640127/PERFORMANCE_PASS17.md) was an investigation without a production change.
+The archived reports preserve before/after measurements, allocation counts, variance,
 correctness checks, and rejected experiments. Small timing changes in Passes 15,
 16, 19, and 20 should be read with their recorded variance; allocation reductions
 and changes in ORT's reference timing are reported separately.
@@ -270,7 +270,7 @@ The top-level `tools/compare_runtime.py`, runner, and requirements file are no
 longer tracked. The archived [setup and usage guide](https://github.com/itsmontoya/onnx/blob/c2d5123/tools/compare_runtime/README.md)
 describes fixture preparation and ORT configuration; use those tool files with
 the current runtime to compare current code. The
-[Pass 20 evidence](tools/compare_runtime/pass20/README.md) retains raw samples,
+[archived Pass 20 evidence](https://github.com/itsmontoya/onnx/blob/ffc64b74c79167e64ca2354785bc5e3338640127/tools/compare_runtime/pass20/README.md) retains raw samples,
 fingerprints, summaries, and replay scripts, which also require the archived driver.
 
 Once `.cache/compare-runtime/mnist-ir8-opset13.onnx` is prepared, run the separate
@@ -294,13 +294,10 @@ CGO_ENABLED=0 go test -tags=purego ./...
 
 Read [AGENTS.md](AGENTS.md), [STYLEGUIDE.md](STYLEGUIDE.md), and the
 [PR template](.github/PULL_REQUEST_TEMPLATE.md) before contributing.
-[ROADMAP.md](ROADMAP.md), [TODO.md](TODO.md), and [NEEDS.md](NEEDS.md) record
-planned work and backend handoffs. Detailed older guides remain archived:
+Detailed older guides remain archived:
 [getting started](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/getting-started.md),
 [development](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/development.md), and
 [release checklist and fixture provenance](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/release-checklist.md).
 
-**There is no project LICENSE.** Runtime source and original fixtures still need
-a maintainer licensing decision before public release. Existing
-[third-party notices](third_party/README.md) cover their identified upstream
-artifacts and dependencies.
+See [LICENSE](LICENSE) for the project license and
+[third-party notices](third_party/README.md) for upstream artifacts and dependencies.

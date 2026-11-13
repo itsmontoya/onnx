@@ -34,8 +34,7 @@ Regenerate with Python 3.9.6, ONNX 1.16.2 (source commit
 /private/tmp/neuralnetwork-onnx-reference/bin/python tools/check_m2.py
 ```
 
-No repository LICENSE is present; these original fixtures have no separately
-declared license. Provenance records origin without inventing a license.
+See the project [LICENSE](../../LICENSE) for these original fixtures.
 The [shape-heavy composed graph](../inference/README.md) and
 [NN-13 handoff](https://github.com/itsmontoya/onnx/blob/a5ea458f0ec147f7878d838730751a841549fb46/docs/handoff-nn13.md) reuse the existing public example
 and fixture harness.

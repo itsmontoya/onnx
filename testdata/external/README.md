@@ -23,6 +23,6 @@ CGO_ENABLED=0 go run ./examples/external -batch 3
 ```
 
 The example explicitly allows `weights.bin` through an immutable memory resolver.
-The repository has no LICENSE; no separate license is declared for these original
-fixtures. The upstream ONNX specification and protobuf schema retain their
+See the project [LICENSE](../../LICENSE) for these original fixtures.
+The upstream ONNX specification and protobuf schema retain their
 recorded Apache-2.0 attribution.
