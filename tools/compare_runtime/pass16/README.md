@@ -1,5 +1,9 @@
 # Pass 16 evidence and NeuralNetwork handoff
 
+ONNX now uses published **NeuralNetwork v0.10.10**. Fresh integration evidence is
+preserved separately in [release/](release/README.md). The prompt and measurements
+below are the completed historical handoff; it does not need to be run again.
+
 [PERFORMANCE_PASS16.md](../../../PERFORMANCE_PASS16.md) records the repository
 boundary decision. [NEURALNETWORK_PROMPT.md](NEURALNETWORK_PROMPT.md) is a
 self-contained implementation prompt for a fresh agent working only in the
@@ -32,6 +36,8 @@ The first preparation also caught diagnostic formatting before compilation;
 the preserved diagnostic source is gofmt-formatted.
 
 Replay from the ONNX root with Go 1.27.2 and released v0.10.9 already available.
+Use the investigation commit `da7ac98` for historical replay; it contains these
+artifacts with the original v0.10.9 module files. Current go.mod uses v0.10.10.
 Use a writable Go cache (the measured host defaults to the existing
 `/private/tmp/onnx-pass6/go-cache`). Prepare the pinned model using the existing
 `tools/compare_runtime.py` workflow if

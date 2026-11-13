@@ -1,5 +1,9 @@
 # Performance Pass 16 — Repository Boundary and Backend Handoff
 
+Published integration is now complete with NeuralNetwork **v0.10.10**. See
+[the release validation](PERFORMANCE_PASS16_RELEASE.md) for fresh transfer results.
+The report below preserves the original investigation and repository handoff.
+
 The measured optimization belongs in **NeuralNetwork**. Implementation is
 delegated through the standalone [NeuralNetwork agent prompt](tools/compare_runtime/pass16/NEURALNETWORK_PROMPT.md),
 ready for the user to run separately against that repository. Pass 16 production
