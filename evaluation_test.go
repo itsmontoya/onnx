@@ -11,6 +11,89 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+func TestEvaluationArgumentsOptionalAndWideCalls(t *testing.T) {
+	tests := []struct {
+		name     string
+		operator string
+		inputs   []string
+		shape    []int64
+		want     []float32
+	}{
+		{"omitted bias after populated bias", "Gemm", []string{"a", "w", ""}, []int64{1, 2}, []float32{4, 7}},
+		{"five argument fallback", "Concat", []string{"a", "a", "a", "a", "a"}, []int64{1, 10}, []float32{4, 7, 4, 7, 4, 7, 4, 7, 4, 7}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			wire := modelWire(t, "profile/identity")
+			wire.Graph.Input, wire.Graph.ValueInfo = nil, nil
+			wire.Graph.Output[0].Type.GetTensorType().Shape = nil
+			wire.Graph.Initializer = []*onnxpb.TensorProto{
+				{Name: proto.String("x"), DataType: proto.Int32(1), Dims: []int64{1, 2}, FloatData: []float32{1, 2}},
+				{Name: proto.String("w"), DataType: proto.Int32(1), Dims: []int64{2, 2}, FloatData: []float32{1, 0, 0, 1}},
+				{Name: proto.String("b"), DataType: proto.Int32(1), Dims: []int64{2}, FloatData: []float32{3, 5}},
+			}
+			wire.Graph.Node = []*onnxpb.NodeProto{
+				{OpType: proto.String("Gemm"), Input: []string{"x", "w", "b"}, Output: []string{"a"}},
+				{OpType: proto.String(tt.operator), Input: tt.inputs, Output: []string{"y"}},
+			}
+			if tt.operator == "Concat" {
+				wire.Graph.Node[1].Attribute = []*onnxpb.AttributeProto{{Name: proto.String("axis"), Type: onnxpb.AttributeProto_INT.Enum(), I: proto.Int64(1)}}
+			}
+
+			session := modelSession(t, loadedModel(t, modelBytes(t, wire), Options{}))
+			for range 3 {
+				outputs, err := session.Run(context.Background(), nil, RunOptions{})
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				assertFloats(t, outputs[0].Tensor, tt.shape, tt.want)
+			}
+		})
+	}
+}
+
+func TestEvaluationNormalizationOptionalArguments(t *testing.T) {
+	wire := modelWire(t, "normalization/models/optional_inverse_no_bias")
+	inputs := map[string]*Tensor{
+		"x":     floatTensor(t, []int64{2, 3}, []float32{1, 2, 3, 4, 5, 6}),
+		"scale": floatTensor(t, []int64{3}, []float32{1, 1, 1}),
+	}
+	control := modelSession(t, loadedModel(t, modelBytes(t, wire), Options{}))
+	expected, err := control.Run(context.Background(), inputs, RunOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	first := proto.Clone(wire.Graph.Node[0]).(*onnxpb.NodeProto)
+	first.Name = proto.String("with_bias")
+	first.Input = append(first.Input, "bias")
+	first.Output = []string{"biased"}
+	wire.Graph.Node[0].Input = append(wire.Graph.Node[0].Input, "")
+	wire.Graph.Node = append([]*onnxpb.NodeProto{first}, wire.Graph.Node...)
+	wire.Graph.Initializer = []*onnxpb.TensorProto{{Name: proto.String("bias"), DataType: proto.Int32(1), Dims: []int64{3}, FloatData: []float32{3, 5, 7}}}
+	session := modelSession(t, loadedModel(t, modelBytes(t, wire), Options{}))
+	if len(session.plan.steps) != 2 {
+		t.Fatal("missing preceding biased call")
+	}
+
+	for range 3 {
+		outputs, runErr := session.Run(context.Background(), inputs, RunOptions{})
+		if runErr != nil || len(outputs) != len(expected) {
+			t.Fatalf("normalization outputs: %v, %v", outputs, runErr)
+		}
+
+		for index, output := range expected {
+			values, valuesErr := output.Tensor.Float32Values()
+			if valuesErr != nil {
+				t.Fatal(valuesErr)
+			}
+
+			assertFloats(t, outputs[index].Tensor, output.Tensor.Shape(), values)
+		}
+	}
+}
+
 func TestEvaluationRetainedConstantsNeverBecomeDestinations(t *testing.T) {
 	tests := []struct {
 		name     string
