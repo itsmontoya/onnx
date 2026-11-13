@@ -1,0 +1,3688 @@
+{
+  "environment": {
+    "go": "go version go1.27.2 darwin/arm64",
+    "macos": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.2\nBuildVersion:\t\t25F84\n",
+    "kernel": "Darwin Joshs-MacBook-Air.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:19:21 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T8122 arm64\n",
+    "hardware": {
+      "chip_type": "Apple M3",
+      "machine_model": "Mac15,13",
+      "physical_memory": "24 GB",
+      "number_processors": "proc 8:4:4:0"
+    },
+    "performance_environment": {
+      "CGO_ENABLED": "0",
+      "GOMAXPROCS": "1",
+      "GOWORK": "off",
+      "GOARM64": "v8.0",
+      "GOFLAGS": "",
+      "GOCACHE": "/private/tmp/onnx-pass6/go-cache",
+      "PYTHONPATH": "/Users/itsmontoya/go/src/github.com/itsmontoya/neuralnetwork/.benchmarks/conv2d-pass8/20261111-standalone/python-site"
+    },
+    "onnx_commit": "06ae89fbaba9f46c0e111fc7ef3b896eccb8e899",
+    "publication": {
+      "Path": "github.com/itsmontoya/neuralnetwork",
+      "Version": "v0.10.10",
+      "Info": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.10.info",
+      "GoMod": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.10.mod",
+      "Zip": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.10.zip",
+      "Dir": "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.10",
+      "Sum": "h1:CcoQQN8w9aGodz61FQGKSWtbnKzAHf/gtXbukwVUkj0=",
+      "GoModSum": "h1:4ha7jggW7cxuYy1EIaGUvn6aLe8NBt8BLOYm4to6y+Y=",
+      "Origin": {
+        "VCS": "git",
+        "URL": "https://github.com/itsmontoya/neuralnetwork",
+        "Hash": "2ffa5bd9fd2034382c49d14efc732ea4d026aa09",
+        "Ref": "refs/tags/v0.10.10"
+      }
+    },
+    "modules": "github.com/itsmontoya/onnx\ngithub.com/davecgh/go-spew v1.1.1\ngithub.com/golang/protobuf v1.5.0\ngithub.com/google/go-cmp v0.7.0\ngithub.com/itsmontoya/neuralnetwork v0.10.10\ngithub.com/pmezard/go-difflib v1.0.0\ngithub.com/stretchr/testify v1.11.1\ngithub.com/tphakala/simd v1.3.0\ngolang.org/x/arch v0.27.0\ngolang.org/x/sys v0.45.0\ngoogle.golang.org/protobuf v1.36.12\ngopkg.in/yaml.v3 v3.0.1\n",
+    "branch": "optimization-pass-20",
+    "python": "3.9.6 (default, Feb  3 2024, 15:58:27) \n[Clang 15.0.0 (clang-1500.3.9.4)]\n{'numpy': '1.26.4', 'onnx': '1.16.2', 'ort': '1.19.2'}\n"
+  },
+  "implementation_commit": "cc995e6199b9ca23d281393e3f61fc217cbda107",
+  "fixed_policy_environment": {
+    "python": "3.9.6",
+    "numpy": "1.26.4",
+    "onnx": "1.16.2",
+    "onnxruntime": "1.19.2",
+    "protobuf": "4.25.3",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "processor": "arm",
+    "go": "go version go1.27.2 darwin/arm64",
+    "runtime_revision": "06ae89fbaba9f46c0e111fc7ef3b896eccb8e899",
+    "working_tree_dirty": false,
+    "driver_sha256": "9f32bdc790f2b323c53ac2d8fa1a8f777be8daa8d9f73aac3cd32f6f63b2bdae",
+    "runner_sha256": {
+      "run_result.go": "f1357afe5986ff398f752f9cdc7d7415eb32b0d13e7740c161ec63f1539bd64f",
+      "runner.go": "9d1f4a83da63fd38ae8609ffc45b40d3bd81aa30b77d04085f7d4296a8832eec",
+      "tensor_data.go": "e29a7e66c44068b91f73c200f5ad04aaf3230a47475966f3c6a3c4965cd200ac"
+    },
+    "go_flags": "",
+    "ort_providers": [
+      "CPUExecutionProvider"
+    ],
+    "ort_optimizations": "disabled",
+    "ort_threads": 1,
+    "gomaxprocs": 1,
+    "cgo_enabled": 0,
+    "seed": 0,
+    "random_cases": 16
+  },
+  "model": {
+    "path": "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/mnist-ir8-opset13.onnx",
+    "sha256": "310384d2500a063def1ed3ad5b448baeda1edd5a570f137cb82cb11b7c25c05d",
+    "ir_version": 8,
+    "opsets": {
+      "": 13
+    },
+    "nodes": 12,
+    "operators": [
+      "Add",
+      "Conv",
+      "MatMul",
+      "MaxPool",
+      "Relu",
+      "Reshape"
+    ]
+  },
+  "baseline": {
+    "baseline": {
+      "go": {
+        "median": 51.0,
+        "minimum": 49.9375,
+        "maximum": 52.646,
+        "cv_pct": 1.6264125008393946,
+        "values": [
+          50.833,
+          50.667,
+          49.9375,
+          51.0,
+          51.1875,
+          52.646,
+          52.042
+        ]
+      },
+      "ort": {
+        "median": 44.167,
+        "minimum": 41.875,
+        "maximum": 45.0,
+        "cv_pct": 2.817584371487971,
+        "values": [
+          42.208,
+          41.875,
+          42.083,
+          44.208,
+          44.167,
+          44.5,
+          45.0
+        ]
+      },
+      "ratio": 1.1547082663527066
+    }
+  },
+  "production": {
+    "merged": {
+      "go": {
+        "median": 51.1045,
+        "minimum": 50.333,
+        "maximum": 51.666,
+        "cv_pct": 0.7451564182964984,
+        "values": [
+          51.417,
+          51.666,
+          50.333,
+          51.1045,
+          51.0415,
+          51.167,
+          51.083
+        ]
+      },
+      "ort": {
+        "median": 44.417,
+        "minimum": 42.0,
+        "maximum": 45.1045,
+        "cv_pct": 2.2000790094336455,
+        "values": [
+          42.0,
+          43.875,
+          44.2705,
+          45.1045,
+          44.417,
+          44.833,
+          44.833
+        ]
+      },
+      "ratio": 1.1505617218632505
+    },
+    "candidate": {
+      "go": {
+        "median": 50.917,
+        "minimum": 50.75,
+        "maximum": 51.4375,
+        "cv_pct": 0.4239176050912883,
+        "values": [
+          51.042,
+          50.75,
+          50.917,
+          50.875,
+          51.4375,
+          50.7915,
+          51.083
+        ]
+      },
+      "ort": {
+        "median": 44.667,
+        "minimum": 41.708,
+        "maximum": 45.042,
+        "cv_pct": 3.1002375499326655,
+        "values": [
+          42.0,
+          41.708,
+          44.834,
+          42.9795,
+          44.667,
+          44.916,
+          45.042
+        ]
+      },
+      "ratio": 1.1399243289229184
+    },
+    "movement": {
+      "go_reduction_us": 0.1875,
+      "go_reduction_pct": 0.36689528319423925,
+      "ort_increase_us": 0.25,
+      "ort_increase_pct": 0.5628475583672918,
+      "paired_go_reduction_us": {
+        "median": 0.2295000000000016,
+        "minimum": -0.5840000000000032,
+        "maximum": 0.9159999999999968,
+        "cv_pct": 359.75729665156484,
+        "values": [
+          0.375,
+          0.9159999999999968,
+          -0.5840000000000032,
+          0.2295000000000016,
+          -0.3960000000000008,
+          0.3755000000000024,
+          0.0
+        ]
+      }
+    }
+  },
+  "ramps": {
+    "baseline": {
+      "latency_us": {
+        "median": 48.583,
+        "minimum": 48.008,
+        "maximum": 49.163,
+        "cv_pct": 0.6866001853419346,
+        "values": [
+          49.163,
+          48.008,
+          48.871,
+          48.481,
+          48.583,
+          48.525,
+          48.756
+        ]
+      },
+      "bytes": [
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265
+      ],
+      "allocs": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ]
+    },
+    "production-merged": {
+      "latency_us": {
+        "median": 49.152,
+        "minimum": 48.812,
+        "maximum": 49.865,
+        "cv_pct": 0.6574678520001459,
+        "values": [
+          49.865,
+          48.812,
+          48.868,
+          49.239,
+          49.021,
+          49.213,
+          49.152
+        ]
+      },
+      "bytes": [
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265
+      ],
+      "allocs": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ]
+    },
+    "production-candidate": {
+      "latency_us": {
+        "median": 48.932,
+        "minimum": 48.708,
+        "maximum": 50.269,
+        "cv_pct": 1.2195978404278718,
+        "values": [
+          50.269,
+          48.708,
+          50.02,
+          48.932,
+          48.783,
+          48.72,
+          49.251
+        ]
+      },
+      "bytes": [
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265
+      ],
+      "allocs": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  },
+  "ablations": {
+    "control": {
+      "latency_us": {
+        "median": 49.052,
+        "minimum": 48.993,
+        "maximum": 49.177,
+        "cv_pct": 0.12746632287442283,
+        "values": [
+          49.012,
+          48.993,
+          49.109,
+          49.052,
+          49.177,
+          48.993,
+          49.062
+        ]
+      },
+      "bytes": [
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265
+      ],
+      "allocs": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ]
+    },
+    "local-dtype": {
+      "latency_us": {
+        "median": 48.907,
+        "minimum": 48.729,
+        "maximum": 49.026,
+        "cv_pct": 0.18833855135876526,
+        "values": [
+          48.729,
+          48.949,
+          48.962,
+          48.888,
+          48.811,
+          49.026,
+          48.907
+        ]
+      },
+      "bytes": [
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265
+      ],
+      "allocs": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ]
+    },
+    "prepared-proof": {
+      "latency_us": {
+        "median": 48.92,
+        "minimum": 48.792,
+        "maximum": 53.348,
+        "cv_pct": 3.591922431701248,
+        "values": [
+          48.792,
+          48.92,
+          53.348,
+          48.833,
+          49.014,
+          48.794,
+          52.224
+        ]
+      },
+      "bytes": [
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265
+      ],
+      "allocs": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ]
+    },
+    "invalid-direct": {
+      "latency_us": {
+        "median": 48.79,
+        "minimum": 48.614,
+        "maximum": 50.514,
+        "cv_pct": 1.261511705172055,
+        "values": [
+          50.514,
+          48.81,
+          48.787,
+          48.79,
+          48.662,
+          48.614,
+          48.988
+        ]
+      },
+      "bytes": [
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265,
+        1265
+      ],
+      "allocs": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ]
+    },
+    "shell": {
+      "latency_us": {
+        "median": 3.705,
+        "minimum": 3.696,
+        "maximum": 4.212,
+        "cv_pct": 4.634023132949639,
+        "values": [
+          3.825,
+          4.212,
+          3.703,
+          3.697,
+          3.696,
+          3.72,
+          3.705
+        ]
+      },
+      "bytes": [
+        689,
+        689,
+        689,
+        689,
+        689,
+        689,
+        689
+      ],
+      "allocs": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ]
+    }
+  },
+  "diagnostics": {
+    "alloc-run": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 80.915,
+          "minimum": 80.915,
+          "maximum": 80.915,
+          "cv_pct": 0.0,
+          "values": [
+            80.915
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "backend-geometry": {
+      "BenchmarkPass17Pool/Pool03/Validation": {
+        "latency_us": {
+          "median": 0.09792000000000001,
+          "minimum": 0.09768,
+          "maximum": 0.14809999999999998,
+          "cv_pct": 16.60861056248951,
+          "values": [
+            0.14809999999999998,
+            0.09928000000000001,
+            0.09781000000000001,
+            0.09842000000000001,
+            0.09792000000000001,
+            0.09779,
+            0.09768
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkPass17Pool/Pool03/Shape": {
+        "latency_us": {
+          "median": 0.06639,
+          "minimum": 0.06608,
+          "maximum": 0.06667000000000001,
+          "cv_pct": 0.3141952412990881,
+          "values": [
+            0.06608,
+            0.06639,
+            0.06614,
+            0.06656999999999999,
+            0.06658,
+            0.06638,
+            0.06667000000000001
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkPass17Pool/Pool07/Validation": {
+        "latency_us": {
+          "median": 0.09816,
+          "minimum": 0.09752,
+          "maximum": 0.09914,
+          "cv_pct": 0.48090835885550254,
+          "values": [
+            0.09914,
+            0.09818,
+            0.09806000000000001,
+            0.09778,
+            0.09834999999999999,
+            0.09816,
+            0.09752
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkPass17Pool/Pool07/Shape": {
+        "latency_us": {
+          "median": 0.06633,
+          "minimum": 0.06562,
+          "maximum": 0.06708,
+          "cv_pct": 0.7415890301509381,
+          "values": [
+            0.06562,
+            0.06633,
+            0.06608,
+            0.06575,
+            0.0668,
+            0.06644,
+            0.06708
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkPass19Geometry/Conv00Shape": {
+        "latency_us": {
+          "median": 0.07637999999999999,
+          "minimum": 0.07572,
+          "maximum": 0.07757,
+          "cv_pct": 0.7493297403362702,
+          "values": [
+            0.07673,
+            0.07622,
+            0.07637999999999999,
+            0.07572,
+            0.07757,
+            0.07586,
+            0.07661
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkPass19Geometry/Conv04Shape": {
+        "latency_us": {
+          "median": 0.07595,
+          "minimum": 0.07549,
+          "maximum": 0.08019,
+          "cv_pct": 2.018710498285069,
+          "values": [
+            0.07742,
+            0.07595,
+            0.07576000000000001,
+            0.07549,
+            0.07562999999999999,
+            0.07651999999999999,
+            0.08019
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkPass19Geometry/Reshape08Complete": {
+        "latency_us": {
+          "median": 0.08446,
+          "minimum": 0.08292000000000001,
+          "maximum": 0.09942000000000001,
+          "cv_pct": 6.760671524211343,
+          "values": [
+            0.08775,
+            0.08421,
+            0.08292000000000001,
+            0.09537000000000001,
+            0.08446,
+            0.08437,
+            0.09942000000000001
+          ]
+        },
+        "bytes": [
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkPass19Geometry/Reshape08Shape": {
+        "latency_us": {
+          "median": 0.0325,
+          "minimum": 0.03228,
+          "maximum": 0.03272,
+          "cv_pct": 0.5039619899016631,
+          "values": [
+            0.03272,
+            0.03264,
+            0.03263,
+            0.03232,
+            0.0325,
+            0.03228,
+            0.032350000000000004
+          ]
+        },
+        "bytes": [
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    "baseline-ramp-1": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 49.163,
+          "minimum": 49.163,
+          "maximum": 49.163,
+          "cv_pct": 0.0,
+          "values": [
+            49.163
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "baseline-ramp-2": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 48.008,
+          "minimum": 48.008,
+          "maximum": 48.008,
+          "cv_pct": 0.0,
+          "values": [
+            48.008
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "baseline-ramp-3": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 48.871,
+          "minimum": 48.871,
+          "maximum": 48.871,
+          "cv_pct": 0.0,
+          "values": [
+            48.871
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "baseline-ramp-4": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 48.481,
+          "minimum": 48.481,
+          "maximum": 48.481,
+          "cv_pct": 0.0,
+          "values": [
+            48.481
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "baseline-ramp-5": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 48.583,
+          "minimum": 48.583,
+          "maximum": 48.583,
+          "cv_pct": 0.0,
+          "values": [
+            48.583
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "baseline-ramp-6": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 48.525,
+          "minimum": 48.525,
+          "maximum": 48.525,
+          "cv_pct": 0.0,
+          "values": [
+            48.525
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "baseline-ramp-7": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 48.756,
+          "minimum": 48.756,
+          "maximum": 48.756,
+          "cv_pct": 0.0,
+          "values": [
+            48.756
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "candidate-alloc-run": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 80.988,
+          "minimum": 80.988,
+          "maximum": 80.988,
+          "cv_pct": 0.0,
+          "values": [
+            80.988
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "control-ablation-1": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 49.012,
+          "minimum": 49.012,
+          "maximum": 49.012,
+          "cv_pct": 0.0,
+          "values": [
+            49.012
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "control-ablation-2": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.993,
+          "minimum": 48.993,
+          "maximum": 48.993,
+          "cv_pct": 0.0,
+          "values": [
+            48.993
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "control-ablation-3": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 49.109,
+          "minimum": 49.109,
+          "maximum": 49.109,
+          "cv_pct": 0.0,
+          "values": [
+            49.109
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "control-ablation-4": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 49.052,
+          "minimum": 49.052,
+          "maximum": 49.052,
+          "cv_pct": 0.0,
+          "values": [
+            49.052
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "control-ablation-5": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 49.177,
+          "minimum": 49.177,
+          "maximum": 49.177,
+          "cv_pct": 0.0,
+          "values": [
+            49.177
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "control-ablation-6": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.993,
+          "minimum": 48.993,
+          "maximum": 48.993,
+          "cv_pct": 0.0,
+          "values": [
+            48.993
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "control-ablation-7": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 49.062,
+          "minimum": 49.062,
+          "maximum": 49.062,
+          "cv_pct": 0.0,
+          "values": [
+            49.062
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "cpu-run": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 49.067,
+          "minimum": 49.067,
+          "maximum": 49.067,
+          "cv_pct": 0.0,
+          "values": [
+            49.067
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "invalid-direct-ablation-1": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 50.514,
+          "minimum": 50.514,
+          "maximum": 50.514,
+          "cv_pct": 0.0,
+          "values": [
+            50.514
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "invalid-direct-ablation-2": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.81,
+          "minimum": 48.81,
+          "maximum": 48.81,
+          "cv_pct": 0.0,
+          "values": [
+            48.81
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "invalid-direct-ablation-3": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.787,
+          "minimum": 48.787,
+          "maximum": 48.787,
+          "cv_pct": 0.0,
+          "values": [
+            48.787
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "invalid-direct-ablation-4": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.79,
+          "minimum": 48.79,
+          "maximum": 48.79,
+          "cv_pct": 0.0,
+          "values": [
+            48.79
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "invalid-direct-ablation-5": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.662,
+          "minimum": 48.662,
+          "maximum": 48.662,
+          "cv_pct": 0.0,
+          "values": [
+            48.662
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "invalid-direct-ablation-6": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.614,
+          "minimum": 48.614,
+          "maximum": 48.614,
+          "cv_pct": 0.0,
+          "values": [
+            48.614
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "invalid-direct-ablation-7": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.988,
+          "minimum": 48.988,
+          "maximum": 48.988,
+          "cv_pct": 0.0,
+          "values": [
+            48.988
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "local-dtype-ablation-1": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.729,
+          "minimum": 48.729,
+          "maximum": 48.729,
+          "cv_pct": 0.0,
+          "values": [
+            48.729
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "local-dtype-ablation-2": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.949,
+          "minimum": 48.949,
+          "maximum": 48.949,
+          "cv_pct": 0.0,
+          "values": [
+            48.949
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "local-dtype-ablation-3": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.962,
+          "minimum": 48.962,
+          "maximum": 48.962,
+          "cv_pct": 0.0,
+          "values": [
+            48.962
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "local-dtype-ablation-4": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.888,
+          "minimum": 48.888,
+          "maximum": 48.888,
+          "cv_pct": 0.0,
+          "values": [
+            48.888
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "local-dtype-ablation-5": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.811,
+          "minimum": 48.811,
+          "maximum": 48.811,
+          "cv_pct": 0.0,
+          "values": [
+            48.811
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "local-dtype-ablation-6": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 49.026,
+          "minimum": 49.026,
+          "maximum": 49.026,
+          "cv_pct": 0.0,
+          "values": [
+            49.026
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "local-dtype-ablation-7": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.907,
+          "minimum": 48.907,
+          "maximum": 48.907,
+          "cv_pct": 0.0,
+          "values": [
+            48.907
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "local-dtype-components": {
+      "BenchmarkPass19Parts/CheckValues": {
+        "latency_us": {
+          "median": 0.7901,
+          "minimum": 0.7846000000000001,
+          "maximum": 0.7986,
+          "cv_pct": 0.64352795565187,
+          "values": [
+            0.7875,
+            0.7901,
+            0.7986,
+            0.7846000000000001,
+            0.7918999999999999,
+            0.7966,
+            0.7847999999999999
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass19Parts/RetainedLookup": {
+        "latency_us": {
+          "median": 0.3024,
+          "minimum": 0.29860000000000003,
+          "maximum": 0.3049,
+          "cv_pct": 0.5922043033162215,
+          "values": [
+            0.29860000000000003,
+            0.3023,
+            0.3049,
+            0.3008,
+            0.3025,
+            0.30269999999999997,
+            0.3024
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass19Parts/Acquisition": {
+        "latency_us": {
+          "median": 0.8561,
+          "minimum": 0.8481000000000001,
+          "maximum": 0.8616,
+          "cv_pct": 0.5775076793239662,
+          "values": [
+            0.8616,
+            0.8583999999999999,
+            0.8483999999999999,
+            0.852,
+            0.8481000000000001,
+            0.8561,
+            0.8588
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "metadata-compare-exact": {
+      "BenchmarkPass20Metadata/CompareExact": {
+        "latency_us": {
+          "median": 0.0361,
+          "minimum": 0.03543,
+          "maximum": 0.04063,
+          "cv_pct": 4.4662480237860365,
+          "values": [
+            0.04063,
+            0.03576,
+            0.03666,
+            0.03655,
+            0.03598,
+            0.0361,
+            0.03543
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "metadata": {
+      "BenchmarkPass20Metadata/Table": {
+        "latency_us": {
+          "median": 0.01048,
+          "minimum": 0.01041,
+          "maximum": 0.0106,
+          "cv_pct": 0.6533110313668393,
+          "values": [
+            0.01048,
+            0.0105,
+            0.0106,
+            0.01043,
+            0.01058,
+            0.01044,
+            0.01041
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass20Metadata/Validate": {
+        "latency_us": {
+          "median": 0.12869999999999998,
+          "minimum": 0.1274,
+          "maximum": 0.12940000000000002,
+          "cv_pct": 0.5254040185571928,
+          "values": [
+            0.12869999999999998,
+            0.12890000000000001,
+            0.1274,
+            0.1293,
+            0.1279,
+            0.12840000000000001,
+            0.12940000000000002
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass20Metadata/DataType": {
+        "latency_us": {
+          "median": 0.1311,
+          "minimum": 0.1298,
+          "maximum": 0.13369999999999999,
+          "cv_pct": 0.9957431433320569,
+          "values": [
+            0.131,
+            0.13340000000000002,
+            0.131,
+            0.1311,
+            0.13119999999999998,
+            0.1298,
+            0.13369999999999999
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass20Metadata/ShapeLocal": {
+        "latency_us": {
+          "median": 0.1656,
+          "minimum": 0.16419999999999998,
+          "maximum": 0.1686,
+          "cv_pct": 0.8888641193580293,
+          "values": [
+            0.16419999999999998,
+            0.16490000000000002,
+            0.1673,
+            0.1667,
+            0.1686,
+            0.16469999999999999,
+            0.1656
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass20Metadata/ShapeOwned": {
+        "latency_us": {
+          "median": 0.2337,
+          "minimum": 0.2311,
+          "maximum": 0.2363,
+          "cv_pct": 0.6771473993158172,
+          "values": [
+            0.2363,
+            0.2343,
+            0.2311,
+            0.2337,
+            0.2351,
+            0.2326,
+            0.233
+          ]
+        },
+        "bytes": [
+          240,
+          240,
+          240,
+          240,
+          240,
+          240,
+          240
+        ],
+        "allocs": [
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9
+        ]
+      },
+      "BenchmarkPass20Metadata/Rank": {
+        "latency_us": {
+          "median": 0.1278,
+          "minimum": 0.127,
+          "maximum": 0.1296,
+          "cv_pct": 0.6383185854939712,
+          "values": [
+            0.1278,
+            0.12830000000000003,
+            0.12869999999999998,
+            0.127,
+            0.1276,
+            0.1274,
+            0.1296
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass20Metadata/Len": {
+        "latency_us": {
+          "median": 0.1316,
+          "minimum": 0.1301,
+          "maximum": 0.1326,
+          "cv_pct": 0.6370317496954545,
+          "values": [
+            0.13219999999999998,
+            0.1316,
+            0.131,
+            0.1323,
+            0.1326,
+            0.13090000000000002,
+            0.1301
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass20Metadata/ByteSize": {
+        "latency_us": {
+          "median": 0.13419999999999999,
+          "minimum": 0.13319999999999999,
+          "maximum": 0.1346,
+          "cv_pct": 0.29945598386011724,
+          "values": [
+            0.1343,
+            0.13319999999999999,
+            0.13419999999999999,
+            0.1341,
+            0.1346,
+            0.13419999999999999,
+            0.134
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass20Metadata/Compare": {
+        "latency_us": {
+          "median": 0.02454,
+          "minimum": 0.02434,
+          "maximum": 0.02524,
+          "cv_pct": 1.2275399408870291,
+          "values": [
+            0.02454,
+            0.024579999999999998,
+            0.02434,
+            0.02437,
+            0.02486,
+            0.024399999999999998,
+            0.02524
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass20Metadata/CopyLocal": {
+        "latency_us": {
+          "median": 0.02042,
+          "minimum": 0.02036,
+          "maximum": 0.02053,
+          "cv_pct": 0.2528757001821417,
+          "values": [
+            0.02044,
+            0.02041,
+            0.020390000000000002,
+            0.02053,
+            0.02042,
+            0.02036,
+            0.02047
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "nodes": {
+      "BenchmarkMNISTNodes/00_Conv": {
+        "latency_us": {
+          "median": 7.746,
+          "minimum": 7.741,
+          "maximum": 7.754,
+          "cv_pct": 0.05408560630978863,
+          "values": [
+            7.748,
+            7.744,
+            7.747,
+            7.741,
+            7.746,
+            7.754,
+            7.741
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkMNISTNodes/01_Add": {
+        "latency_us": {
+          "median": 1.934,
+          "minimum": 1.913,
+          "maximum": 1.951,
+          "cv_pct": 0.6004817137840232,
+          "values": [
+            1.938,
+            1.924,
+            1.951,
+            1.934,
+            1.938,
+            1.923,
+            1.913
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkMNISTNodes/03_MaxPool": {
+        "latency_us": {
+          "median": 2.493,
+          "minimum": 2.467,
+          "maximum": 2.518,
+          "cv_pct": 0.714519195203745,
+          "values": [
+            2.517,
+            2.518,
+            2.495,
+            2.479,
+            2.481,
+            2.467,
+            2.493
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkMNISTNodes/04_Conv": {
+        "latency_us": {
+          "median": 27.114,
+          "minimum": 27.099,
+          "maximum": 27.189,
+          "cv_pct": 0.12691852309325932,
+          "values": [
+            27.135,
+            27.189,
+            27.181,
+            27.112,
+            27.103,
+            27.099,
+            27.114
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkMNISTNodes/05_Add": {
+        "latency_us": {
+          "median": 1.199,
+          "minimum": 1.188,
+          "maximum": 1.213,
+          "cv_pct": 0.6408776490210196,
+          "values": [
+            1.206,
+            1.202,
+            1.188,
+            1.213,
+            1.199,
+            1.195,
+            1.194
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkMNISTNodes/07_MaxPool": {
+        "latency_us": {
+          "median": 0.9679,
+          "minimum": 0.9567,
+          "maximum": 0.9778,
+          "cv_pct": 0.750486777450987,
+          "values": [
+            0.9612999999999999,
+            0.9679,
+            0.9662000000000001,
+            0.9778,
+            0.9718,
+            0.9567,
+            0.9772000000000001
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkMNISTNodes/10_MatMul": {
+        "latency_us": {
+          "median": 1.682,
+          "minimum": 1.676,
+          "maximum": 1.691,
+          "cv_pct": 0.26907234235317606,
+          "values": [
+            1.678,
+            1.676,
+            1.683,
+            1.682,
+            1.691,
+            1.685,
+            1.681
+          ]
+        },
+        "bytes": [
+          144,
+          144,
+          144,
+          144,
+          144,
+          144,
+          144
+        ],
+        "allocs": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      },
+      "BenchmarkMNISTNodes/11_Add": {
+        "latency_us": {
+          "median": 0.18259999999999998,
+          "minimum": 0.18130000000000002,
+          "maximum": 0.18409999999999999,
+          "cv_pct": 0.4901255141971234,
+          "values": [
+            0.18409999999999999,
+            0.18259999999999998,
+            0.1827,
+            0.18130000000000002,
+            0.18230000000000002,
+            0.18130000000000002,
+            0.18280000000000002
+          ]
+        },
+        "bytes": [
+          288,
+          288,
+          288,
+          288,
+          288,
+          288,
+          288
+        ],
+        "allocs": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    },
+    "parts": {
+      "BenchmarkPass19Parts/Bind": {
+        "latency_us": {
+          "median": 0.8044,
+          "minimum": 0.7992,
+          "maximum": 0.808,
+          "cv_pct": 0.3716798911860378,
+          "values": [
+            0.8065,
+            0.8044,
+            0.8022999999999999,
+            0.8055,
+            0.8005,
+            0.808,
+            0.7992
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass19Parts/CheckValues": {
+        "latency_us": {
+          "median": 0.91,
+          "minimum": 0.9025,
+          "maximum": 0.9115,
+          "cv_pct": 0.34640829511289917,
+          "values": [
+            0.9113,
+            0.9115,
+            0.9025,
+            0.91,
+            0.9103,
+            0.9055,
+            0.907
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass19Parts/Publish": {
+        "latency_us": {
+          "median": 0.1175,
+          "minimum": 0.1169,
+          "maximum": 0.1212,
+          "cv_pct": 1.136939863117581,
+          "values": [
+            0.1179,
+            0.1183,
+            0.1174,
+            0.1175,
+            0.1169,
+            0.1173,
+            0.1212
+          ]
+        },
+        "bytes": [
+          193,
+          193,
+          193,
+          193,
+          193,
+          193,
+          193
+        ],
+        "allocs": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      },
+      "BenchmarkPass19Parts/RetainedLookup": {
+        "latency_us": {
+          "median": 0.29769999999999996,
+          "minimum": 0.29510000000000003,
+          "maximum": 0.30260000000000004,
+          "cv_pct": 0.7495194478059126,
+          "values": [
+            0.2988,
+            0.29910000000000003,
+            0.29769999999999996,
+            0.29510000000000003,
+            0.29719999999999996,
+            0.30260000000000004,
+            0.2963
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass19Parts/DirectLookup": {
+        "latency_us": {
+          "median": 0.01094,
+          "minimum": 0.0106,
+          "maximum": 0.01148,
+          "cv_pct": 2.6755310886100125,
+          "values": [
+            0.01112,
+            0.0107,
+            0.01094,
+            0.0106,
+            0.01105,
+            0.01148,
+            0.01064
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass19Parts/Acquisition": {
+        "latency_us": {
+          "median": 0.8513,
+          "minimum": 0.843,
+          "maximum": 0.8827,
+          "cv_pct": 1.3851130960858844,
+          "values": [
+            0.8495,
+            0.8546,
+            0.8499,
+            0.8563999999999999,
+            0.8513,
+            0.843,
+            0.8827
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "pipeline": {
+      "BenchmarkMNISTPipeline/Bind": {
+        "latency_us": {
+          "median": 0.9497000000000001,
+          "minimum": 0.9468,
+          "maximum": 0.9539,
+          "cv_pct": 0.24366422801718668,
+          "values": [
+            0.952,
+            0.9477000000000001,
+            0.9497000000000001,
+            0.9484,
+            0.9468,
+            0.9505,
+            0.9539
+          ]
+        },
+        "bytes": [
+          496,
+          496,
+          496,
+          496,
+          496,
+          496,
+          496
+        ],
+        "allocs": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ]
+      },
+      "BenchmarkMNISTPipeline/PreparedGraph": {
+        "latency_us": {
+          "median": 45.607,
+          "minimum": 45.57,
+          "maximum": 45.823,
+          "cv_pct": 0.19171060061056208,
+          "values": [
+            45.607,
+            45.694,
+            45.591,
+            45.57,
+            45.823,
+            45.598,
+            45.74
+          ]
+        },
+        "bytes": [
+          592,
+          592,
+          592,
+          592,
+          592,
+          592,
+          592
+        ],
+        "allocs": [
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15
+        ]
+      }
+    },
+    "prepared-proof-ablation-1": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.792,
+          "minimum": 48.792,
+          "maximum": 48.792,
+          "cv_pct": 0.0,
+          "values": [
+            48.792
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "prepared-proof-ablation-2": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.92,
+          "minimum": 48.92,
+          "maximum": 48.92,
+          "cv_pct": 0.0,
+          "values": [
+            48.92
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "prepared-proof-ablation-3": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 53.348,
+          "minimum": 53.348,
+          "maximum": 53.348,
+          "cv_pct": 0.0,
+          "values": [
+            53.348
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "prepared-proof-ablation-4": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.833,
+          "minimum": 48.833,
+          "maximum": 48.833,
+          "cv_pct": 0.0,
+          "values": [
+            48.833
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "prepared-proof-ablation-5": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 49.014,
+          "minimum": 49.014,
+          "maximum": 49.014,
+          "cv_pct": 0.0,
+          "values": [
+            49.014
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "prepared-proof-ablation-6": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 48.794,
+          "minimum": 48.794,
+          "maximum": 48.794,
+          "cv_pct": 0.0,
+          "values": [
+            48.794
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "prepared-proof-ablation-7": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 52.224,
+          "minimum": 52.224,
+          "maximum": 52.224,
+          "cv_pct": 0.0,
+          "values": [
+            52.224
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "prepared-proof-components": {
+      "BenchmarkPass19Parts/CheckValues": {
+        "latency_us": {
+          "median": 0.9208999999999999,
+          "minimum": 0.9161,
+          "maximum": 0.9284,
+          "cv_pct": 0.5113497629640668,
+          "values": [
+            0.9203,
+            0.9172,
+            0.9284,
+            0.9208999999999999,
+            0.9161,
+            0.9268,
+            0.9276
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass19Parts/RetainedLookup": {
+        "latency_us": {
+          "median": 0.05233,
+          "minimum": 0.05102,
+          "maximum": 0.07648999999999999,
+          "cv_pct": 15.467811704571222,
+          "values": [
+            0.05233,
+            0.05112,
+            0.05102,
+            0.05233,
+            0.05275,
+            0.07648999999999999,
+            0.05256
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass19Parts/Acquisition": {
+        "latency_us": {
+          "median": 0.6277999999999999,
+          "minimum": 0.6261,
+          "maximum": 0.6473,
+          "cv_pct": 1.0977514661678809,
+          "values": [
+            0.6261,
+            0.6263,
+            0.6327,
+            0.6473,
+            0.6277999999999999,
+            0.63,
+            0.6277999999999999
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "prepared": {
+      "BenchmarkPass19Prepared/Traversal": {
+        "latency_us": {
+          "median": 44.639,
+          "minimum": 44.537,
+          "maximum": 44.976,
+          "cv_pct": 0.36638903219307795,
+          "values": [
+            44.976,
+            44.76,
+            44.591,
+            44.537,
+            44.553,
+            44.639,
+            44.912
+          ]
+        },
+        "bytes": [
+          576,
+          576,
+          576,
+          576,
+          576,
+          576,
+          576
+        ],
+        "allocs": [
+          14,
+          14,
+          14,
+          14,
+          14,
+          14,
+          14
+        ]
+      },
+      "BenchmarkPass19Prepared/Node00": {
+        "latency_us": {
+          "median": 7.733,
+          "minimum": 7.709,
+          "maximum": 7.768,
+          "cv_pct": 0.25145128003003164,
+          "values": [
+            7.754,
+            7.709,
+            7.751,
+            7.728,
+            7.733,
+            7.719,
+            7.768
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkPass19Prepared/Node01": {
+        "latency_us": {
+          "median": 1.889,
+          "minimum": 1.877,
+          "maximum": 1.904,
+          "cv_pct": 0.4503322670494546,
+          "values": [
+            1.889,
+            1.904,
+            1.88,
+            1.881,
+            1.889,
+            1.877,
+            1.892
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass19Prepared/Node02": {
+        "latency_us": {
+          "median": 0.873,
+          "minimum": 0.8667,
+          "maximum": 1.068,
+          "cv_pct": 8.470312253946167,
+          "values": [
+            0.8732000000000001,
+            0.8667,
+            1.008,
+            0.8674,
+            0.873,
+            0.8682000000000001,
+            1.068
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass19Prepared/Node03": {
+        "latency_us": {
+          "median": 2.437,
+          "minimum": 2.435,
+          "maximum": 2.461,
+          "cv_pct": 0.3747730174005865,
+          "values": [
+            2.436,
+            2.45,
+            2.437,
+            2.461,
+            2.436,
+            2.435,
+            2.447
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkPass19Prepared/Node04": {
+        "latency_us": {
+          "median": 27.133,
+          "minimum": 27.052,
+          "maximum": 27.464,
+          "cv_pct": 0.4703218959405077,
+          "values": [
+            27.052,
+            27.464,
+            27.149,
+            27.072,
+            27.173,
+            27.133,
+            27.119
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkPass19Prepared/Node05": {
+        "latency_us": {
+          "median": 1.167,
+          "minimum": 1.157,
+          "maximum": 1.222,
+          "cv_pct": 1.7455137938951895,
+          "values": [
+            1.165,
+            1.157,
+            1.165,
+            1.167,
+            1.169,
+            1.222,
+            1.186
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass19Prepared/Node06": {
+        "latency_us": {
+          "median": 0.4561,
+          "minimum": 0.451,
+          "maximum": 0.4703,
+          "cv_pct": 1.3929702238444688,
+          "values": [
+            0.4527,
+            0.451,
+            0.45180000000000003,
+            0.4567,
+            0.4561,
+            0.4703,
+            0.462
+          ]
+        },
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "allocs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "BenchmarkPass19Prepared/Node07": {
+        "latency_us": {
+          "median": 0.9592999999999999,
+          "minimum": 0.9481,
+          "maximum": 0.9682999999999999,
+          "cv_pct": 0.6634166883599026,
+          "values": [
+            0.9628,
+            0.9592999999999999,
+            0.9682999999999999,
+            0.9481,
+            0.9652999999999999,
+            0.9544,
+            0.9571000000000001
+          ]
+        },
+        "bytes": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkPass19Prepared/Node08": {
+        "latency_us": {
+          "median": 0.08559,
+          "minimum": 0.08511,
+          "maximum": 0.08606,
+          "cv_pct": 0.3651005833648312,
+          "values": [
+            0.0858,
+            0.08559,
+            0.08544,
+            0.08606,
+            0.08524,
+            0.0858,
+            0.08511
+          ]
+        },
+        "bytes": [
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16
+        ],
+        "allocs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "BenchmarkPass19Prepared/Node10": {
+        "latency_us": {
+          "median": 1.685,
+          "minimum": 1.674,
+          "maximum": 1.695,
+          "cv_pct": 0.4767928523343592,
+          "values": [
+            1.692,
+            1.678,
+            1.691,
+            1.675,
+            1.695,
+            1.674,
+            1.685
+          ]
+        },
+        "bytes": [
+          144,
+          144,
+          144,
+          144,
+          144,
+          144,
+          144
+        ],
+        "allocs": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      },
+      "BenchmarkPass19Prepared/Node11": {
+        "latency_us": {
+          "median": 0.18359999999999999,
+          "minimum": 0.18209999999999998,
+          "maximum": 0.18569999999999998,
+          "cv_pct": 0.5759822223403145,
+          "values": [
+            0.18569999999999998,
+            0.18209999999999998,
+            0.18280000000000002,
+            0.18380000000000002,
+            0.1834,
+            0.18359999999999999,
+            0.18430000000000002
+          ]
+        },
+        "bytes": [
+          288,
+          288,
+          288,
+          288,
+          288,
+          288,
+          288
+        ],
+        "allocs": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      }
+    },
+    "production-candidate-ramp-1": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 50.269,
+          "minimum": 50.269,
+          "maximum": 50.269,
+          "cv_pct": 0.0,
+          "values": [
+            50.269
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "production-candidate-ramp-2": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 48.708,
+          "minimum": 48.708,
+          "maximum": 48.708,
+          "cv_pct": 0.0,
+          "values": [
+            48.708
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "production-candidate-ramp-3": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 50.02,
+          "minimum": 50.02,
+          "maximum": 50.02,
+          "cv_pct": 0.0,
+          "values": [
+            50.02
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "production-candidate-ramp-4": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 48.932,
+          "minimum": 48.932,
+          "maximum": 48.932,
+          "cv_pct": 0.0,
+          "values": [
+            48.932
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "production-candidate-ramp-5": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 48.783,
+          "minimum": 48.783,
+          "maximum": 48.783,
+          "cv_pct": 0.0,
+          "values": [
+            48.783
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "production-candidate-ramp-6": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 48.72,
+          "minimum": 48.72,
+          "maximum": 48.72,
+          "cv_pct": 0.0,
+          "values": [
+            48.72
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "production-candidate-ramp-7": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 49.251,
+          "minimum": 49.251,
+          "maximum": 49.251,
+          "cv_pct": 0.0,
+          "values": [
+            49.251
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "production-merged-ramp-1": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 49.865,
+          "minimum": 49.865,
+          "maximum": 49.865,
+          "cv_pct": 0.0,
+          "values": [
+            49.865
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "production-merged-ramp-2": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 48.812,
+          "minimum": 48.812,
+          "maximum": 48.812,
+          "cv_pct": 0.0,
+          "values": [
+            48.812
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "production-merged-ramp-3": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 48.868,
+          "minimum": 48.868,
+          "maximum": 48.868,
+          "cv_pct": 0.0,
+          "values": [
+            48.868
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "production-merged-ramp-4": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 49.239,
+          "minimum": 49.239,
+          "maximum": 49.239,
+          "cv_pct": 0.0,
+          "values": [
+            49.239
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "production-merged-ramp-5": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 49.021,
+          "minimum": 49.021,
+          "maximum": 49.021,
+          "cv_pct": 0.0,
+          "values": [
+            49.021
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "production-merged-ramp-6": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 49.213,
+          "minimum": 49.213,
+          "maximum": 49.213,
+          "cv_pct": 0.0,
+          "values": [
+            49.213
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "production-merged-ramp-7": {
+      "BenchmarkMNIST": {
+        "latency_us": {
+          "median": 49.152,
+          "minimum": 49.152,
+          "maximum": 49.152,
+          "cv_pct": 0.0,
+          "values": [
+            49.152
+          ]
+        },
+        "bytes": [
+          1265
+        ],
+        "allocs": [
+          24
+        ]
+      }
+    },
+    "shell-ablation-1": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 3.825,
+          "minimum": 3.825,
+          "maximum": 3.825,
+          "cv_pct": 0.0,
+          "values": [
+            3.825
+          ]
+        },
+        "bytes": [
+          689
+        ],
+        "allocs": [
+          10
+        ]
+      }
+    },
+    "shell-ablation-2": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 4.212,
+          "minimum": 4.212,
+          "maximum": 4.212,
+          "cv_pct": 0.0,
+          "values": [
+            4.212
+          ]
+        },
+        "bytes": [
+          689
+        ],
+        "allocs": [
+          10
+        ]
+      }
+    },
+    "shell-ablation-3": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 3.703,
+          "minimum": 3.703,
+          "maximum": 3.703,
+          "cv_pct": 0.0,
+          "values": [
+            3.703
+          ]
+        },
+        "bytes": [
+          689
+        ],
+        "allocs": [
+          10
+        ]
+      }
+    },
+    "shell-ablation-4": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 3.697,
+          "minimum": 3.697,
+          "maximum": 3.697,
+          "cv_pct": 0.0,
+          "values": [
+            3.697
+          ]
+        },
+        "bytes": [
+          689
+        ],
+        "allocs": [
+          10
+        ]
+      }
+    },
+    "shell-ablation-5": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 3.696,
+          "minimum": 3.696,
+          "maximum": 3.696,
+          "cv_pct": 0.0,
+          "values": [
+            3.696
+          ]
+        },
+        "bytes": [
+          689
+        ],
+        "allocs": [
+          10
+        ]
+      }
+    },
+    "shell-ablation-6": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 3.72,
+          "minimum": 3.72,
+          "maximum": 3.72,
+          "cv_pct": 0.0,
+          "values": [
+            3.72
+          ]
+        },
+        "bytes": [
+          689
+        ],
+        "allocs": [
+          10
+        ]
+      }
+    },
+    "shell-ablation-7": {
+      "BenchmarkPass19Run": {
+        "latency_us": {
+          "median": 3.705,
+          "minimum": 3.705,
+          "maximum": 3.705,
+          "cv_pct": 0.0,
+          "values": [
+            3.705
+          ]
+        },
+        "bytes": [
+          689
+        ],
+        "allocs": [
+          10
+        ]
+      }
+    }
+  },
+  "frequency": {
+    "counter": {
+      "counts": {
+        "ByteSize": 18,
+        "Clone": 1,
+        "Conv2DShape": 2,
+        "DataType": 52,
+        "Pool2DShape": 2,
+        "Rank": 21,
+        "ReshapeShape": 1,
+        "Shape": 39,
+        "Validate": 161,
+        "ValidateShape": 42,
+        "newMatMulPlan": 1,
+        "newTensor": 1,
+        "shapesEqual": 20,
+        "validateDestination": 11,
+        "validateShapeSize": 204,
+        "validateTensorType": 27
+      },
+      "sites": {
+        "ByteSize <- github.com/itsmontoya/onnx.(*evaluation).bind": 1,
+        "ByteSize <- github.com/itsmontoya/onnx.(*evaluation).cloneOutput": 1,
+        "ByteSize <- github.com/itsmontoya/onnx.(*runStorage).destination": 7,
+        "ByteSize <- github.com/itsmontoya/onnx.(*runStorage).trim": 1,
+        "ByteSize <- github.com/itsmontoya/onnx/internal/graph.(*Constant).ByteSize": 8,
+        "Clone <- github.com/itsmontoya/onnx.(*evaluation).cloneOutput": 1,
+        "Conv2DShape <- github.com/itsmontoya/neuralnetwork/tensor.Conv2DInto": 2,
+        "DataType <- github.com/itsmontoya/onnx.(*destinationStorage).get": 9,
+        "DataType <- github.com/itsmontoya/onnx.(*evaluation).checkValue": 34,
+        "DataType <- github.com/itsmontoya/onnx.(*runStorage).destination": 9,
+        "Pool2DShape <- github.com/itsmontoya/neuralnetwork/tensor.validatePoolDestination": 2,
+        "Rank <- github.com/itsmontoya/onnx.(*evaluation).checkValue": 21,
+        "ReshapeShape <- github.com/itsmontoya/neuralnetwork/tensor.ReshapeInto": 1,
+        "Shape <- github.com/itsmontoya/onnx.(*destinationStorage).get": 9,
+        "Shape <- github.com/itsmontoya/onnx.(*evaluation).checkValue": 21,
+        "Shape <- github.com/itsmontoya/onnx.(*runStorage).destination": 9,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).ByteSize": 18,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Clone": 1,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).DataType": 52,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Rank": 21,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Shape": 39,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.ReshapeInto": 1,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.validateTensorType": 27,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.validateTransformInput": 1,
+        "Validate <- github.com/itsmontoya/onnx.(*Tensor).Validate": 1,
+        "ValidateShape <- github.com/itsmontoya/neuralnetwork/tensor.Conv2DShape": 6,
+        "ValidateShape <- github.com/itsmontoya/neuralnetwork/tensor.Pool2DShape": 4,
+        "ValidateShape <- github.com/itsmontoya/neuralnetwork/tensor.ReshapeShape": 2,
+        "ValidateShape <- github.com/itsmontoya/neuralnetwork/tensor.broadcastShapeInto": 27,
+        "ValidateShape <- github.com/itsmontoya/neuralnetwork/tensor.newMatMulPlan": 3,
+        "newMatMulPlan <- github.com/itsmontoya/neuralnetwork/tensor.MatMulInto": 1,
+        "newTensor <- github.com/itsmontoya/neuralnetwork/tensor.FromFloat32": 1,
+        "shapesEqual <- github.com/itsmontoya/neuralnetwork/tensor.ValidateBroadcastTo": 6,
+        "shapesEqual <- github.com/itsmontoya/neuralnetwork/tensor.binaryFloat32Into": 3,
+        "shapesEqual <- github.com/itsmontoya/neuralnetwork/tensor.validateDestination": 11,
+        "validateDestination <- github.com/itsmontoya/neuralnetwork/tensor.Conv2DInto": 2,
+        "validateDestination <- github.com/itsmontoya/neuralnetwork/tensor.MatMulInto": 1,
+        "validateDestination <- github.com/itsmontoya/neuralnetwork/tensor.ReLUPreservingNaNInto": 2,
+        "validateDestination <- github.com/itsmontoya/neuralnetwork/tensor.binaryFloat32Into": 3,
+        "validateDestination <- github.com/itsmontoya/neuralnetwork/tensor.copyTransformInto": 1,
+        "validateDestination <- github.com/itsmontoya/neuralnetwork/tensor.validatePoolDestination": 2,
+        "validateShapeSize <- github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Validate": 161,
+        "validateShapeSize <- github.com/itsmontoya/neuralnetwork/tensor.FromFloat32": 1,
+        "validateShapeSize <- github.com/itsmontoya/neuralnetwork/tensor.ValidateShape": 42,
+        "validateTensorType <- github.com/itsmontoya/neuralnetwork/tensor.Conv2DInto": 4,
+        "validateTensorType <- github.com/itsmontoya/neuralnetwork/tensor.MatMulInto": 2,
+        "validateTensorType <- github.com/itsmontoya/neuralnetwork/tensor.ReLUPreservingNaNInto": 2,
+        "validateTensorType <- github.com/itsmontoya/neuralnetwork/tensor.binaryFloat32Into": 6,
+        "validateTensorType <- github.com/itsmontoya/neuralnetwork/tensor.validateDestination": 11,
+        "validateTensorType <- github.com/itsmontoya/neuralnetwork/tensor.validatePoolDestination": 2
+      },
+      "matrix": {
+        "Shape": 1,
+        "ValuesInto": 1,
+        "matrixSize": 7,
+        "validate": 4
+      }
+    },
+    "counter-candidate": {
+      "counts": {
+        "ByteSize": 18,
+        "Clone": 1,
+        "Conv2DShape": 2,
+        "DataType": 39,
+        "Pool2DShape": 2,
+        "Rank": 21,
+        "ReshapeShape": 1,
+        "Shape": 39,
+        "Validate": 148,
+        "ValidateShape": 42,
+        "newMatMulPlan": 1,
+        "newTensor": 1,
+        "shapesEqual": 20,
+        "validateDestination": 11,
+        "validateShapeSize": 191,
+        "validateTensorType": 27
+      },
+      "sites": {
+        "ByteSize <- github.com/itsmontoya/onnx.(*evaluation).bind": 1,
+        "ByteSize <- github.com/itsmontoya/onnx.(*evaluation).cloneOutput": 1,
+        "ByteSize <- github.com/itsmontoya/onnx.(*runStorage).destination": 7,
+        "ByteSize <- github.com/itsmontoya/onnx.(*runStorage).trim": 1,
+        "ByteSize <- github.com/itsmontoya/onnx/internal/graph.(*Constant).ByteSize": 8,
+        "Clone <- github.com/itsmontoya/onnx.(*evaluation).cloneOutput": 1,
+        "Conv2DShape <- github.com/itsmontoya/neuralnetwork/tensor.Conv2DInto": 2,
+        "DataType <- github.com/itsmontoya/onnx.(*destinationStorage).get": 9,
+        "DataType <- github.com/itsmontoya/onnx.(*evaluation).checkValue": 21,
+        "DataType <- github.com/itsmontoya/onnx.(*runStorage).destination": 9,
+        "Pool2DShape <- github.com/itsmontoya/neuralnetwork/tensor.validatePoolDestination": 2,
+        "Rank <- github.com/itsmontoya/onnx.(*evaluation).checkValue": 21,
+        "ReshapeShape <- github.com/itsmontoya/neuralnetwork/tensor.ReshapeInto": 1,
+        "Shape <- github.com/itsmontoya/onnx.(*destinationStorage).get": 9,
+        "Shape <- github.com/itsmontoya/onnx.(*evaluation).checkValue": 21,
+        "Shape <- github.com/itsmontoya/onnx.(*runStorage).destination": 9,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).ByteSize": 18,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Clone": 1,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).DataType": 39,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Rank": 21,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Shape": 39,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.ReshapeInto": 1,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.validateTensorType": 27,
+        "Validate <- github.com/itsmontoya/neuralnetwork/tensor.validateTransformInput": 1,
+        "Validate <- github.com/itsmontoya/onnx.(*Tensor).Validate": 1,
+        "ValidateShape <- github.com/itsmontoya/neuralnetwork/tensor.Conv2DShape": 6,
+        "ValidateShape <- github.com/itsmontoya/neuralnetwork/tensor.Pool2DShape": 4,
+        "ValidateShape <- github.com/itsmontoya/neuralnetwork/tensor.ReshapeShape": 2,
+        "ValidateShape <- github.com/itsmontoya/neuralnetwork/tensor.broadcastShapeInto": 27,
+        "ValidateShape <- github.com/itsmontoya/neuralnetwork/tensor.newMatMulPlan": 3,
+        "newMatMulPlan <- github.com/itsmontoya/neuralnetwork/tensor.MatMulInto": 1,
+        "newTensor <- github.com/itsmontoya/neuralnetwork/tensor.FromFloat32": 1,
+        "shapesEqual <- github.com/itsmontoya/neuralnetwork/tensor.ValidateBroadcastTo": 6,
+        "shapesEqual <- github.com/itsmontoya/neuralnetwork/tensor.binaryFloat32Into": 3,
+        "shapesEqual <- github.com/itsmontoya/neuralnetwork/tensor.validateDestination": 11,
+        "validateDestination <- github.com/itsmontoya/neuralnetwork/tensor.Conv2DInto": 2,
+        "validateDestination <- github.com/itsmontoya/neuralnetwork/tensor.MatMulInto": 1,
+        "validateDestination <- github.com/itsmontoya/neuralnetwork/tensor.ReLUPreservingNaNInto": 2,
+        "validateDestination <- github.com/itsmontoya/neuralnetwork/tensor.binaryFloat32Into": 3,
+        "validateDestination <- github.com/itsmontoya/neuralnetwork/tensor.copyTransformInto": 1,
+        "validateDestination <- github.com/itsmontoya/neuralnetwork/tensor.validatePoolDestination": 2,
+        "validateShapeSize <- github.com/itsmontoya/neuralnetwork/tensor.(*Tensor).Validate": 148,
+        "validateShapeSize <- github.com/itsmontoya/neuralnetwork/tensor.FromFloat32": 1,
+        "validateShapeSize <- github.com/itsmontoya/neuralnetwork/tensor.ValidateShape": 42,
+        "validateTensorType <- github.com/itsmontoya/neuralnetwork/tensor.Conv2DInto": 4,
+        "validateTensorType <- github.com/itsmontoya/neuralnetwork/tensor.MatMulInto": 2,
+        "validateTensorType <- github.com/itsmontoya/neuralnetwork/tensor.ReLUPreservingNaNInto": 2,
+        "validateTensorType <- github.com/itsmontoya/neuralnetwork/tensor.binaryFloat32Into": 6,
+        "validateTensorType <- github.com/itsmontoya/neuralnetwork/tensor.validateDestination": 11,
+        "validateTensorType <- github.com/itsmontoya/neuralnetwork/tensor.validatePoolDestination": 2
+      },
+      "matrix": {
+        "Shape": 1,
+        "ValuesInto": 1,
+        "matrixSize": 7,
+        "validate": 4
+      }
+    }
+  },
+  "metal": {
+    "backend-metal-host-serialized": {
+      "skips": 0,
+      "passes": 5705,
+      "failures": 0
+    },
+    "backend-metal-host-stress": {
+      "skips": 0,
+      "passes": 5,
+      "failures": 0
+    },
+    "backend-metal-sandbox-serialized": {
+      "skips": 46,
+      "passes": 5628,
+      "failures": 0
+    },
+    "onnx-metal-sandbox-serialized": {
+      "skips": 0,
+      "passes": 2043,
+      "failures": 0
+    },
+    "onnx-metal-host-serialized": {
+      "skips": 0,
+      "passes": 2043,
+      "failures": 0
+    }
+  },
+  "decision": "One ONNX-only optimization: reuse actual dtype within each value check; no backend changes.",
+  "roadmap": {
+    "1.25": {
+      "go_target_us": 55.83375,
+      "further_reduction_us": 0
+    },
+    "1.1": {
+      "go_target_us": 49.133700000000005,
+      "further_reduction_us": 1.783299999999997
+    }
+  }
+}
