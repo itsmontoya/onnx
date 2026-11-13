@@ -1,0 +1,70 @@
+
+// destinationBudget declines retention unless all allocation geometry is static
+// and its extra residency fits beside a conservative complete-Run reservation.
+func (p *executionPlan) destinationBudget(ctx context.Context) (bytes int64) {
+	available := p.preparedLiveBudget(ctx)
+	for position, step := range p.steps {
+		if ctx.Err() != nil {
+			return 0
+		}
+
+		if step.Operator == "Identity" || step.Operator == "Constant" {
+			continue
+		}
+
+		if position >= len(p.calls) || p.calls[position] == nil {
+			return 0
+		}
+
+		call := p.calls[position]
+		var (
+			shape    []int64
+			dataType = Float32
+			size     int64
+		)
+
+		switch step.Operator {
+		case "Conv", "MaxPool":
+			if call.cnn == nil {
+				return 0
+			}
+			shape, size = call.cnn.shape, call.cnn.bytes
+		case "Add", "Relu", "MatMul":
+			if call.numerical == nil {
+				return 0
+			}
+			shape, size = call.numerical.shape, call.numerical.bytes
+		case "Reshape":
+			if call.shape == nil {
+				return 0
+			}
+			shape, size, dataType = call.shape.shape, call.shape.bytes, call.shape.dataType
+		default:
+			return 0
+		}
+		// Check actual prepared geometry before using declared sizes as a bound.
+		info := p.values[step.Outputs[0]].Info
+		if !info.ShapeKnown || info.DataType != dataType || len(info.Dimensions) != len(shape) {
+			return 0
+		}
+
+		for axis, dimension := range info.Dimensions {
+			if dimension.Kind != graph.FixedDimension || dimension.Value != shape[axis] {
+				return 0
+			}
+		}
+		if call.retained != nil {
+			continue
+		}
+
+		if size > p.limits.MaxTensorBytes || size > available-bytes {
+			return 0
+		}
+
+		bytes += size
+	}
+	if bytes > 0 {
+		p.destinationMinimum = p.limits.MaxLiveBytes - available + bytes
+	}
+	return bytes
+}
