@@ -21,8 +21,7 @@ float NaN/infinity/zero identity. Inputs include both raw and typed TensorProto
 encodings; expected outputs use typed fields. Reference checks independently
 verify the literal expectations. The Go harness uses the runtime's shared
 bounded TensorProto decoder; it never routes integer values through floats.
-No repository LICENSE is present; these original fixtures have no separately
-declared license. Their origin is recorded without implying a formal license.
+See the project [LICENSE](../../LICENSE) for these original fixtures.
 
 ## Pinned upstream selection
 

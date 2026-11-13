@@ -5,12 +5,12 @@ inline float32 initializers, and `["batch", 2]` named I/O. `mlp.onnx` is
 Gemm/Relu/Gemm/Softmax. `branch.onnx` extends its logits with Add/Softmax/Sub,
 accepts `features` and `residual`, and returns `probabilities` and `delta`.
 Each has actual ONNX reference goldens for batch sizes 1 and 3. No upstream
-model is copied. No repository LICENSE is present; these original artifacts
-have no separately declared license. Origin does not establish a license.
+model is copied. See the project [LICENSE](../../LICENSE) for these original
+artifacts.
 
 [provenance.json](provenance.json) records each model and named TensorProto
-value's SHA-256, exact IR/import/schema versions, original source, license gap,
-comparison policy and actual reference observation. Float32 values retain raw
+value's SHA-256, exact IR/import/schema versions, original source, license status
+at generation, comparison policy and actual reference observation. Float32 values retain raw
 bits in the TensorProto payload. All artifacts are used by normal offline Go
 tests through RT-10's bounded typed-value decoder and hash/comparison helpers.
 

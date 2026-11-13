@@ -34,8 +34,8 @@ pooling windows, and the literal float32 normalization expression
 `atol=rtol=1e-5`, NaNs by classification, and infinity signs exactly. Zero tie
 signs and NaN payloads have no cross-backend promise. Model and every named
 TensorProto value have SHA-256 records verified by the existing Go harness.
-There is no repository LICENSE; original fixtures have no separately declared
-license. No upstream model is copied into this set.
+See the project [LICENSE](../../LICENSE) for these original fixtures.
+No upstream model is copied into this set.
 
 Important retained oracle boundaries:
 

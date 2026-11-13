@@ -1,11 +1,10 @@
 # Third-party sources and notices
 
 This inventory identifies included upstream artifacts and the dependencies in
-`go.mod`. It does not assign a license to this repository's runtime source or
-original fixtures: **no root project LICENSE is present**. Maintainers must
-resolve that licensing decision before public release. Provenance/original
-authorship does not supply a license. Preserve the listed license texts and
-source notices when packaging a source archive or a binary distribution.
+`go.mod`. See [LICENSE](../LICENSE) for the project license. Historical fixture
+provenance manifests record the licensing status when generated and predate
+that file. Preserve the listed license texts and source notices when packaging
+a source archive or a binary distribution.
 
 ## Included ONNX artifacts
 
@@ -22,14 +21,14 @@ generator headers. [Conformance provenance](../testdata/conformance/provenance.j
 records each copied upstream model/value path and SHA-256. These unchanged IR-7
 models are rejection tests, not numerical support claims. Original M1/M2/M3,
 inference, session and external fixtures have no separately declared license;
-their provenance records this gap explicitly.
+see the project [LICENSE](../LICENSE).
 
 RT-19 additionally includes [33 byte-original models and the enabled models’
 values/source export](../testdata/corpus/README.md) under this same Apache-2.0
 license. The pinned archive has no NOTICE; exact source paths/hashes and notices
 are in [the corpus index](../testdata/corpus/index.json). Nineteen normalization
-models execute; fourteen remain negative fixtures. The separate original
-normalization helper graphs have no redistribution grant or project license.
+models execute; fourteen remain negative fixtures. For the separate original
+normalization helper graphs, see the project [LICENSE](../LICENSE).
 
 ## Go runtime dependencies
 
