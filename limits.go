@@ -9,8 +9,10 @@ import (
 )
 
 // Limits bounds logical payload and tensor reservations, excluding Go allocation
-// overhead and outputs retained from earlier runs. Zero fields select defaults;
-// negative or host-unrepresentable limits fail before any I/O.
+// overhead and outputs retained from earlier runs. Retained Session destination
+// payload is included in MaxLiveBytes in addition to invocation reservations.
+// Zero fields select defaults; negative or host-unrepresentable limits fail
+// before any I/O.
 type Limits struct {
 	MaxModelBytes       int64
 	MaxLoadBytes        int64
