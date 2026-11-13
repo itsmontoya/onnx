@@ -5,3 +5,8 @@
 /tools/__pycache__/
 /docs
 /tools
+!/tools/
+/tools/*
+!/tools/compare_runtime/
+/tools/compare_runtime/*
+!/tools/compare_runtime/pass16/
