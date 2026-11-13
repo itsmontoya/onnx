@@ -1,0 +1,239 @@
+package tensor
+
+import (
+	"math"
+	"testing"
+
+	"github.com/itsmontoya/neuralnetwork/matrix"
+)
+
+// BenchmarkPass16Add separates the existing adapter from non-production ceilings.
+func BenchmarkPass16Add(b *testing.B) {
+	var (
+		left, right, destination        *Tensor
+		leftMatrix, rightMatrix, output *matrix.Matrix
+		values                          []float32
+		err                             error
+	)
+
+	left = pass16Tensor(b, []int64{1, 10}, 3)
+	right = pass16Tensor(b, []int64{1, 10}, 7)
+	destination = pass16Tensor(b, []int64{1, 10}, 0)
+	if leftMatrix, err = matrix.FromSlice(1, 10, left.floats); err != nil {
+		b.Fatal(err)
+	}
+
+	if rightMatrix, err = matrix.FromSlice(1, 10, right.floats); err != nil {
+		b.Fatal(err)
+	}
+
+	if output, err = matrix.New(1, 10); err != nil {
+		b.Fatal(err)
+	}
+
+	for _, mode := range []string{
+		"Complete", "Adapter", "FromSlice", "New", "MatrixAdd", "Values",
+		"ValuesInto", "FourCopies", "ArithmeticCeiling", "ValidatedCeiling",
+	} {
+		b.Run(mode, func(part *testing.B) {
+			var (
+				first, second = make([]float32, 10), make([]float32, 10)
+				third, fourth = make([]float32, 10), make([]float32, 10)
+			)
+
+			part.ReportAllocs()
+			for part.Loop() {
+				switch mode {
+				case "Complete":
+					err = AddInto(left, right, destination)
+				case "Adapter":
+					err = matrixBinaryInto(left, right, destination, (*matrix.Matrix).AddInto)
+				case "FromSlice":
+					output, err = matrix.FromSlice(1, 10, left.floats)
+				case "New":
+					output, err = matrix.New(1, 10)
+				case "MatrixAdd":
+					err = leftMatrix.AddInto(rightMatrix, output)
+				case "Values":
+					values, err = output.Values()
+				case "ValuesInto":
+					err = output.ValuesInto(destination.floats)
+				case "FourCopies":
+					copy(first, left.floats)
+					copy(second, right.floats)
+					copy(third, first)
+					copy(fourth, third)
+				case "ArithmeticCeiling":
+					pass16Add(left, right, destination)
+				case "ValidatedCeiling":
+					if err = pass16ValidateAdd(left, right, destination); err == nil {
+						pass16Add(left, right, destination)
+					}
+				}
+				if err != nil {
+					part.Fatal(err)
+				}
+			}
+			// Keep independently measured copies and returned storage observable.
+			part.StopTimer()
+			if mode == "FourCopies" && (fourth[0] != left.floats[0] || second[0] != right.floats[0]) {
+				part.Fatal("copy mismatch")
+			}
+
+			if mode == "Values" && len(values) != 10 {
+				part.Fatal("values length mismatch")
+			}
+		})
+	}
+}
+
+// BenchmarkPass16MatMul keeps staging and planning scopes distinct.
+func BenchmarkPass16MatMul(b *testing.B) {
+	var (
+		left        = pass16Tensor(b, []int64{1, 256}, 3)
+		right       = pass16Tensor(b, []int64{256, 10}, 7)
+		destination = pass16Tensor(b, []int64{1, 10}, 0)
+		plan        *matMulPlan
+		err         error
+	)
+
+	if plan, err = newMatMulPlan(left.shape, right.shape); err != nil {
+		b.Fatal(err)
+	}
+
+	for _, mode := range []string{
+		"Complete", "Plan", "BatchesWithStaging", "ProductInto", "OutputCopy", "ValidatedProductCeiling",
+	} {
+		b.Run(mode, func(part *testing.B) {
+			var temporary = make([]float32, 10)
+			part.ReportAllocs()
+			for part.Loop() {
+				switch mode {
+				case "Complete":
+					err = MatMulInto(left, right, destination)
+				case "Plan":
+					plan, err = newMatMulPlan(left.shape, right.shape)
+				case "BatchesWithStaging":
+					err = matMulBatchesInto(left, right, destination, plan)
+				case "ProductInto":
+					err = matrixProductInto(left.floats, right.floats, left.shape, right.shape, false, false, destination.floats)
+				case "OutputCopy":
+					copy(temporary, left.floats[:10])
+				case "ValidatedProductCeiling":
+					if err = validateTensorType("left", left, Float32); err == nil {
+						err = validateTensorType("right", right, Float32)
+					}
+
+					if err == nil {
+						err = validateDestination(destination, Float32, plan.shape, left, right)
+					}
+
+					if err == nil {
+						err = matrixProductInto(left.floats, right.floats, left.shape, right.shape, false, false, destination.floats)
+					}
+				}
+				if err != nil {
+					part.Fatal(err)
+				}
+			}
+			part.StopTimer()
+			if mode == "OutputCopy" && temporary[0] != left.floats[0] {
+				part.Fatal("copy mismatch")
+			}
+		})
+	}
+}
+
+func TestPass16Ceilings(t *testing.T) {
+	var (
+		left      = pass16Tensor(t, []int64{1, 10}, 3)
+		right     = pass16Tensor(t, []int64{1, 10}, 7)
+		complete  = pass16Tensor(t, []int64{1, 10}, 0)
+		ceiling   = pass16Tensor(t, []int64{1, 10}, 0)
+		leftCopy  = append([]float32(nil), left.floats...)
+		rightCopy = append([]float32(nil), right.floats...)
+		err       error
+	)
+
+	if err = AddInto(left, right, complete); err != nil {
+		t.Fatal(err)
+	}
+
+	if err = pass16ValidateAdd(left, right, ceiling); err != nil {
+		t.Fatal(err)
+	}
+
+	pass16Add(left, right, ceiling)
+	pass16EqualBits(t, complete.floats, ceiling.floats)
+	pass16EqualBits(t, leftCopy, left.floats)
+	pass16EqualBits(t, rightCopy, right.floats)
+	left = pass16Tensor(t, []int64{1, 256}, 3)
+	right = pass16Tensor(t, []int64{256, 10}, 7)
+	leftCopy = append(leftCopy[:0], left.floats...)
+	rightCopy = append(rightCopy[:0], right.floats...)
+	if err = MatMulInto(left, right, complete); err != nil {
+		t.Fatal(err)
+	}
+
+	if err = matrixProductInto(left.floats, right.floats, left.shape, right.shape, false, false, ceiling.floats); err != nil {
+		t.Fatal(err)
+	}
+
+	pass16EqualBits(t, complete.floats, ceiling.floats)
+	pass16EqualBits(t, leftCopy, left.floats)
+	pass16EqualBits(t, rightCopy, right.floats)
+}
+
+func pass16Tensor(tb testing.TB, shape []int64, offset int) (out *Tensor) {
+	tb.Helper()
+	var err error
+	if out, err = New(Float32, shape); err != nil {
+		tb.Fatal(err)
+	}
+
+	for index := range out.floats {
+		out.floats[index] = float32((index+offset)%29-14) * 0.125
+	}
+	return out
+}
+
+func pass16Add(left, right, destination *Tensor) {
+	for index, value := range left.floats {
+		destination.floats[index] = value + right.floats[index]
+	}
+}
+
+// pass16ValidateAdd preserves public Add validation but deliberately bypasses adapters.
+func pass16ValidateAdd(left, right, destination *Tensor) (err error) {
+	var (
+		buffer [broadcastStackRank]int64
+		shape  []int64
+	)
+
+	if err = validateTensorType("left", left, Float32); err != nil {
+		return err
+	}
+
+	if err = validateTensorType("right", right, Float32); err != nil {
+		return err
+	}
+
+	if shape, err = broadcastShapeInto(left.shape, right.shape, buffer[:]); err != nil {
+		return err
+	}
+
+	return validateDestination(destination, Float32, shape, left, right)
+}
+
+func pass16EqualBits(t *testing.T, expected, actual []float32) {
+	t.Helper()
+	if len(expected) != len(actual) {
+		t.Fatal("value count mismatch")
+	}
+
+	for index, value := range expected {
+		if math.Float32bits(value) != math.Float32bits(actual[index]) {
+			t.Fatalf("value %d differs: %g versus %g", index, value, actual[index])
+		}
+	}
+}

@@ -1,0 +1,718 @@
+{
+  "control": {
+    "timing": {
+      "go": {
+        "median": 54.9795,
+        "minimum": 53.292,
+        "maximum": 55.125,
+        "cv_pct": 1.281744762765025,
+        "values": [
+          54.604,
+          54.9795,
+          53.292,
+          55.125,
+          53.7085,
+          55.125,
+          55.0835
+        ]
+      },
+      "ort": {
+        "median": 42.25,
+        "minimum": 41.792,
+        "maximum": 43.8125,
+        "cv_pct": 1.471535982674332,
+        "values": [
+          41.792,
+          42.042,
+          42.25,
+          42.25,
+          42.75,
+          42.125,
+          43.8125
+        ]
+      }
+    },
+    "ratio": 1.3012899408284024,
+    "ramp": {
+      "median": 54.945,
+      "minimum": 54.263,
+      "maximum": 55.81,
+      "cv_pct": 0.951995414511967,
+      "values": [
+        54.263,
+        54.754,
+        54.505,
+        55.429,
+        54.945,
+        55.81,
+        55.484
+      ],
+      "bytes": 92874,
+      "allocs": 73
+    },
+    "nodes": {
+      "BenchmarkMNISTNodes/01_Add": {
+        "median": 1.882,
+        "minimum": 1.865,
+        "maximum": 2.278,
+        "cv_pct": 7.192514062278573,
+        "values": [
+          1.893,
+          1.871,
+          1.865,
+          1.871,
+          1.882,
+          1.907,
+          2.278
+        ],
+        "bytes": [
+          0
+        ],
+        "allocs": [
+          0
+        ]
+      },
+      "BenchmarkMNISTNodes/05_Add": {
+        "median": 1.158,
+        "minimum": 1.148,
+        "maximum": 1.169,
+        "cv_pct": 0.6334488375543033,
+        "values": [
+          1.15,
+          1.169,
+          1.161,
+          1.163,
+          1.158,
+          1.148,
+          1.15
+        ],
+        "bytes": [
+          0
+        ],
+        "allocs": [
+          0
+        ]
+      },
+      "BenchmarkMNISTNodes/10_MatMul": {
+        "median": 1.622,
+        "minimum": 1.59,
+        "maximum": 1.635,
+        "cv_pct": 0.9582484032788916,
+        "values": [
+          1.601,
+          1.59,
+          1.622,
+          1.608,
+          1.63,
+          1.627,
+          1.635
+        ],
+        "bytes": [
+          144
+        ],
+        "allocs": [
+          3
+        ]
+      },
+      "BenchmarkMNISTNodes/11_Add": {
+        "median": 0.19169999999999998,
+        "minimum": 0.1901,
+        "maximum": 0.2303,
+        "cv_pct": 6.877602846456331,
+        "values": [
+          0.1928,
+          0.19169999999999998,
+          0.19030000000000002,
+          0.1901,
+          0.19069999999999998,
+          0.2303,
+          0.2022
+        ],
+        "bytes": [
+          336
+        ],
+        "allocs": [
+          7
+        ]
+      }
+    },
+    "load": {
+      "BenchmarkMNISTPreparation/LoadBytes": {
+        "median": 373.64,
+        "minimum": 367.763,
+        "maximum": 377.854,
+        "cv_pct": 1.0729651547239272,
+        "values": [
+          377.739,
+          367.763,
+          370.27,
+          373.64,
+          377.854
+        ],
+        "bytes": [
+          345317,
+          345319,
+          345807
+        ],
+        "allocs": [
+          2563,
+          2566
+        ]
+      },
+      "BenchmarkMNISTPreparation/Session": {
+        "median": 0.02597,
+        "minimum": 0.02578,
+        "maximum": 0.02606,
+        "cv_pct": 0.45512698167549354,
+        "values": [
+          0.02606,
+          0.02606,
+          0.02597,
+          0.02582,
+          0.02578
+        ],
+        "bytes": [
+          24
+        ],
+        "allocs": [
+          1
+        ]
+      }
+    },
+    "module": {
+      "Path": "github.com/itsmontoya/neuralnetwork",
+      "Version": "v0.10.9",
+      "Time": "2026-11-12T22:04:41Z",
+      "Dir": "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.9",
+      "GoMod": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.9.mod",
+      "GoVersion": "1.26.1",
+      "Sum": "h1:kmfxkbiZZ8fbw0cxCxvar2nfYJ2Bx6kci/QUNH0w6oQ=",
+      "GoModSum": "h1:4ha7jggW7cxuYy1EIaGUvn6aLe8NBt8BLOYm4to6y+Y="
+    }
+  },
+  "candidate": {
+    "timing": {
+      "go": {
+        "median": 54.625,
+        "minimum": 54.209,
+        "maximum": 55.2295,
+        "cv_pct": 0.5819489385805885,
+        "values": [
+          54.583,
+          54.375,
+          54.209,
+          54.625,
+          54.7295,
+          54.958,
+          55.2295
+        ]
+      },
+      "ort": {
+        "median": 42.0835,
+        "minimum": 41.625,
+        "maximum": 44.084,
+        "cv_pct": 2.042008311059149,
+        "values": [
+          42.208,
+          41.625,
+          41.833,
+          42.0835,
+          44.084,
+          43.5,
+          41.959
+        ]
+      }
+    },
+    "ratio": 1.2980146613280739,
+    "ramp": {
+      "median": 55.264,
+      "minimum": 53.637,
+      "maximum": 55.575,
+      "cv_pct": 1.182730459567465,
+      "values": [
+        55.264,
+        53.637,
+        55.195,
+        54.501,
+        55.558,
+        55.575,
+        55.327
+      ],
+      "bytes": 92826,
+      "allocs": 72
+    },
+    "nodes": {
+      "BenchmarkMNISTNodes/01_Add": {
+        "median": 1.873,
+        "minimum": 1.868,
+        "maximum": 1.895,
+        "cv_pct": 0.4642373209695563,
+        "values": [
+          1.868,
+          1.868,
+          1.875,
+          1.88,
+          1.895,
+          1.872,
+          1.873
+        ],
+        "bytes": [
+          0
+        ],
+        "allocs": [
+          0
+        ]
+      },
+      "BenchmarkMNISTNodes/05_Add": {
+        "median": 1.168,
+        "minimum": 1.154,
+        "maximum": 1.507,
+        "cv_pct": 9.864170949051456,
+        "values": [
+          1.168,
+          1.161,
+          1.507,
+          1.154,
+          1.158,
+          1.18,
+          1.172
+        ],
+        "bytes": [
+          0
+        ],
+        "allocs": [
+          0
+        ]
+      },
+      "BenchmarkMNISTNodes/10_MatMul": {
+        "median": 1.66,
+        "minimum": 1.636,
+        "maximum": 1.858,
+        "cv_pct": 4.284230112138866,
+        "values": [
+          1.685,
+          1.65,
+          1.636,
+          1.66,
+          1.643,
+          1.858,
+          1.662
+        ],
+        "bytes": [
+          144
+        ],
+        "allocs": [
+          3
+        ]
+      },
+      "BenchmarkMNISTNodes/11_Add": {
+        "median": 0.1812,
+        "minimum": 0.17980000000000002,
+        "maximum": 0.2119,
+        "cv_pct": 5.788206602502113,
+        "values": [
+          0.1846,
+          0.2119,
+          0.18080000000000002,
+          0.18059999999999998,
+          0.18159999999999998,
+          0.17980000000000002,
+          0.1812
+        ],
+        "bytes": [
+          288
+        ],
+        "allocs": [
+          6
+        ]
+      }
+    },
+    "load": {
+      "BenchmarkMNISTPreparation/LoadBytes": {
+        "median": 377.222,
+        "minimum": 375.123,
+        "maximum": 378.457,
+        "cv_pct": 0.2934362769519163,
+        "values": [
+          378.457,
+          377.608,
+          376.754,
+          377.222,
+          375.123
+        ],
+        "bytes": [
+          345317,
+          345330,
+          345807
+        ],
+        "allocs": [
+          2563,
+          2566
+        ]
+      },
+      "BenchmarkMNISTPreparation/Session": {
+        "median": 0.02606,
+        "minimum": 0.02597,
+        "maximum": 0.026350000000000002,
+        "cv_pct": 0.547264152100786,
+        "values": [
+          0.026350000000000002,
+          0.026199999999999998,
+          0.02606,
+          0.02599,
+          0.02597
+        ],
+        "bytes": [
+          24
+        ],
+        "allocs": [
+          1
+        ]
+      }
+    },
+    "module": {
+      "Path": "github.com/itsmontoya/neuralnetwork",
+      "Version": "v0.10.10",
+      "Time": "2026-11-13T16:47:26Z",
+      "Dir": "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.10",
+      "GoMod": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.10.mod",
+      "GoVersion": "1.26.1",
+      "Sum": "h1:CcoQQN8w9aGodz61FQGKSWtbnKzAHf/gtXbukwVUkj0=",
+      "GoModSum": "h1:4ha7jggW7cxuYy1EIaGUvn6aLe8NBt8BLOYm4to6y+Y="
+    }
+  },
+  "saving_us": 0.3545000000000016,
+  "saving_pct": 0.6447857837921436,
+  "paired_savings_us": {
+    "median": 0.021000000000000796,
+    "minimum": -1.0210000000000008,
+    "maximum": 0.6045000000000016,
+    "cv_pct": null,
+    "values": [
+      0.021000000000000796,
+      0.6045000000000016,
+      -0.9170000000000016,
+      0.5,
+      -1.0210000000000008,
+      0.1670000000000016,
+      -0.1460000000000008
+    ]
+  },
+  "maximum_absolute_error": 1.9073486328125e-05,
+  "go_outputs_bit_identical": true,
+  "purego_comparison_passed": true,
+  "environment": {
+    "go": "go version go1.27.2 darwin/arm64",
+    "macos": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.2\nBuildVersion:\t\t25F84\n",
+    "kernel": "Darwin Joshs-MacBook-Air.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:19:21 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T8122 arm64\n",
+    "hardware": {
+      "chip_type": "Apple M3",
+      "machine_model": "Mac15,13",
+      "physical_memory": "24 GB",
+      "number_processors": "proc 8:4:4:0"
+    },
+    "performance_environment": {
+      "CGO_ENABLED": "0",
+      "GOMAXPROCS": "1",
+      "GOWORK": "off",
+      "GOARM64": "v8.0",
+      "GOFLAGS": "",
+      "GOCACHE": "/private/tmp/onnx-pass6/go-cache"
+    },
+    "onnx_head": "0803d3ea12ae02597592d014e4792c95ec5ca364",
+    "publication": {
+      "Path": "github.com/itsmontoya/neuralnetwork",
+      "Version": "v0.10.10",
+      "Info": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.10.info",
+      "GoMod": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.10.mod",
+      "Zip": "/Users/itsmontoya/go/pkg/mod/cache/download/github.com/itsmontoya/neuralnetwork/@v/v0.10.10.zip",
+      "Dir": "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.10",
+      "Sum": "h1:CcoQQN8w9aGodz61FQGKSWtbnKzAHf/gtXbukwVUkj0=",
+      "GoModSum": "h1:4ha7jggW7cxuYy1EIaGUvn6aLe8NBt8BLOYm4to6y+Y=",
+      "Origin": {
+        "VCS": "git",
+        "URL": "https://github.com/itsmontoya/neuralnetwork",
+        "Hash": "2ffa5bd9fd2034382c49d14efc732ea4d026aa09",
+        "Ref": "refs/tags/v0.10.10"
+      }
+    }
+  },
+  "fingerprints": {
+    "inputs": {
+      "ones": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "c0acddaeb5e08ca7c6f0ab859e008b5ea5544cac1fe9eea8d644f87f071f9eab"
+        }
+      },
+      "random_000": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "176fa0b1e1ee7eddcbcea1ef7478755003e7ee7dcfae4b6cc3dc2805932c2820"
+        }
+      },
+      "random_001": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "8ae1c04f8f442f02d7f28c429fb89ea83e23aebb3e9310a7b9a137e6f51ec85f"
+        }
+      },
+      "random_002": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "dfefaf5cb13ad561f419a569fca6b817acaf23a9303cfc94dd54d907d6d004c0"
+        }
+      },
+      "random_003": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "00734f81a156ee0f0fa97beafa9a63b4d853fee4d03a798e8394a3c9a5113514"
+        }
+      },
+      "random_004": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "616ac4efa5d17440e682dc6c2ae12f4ec34cdc5670aa511e096d35125a5cfc25"
+        }
+      },
+      "random_005": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "6a4e3a56943ca9a4d8d31b1c1b6e536a7862c4a3961268f6524980137c07909c"
+        }
+      },
+      "random_006": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "6bdbb98df77b722da63fc5c00f82550f1b58f4165d464c4372dbbddc3c826399"
+        }
+      },
+      "random_007": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "8437d852784dbf81f6bc1f64979f0998a36228e2af3af154fc3d7527bd403057"
+        }
+      },
+      "random_008": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "d87876570c4a5b070004761581c385cb478d7f9e101e66234de300fde02cc8fe"
+        }
+      },
+      "random_009": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "ddb6214f4cd44dd7bb0eddcd8803af3606f7e7587ff95b29e0974718311fc664"
+        }
+      },
+      "random_010": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "2754bb8698278fe949707ebfebe22c0bd940aaa4983611ef00f042afb16c5e75"
+        }
+      },
+      "random_011": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "8ccaf6e0bf83d4dcd3d16b5a172a6d58e2ab4b10a5dd05cafff07e845ba563e1"
+        }
+      },
+      "random_012": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "32d9f3b55a7214737d0df76be2ec22ad32d24cf12dc6c0fc167a09014a821cfb"
+        }
+      },
+      "random_013": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "9912799b2c78c88426d7afb84bb0da3c45f18b5ae01f6c93741ede07d45e4d06"
+        }
+      },
+      "random_014": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "e9512622a3753782eaa7afa9b5ec4ff8b0b43186fe11c7a4f8e4f64b133c6a3a"
+        }
+      },
+      "random_015": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "7a8ae2cfb4ba02fbacd95d205d46770b6597f1bd3fe6e7bdf81a071cd7f19e0d"
+        }
+      },
+      "upstream": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "45aee9887638608634bd6d5da3a112f58166f6cab0bbaf552d028d61c3303561"
+        }
+      },
+      "zeros": {
+        "Input3": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            1,
+            28,
+            28
+          ],
+          "sha256": "b00cd820a573181c37db022786eec519e6440cc3643181e0449da9c3f8f3e271"
+        }
+      }
+    },
+    "model": "310384d2500a063def1ed3ad5b448baeda1edd5a570f137cb82cb11b7c25c05d",
+    "driver": "9f32bdc790f2b323c53ac2d8fa1a8f777be8daa8d9f73aac3cd32f6f63b2bdae",
+    "runner": {
+      "run_result.go": "f1357afe5986ff398f752f9cdc7d7415eb32b0d13e7740c161ec63f1539bd64f",
+      "runner.go": "9d1f4a83da63fd38ae8609ffc45b40d3bd81aa30b77d04085f7d4296a8832eec",
+      "tensor_data.go": "e29a7e66c44068b91f73c200f5ad04aaf3230a47475966f3c6a3c4965cd200ac"
+    }
+  },
+  "source_sha256": {
+    "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/go.mod": "ea39afd1896ab0e0fd0f78fc542c8c1fdc0e143df95c5c708e6a2603b41f53c8",
+    "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/go.sum": "6e5567ed483c01c1ac295861df670364ac3223ae980415498a70edf9aac9acf1",
+    "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime.py": "9f32bdc790f2b323c53ac2d8fa1a8f777be8daa8d9f73aac3cd32f6f63b2bdae",
+    "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/run_result.go": "f1357afe5986ff398f752f9cdc7d7415eb32b0d13e7740c161ec63f1539bd64f",
+    "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/runner.go": "9d1f4a83da63fd38ae8609ffc45b40d3bd81aa30b77d04085f7d4296a8832eec",
+    "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/tools/compare_runtime/tensor_data.go": "e29a7e66c44068b91f73c200f5ad04aaf3230a47475966f3c6a3c4965cd200ac",
+    "/Users/itsmontoya/go/src/github.com/itsmontoya/onnx/.cache/compare-runtime/mnist-ir8-opset13.onnx": "310384d2500a063def1ed3ad5b448baeda1edd5a570f137cb82cb11b7c25c05d",
+    "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.10/tensor/arithmetic.go": "1871d67c75ba43a14d7fef63c86668abb2a4014ef515604d22e3930287b9feb1",
+    "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.10/tensor/matmul.go": "6e25371057916d7dc99f51f046230fa333cd5dfd848a95bd82d5067481c5c15c"
+  },
+  "validation_failures": [
+    {
+      "name": "backend-test-metal-host",
+      "command": [
+        "go",
+        "test",
+        "-count=1",
+        "-tags=metal",
+        "./..."
+      ],
+      "environment": {
+        "CGO_ENABLED": "1",
+        "GOMAXPROCS": "2"
+      },
+      "cwd": "/Users/itsmontoya/go/pkg/mod/github.com/itsmontoya/neuralnetwork@v0.10.10",
+      "exit_code": 1,
+      "elapsed_s": 5.661433290690184
+    }
+  ],
+  "metal_validation": {
+    "detail": "backend-metal-host-detail.txt",
+    "skipped_tests": 0
+  },
+  "replay_source_sha256": {
+    "tools/compare_runtime/pass16/release/measure.py": "3cfa39e2c6e183ac54cc2b8e80aece2765a21f516edc6b662f63446193c48669",
+    "tools/compare_runtime/pass16/release/summarize.py": "8c5fadb3bd0f2a690453e507d36f06497d8fd6a468036bff9998626f7babf596",
+    "tools/compare_runtime/pass15/measure.py": "2b3f2c34bf56d15834b4528aeb1b1bd635839b678cd9ecb2163481de4c5c4f92"
+  }
+}
