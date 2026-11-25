@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 
 	"github.com/itsmontoya/neuralnetwork/gpu"
 	"github.com/itsmontoya/onnx/internal/graph"
@@ -31,7 +32,6 @@ func newMetalPlan(ctx context.Context, values []operators.Value, steps []operato
 	p.device = device
 	p.options = options
 	p.weights = make(map[int]*gpu.Tensor)
-	p.rowBiases = make(map[int]*gpu.Tensor)
 	p.stats = GPUStats{
 		Active:          true,
 		WeightPrecision: options.WeightPrecision,
@@ -48,18 +48,16 @@ func newMetalPlan(ctx context.Context, values []operators.Value, steps []operato
 // metalPlan owns the immutable Metal device handle and pre-uploaded constant
 // weights shared across sessions of one loaded Model.
 type metalPlan struct {
-	device    *gpu.Device
-	options   ExecutionOptions
-	weights   map[int]*gpu.Tensor
-	rowBiases map[int]*gpu.Tensor
-	stats     GPUStats
+	device  *gpu.Device
+	options ExecutionOptions
+	weights map[int]*gpu.Tensor
+	stats   GPUStats
 }
 
 func (p *metalPlan) uploadConstants(ctx context.Context, values []operators.Value, steps []operators.Step) (err error) {
 	var (
 		constants       = make([]*graph.Constant, len(values))
 		usedGeneral     = make([]bool, len(values))
-		usedRowBias     = make([]bool, len(values))
 		needsFloat32    = make([]bool, len(values))
 		reducedEligible = make([]bool, len(values))
 	)
@@ -84,7 +82,7 @@ func (p *metalPlan) uploadConstants(ctx context.Context, values []operators.Valu
 			continue
 		}
 
-		p.classifyStepInputs(step, constants, usedGeneral, usedRowBias, needsFloat32, reducedEligible)
+		p.classifyStepInputs(step, constants, usedGeneral, needsFloat32, reducedEligible)
 	}
 
 	for index, constant := range constants {
@@ -92,12 +90,15 @@ func (p *metalPlan) uploadConstants(ctx context.Context, values []operators.Valu
 			return err
 		}
 
-		if constant == nil || (!usedGeneral[index] && !usedRowBias[index]) {
+		if constant == nil || !usedGeneral[index] {
 			continue
 		}
 
 		shape := constant.Borrow().Shape()
-		if !positiveShape(shape) {
+		uploadShape := shape
+		if len(shape) == 0 {
+			uploadShape = []int64{1}
+		} else if !validGPUShape(shape) {
 			continue
 		}
 
@@ -106,30 +107,18 @@ func (p *metalPlan) uploadConstants(ctx context.Context, values []operators.Valu
 			return fmt.Errorf("read constant %q for Metal upload: %w", values[index].Name, err)
 		}
 
-		if usedGeneral[index] {
-			dtype := gpu.Float32
-			if p.options.WeightPrecision != WeightFloat32 && reducedEligible[index] && !needsFloat32[index] && len(shape) == 2 {
-				dtype = p.options.WeightPrecision.gpuDType()
-			}
-
-			var weight *gpu.Tensor
-			if weight, err = p.uploadTensor(shape, dtype, hostValues); err != nil {
-				return fmt.Errorf("upload Metal weight %q: %w", values[index].Name, err)
-			}
-
-			p.weights[index] = weight
-			p.recordWeight(weight, uint64(len(hostValues))*4)
+		dtype := gpu.Float32
+		if p.options.WeightPrecision != WeightFloat32 && reducedEligible[index] && !needsFloat32[index] && len(shape) >= 1 && len(shape) <= 6 {
+			dtype = p.options.WeightPrecision.gpuDType()
 		}
 
-		if usedRowBias[index] && len(shape) == 1 {
-			var bias *gpu.Tensor
-			if bias, err = p.uploadTensor([]int64{1, shape[0]}, gpu.Float32, hostValues); err != nil {
-				return fmt.Errorf("upload Metal row bias %q: %w", values[index].Name, err)
-			}
-
-			p.rowBiases[index] = bias
-			p.recordWeight(bias, uint64(len(hostValues))*4)
+		var weight *gpu.Tensor
+		if weight, err = p.uploadTensor(uploadShape, dtype, hostValues); err != nil {
+			return fmt.Errorf("upload Metal weight %q: %w", values[index].Name, err)
 		}
+
+		p.weights[index] = weight
+		p.recordWeight(weight, uint64(len(hostValues))*4)
 	}
 
 	return nil
@@ -139,7 +128,6 @@ func (p *metalPlan) classifyStepInputs(
 	step operators.Step,
 	constants []*graph.Constant,
 	usedGeneral []bool,
-	usedRowBias []bool,
 	needsFloat32 []bool,
 	reducedEligible []bool,
 ) {
@@ -152,7 +140,11 @@ func (p *metalPlan) classifyStepInputs(
 
 		if right := step.Inputs[1]; right >= 0 {
 			usedGeneral[right] = true
-			reducedEligible[right] = true
+			if constants[right] != nil && constants[right].Rank() >= 2 && constants[right].Rank() <= 6 {
+				reducedEligible[right] = true
+			} else {
+				needsFloat32[right] = true
+			}
 		}
 	case "Gemm":
 		if left := step.Inputs[0]; left >= 0 {
@@ -162,38 +154,66 @@ func (p *metalPlan) classifyStepInputs(
 
 		if right := step.Inputs[1]; right >= 0 {
 			usedGeneral[right] = true
-			reducedEligible[right] = true
+			if constants[right] != nil && constants[right].Rank() == 2 {
+				reducedEligible[right] = true
+			} else {
+				needsFloat32[right] = true
+			}
 		}
 
 		if len(step.Inputs) > 2 && step.Inputs[2] >= 0 {
 			bias := step.Inputs[2]
+			usedGeneral[bias] = true
 			needsFloat32[bias] = true
-			if constants[bias] != nil && constants[bias].Rank() == 1 {
-				usedRowBias[bias] = true
-			} else {
-				usedGeneral[bias] = true
-			}
 		}
-	case "Add", "Mul":
+	case "Add", "Sub", "Mul", "Div":
 		if left := step.Inputs[0]; left >= 0 {
 			usedGeneral[left] = true
 			needsFloat32[left] = true
 		}
 
 		if right := step.Inputs[1]; right >= 0 {
+			usedGeneral[right] = true
 			needsFloat32[right] = true
-			if constants[right] != nil && constants[right].Rank() == 1 {
-				usedRowBias[right] = true
-				usedGeneral[right] = true
+		}
+	case "Relu", "Sigmoid", "Tanh", "Softmax", "Transpose", "Reshape", "Flatten", "Squeeze", "Unsqueeze":
+		if input := step.Inputs[0]; input >= 0 {
+			usedGeneral[input] = true
+			needsFloat32[input] = true
+		}
+	case "LayerNormalization":
+		if input := step.Inputs[0]; input >= 0 {
+			usedGeneral[input] = true
+			needsFloat32[input] = true
+		}
+
+		if scale := step.Inputs[1]; scale >= 0 {
+			usedGeneral[scale] = true
+			if constants[scale] != nil && constants[scale].Rank() == 1 {
+				reducedEligible[scale] = true
 			} else {
-				usedGeneral[right] = true
+				needsFloat32[scale] = true
+			}
+		}
+
+		if len(step.Inputs) > 2 && step.Inputs[2] >= 0 {
+			bias := step.Inputs[2]
+			usedGeneral[bias] = true
+			if constants[bias] != nil && constants[bias].Rank() == 1 {
+				reducedEligible[bias] = true
+			} else {
+				needsFloat32[bias] = true
 			}
 		}
 	case "Gather":
 		if step.Axis == 0 && step.Inputs[0] >= 0 {
 			data := step.Inputs[0]
 			usedGeneral[data] = true
-			reducedEligible[data] = true
+			if constants[data] != nil && constants[data].Rank() == 2 {
+				reducedEligible[data] = true
+			} else {
+				needsFloat32[data] = true
+			}
 		}
 	}
 }
@@ -233,14 +253,6 @@ func (p *metalPlan) close() (err error) {
 		delete(p.weights, index)
 	}
 
-	for index, bias := range p.rowBiases {
-		if bias != nil {
-			err = errors.Join(err, bias.Close())
-		}
-
-		delete(p.rowBiases, index)
-	}
-
 	if p.device != nil {
 		err = errors.Join(err, p.device.Close())
 		p.device = nil
@@ -258,6 +270,23 @@ func positiveShape(shape []int64) (ok bool) {
 		if dimension <= 0 {
 			return false
 		}
+	}
+
+	return true
+}
+
+func validGPUShape(shape []int64) (ok bool) {
+	if !positiveShape(shape) {
+		return false
+	}
+
+	count := int64(1)
+	for _, dimension := range shape {
+		if dimension > math.MaxUint32/count {
+			return false
+		}
+
+		count *= dimension
 	}
 
 	return true
