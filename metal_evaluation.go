@@ -542,14 +542,14 @@ func (m *metalEvaluation) tryLayerNorm(e *evaluation, step operators.Step) (hand
 	}
 
 	var (
-		xIdx      = step.Inputs[0]
-		wIdx      = step.Inputs[1]
-		hasBias   = len(step.Inputs) > 2 && step.Inputs[2] >= 0
-		xType     DataType
-		wType     DataType
-		xShape    []int64
-		wShape    []int64
-		axis      int
+		xIdx    = step.Inputs[0]
+		wIdx    = step.Inputs[1]
+		hasBias = len(step.Inputs) > 2 && step.Inputs[2] >= 0
+		xType   DataType
+		wType   DataType
+		xShape  []int64
+		wShape  []int64
+		axis    int
 	)
 
 	xType, xShape = m.valueMeta(e, xIdx)

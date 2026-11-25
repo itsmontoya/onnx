@@ -8,9 +8,9 @@ import (
 
 // BenchmarkMetalVsCPU compares warm CPU and opt-in Metal execution across
 // FP32, FP16, and BF16 resident weights on checked-in inference fixtures
-// (mlp.onnx, branch.onnx), a 100%-resident ONNX graph
-// (Gather -> Gemm -> Mul -> Gemm -> Add -> Identity), and a hybrid MLP graph
-// (Gemm -> Relu [CPU fallback] -> Gemm).
+// (mlp.onnx), a 100%-resident FFN graph, a fully resident MLP graph
+// (Gemm -> Relu -> Gemm, formerly hybrid in ONNX-01), and a complete
+// resident Transformer encoder block.
 func BenchmarkMetalVsCPU(b *testing.B) {
 	const (
 		vocab  int64 = 4096
@@ -112,6 +112,40 @@ func BenchmarkMetalVsCPU(b *testing.B) {
 					}
 
 					benchmarkModelMode(sub, hybridGraph, inputs, mode.execution)
+				})
+			}
+		})
+	}
+
+	transformerConfigs := []struct {
+		name    string
+		batch   int64
+		seqLen  int64
+		heads   int64
+		headDim int64
+		ffn     int64
+	}{
+		{"TransformerBlock_B1_S16", 1, 16, 8, 64, 2048},
+		{"TransformerBlock_B4_S32", 4, 32, 8, 64, 2048},
+	}
+
+	for _, cfg := range transformerConfigs {
+		b.Run(cfg.name, func(group *testing.B) {
+			graph := buildTransformerEncoderBlockGraph(group, cfg.batch, cfg.seqLen, cfg.heads, cfg.headDim, cfg.ffn)
+			hiddenDim := cfg.heads * cfg.headDim
+			x, err := NewFloat32([]int64{cfg.batch, cfg.seqLen, hiddenDim}, deterministicFloats(int(cfg.batch*cfg.seqLen*hiddenDim), 1201))
+			if err != nil {
+				group.Fatal(err)
+			}
+
+			inputs := map[string]*Tensor{"x": x}
+			for _, mode := range modes {
+				group.Run(mode.name, func(sub *testing.B) {
+					if mode.execution.Device == DeviceMetal && !metalAvailable() {
+						sub.Skip("Metal device unavailable in this build or host")
+					}
+
+					benchmarkModelMode(sub, graph, inputs, mode.execution)
 				})
 			}
 		})
