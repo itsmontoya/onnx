@@ -36,6 +36,8 @@ func operationError(stage string, cause error, value string) (out *Error) {
 		diagnostic.Kind = ErrLimit
 	case errors.Is(cause, ErrUnsupported):
 		diagnostic.Kind = ErrUnsupported
+	case errors.Is(cause, ErrUnavailable):
+		diagnostic.Kind = ErrUnavailable
 	case errors.Is(cause, ErrInvalidModel), errors.Is(cause, decode.ErrInvalidWire), errors.Is(cause, decode.ErrInvalidTensor):
 		diagnostic.Kind = ErrInvalidModel
 	}

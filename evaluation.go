@@ -32,6 +32,7 @@ type evaluation struct {
 	plan      *executionPlan
 	budget    *runBudget
 	storage   runStorage
+	metal     *metalEvaluation
 	symbols   map[string]int64
 	arguments [3]*tensor.Tensor
 }
@@ -155,6 +156,25 @@ func (e *evaluation) bind(inputs map[string]*Tensor) (err error) {
 }
 
 func (e *evaluation) execute(step operators.Step) (err error) {
+	if e.metal != nil {
+		var handled bool
+		if handled, err = e.metal.tryStep(e, step); err != nil {
+			return err
+		}
+
+		if handled {
+			return nil
+		}
+
+		if err = e.metal.materializeInputs(e, step); err != nil {
+			return err
+		}
+
+		if step.Operator != "Constant" && step.Operator != "Identity" {
+			e.metal.stats.HostFallbackOps++
+		}
+	}
+
 	if step.Operator == "LayerNormalization" {
 		return e.normalize(step)
 	}
@@ -323,11 +343,14 @@ func (e *evaluation) nodeArguments(count int) (inputs []*tensor.Tensor) {
 }
 
 func (e *evaluation) checkValue(value operators.Value, backend *tensor.Tensor, kind error) (err error) {
-	if backend.Rank() > e.plan.limits.MaxRank {
-		return fmt.Errorf("%w: runtime rank %d", ErrLimit, backend.Rank())
+	return e.checkValueShape(value, backend.DataType(), backend.Shape(), kind)
+}
+
+func (e *evaluation) checkValueShape(value operators.Value, dataType DataType, shape []int64, kind error) (err error) {
+	if len(shape) > e.plan.limits.MaxRank {
+		return fmt.Errorf("%w: runtime rank %d", ErrLimit, len(shape))
 	}
 
-	shape := backend.Shape()
 	for axis, size := range shape {
 		if err = e.ctx.Err(); err != nil {
 			return err
@@ -340,7 +363,6 @@ func (e *evaluation) checkValue(value operators.Value, backend *tensor.Tensor, k
 
 	// Inference can refine away a symbol or unknown axis. Original declarations
 	// still constrain that concrete value and bind symbols for the entire run.
-	dataType := backend.DataType()
 	for _, declaration := range value.Declarations {
 		if err = e.checkInfo(declaration, dataType, shape, kind); err != nil {
 			return err
@@ -413,6 +435,12 @@ func (e *evaluation) constantValue(constant *graph.Constant) (out *tensor.Tensor
 }
 
 func (e *evaluation) publish(indices []int) (outputs []NamedTensor, err error) {
+	if e.metal != nil {
+		if err = e.metal.flush(); err != nil {
+			return nil, err
+		}
+	}
+
 	outputs = make([]NamedTensor, len(indices))
 	for index, valueIndex := range indices {
 		if err = e.ctx.Err(); err != nil {
@@ -420,8 +448,17 @@ func (e *evaluation) publish(indices []int) (outputs []NamedTensor, err error) {
 		}
 
 		name := e.plan.values[valueIndex].Name
+		var source *tensor.Tensor
+		if e.metal != nil && e.storage.values[valueIndex] == nil && e.metal.values[valueIndex] != nil {
+			if source, err = e.metal.materialize(e, valueIndex); err != nil {
+				return nil, operationError("run", err, name)
+			}
+		} else {
+			source = e.storage.values[valueIndex]
+		}
+
 		var value *Tensor
-		if value, err = e.cloneOutput(e.storage.values[valueIndex]); err != nil {
+		if value, err = e.cloneOutput(source); err != nil {
 			return nil, operationError("run", err, name)
 		}
 
@@ -459,8 +496,12 @@ func (e *evaluation) nodeError(step operators.Step, cause error) (out *Error) {
 	diagnostic.Domain, diagnostic.Operator, diagnostic.Opset = step.Domain, step.Operator, step.Opset
 	for _, index := range step.Inputs {
 		var shape []int64
-		if index >= 0 && e.storage.values[index] != nil {
-			shape = e.storage.values[index].Shape()
+		if index >= 0 {
+			if e.storage.values[index] != nil {
+				shape = e.storage.values[index].Shape()
+			} else if e.metal != nil {
+				shape = e.metal.shapeOf(index)
+			}
 		}
 
 		diagnostic.Shapes = append(diagnostic.Shapes, shape)
