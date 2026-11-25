@@ -83,6 +83,10 @@ func LoadFile(ctx context.Context, path string, options Options) (out *Model, er
 func newModel(plan *executionPlan) (out *Model) {
 	var m Model
 	m.plan, m.metadata, m.initialized = plan, plan.metadata, true
+	if plan.metal != nil {
+		m.gpuStats = plan.metal.stats
+	}
+
 	return &m
 }
 
@@ -93,6 +97,7 @@ type Model struct {
 	mu          sync.Mutex
 	plan        *executionPlan
 	metadata    Metadata
+	gpuStats    GPUStats
 	initialized bool
 	closed      bool
 }
@@ -105,6 +110,16 @@ func (m *Model) Metadata() (metadata Metadata) {
 	}
 
 	return m.metadata.clone()
+}
+
+// GPUStats returns immutable model-level Metal residency statistics, including
+// after Close. CPU, nil, and zero models return the zero value.
+func (m *Model) GPUStats() (stats GPUStats) {
+	if m == nil || !m.initialized {
+		return stats
+	}
+
+	return m.gpuStats
 }
 
 // NewSession reserves one of the plan's finite session slots. Creation and
@@ -143,7 +158,16 @@ func (m *Model) Close() (err error) {
 		return ErrInvalidArgument
 	}
 
+	if m.closed {
+		return nil
+	}
+
+	plan := m.plan
 	m.closed, m.plan = true, nil
+	if plan != nil {
+		return plan.releaseModel()
+	}
+
 	return nil
 }
 
@@ -179,11 +203,12 @@ func loadModel(ctx context.Context, wire *onnxpb.ModelProto, encodedBytes int64,
 		return nil, operationError("load", err, "")
 	}
 
-	if plan, err = newExecutionPlan(ctx, compiled, limits); err != nil {
+	if plan, err = newExecutionPlan(ctx, compiled, limits, options.Execution); err != nil {
 		return nil, operationError("load", err, "")
 	}
 
 	if err = ctx.Err(); err != nil {
+		_ = plan.releaseModel()
 		return nil, operationError("load", err, "")
 	}
 

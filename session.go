@@ -2,6 +2,7 @@ package onnx
 
 import (
 	"context"
+	"errors"
 	"sync"
 )
 
@@ -9,6 +10,11 @@ func newSession(plan *executionPlan) (out *Session) {
 	var s Session
 	s.plan, s.initialized = plan, true
 	s.destinations = newDestinationStorage(plan.destinationLimit, plan.destinationMinimum, len(plan.steps))
+	if plan.metal != nil {
+		s.metalCache = newMetalCache(plan.metal.device)
+		s.gpuStats.Active = true
+	}
+
 	return &s
 }
 
@@ -20,9 +26,36 @@ func newSession(plan *executionPlan) (out *Session) {
 type Session struct {
 	mu           sync.Mutex
 	destinations destinationStorage
+	metalCache   *metalCache
+	gpuStats     SessionGPUStats
 	plan         *executionPlan
 	initialized  bool
 	closed       bool
+}
+
+// GPUStats returns Metal execution counters from the most recent Run and
+// current cached activation buffer accounting. CPU, nil, or zero sessions
+// return the zero value. Overlapping with an active Run returns ErrBusy.
+func (s *Session) GPUStats() (stats SessionGPUStats, err error) {
+	if s == nil {
+		return stats, ErrInvalidArgument
+	}
+
+	if !s.mu.TryLock() {
+		return stats, ErrBusy
+	}
+
+	defer s.mu.Unlock()
+	if !s.initialized {
+		return stats, ErrInvalidArgument
+	}
+
+	stats = s.gpuStats
+	if s.metalCache != nil {
+		stats.ActivationBuffers, stats.ActivationBytes = s.metalCache.stats()
+	}
+
+	return stats, nil
 }
 
 // Run binds all required/defaulted inputs and executes every node serially.
@@ -57,6 +90,10 @@ func (s *Session) Run(ctx context.Context, inputs map[string]*Tensor, options Ru
 		return nil, operationError("run", err, "")
 	}
 
+	if s.plan.metal != nil {
+		run.metal = newMetalEvaluation(ctx, s.plan.metal, s.metalCache, len(s.plan.values))
+	}
+
 	if s.plan.limits.MaxLiveBytes < s.destinations.minimumLive {
 		s.destinations = destinationStorage{}
 	}
@@ -66,7 +103,23 @@ func (s *Session) Run(ctx context.Context, inputs map[string]*Tensor, options Ru
 	// reservation, including workspace, invalid bindings and output clones.
 	run.budget.live += s.destinations.bytes
 	if outputs, err = run.run(inputs, options); err != nil {
+		if run.metal != nil {
+			_ = run.metal.close()
+			_ = s.metalCache.close()
+			s.gpuStats = run.metal.stats
+		}
+
 		return nil, operationError("run", err, "")
+	}
+
+	if run.metal != nil {
+		if closeErr := run.metal.close(); closeErr != nil {
+			_ = s.metalCache.close()
+			return nil, operationError("run", closeErr, "")
+		}
+
+		s.gpuStats = run.metal.stats
+		s.gpuStats.ActivationBuffers, s.gpuStats.ActivationBytes = s.metalCache.stats()
 	}
 
 	return outputs, nil
@@ -94,7 +147,15 @@ func (s *Session) Close() (err error) {
 	}
 
 	s.destinations = destinationStorage{}
-	s.plan.release()
+	if s.metalCache != nil {
+		err = errors.Join(err, s.metalCache.close())
+		s.metalCache = nil
+	}
+
+	if s.plan != nil {
+		err = errors.Join(err, s.plan.release())
+	}
+
 	s.closed, s.plan = true, nil
-	return nil
+	return err
 }

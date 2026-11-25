@@ -10,8 +10,9 @@ import (
 	"github.com/itsmontoya/onnx/internal/operators"
 )
 
-func newExecutionPlan(ctx context.Context, compiled *operators.Plan, limits Limits) (out *executionPlan, err error) {
+func newExecutionPlan(ctx context.Context, compiled *operators.Plan, limits Limits, execution ExecutionOptions) (out *executionPlan, err error) {
 	var p executionPlan
+	p.refs = 1
 	p.limits = limits
 	p.loadBytes, p.residentBytes = compiled.Usage()
 	// Count copied metadata rather than multiplying prior load reservations:
@@ -80,11 +81,18 @@ func newExecutionPlan(ctx context.Context, compiled *operators.Plan, limits Limi
 	}
 
 	p.destinationLimit = p.destinationBudget(ctx)
+	if execution.Device == DeviceMetal {
+		if p.metal, err = newMetalPlan(ctx, p.values, p.steps, execution); err != nil {
+			return nil, err
+		}
+	}
+
 	return &p, nil
 }
 
 type executionPlan struct {
 	mu                 sync.Mutex
+	refs               int
 	sessions           int
 	limits             Limits
 	loadBytes          int64
@@ -103,6 +111,7 @@ type executionPlan struct {
 	callBytes          int64
 	destinationLimit   int64
 	destinationMinimum int64
+	metal              *metalPlan
 }
 
 func (p *executionPlan) prepareCalls(ctx context.Context) (err error) {
@@ -291,13 +300,41 @@ func (p *executionPlan) acquire() (err error) {
 	}
 
 	p.sessions++
+	p.refs++
 	return nil
 }
 
-func (p *executionPlan) release() {
+func (p *executionPlan) release() (err error) {
+	var metal *metalPlan
 	p.mu.Lock()
-	defer p.mu.Unlock()
 	p.sessions--
+	p.refs--
+	if p.refs == 0 {
+		metal, p.metal = p.metal, nil
+	}
+
+	p.mu.Unlock()
+	if metal != nil {
+		return metal.close()
+	}
+
+	return nil
+}
+
+func (p *executionPlan) releaseModel() (err error) {
+	var metal *metalPlan
+	p.mu.Lock()
+	p.refs--
+	if p.refs == 0 {
+		metal, p.metal = p.metal, nil
+	}
+
+	p.mu.Unlock()
+	if metal != nil {
+		return metal.close()
+	}
+
+	return nil
 }
 
 func publicInfos(ctx context.Context, infos []graph.ValueInfo) (out []ValueInfo, err error) {
