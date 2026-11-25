@@ -1,13 +1,13 @@
-# ONNX-01 Consumer Report: `neuralnetwork/gpu` Integration in `onnx`
+# ONNX-02 Consumer Report: Phase 3 `neuralnetwork/gpu` Integration in `onnx`
 
-**Task:** `ONNX-01` (`github.com/itsmontoya/onnx`)  
-**Upstream dependency:** `github.com/itsmontoya/neuralnetwork@v0.12.1`  
-**Upstream commit SHA:** `32f83b827469b384e3a2546dc9ef4a5482e2c479`  
-**Module checksum:** `h1:y4YSQZ9BaK1tM301y1lqSD+A18j7NAYtYi2i8+4Q0yY=` (`go.mod`: `h1:SafbkuDehVErsuJAL5FHFsLhKJbeh/OI3ItvbmwDafw=`)  
+**Task:** `ONNX-02` (`github.com/itsmontoya/onnx`)  
+**Upstream dependency:** `github.com/itsmontoya/neuralnetwork@v0.13.0` (`GATE-F`)  
+**Upstream commit SHA:** `a392e3971fc802105ad8fe6a8c24e998d68e9fd4`  
+**Module checksum:** `h1:XUhe9AFw4ct/X33VyqgaVZ3kiLYVgP5GIP4QdFfqKQY=` (`go.mod`: `h1:SafbkuDehVErsuJAL5FHFsLhKJbeh/OI3ItvbmwDafw=`)  
 **Hardware / Environment:** Apple M3 (`10`-core GPU, 24 GiB unified memory, Metal 4), Darwin `25.5.0 arm64`, Go `1.27.4` (`go 1.27.3` in `go.mod`, `GOWORK=off`)  
-**Raw artifacts:** `.benchmarks/gpu-onnx-01/2026-11-25-m3/` (gitignored: `test-matrix.log`, `metal-parity.txt`, `bench-cpu-neon.txt`, `bench-metal.txt`)
+**Raw artifacts:** `.benchmarks/gpu-onnx-02/2026-11-25-m3/` (gitignored: `test-matrix.log`, `metal-parity.txt`, `bench-cpu-neon.txt`, `bench-metal.txt`)
 
-## 1. Opt-In Metal Execution Architecture
+## 1. Opt-In Metal Execution Architecture (`v0.13.0` Phase 3 Integration)
 
 CPU execution remains the zero-value default (`Options{}`) with zero behavioral changes. Callers opt into Metal explicitly at load time:
 
@@ -21,46 +21,55 @@ model, err := onnx.LoadFile(ctx, path, onnx.Options{
 ```
 
 - **Explicit unavailability:** Requesting `DeviceMetal` on non-Metal builds (`CGO_ENABLED=0`, `-tags=purego`, non-Darwin, or hosts without Metal) fails at `Load*` with `onnx.ErrUnavailable` rather than silently falling back to CPU.
-- **Model/Session ownership:** `executionPlan` reference-counts `Model` and its live `Session`s. Immutable resident weight tensors (`gpu.Tensor`) and the `gpu.Device` handle are shared across concurrent sessions and released only when the model and all sessions have closed. Each `Session` owns a private `metalCache` of reusable FP32 activation buffers, released on `Session.Close()` or reset on run error.
-- **Resident scope batching & hybrid fallback:** Consecutive GPU-eligible operators record into a single `gpu.Scope` with zero intermediate host readbacks. When a CPU-only operator (such as `Relu`, `Softmax`, `Sub`, `Conv`, or `LayerNormalization`) or final output publication requires host data, the open scope submits, waits, and downloads only the required tensor.
-- **Observability:** `Model.GPUStats()` reports immutable model-level weight residency (`WeightTensors`, `ReducedPrecisionTensors`, `WeightBytes`, `FP32EquivalentWeightBytes`); `Session.GPUStats()` reports per-run `DeviceOps`, `HostFallbackOps`, `ScopeSubmits`, `HostUploads`, `HostDownloads`, and cached activation residency.
+- **Model/Session ownership & view lifecycle:** `executionPlan` reference-counts `Model` and its live `Session`s. Immutable resident weight tensors (`gpu.Tensor`) and the `gpu.Device` handle are shared across concurrent sessions and released only when the model and all sessions have closed. Each `Session` owns a private `metalCache` of reusable FP32 activation buffers, released on `Session.Close()` or reset on run error. Zero-copy `Tensor.View` handles created by `Reshape`/`Flatten`/`Squeeze`/`Unsqueeze` during a `Run` are tracked per `metalEvaluation` and closed cleanly on `Run` completion or error so `metalCache` and `Device.Close()` release with zero leaks.
+- **Single-scope residency:** Wiring Phase 3 primitives (`ReLU`, `Sigmoid`, `Tanh`, `Softmax`/`SoftmaxAxis`, `Sub`/`Div`/`Scale`, `*Broadcast`, `LayerNorm`, `BatchedMatMul`, `MatMulLeftTranspose`, `Transpose`, `Tensor.View`) eliminates CPU fallback round-trips across standard ONNX MLPs, residual graphs, and full Transformer encoder blocks.
 
-### Operator Mapping (`onnx` Opset 13/17 → `neuralnetwork/gpu` v0.12.1)
+### Operator Mapping (`onnx` Opset 13/17 → `neuralnetwork/gpu` v0.13.0)
 
 | ONNX Operator | Metal GPU Path | Supported Weight DTypes | CPU Fallback Cases |
 | --- | --- | --- | --- |
-| `MatMul` | `Scope.MatMul` | `Float32`, `Float16`, `BFloat16` | Rank != 2 (vector promotion, 3D+ batched), empty dims |
-| `Gemm` | `Scope.MatMul` (`transB=0`), `Scope.MatMulRightTranspose` (`transB=1`), plus resident `Scope.Add` / `GatherRows` row-bias broadcast | `Float32`, `Float16`, `BFloat16` (B weight); `Float32` (C bias) | `transA=1`, `alpha != 1`, `beta` not in `{0,1}`, scalar/column `C` |
-| `Add`, `Mul` | `Scope.Add`, `Scope.Mul` (same-shape or 2D+1D/row bias via `GatherRows`) | `Float32` | General multidirectional broadcast, rank-0 scalars, empty dims |
+| `MatMul` | `Scope.MatMul` (2D), `Scope.BatchedMatMul` (3D–6D with batch broadcasting) | `Float32`, `Float16`, `BFloat16` (right operand) | Rank < 2 (vector promotion), rank > 6, empty dims |
+| `Gemm` | `Scope.MatMul` (`0,0`), `Scope.MatMulRightTranspose` (`0,1`), `Scope.MatMulLeftTranspose` (`1,0`), `Transpose`+`MatMulRightTranspose` (`1,1`); `Scope.Scale` for `alpha`/`beta`; `Scope.Add`/`Scope.AddBroadcast` for bias | `Float32`, `Float16`, `BFloat16` (B weight); `Float32` (C bias, including rank-0 scalar) | Empty dims, non-Float32 |
+| `Add`, `Sub`, `Mul`, `Div` | `Scope.{Add,Sub,Mul,Div}` (same shape) and `Scope.{Add,Sub,Mul,Div}Broadcast` (rank 1–6 multidirectional broadcast, including rank-0 scalar operands) | `Float32` | Rank-0 output, rank > 6, empty dims |
+| `Relu`, `Sigmoid`, `Tanh` | `Scope.ReLU`, `Scope.Sigmoid`, `Scope.Tanh` | `Float32` | Rank-0 scalar, empty dims |
+| `Softmax` | `Scope.Softmax` (last axis), `Scope.SoftmaxAxis` (general axis, negative ONNX axis normalized) | `Float32` | Rank-0 scalar, empty dims |
+| `LayerNormalization` | `Scope.LayerNorm` (optional bias) | `Float32`, `Float16`, `BFloat16` (scale & bias) | Optional `Mean`/`InvStdDev` outputs requested, non-last-axis normalization, non-positive `epsilon`, non-rank-1 scale/bias |
+| `Transpose` | `Scope.Transpose` (rank 1–6) | `Float32` | Rank 0, rank > 6, empty dims, `int64` tensors |
+| `Reshape`, `Flatten`, `Squeeze`, `Unsqueeze` | Zero-copy `Tensor.View` (0 device copies, 0 cache allocations) | Any resident `Float32` tensor | Rank-0 input/output, empty dims, `int64` tensors |
 | `Gather` | `Scope.GatherRows` (negative ONNX indices normalized on host) | `Float32`, `Float16`, `BFloat16` (dequantizing to `Float32`) | `axis != 0`, `data` rank != 2, `indices` rank != 1, `int64` data |
 | `Identity` | Zero-copy resident handle propagation | Any resident GPU tensor | Host-only tensors |
-| `Relu`, `Sigmoid`, `Tanh`, `Softmax`, `Sub`, `Div`, `LayerNormalization`, `Conv`, pooling, `BatchNormalization`, shape ops | — | — | Always CPU fallback (not in `neuralnetwork/gpu`) |
+| `Conv`, `MaxPool`, `AveragePool`, `GlobalAveragePool`, `BatchNormalization`, `Shape`, `Concat` | — | — | Always CPU fallback (seamlessly interoperates in hybrid graphs such as `m3/models/cnn.onnx`) |
 
-## 2. Numerical Parity & Error Distributions
+## 2. Numerical Parity, Residency Confirmation & Error Distributions
 
 All Metal parity tests passed against `onnx`'s CPU reference (and checked-in golden outputs for FP32) in `metal-parity.txt`:
 
-- **Checked-in ONNX fixtures (`mlp.onnx` batch 1/3, `branch.onnx` batch 1/3, unmodified PyTorch opset-17 `pytorch_mlp.onnx`, external-weights `external/models/mlp.onnx`, and `m1/*` unit fixtures):**
-  - `mlp.onnx` (`Gemm → Relu → Gemm → Softmax`): `2` device ops, `2` fallback ops, `2` scope submits, weight bytes `68 → 44 B` (`FP16`/`BF16`), max abs error `0.000e+00` across `FP32`, `FP16`, and `BF16`.
-  - `branch.onnx` (`Gemm → Relu → Gemm → Add → Softmax / Sub`): `3` device ops (`Gemm` + `Add` batched in 1 scope), `3` fallback ops, `2` scope submits, max abs error `0.000e+00`.
-- **Large ONNX graphs (`ResidentFFN`: `vocab=4096, hidden=1024, ffn=4096`, 6 device ops / 0 fallback / 1 scope submit; `HybridMLP`: `hidden=1024, ffn=4096`, `Gemm → Relu → Gemm`, 2 device ops / 1 fallback / 2 scope submits):**
+- **Single-scope residency confirmed (`HostFallbackOps == 0`, `ScopeSubmits == 1`):**
+  - `mlp.onnx` (`batch 1`/`3`): `4` device ops, **`0` fallback ops**, **`1` scope submit** (down from `2` fallbacks / `2` submits in `ONNX-01`), weight bytes `68 → 44 B`, max abs error `0.000e+00` across `FP32`/`FP16`/`BF16`.
+  - `branch.onnx` (`batch 1`/`3`): `6` device ops, **`0` fallback ops**, **`1` scope submit** (down from `3` fallbacks / `2` submits in `ONNX-01`), max abs error `0.000e+00` (`batch 1`) / `1.863e-09` (`batch 3`).
+  - `pytorch_mlp.onnx` (unmodified PyTorch opset-17 export) and `external/models/mlp.onnx`: **`0` fallback ops**, **`1` scope submit**.
+  - `HybridMLP` (`hidden=1024, ffn=4096`, `Gemm → Relu → Gemm`): **`0` fallback ops**, **`1` scope submit** (down from `1` fallback / `2` submits in `ONNX-01`).
+  - `m1/*` (27 unit fixtures covering `Gemm` all `transA`/`transB`/`alpha`/`beta`/scalar/column combinations, `Add`/`Sub`/`Mul`/`Div` matching + broadcast, `Relu`/`Sigmoid`/`Tanh`, `Softmax` all axes, batched `MatMul`, `mlp_initializers`, `residual`): all pass with **`0` fallback ops**, **`1` scope submit**.
+  - `m2/*` (all 66 shape/indexing fixtures), `m3/*` (all CNN/pooling/BN fixtures including hybrid `cnn.onnx`), and `normalization/*` (all 28 LayerNormalization fixtures): all pass exact reference comparison under `DeviceMetal`.
+  - Dedicated tests for resident `LayerNormalization` (with/without bias, FP32/FP16/BF16 weights), 3D/4D batched `MatMul` + `Transpose`, chained zero-copy `Reshape`/`Flatten`/`Squeeze`/`Unsqueeze` views across dynamic batch sizes (verifying zero extra activation buffers and clean `Session.Close()` / `Model.Close()`), and a full 29-op opset-17 Transformer encoder block (`HostFallbackOps == 0`, `ScopeSubmits == 1`, `HostDownloads == 1`).
 
-| Workload | Precision | Weight Bytes (vs FP32) | Outputs | p50 Abs Err | p95 Abs Err | p99 Abs Err | Max Abs Err |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| `ResidentFFN M=1` | `float32` | 50,352,128 (100%) | 1,024 | `0.000e+00` | `0.000e+00` | `0.000e+00` | `0.000e+00` |
-| `ResidentFFN M=1` | `float16` | **25,186,304 (50.0%)** | 1,024 | `1.736e-04` | `5.370e-04` | `7.063e-04` | `1.030e-03` |
-| `ResidentFFN M=1` | `bfloat16` | **25,186,304 (50.0%)** | 1,024 | `1.419e-03` | `4.283e-03` | `5.560e-03` | `7.872e-03` |
-| `ResidentFFN M=32` | `float32` | 50,352,128 (100%) | 32,768 | `0.000e+00` | `0.000e+00` | `0.000e+00` | `0.000e+00` |
-| `ResidentFFN M=32` | `float16` | **25,186,304 (50.0%)** | 32,768 | `1.912e-04` | `5.602e-04` | `7.305e-04` | `1.362e-03` |
-| `ResidentFFN M=32` | `bfloat16` | **25,186,304 (50.0%)** | 32,768 | `1.538e-03` | `4.476e-03` | `5.861e-03` | `9.520e-03` |
-| `HybridMLP M=1` | `float32` | 33,574,912 (100%) | 1,024 | `0.000e+00` | `0.000e+00` | `0.000e+00` | `0.000e+00` |
-| `HybridMLP M=1` | `float16` | **16,797,696 (50.0%)** | 1,024 | `7.592e-04` | `2.198e-03` | `2.885e-03` | `3.766e-03` |
-| `HybridMLP M=1` | `bfloat16` | **16,797,696 (50.0%)** | 1,024 | `6.444e-03` | `1.694e-02` | `2.170e-02` | `2.904e-02` |
-| `HybridMLP M=32` | `float32` | 33,574,912 (100%) | 32,768 | `0.000e+00` | `0.000e+00` | `0.000e+00` | `0.000e+00` |
-| `HybridMLP M=32` | `float16` | **16,797,696 (50.0%)** | 32,768 | `7.715e-04` | `2.239e-03` | `2.956e-03` | `4.664e-03` |
-| `HybridMLP M=32` | `bfloat16` | **16,797,696 (50.0%)** | 32,768 | `6.148e-03` | `1.786e-02` | `2.365e-02` | `3.499e-02` |
-
-Note: Rank-2 weight matrices (`embed_table`, `w1`, `w2`) are halved exactly (`50.0%`), while 1D FP32 biases (`b1`, `b2`, 20 KB total) stay `Float32`.
+| Workload | Precision | Weight Bytes (vs FP32) | Submits | Outputs | p50 Abs Err | p95 Abs Err | p99 Abs Err | Max Abs Err |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `ResidentFFN M=1` | `float32` | 50,352,128 (100%) | 1 | 1,024 | `0.000e+00` | `0.000e+00` | `0.000e+00` | `0.000e+00` |
+| `ResidentFFN M=1` | `float16` | **25,186,304 (50.0%)** | 1 | 1,024 | `1.736e-04` | `5.370e-04` | `7.063e-04` | `1.030e-03` |
+| `ResidentFFN M=1` | `bfloat16` | **25,186,304 (50.0%)** | 1 | 1,024 | `1.419e-03` | `4.283e-03` | `5.560e-03` | `7.872e-03` |
+| `ResidentFFN M=32` | `float32` | 50,352,128 (100%) | 1 | 32,768 | `0.000e+00` | `0.000e+00` | `0.000e+00` | `0.000e+00` |
+| `ResidentFFN M=32` | `float16` | **25,186,304 (50.0%)** | 1 | 32,768 | `1.912e-04` | `5.602e-04` | `7.305e-04` | `1.362e-03` |
+| `ResidentFFN M=32` | `bfloat16` | **25,186,304 (50.0%)** | 1 | 32,768 | `1.538e-03` | `4.476e-03` | `5.861e-03` | `9.520e-03` |
+| `HybridMLP M=1` | `float32` | 33,574,912 (100%) | 1 | 1,024 | `0.000e+00` | `0.000e+00` | `0.000e+00` | `0.000e+00` |
+| `HybridMLP M=1` | `float16` | **16,797,696 (50.0%)** | 1 | 1,024 | `7.592e-04` | `2.198e-03` | `2.885e-03` | `3.766e-03` |
+| `HybridMLP M=1` | `bfloat16` | **16,797,696 (50.0%)** | 1 | 1,024 | `6.444e-03` | `1.694e-02` | `2.170e-02` | `2.904e-02` |
+| `HybridMLP M=32` | `float32` | 33,574,912 (100%) | 1 | 32,768 | `0.000e+00` | `0.000e+00` | `0.000e+00` | `0.000e+00` |
+| `HybridMLP M=32` | `float16` | **16,797,696 (50.0%)** | 1 | 32,768 | `7.715e-04` | `2.239e-03` | `2.956e-03` | `4.664e-03` |
+| `HybridMLP M=32` | `bfloat16` | **16,797,696 (50.0%)** | 1 | 32,768 | `6.148e-03` | `1.786e-02` | `2.365e-02` | `3.499e-02` |
+| `TransformerBlock (2×16×128)` | `float32` | 793,092 (100%) | 1 | 4,096 | `2.384e-07` | `5.960e-07` | `9.537e-07` | `1.669e-06` |
+| `TransformerBlock (2×16×128)` | `float16` | **398,852 (50.3%)** | 1 | 4,096 | `2.166e-04` | `5.761e-04` | `7.182e-04` | `8.899e-04` |
+| `TransformerBlock (2×16×128)` | `bfloat16` | **398,852 (50.3%)** | 1 | 4,096 | `1.698e-03` | `4.911e-03` | `6.555e-03` | `8.329e-03` |
 
 ## 3. Paired CPU NEON vs. Metal Benchmarks on Apple M3
 
@@ -68,32 +77,40 @@ Medians of 5 runs (`-benchtime=5x -count=5`). Pure ARM64 NEON CPU was measured w
 
 | Workload | CPU NEON (`CGO=0`) | Legacy `DeviceCPU` (`-tags=metal`) | Metal FP32 | Metal FP16 | Metal BF16 | Best Metal vs CPU NEON |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| `Fixture_mlp_batch_1` | **4.16 µs** (`3.9 KB/op`) | 4.21 µs | 720.0 µs | 639.9 µs | 373.8 µs | 0.01× (submit-bound) |
-| `Fixture_mlp_batch_3` | **3.31 µs** (`4.0 KB/op`) | 3.64 µs | 415.8 µs | 429.8 µs | 423.8 µs | 0.01× (submit-bound) |
-| `ResidentFFN_M1` (1 submit) | **0.507 ms** (`77.9 KB/op`) | 1.810 ms (`33.7 MB/op`) | 2.055 ms (`35.5 KB/op`) | 0.651 ms (`35.5 KB/op`) | 0.669 ms (`35.5 KB/op`) | 0.78× (2.78× vs legacy) |
-| `HybridMLP_M1` (2 submits) | **0.484 ms** (`66.0 KB/op`) | 1.887 ms (`33.7 MB/op`) | 1.473 ms (`85.3 KB/op`) | 0.891 ms (`85.3 KB/op`) | 0.811 ms (`85.3 KB/op`) | 0.60× (2.33× vs legacy) |
-| `ResidentFFN_M32` (1 submit) | 5.645 ms (`2.24 MB/op`) | 8.055 ms (`37.1 MB/op`) | **3.686 ms** (`1.05 MB/op`) | **2.493 ms** (`1.05 MB/op`) | **1.565 ms** (`1.05 MB/op`) | **3.61× faster** (BF16) |
-| `HybridMLP_M32` (2 submits) | 5.729 ms (`1.97 MB/op`) | 7.950 ms (`36.8 MB/op`) | **3.829 ms** (`2.63 MB/op`) | **1.826 ms** (`2.63 MB/op`) | **1.822 ms** (`2.63 MB/op`) | **3.15× faster** (BF16) |
+| `Fixture_mlp_batch_1` (1 submit) | **3.4 µs** (`3.8 KB/op`) | 4.0 µs | 239.3 µs (`2.5 KB/op`) | 241.5 µs | 240.6 µs | 0.01× (submit-bound) |
+| `Fixture_mlp_batch_3` (1 submit) | **3.5 µs** (`3.9 KB/op`) | 3.4 µs | 186.1 µs (`2.6 KB/op`) | 186.4 µs | 186.8 µs | 0.02× (submit-bound) |
+| `ResidentFFN_M1` (1 submit) | **0.511 ms** (`76.1 KB/op`) | 1.930 ms (`32.1 MB/op`) | 0.924 ms (`34.8 KB/op`) | 0.697 ms (`34.8 KB/op`) | 0.691 ms (`34.8 KB/op`) | 0.74× (2.79× vs legacy) |
+| `HybridMLP_M1` (1 submit) | **0.458 ms** (`67.7 KB/op`) | 1.740 ms (`32.1 MB/op`) | 1.043 ms (`18.4 KB/op`) | 0.650 ms (`18.4 KB/op`) | 0.659 ms (`18.4 KB/op`) | 0.70× (2.68× vs legacy) |
+| `ResidentFFN_M32` (1 submit) | 5.547 ms (`2.13 MB/op`) | 7.978 ms (`35.4 MB/op`) | **3.636 ms** (`1.00 MB/op`) | **2.172 ms** (`1.00 MB/op`) | **2.514 ms** (`1.00 MB/op`) | **2.55× faster** (FP16) |
+| `HybridMLP_M32` (1 submit) | 5.485 ms (`1.88 MB/op`) | 7.875 ms (`35.1 MB/op`) | **3.555 ms** (`514.4 KB/op`) | **1.302 ms** (`514.4 KB/op`) | **1.442 ms** (`514.4 KB/op`) | **4.21× faster** (FP16) |
+| `TransformerBlock_B1_S16` (29 ops, 1 submit) | 27.948 ms (`1.47 MB/op`) | 4.835 ms (`14.5 MB/op`) | **1.726 ms** (`138.8 KB/op`) | **1.725 ms** (`138.8 KB/op`) | **1.695 ms** (`138.8 KB/op`) | **16.49× faster** (BF16) |
+| `TransformerBlock_B4_S32` (29 ops, 1 submit) | 224.675 ms (`11.89 MB/op`) | 25.280 ms (`68.3 MB/op`) | **7.942 ms** (`1.01 MB/op`) | **7.422 ms** (`1.01 MB/op`) | **6.549 ms** (`1.01 MB/op`) | **34.31× faster** (BF16) |
 
-### Key Observations
-- **Batched workloads (`M=32`) show clear Metal speedups:** `1.50×–1.53×` in FP32, `2.26×–3.14×` in FP16, and `3.15×–3.61×` in BF16 over ARM64 NEON CPU, while cutting rank-2 weight residency by 50% and halving host allocations on `ResidentFFN_M32` (`2.24 MB/op → 1.05 MB/op`).
-- **Tiny models & small `M=1` workloads remain faster on CPU NEON:** Per-scope submit/wait latency (~180–200 µs) makes opt-in Metal slower than CPU NEON on tiny fixtures (`mlp.onnx`) and small 2-layer `M=1` graphs, validating keeping CPU as default.
-- **Hybrid fallback penalty is measurable:** Adding one CPU `Relu` fallback between two `Gemm` layers (`HybridMLP` vs `ResidentFFN`) adds a second `Scope` submit/wait (~200 µs at `M=1`) and increases host allocations at `M=32` from `1.05 MB/op` to `2.63 MB/op` due to downloading and re-uploading `[32, 4096]`.
+### Before (`ONNX-01`) vs. After (`ONNX-02`) Eliminating CPU `Relu` & `GatherRows` Bias
 
-## 4. `neuralnetwork/gpu` API Generality Assessment (Input for `REVIEW-2`)
+| Workload | `ONNX-01` (2 submits, CPU `Relu` + `GatherRows` bias) | `ONNX-02` (1 submit, GPU `ReLU` + `AddBroadcast`) | Improvement |
+| --- | ---: | ---: | ---: |
+| `Fixture_mlp_batch_1` (Metal FP32) | 720.0 µs (2 submits) | **239.3 µs** (1 submit) | **3.01× faster** |
+| `HybridMLP_M1` (Metal FP16) | 0.891 ms (`85.3 KB/op`, 2 submits) | **0.650 ms** (`18.4 KB/op`, 1 submit) | **1.37× faster**, **-78% host allocs** |
+| `HybridMLP_M32` (Metal FP16) | 1.826 ms (`2.63 MB/op`, 2 submits) | **1.302 ms** (`514.4 KB/op`, 1 submit) | **1.40× faster**, **-80% host allocs** |
+| `HybridMLP_M32` (Metal BF16) | 1.822 ms (`2.63 MB/op`, 2 submits) | **1.442 ms** (`514.4 KB/op`, 1 submit) | **1.26× faster**, **-80% host allocs** |
+
+### Key Observations & Honest Tradeoffs
+- **Eliminating the `Relu` boundary delivered both latency and memory wins:** `HybridMLP_M32` dropped from `2` submits / `2.63 MB/op` host allocs to `1` submit / `514.4 KB/op` (**-80% host allocs**), reaching **4.21× faster** than CPU NEON in FP16 (`1.302 ms` vs `5.485 ms`), and removing the `GatherRows` row-bias scratch buffer saved an additional `[M, N]` GPU allocation per `Gemm`.
+- **Full Transformer encoder blocks shine on Metal:** A 29-operator opset-17 Pre-LN Transformer encoder block (`hidden=512, heads=8, headDim=64, ffn=2048`) runs in **1 `gpu.Scope`** with `0` CPU fallbacks, achieving **16.5×** speedup over CPU NEON at `B=1, S=16` (`1.70 ms` vs `27.95 ms`) and **34.3×** speedup at `B=4, S=32` (`6.55 ms` vs `224.67 ms`) while cutting host allocations by **11.8×** (`11.89 MB/op → 1.01 MB/op`).
+- **Tiny models & small `M=1` MLPs remain faster on CPU NEON:** A single Metal command-buffer submit/wait still costs ~180–240 µs on M3, so tiny fixtures (`mlp.onnx`: `3.4 µs` CPU vs `186–239 µs` Metal) and 2-layer `M=1` MLPs (`0.46 ms` CPU vs `0.65 ms` Metal) remain faster on CPU NEON. Keeping `Options{}` CPU-by-default remains the right design.
+
+## 4. `neuralnetwork/gpu` v0.13.0 API Assessment (Input for `REVIEW-3`)
 
 ### What Worked Cleanly
-1. **Zero-build-tag consumer portability:** `neuralnetwork/gpu` compiles everywhere (`CGO_ENABLED=0`, `-tags=purego`, `GOOS=linux GOARCH=amd64`) and returns `gpu.ErrUnavailable` cleanly when disabled. `onnx` required zero platform build-tag stub files.
-2. **Ownership and concurrency model:** `gpu.Device` + shared read-only weight `gpu.Tensor`s + per-session activation buffers + per-run `gpu.Scope` mapped cleanly onto `onnx`'s `Model`/`Session` lifecycle, passing `-race -tags=metal` with concurrent sessions and out-of-order `Model.Close()` before `Session.Close()`.
-3. **Uniform reduced-precision weight interface:** `NewTensorWithDType`, `UploadFloat32As`, `MatMul`, `MatMulRightTranspose`, and dequantizing `GatherRows` worked seamlessly for FP32, FP16, and BF16 weights with FP32 accumulation.
+1. **Zero-copy `Tensor.View` with storage-level lease tracking:** `Reshape`, `Flatten`, `Squeeze`, and `Unsqueeze` integrated directly into `metalEvaluation` with zero device copies and zero activation-cache allocations. Closing per-run views in `metalEvaluation.close()` cleanly preserves `metalCache` ownership and passes `-race -tags=metal` across dynamic batch sizes and out-of-order `Model.Close()`.
+2. **Native broadcast & scaling primitives:** `AddBroadcast`/`SubBroadcast`/`MulBroadcast`/`DivBroadcast` and `Scale` completely eliminated `metalPlan.rowBiases` and the `GatherRows` bias workaround, and enabled all 4 `Gemm` `(transA, transB)` modes plus arbitrary `alpha`/`beta` and scalar constants (`[]` uploaded as `[1]`) on GPU.
+3. **Uniform reduced-precision support:** `LayerNorm`, `BatchedMatMul`, `MatMulLeftTranspose`, `MatMulRightTranspose`, and `GatherRows` all accept `Float32`/`Float16`/`BFloat16` weights uniformly with FP32 accumulation.
 
-### Concrete API Friction & Missing Generic Primitives for `REVIEW-2`
-1. **Missing standard activations (`Relu`, `Sigmoid`, `Tanh`, `Softmax`):** `gpu.Scope` currently exposes only Llama-specific `SiLU` and `SwiGLU`. Missing `Relu` and `Softmax` prevented even basic ONNX MLPs (`mlp.onnx`, `branch.onnx`, `pytorch_mlp.onnx`) from running in a single resident scope.
-2. **Missing elementwise primitives (`Sub`, `Div`, scalar scale) and broadcasting (`AddBias` / broadcast `Add`/`Mul`):** `Scope.Add` and `Scope.Mul` require identical shapes. Supporting ONNX `Gemm` row biases (`[N]` / `[1, N]`) required a `GatherRows(bias[1, N], zeros(M), bcast[M, N])` workaround plus an extra `[M, N]` buffer; non-unit `alpha`/`beta` and general multidirectional broadcasts must fall back to CPU.
-3. **Missing `LayerNormalization` (or reduction primitives `ReduceMean` + `Sqrt`):** `gpu.Scope` provides Llama-specific `RMSNorm` only; opset-17 `LayerNormalization` cannot run on GPU.
-4. **Rank-2-only `MatMul` and no `Transpose` / `MatMulLeftTranspose`:** `Scope.MatMul` rejects 3D+ batched `MatMul`, rank-1 vector promotion, and `Gemm` with `transA=1`.
-5. **No zero-copy `Tensor` reshape/view:** `gpu.Tensor` has no metadata reshape/view, and `Scope.Copy` requires identical shapes. Contiguous row-major ONNX shape ops (`Reshape`, `Flatten`, `Squeeze`, `Unsqueeze`) cannot stay resident without consumer-side shape tracking or host round-trips.
-6. **Legacy `neuralnetwork/tensor` Metal coupling under `-tags=metal`:** In `-tags=metal` builds, `onnx`'s `DeviceCPU` path still invokes `neuralnetwork/tensor.GemmInto`, which routes large matrices through the legacy copying `matrix` Metal adapter (`33–37 MB/op` host copies per call, `1.4×–3.6×` slower than `CGO_ENABLED=0` CPU NEON). `REVIEW-2` should evaluate decoupling `tensor` CPU ops from the legacy copying ANN Metal path once `neuralnetwork/gpu` stabilizes.
+### Remaining Items for `REVIEW-3`
+1. **Legacy `neuralnetwork/tensor` Metal coupling under `-tags=metal`:** In `-tags=metal` builds, `onnx`'s `DeviceCPU` path still routes large `Gemm`/`MatMul` calls through the legacy copying ANN Metal adapter (`32–68 MB/op` host copies per call). Decoupling `neuralnetwork/tensor` CPU ops from the legacy copying Metal path remains the highest-value cleanup for `-tags=metal` CPU baselines.
+2. **Optional `Transpose` + `BatchedMatMul` fusion (`BatchedMatMulRightTranspose`):** ONNX represents attention `Q @ K^T` as `Transpose(K, [0,2,3,1]) → MatMul(Q, K_T)`. Currently `onnx` maps these 1-to-1 via `Scope.Transpose` + `Scope.BatchedMatMul` (keeping both in one `Scope`). A future pattern-fusion pass in `onnx` could fuse single-consumer last-two-axis transposes into `Scope.BatchedMatMulRightTranspose` to save one dispatch and activation buffer.
+3. **Additional operators if target models require them:** `Conv`, pooling (`MaxPool`/`AveragePool`/`GlobalAveragePool`), `BatchNormalization`, `GELU`, and multi-output `LayerNormalization` (`Mean`/`InvStdDev`) currently fall back cleanly to CPU; prioritize only when driven by concrete target models.
 
 ## 5. Required Test Matrix Results
 
