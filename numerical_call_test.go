@@ -41,9 +41,9 @@ func TestNumericalCallExactWorkspaceAndLiveBounds(t *testing.T) {
 		workspace int64
 	}{
 		{"add_matching", 48}, {"sub_matching", 48}, {"mul_matching", 48}, {"div_matching", 0},
-		{"add_broadcast", 0}, {"matmul_batch", 384}, {"matmul_dot", 28},
+		{"add_broadcast", 0}, {"matmul_batch", 64}, {"matmul_dot", 4},
 		{"matmul_empty_contraction", 0}, {"matmul_empty_output", 0},
-		{"gemm_00_vector", 88}, {"gemm_11_full", 112}, {"gemm_empty_contraction", 24},
+		{"gemm_00_vector", 24}, {"gemm_11_full", 24}, {"gemm_empty_contraction", 24},
 		{"relu_finite", 120}, {"relu_empty", 0}, {"sigmoid_finite", 60}, {"tanh_finite", 60},
 		{"softmax_axis_1", 0}, {"softmax_empty_axis", 0},
 	}
@@ -65,16 +65,6 @@ func TestNumericalCallExactWorkspaceAndLiveBounds(t *testing.T) {
 				inputBytes += input.ByteSize()
 			}
 			workspace := tt.workspace
-			if !copyingProductWorkspace {
-				switch tt.fixture {
-				case "matmul_batch":
-					workspace = 64
-				case "matmul_dot":
-					workspace = 4
-				case "gemm_00_vector", "gemm_11_full":
-					workspace = 24
-				}
-			}
 			call, err := newNumericalCall(step, arguments, session.plan.limits)
 			if err != nil || call.workspace != workspace {
 				t.Fatalf("workspace = %v, want %d: %v", call, workspace, err)
