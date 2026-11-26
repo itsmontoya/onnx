@@ -108,7 +108,7 @@ Medians of 5 runs (`-benchtime=5x -count=5`). Pure ARM64 NEON CPU was measured w
 3. **Uniform reduced-precision support:** `LayerNorm`, `BatchedMatMul`, `MatMulLeftTranspose`, `MatMulRightTranspose`, and `GatherRows` all accept `Float32`/`Float16`/`BFloat16` weights uniformly with FP32 accumulation.
 
 ### Remaining Items for `REVIEW-3`
-1. **Legacy `neuralnetwork/tensor` Metal coupling under `-tags=metal`:** In `-tags=metal` builds, `onnx`'s `DeviceCPU` path still routes large `Gemm`/`MatMul` calls through the legacy copying ANN Metal adapter (`32–68 MB/op` host copies per call). Decoupling `neuralnetwork/tensor` CPU ops from the legacy copying Metal path remains the highest-value cleanup for `-tags=metal` CPU baselines.
+1. **Legacy `neuralnetwork/tensor` Metal coupling under `-tags=metal` (Resolved in `ONNX-03`):** In `v0.13.0`, `-tags=metal` `DeviceCPU` routed large `Gemm`/`MatMul` calls through the legacy copying ANN Metal adapter (`32–68 MB/op`). Pinning `neuralnetwork@v0.13.1` (`NN-18`) decouples `neuralnetwork/tensor` CPU ops from Metal; see Section 6 below.
 2. **Optional `Transpose` + `BatchedMatMul` fusion (`BatchedMatMulRightTranspose`):** ONNX represents attention `Q @ K^T` as `Transpose(K, [0,2,3,1]) → MatMul(Q, K_T)`. Currently `onnx` maps these 1-to-1 via `Scope.Transpose` + `Scope.BatchedMatMul` (keeping both in one `Scope`). A future pattern-fusion pass in `onnx` could fuse single-consumer last-two-axis transposes into `Scope.BatchedMatMulRightTranspose` to save one dispatch and activation buffer.
 3. **Additional operators if target models require them:** `Conv`, pooling (`MaxPool`/`AveragePool`/`GlobalAveragePool`), `BatchNormalization`, `GELU`, and multi-output `LayerNormalization` (`Mean`/`InvStdDev`) currently fall back cleanly to CPU; prioritize only when driven by concrete target models.
 
@@ -130,3 +130,17 @@ All 14 entries of the Required Test Matrix passed (`test-matrix.log`):
 - `CGO_ENABLED=1 GOWORK=off go vet -tags=metal ./...` — PASS
 - `CGO_ENABLED=1 GOWORK=off go test -count=1 -tags=metal ./...` — PASS (all real Metal tests PASS; `TestMetalUnavailableReturnsErrUnavailable` skips when Metal is active)
 - `CGO_ENABLED=1 GOWORK=off go test -count=1 -race -tags=metal ./...` — PASS
+
+## 6. `ONNX-03` Update: `neuralnetwork@v0.13.1` (`NN-18` CPU/Tensor Decoupling)
+
+Pinning `github.com/itsmontoya/neuralnetwork@v0.13.1` (commit `2621db5ea830996a9c0ceaa2f32650788930b938`, module `h1:yIVM0e4UOPIIYL+1X7BtPMeiWpsk0+YYSf0zvqVqqAg=`) decouples `tensor.MatMulInto` and `tensor.GemmInto` from the legacy copying Metal adapter under `-tags=metal`, allowing `onnx` to remove `numerical_product_metal.go` and the `copyingProductWorkspace` workaround.
+
+Paired Apple M3 `DeviceCPU` check (`-benchtime=5x -count=5`, medians; raw logs in `.benchmarks/gpu-onnx-03/2026-11-25-m3/`):
+
+| Workload | Before (`v0.13.0` `-tags=metal` `DeviceCPU`) | After (`v0.13.1` `-tags=metal` `DeviceCPU`) | `CGO_ENABLED=0` CPU NEON Ref | Allocation Delta |
+| --- | ---: | ---: | ---: | ---: |
+| `ResidentFFN_M32` | 7.978 ms (`35.4 MB/op`) | **6.143 ms** (`2.13 MB/op`, 79 allocs) | 5.875 ms (`2.13 MB/op`, 79 allocs) | **-94.0%** |
+| `HybridMLP_M32` | 7.875 ms (`35.1 MB/op`) | **6.190 ms** (`1.88 MB/op`, 60 allocs) | 5.779 ms (`1.88 MB/op`, 61 allocs) | **-94.6%** |
+| `TransformerBlock_B1_S16` | 4.835 ms (`14.5 MB/op`) | **27.441 ms** (`1.47 MB/op`, 320 allocs) | 27.021 ms (`1.47 MB/op`, 320 allocs) | **-89.8%** |
+
+`DeviceCPU` under `-tags=metal` now matches `CGO_ENABLED=0` CPU NEON latency, allocations, and alloc counts without legacy Metal buffer copies.
