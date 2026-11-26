@@ -127,8 +127,14 @@ func (c *numericalCall) scratch(left, right []int64) (bytes int64, err error) {
 		}
 
 		return 0, nil
-	case "Gemm", "MatMul":
-		return productWorkspace(c, left, right)
+	case "Gemm":
+		return c.bytes, nil
+	case "MatMul":
+		if left[len(left)-1] == 0 {
+			return 0, nil
+		}
+
+		return c.bytes, nil
 	}
 	return 0, nil
 }
