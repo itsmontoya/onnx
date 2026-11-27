@@ -58,6 +58,14 @@ func (m *metalEvaluation) tryStep(e *evaluation, step operators.Step) (handled b
 		return m.tryShapeView(e, step)
 	case "Gather":
 		return m.tryGather(e, step)
+	case "Conv":
+		return m.tryConv(e, step)
+	case "BatchNormalization":
+		return m.tryBatchNorm(e, step)
+	case "MaxPool", "AveragePool", "GlobalAveragePool":
+		return m.tryPool2D(e, step)
+	case "Concat":
+		return m.tryConcat(e, step)
 	default:
 		return false, nil
 	}
@@ -825,6 +833,388 @@ func (m *metalEvaluation) tryGather(e *evaluation, step operators.Step) (handled
 	}
 
 	return true, m.publishGPUValue(e, step.Outputs[0], dst, outShape)
+}
+
+func (m *metalEvaluation) tryConv(e *evaluation, step operators.Step) (handled bool, err error) {
+	var (
+		xIdx    = step.Inputs[0]
+		wIdx    = step.Inputs[1]
+		hasBias = len(step.Inputs) > 2 && step.Inputs[2] >= 0
+		xType   DataType
+		wType   DataType
+		xShape  []int64
+		wShape  []int64
+		bShape  []int64
+	)
+
+	xType, xShape = m.valueMeta(e, xIdx)
+	wType, wShape = m.valueMeta(e, wIdx)
+	if xType != Float32 || wType != Float32 || m.isReducedPrecision(xIdx) {
+		return false, nil
+	}
+
+	if !validGPUShape(xShape) || !validGPUShape(wShape) {
+		return false, nil
+	}
+
+	bIdx := -1
+	if hasBias {
+		bIdx = step.Inputs[2]
+		var bType DataType
+		bType, bShape = m.valueMeta(e, bIdx)
+		if bType != Float32 || !validGPUShape(bShape) {
+			return false, nil
+		}
+	}
+
+	shapes := [][]int64{xShape, wShape}
+	if hasBias {
+		shapes = append(shapes, bShape)
+	}
+
+	var (
+		outShape []int64
+		convCfg  tensor.Conv2DConfig
+	)
+
+	if outShape, convCfg, _, err = step.CNN.Shape("Conv", shapes); err != nil || !validGPUShape(outShape) {
+		return false, nil
+	}
+
+	gpuCfg := gpu.Conv2DConfig{
+		Strides:   convCfg.Strides,
+		Pads:      convCfg.Pads,
+		Dilations: convCfg.Dilations,
+		Groups:    convCfg.Groups,
+	}
+
+	if _, err = gpu.Conv2DShape(xShape, wShape, gpuCfg); err != nil {
+		return false, nil
+	}
+
+	if !conv2DGeometryFitsInt32(xShape, wShape, outShape, gpuCfg) {
+		return false, nil
+	}
+
+	if err = m.validateAndReserve(e, outShape); err != nil {
+		return true, err
+	}
+
+	var (
+		input   *gpu.Tensor
+		weights *gpu.Tensor
+		bias    *gpu.Tensor
+		dst     *gpu.Tensor
+	)
+
+	if input, err = m.ensureDeviceInput(e, step.Index, 0, xIdx); err != nil {
+		return true, err
+	}
+
+	if weights, err = m.ensureDeviceInput(e, step.Index, 1, wIdx); err != nil {
+		return true, err
+	}
+
+	if hasBias {
+		if bias, err = m.ensureDeviceInput(e, step.Index, 2, bIdx); err != nil {
+			return true, err
+		}
+	}
+
+	if dst, err = m.cache.acquire(step.Index, 0, outShape); err != nil {
+		return true, fmt.Errorf("allocate Metal Conv destination: %w", err)
+	}
+
+	if err = m.ensureScope(); err != nil {
+		return true, err
+	}
+
+	if err = m.scope.Conv2D(input, weights, bias, dst, gpuCfg); err != nil {
+		return true, fmt.Errorf("encode Metal Conv: %w", err)
+	}
+
+	return true, m.publishGPUValue(e, step.Outputs[0], dst, outShape)
+}
+
+func (m *metalEvaluation) tryBatchNorm(e *evaluation, step operators.Step) (handled bool, err error) {
+	if len(step.Outputs) > 1 && step.Outputs[1] >= 0 {
+		return false, nil
+	}
+
+	if len(step.Inputs) != 5 {
+		return false, nil
+	}
+
+	epsilon := step.CNN.Epsilon
+	if !(epsilon >= 0 && epsilon <= math.MaxFloat32) {
+		return false, nil
+	}
+
+	shapes := make([][]int64, len(step.Inputs))
+	for slot, idx := range step.Inputs {
+		if idx < 0 {
+			return false, nil
+		}
+
+		var (
+			inType  DataType
+			inShape []int64
+		)
+
+		inType, inShape = m.valueMeta(e, idx)
+		if inType != Float32 || m.isReducedPrecision(idx) || !validGPUShape(inShape) {
+			return false, nil
+		}
+
+		shapes[slot] = inShape
+	}
+
+	var outShape []int64
+	if outShape, _, _, err = step.CNN.Shape("BatchNormalization", shapes); err != nil || !validGPUShape(outShape) {
+		return false, nil
+	}
+
+	if err = m.validateAndReserve(e, outShape); err != nil {
+		return true, err
+	}
+
+	var (
+		gpuInputs [5]*gpu.Tensor
+		dst       *gpu.Tensor
+	)
+
+	for slot, idx := range step.Inputs {
+		if gpuInputs[slot], err = m.ensureDeviceInput(e, step.Index, slot, idx); err != nil {
+			return true, err
+		}
+	}
+
+	if dst, err = m.cache.acquire(step.Index, 0, outShape); err != nil {
+		return true, fmt.Errorf("allocate Metal BatchNormalization destination: %w", err)
+	}
+
+	if err = m.ensureScope(); err != nil {
+		return true, err
+	}
+
+	if err = m.scope.BatchNorm(
+		gpuInputs[0],
+		gpuInputs[1],
+		gpuInputs[2],
+		gpuInputs[3],
+		gpuInputs[4],
+		dst,
+		epsilon,
+	); err != nil {
+		return true, fmt.Errorf("encode Metal BatchNormalization: %w", err)
+	}
+
+	return true, m.publishGPUValue(e, step.Outputs[0], dst, outShape)
+}
+
+func (m *metalEvaluation) tryPool2D(e *evaluation, step operators.Step) (handled bool, err error) {
+	if step.Operator == "MaxPool" && len(step.Outputs) > 1 && step.Outputs[1] >= 0 {
+		return false, nil
+	}
+
+	var (
+		xIdx   = step.Inputs[0]
+		xType  DataType
+		xShape []int64
+	)
+
+	xType, xShape = m.valueMeta(e, xIdx)
+	if xType != Float32 || m.isReducedPrecision(xIdx) || len(xShape) != 4 || !validGPUShape(xShape) {
+		return false, nil
+	}
+
+	var (
+		outShape []int64
+		poolCfg  tensor.Pool2DConfig
+	)
+
+	if outShape, _, poolCfg, err = step.CNN.Shape(step.Operator, [][]int64{xShape}); err != nil || !validGPUShape(outShape) {
+		return false, nil
+	}
+
+	var gpuCfg gpu.Pool2DConfig
+	if step.Operator == "GlobalAveragePool" {
+		gpuCfg = gpu.Pool2DConfig{
+			Kernel:    [2]int64{xShape[2], xShape[3]},
+			Strides:   [2]int64{1, 1},
+			Dilations: [2]int64{1, 1},
+		}
+	} else {
+		gpuCfg = gpu.Pool2DConfig{
+			Kernel:          poolCfg.Kernel,
+			Strides:         poolCfg.Strides,
+			Pads:            poolCfg.Pads,
+			Dilations:       poolCfg.Dilations,
+			CeilMode:        poolCfg.CeilMode,
+			CountIncludePad: poolCfg.CountIncludePad,
+		}
+	}
+
+	if _, err = gpu.Pool2DShape(xShape, gpuCfg); err != nil {
+		return false, nil
+	}
+
+	if !pool2DGeometryFitsInt32(xShape, outShape, gpuCfg) {
+		return false, nil
+	}
+
+	if err = m.validateAndReserve(e, outShape); err != nil {
+		return true, err
+	}
+
+	var (
+		input *gpu.Tensor
+		dst   *gpu.Tensor
+	)
+
+	if input, err = m.ensureDeviceInput(e, step.Index, 0, xIdx); err != nil {
+		return true, err
+	}
+
+	if dst, err = m.cache.acquire(step.Index, 0, outShape); err != nil {
+		return true, fmt.Errorf("allocate Metal %s destination: %w", step.Operator, err)
+	}
+
+	if err = m.ensureScope(); err != nil {
+		return true, err
+	}
+
+	if step.Operator == "MaxPool" {
+		err = m.scope.MaxPool2D(input, dst, gpuCfg)
+	} else {
+		err = m.scope.AvgPool2D(input, dst, gpuCfg)
+	}
+
+	if err != nil {
+		return true, fmt.Errorf("encode Metal %s: %w", step.Operator, err)
+	}
+
+	return true, m.publishGPUValue(e, step.Outputs[0], dst, outShape)
+}
+
+func (m *metalEvaluation) tryConcat(e *evaluation, step operators.Step) (handled bool, err error) {
+	if len(step.Inputs) == 0 {
+		return false, nil
+	}
+
+	var (
+		rank     int
+		axis     int
+		outShape []int64
+	)
+
+	for slot, idx := range step.Inputs {
+		if idx < 0 {
+			return false, nil
+		}
+
+		var (
+			inType  DataType
+			inShape []int64
+		)
+
+		inType, inShape = m.valueMeta(e, idx)
+		if inType != Float32 || m.isReducedPrecision(idx) || !validGPUShape(inShape) || len(inShape) > 6 {
+			return false, nil
+		}
+
+		if slot == 0 {
+			rank = len(inShape)
+			if axis, err = tensor.NormalizeAxis(step.Axis, rank); err != nil {
+				return false, nil
+			}
+
+			outShape = slices.Clone(inShape)
+			continue
+		}
+
+		if len(inShape) != rank {
+			return false, nil
+		}
+
+		for dim := range rank {
+			if dim != axis && inShape[dim] != outShape[dim] {
+				return false, nil
+			}
+		}
+
+		if inShape[axis] > math.MaxInt64-outShape[axis] {
+			return false, nil
+		}
+
+		outShape[axis] += inShape[axis]
+	}
+
+	if !validGPUShape(outShape) {
+		return false, nil
+	}
+
+	if err = m.validateAndReserve(e, outShape); err != nil {
+		return true, err
+	}
+
+	inputs := make([]*gpu.Tensor, len(step.Inputs))
+	for slot, idx := range step.Inputs {
+		if inputs[slot], err = m.ensureDeviceInput(e, step.Index, slot, idx); err != nil {
+			return true, err
+		}
+	}
+
+	var dst *gpu.Tensor
+	if dst, err = m.cache.acquire(step.Index, 0, outShape); err != nil {
+		return true, fmt.Errorf("allocate Metal Concat destination: %w", err)
+	}
+
+	if err = m.ensureScope(); err != nil {
+		return true, err
+	}
+
+	if err = m.scope.Concat(inputs, dst, axis); err != nil {
+		return true, fmt.Errorf("encode Metal Concat: %w", err)
+	}
+
+	return true, m.publishGPUValue(e, step.Outputs[0], dst, outShape)
+}
+
+func conv2DGeometryFitsInt32(xShape, wShape, outShape []int64, cfg gpu.Conv2DConfig) (ok bool) {
+	return spatialGeometryFitsInt32(
+		xShape[2], xShape[3],
+		outShape[2], outShape[3],
+		wShape[2], wShape[3],
+		cfg.Strides, cfg.Pads, cfg.Dilations,
+	)
+}
+
+func pool2DGeometryFitsInt32(xShape, outShape []int64, cfg gpu.Pool2DConfig) (ok bool) {
+	return spatialGeometryFitsInt32(
+		xShape[2], xShape[3],
+		outShape[2], outShape[3],
+		cfg.Kernel[0], cfg.Kernel[1],
+		cfg.Strides, cfg.Pads, cfg.Dilations,
+	)
+}
+
+func spatialGeometryFitsInt32(
+	inH, inW, outH, outW, kernelH, kernelW int64,
+	strides [2]int64,
+	pads [4]int64,
+	dilations [2]int64,
+) (ok bool) {
+	return inH <= math.MaxInt32 && inW <= math.MaxInt32 &&
+		outH <= math.MaxInt32 && outW <= math.MaxInt32 &&
+		kernelH <= math.MaxInt32 && kernelW <= math.MaxInt32 &&
+		strides[0] <= math.MaxInt32 && strides[1] <= math.MaxInt32 &&
+		pads[0] <= math.MaxInt32 && pads[1] <= math.MaxInt32 &&
+		dilations[0] <= math.MaxInt32 && dilations[1] <= math.MaxInt32 &&
+		inH+pads[0] <= math.MaxInt32 && inW+pads[1] <= math.MaxInt32 &&
+		pads[0]+dilations[0] <= math.MaxInt32 && pads[1]+dilations[1] <= math.MaxInt32 &&
+		(outH-1)*strides[0]+(kernelH-1)*dilations[0] <= math.MaxInt32 &&
+		(outW-1)*strides[1]+(kernelW-1)*dilations[1] <= math.MaxInt32
 }
 
 func (m *metalEvaluation) publishGPUValue(e *evaluation, outIdx int, dst *gpu.Tensor, shape []int64) (err error) {

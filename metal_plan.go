@@ -176,10 +176,42 @@ func (p *metalPlan) classifyStepInputs(
 			usedGeneral[right] = true
 			needsFloat32[right] = true
 		}
-	case "Relu", "Sigmoid", "Tanh", "Softmax", "Transpose", "Reshape", "Flatten", "Squeeze", "Unsqueeze":
+	case "Relu", "Sigmoid", "Tanh", "Softmax", "Transpose", "Reshape", "Flatten", "Squeeze", "Unsqueeze",
+		"MaxPool", "AveragePool", "GlobalAveragePool":
 		if input := step.Inputs[0]; input >= 0 {
 			usedGeneral[input] = true
 			needsFloat32[input] = true
+		}
+	case "Conv":
+		if input := step.Inputs[0]; input >= 0 {
+			usedGeneral[input] = true
+			needsFloat32[input] = true
+		}
+
+		if weights := step.Inputs[1]; weights >= 0 {
+			usedGeneral[weights] = true
+			if constants[weights] != nil && constants[weights].Rank() == 4 {
+				reducedEligible[weights] = true
+			} else {
+				needsFloat32[weights] = true
+			}
+		}
+
+		if len(step.Inputs) > 2 && step.Inputs[2] >= 0 {
+			bias := step.Inputs[2]
+			usedGeneral[bias] = true
+			if constants[bias] != nil && constants[bias].Rank() == 1 {
+				reducedEligible[bias] = true
+			} else {
+				needsFloat32[bias] = true
+			}
+		}
+	case "BatchNormalization", "Concat":
+		for _, input := range step.Inputs {
+			if input >= 0 {
+				usedGeneral[input] = true
+				needsFloat32[input] = true
+			}
 		}
 	case "LayerNormalization":
 		if input := step.Inputs[0]; input >= 0 {
