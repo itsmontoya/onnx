@@ -150,6 +150,48 @@ func BenchmarkMetalVsCPU(b *testing.B) {
 			}
 		})
 	}
+
+	for _, batch := range []int64{1, 32} {
+		b.Run(fmt.Sprintf("MNIST_CNN_B%d", batch), func(group *testing.B) {
+			graph := buildMNISTCNNGraph(group, batch)
+			x, err := NewFloat32([]int64{batch, 1, 28, 28}, deterministicFloats(int(batch*28*28), 1401))
+			if err != nil {
+				group.Fatal(err)
+			}
+
+			inputs := map[string]*Tensor{"x": x}
+			for _, mode := range modes {
+				group.Run(mode.name, func(sub *testing.B) {
+					if mode.execution.Device == DeviceMetal && !metalAvailable() {
+						sub.Skip("Metal device unavailable in this build or host")
+					}
+
+					benchmarkModelMode(sub, graph, inputs, mode.execution)
+				})
+			}
+		})
+	}
+
+	for _, batch := range []int64{1, 16} {
+		b.Run(fmt.Sprintf("ResNetBottleneck_B%d", batch), func(group *testing.B) {
+			graph := buildResNetBottleneckConcatGraph(group, batch, 64, 32, 32)
+			x, err := NewFloat32([]int64{batch, 64, 32, 32}, deterministicFloats(int(batch*64*32*32), 1501))
+			if err != nil {
+				group.Fatal(err)
+			}
+
+			inputs := map[string]*Tensor{"x": x}
+			for _, mode := range modes {
+				group.Run(mode.name, func(sub *testing.B) {
+					if mode.execution.Device == DeviceMetal && !metalAvailable() {
+						sub.Skip("Metal device unavailable in this build or host")
+					}
+
+					benchmarkModelMode(sub, graph, inputs, mode.execution)
+				})
+			}
+		})
+	}
 }
 
 func benchmarkModelMode(b *testing.B, modelBytesData []byte, inputs map[string]*Tensor, execution ExecutionOptions) {

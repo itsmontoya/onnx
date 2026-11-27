@@ -1030,7 +1030,14 @@ func TestMetalM2M3AndNormalizationFixturesParity(t *testing.T) {
 	})
 
 	t.Run("m3", func(t *testing.T) {
-		runSuite(t, readM3Cases(t), nil)
+		runSuite(t, readM3Cases(t), map[string]bool{
+			"cnn":               true,
+			"conv_default_bias": true,
+			"bn_rank4_default":  true,
+			"max_default":       true,
+			"average_default":   true,
+			"global_default":    true,
+		})
 	})
 
 	t.Run("normalization", func(t *testing.T) {
@@ -1602,4 +1609,448 @@ func buildTransformerEncoderBlockGraph(tb testing.TB, batch, seqLen, heads, head
 	}
 
 	return data
+}
+
+func TestMetalConv2DParity(t *testing.T) {
+	requireMetal(t)
+	type testcase struct {
+		name      string
+		precision WeightPrecision
+		atol      float64
+		rtol      float64
+		withBias  bool
+		groups    int64
+		dilations []int64
+		autoPad   string
+		inShape   []int64
+		wShape    []int64
+	}
+
+	tests := []testcase{
+		{
+			name: "fp32_grouped_dilated_bias", precision: WeightFloat32, atol: 1e-5, rtol: 1e-4,
+			withBias: true, groups: 2, dilations: []int64{2, 2}, autoPad: "SAME_UPPER",
+			inShape: []int64{2, 4, 7, 7}, wShape: []int64{6, 2, 3, 3},
+		},
+		{
+			name: "fp16_valid_no_bias", precision: WeightFloat16, atol: 5e-2, rtol: 5e-2,
+			withBias: false, groups: 1, dilations: []int64{1, 1}, autoPad: "VALID",
+			inShape: []int64{2, 4, 8, 8}, wShape: []int64{6, 4, 3, 3},
+		},
+		{
+			name: "bf16_same_bias", precision: WeightBFloat16, atol: 1e-1, rtol: 1e-1,
+			withBias: true, groups: 1, dilations: []int64{1, 1}, autoPad: "SAME_UPPER",
+			inShape: []int64{2, 4, 8, 8}, wShape: []int64{6, 4, 3, 3},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			wCount := int(tt.wShape[0] * tt.wShape[1] * tt.wShape[2] * tt.wShape[3])
+			inits := []*onnxpb.TensorProto{
+				makeFloatInitializer("w", tt.wShape, deterministicFloats(wCount, 401)),
+			}
+
+			inputs := []string{"x", "w"}
+			if tt.withBias {
+				inits = append(inits, makeFloatInitializer("b", []int64{tt.wShape[0]}, deterministicFloats(int(tt.wShape[0]), 402)))
+				inputs = append(inputs, "b")
+			}
+
+			model := &onnxpb.ModelProto{
+				IrVersion:    proto.Int64(8),
+				ProducerName: proto.String("onnx-gpu-test"),
+				OpsetImport:  []*onnxpb.OperatorSetIdProto{{Domain: proto.String(""), Version: proto.Int64(13)}},
+				Graph: &onnxpb.GraphProto{
+					Name:        proto.String("conv_test"),
+					Input:       []*onnxpb.ValueInfoProto{makeFixedFloatValueInfo("x", tt.inShape)},
+					Output:      []*onnxpb.ValueInfoProto{{Name: proto.String("y"), Type: &onnxpb.TypeProto{Value: &onnxpb.TypeProto_TensorType{TensorType: &onnxpb.TypeProto_Tensor{ElemType: proto.Int32(1)}}}}},
+					Initializer: inits,
+					Node: []*onnxpb.NodeProto{
+						{
+							Name:   proto.String("conv"),
+							OpType: proto.String("Conv"),
+							Input:  inputs,
+							Output: []string{"y"},
+							Attribute: []*onnxpb.AttributeProto{
+								{Name: proto.String("auto_pad"), Type: onnxpb.AttributeProto_STRING.Enum(), S: []byte(tt.autoPad)},
+								{Name: proto.String("dilations"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: tt.dilations},
+								{Name: proto.String("group"), Type: onnxpb.AttributeProto_INT.Enum(), I: proto.Int64(tt.groups)},
+							},
+						},
+					},
+				},
+			}
+
+			data, err := proto.Marshal(model)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			inCount := int(tt.inShape[0] * tt.inShape[1] * tt.inShape[2] * tt.inShape[3])
+			x, err := NewFloat32(tt.inShape, deterministicFloats(inCount, 403))
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			runInputs := map[string]*Tensor{"x": x}
+			cpuModel := loadedModel(t, data, Options{})
+			cpuSess := modelSession(t, cpuModel)
+			cpuOut, err := cpuSess.Run(context.Background(), runInputs, RunOptions{})
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			gpuModel := loadedModel(t, data, Options{
+				Execution: ExecutionOptions{Device: DeviceMetal, WeightPrecision: tt.precision},
+			})
+			gpuSess := modelSession(t, gpuModel)
+			gpuOut, err := gpuSess.Run(context.Background(), runInputs, RunOptions{})
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			compareOutputsAgainstCPU(t, cpuOut, gpuOut, tt.atol, tt.rtol)
+			sessStats, err := gpuSess.GPUStats()
+			if err != nil || sessStats.DeviceOps != 1 || sessStats.HostFallbackOps != 0 || sessStats.ScopeSubmits != 1 {
+				t.Fatalf("unexpected GPUStats: %+v err=%v", sessStats, err)
+			}
+		})
+	}
+}
+
+func TestMetalBatchNormAndPoolingParity(t *testing.T) {
+	requireMetal(t)
+	bn2Model := &onnxpb.ModelProto{
+		IrVersion:    proto.Int64(8),
+		ProducerName: proto.String("onnx-gpu-test"),
+		OpsetImport:  []*onnxpb.OperatorSetIdProto{{Domain: proto.String(""), Version: proto.Int64(13)}},
+		Graph: &onnxpb.GraphProto{
+			Name:   proto.String("bn_rank2"),
+			Input:  []*onnxpb.ValueInfoProto{makeFixedFloatValueInfo("x", []int64{3, 4})},
+			Output: []*onnxpb.ValueInfoProto{makeFixedFloatValueInfo("y", []int64{3, 4})},
+			Initializer: []*onnxpb.TensorProto{
+				makeFloatInitializer("scale", []int64{4}, []float32{1.2, 0.8, 1.5, 0.5}),
+				makeFloatInitializer("bias", []int64{4}, []float32{0.1, -0.2, 0.3, -0.4}),
+				makeFloatInitializer("mean", []int64{4}, []float32{0.5, -0.5, 1.0, -1.0}),
+				makeFloatInitializer("var", []int64{4}, []float32{0.25, 1.0, 2.0, 0.5}),
+			},
+			Node: []*onnxpb.NodeProto{
+				{
+					Name:   proto.String("bn"),
+					OpType: proto.String("BatchNormalization"),
+					Input:  []string{"x", "scale", "bias", "mean", "var"},
+					Output: []string{"y"},
+					Attribute: []*onnxpb.AttributeProto{
+						{Name: proto.String("epsilon"), Type: onnxpb.AttributeProto_FLOAT.Enum(), F: proto.Float32(0)},
+					},
+				},
+			},
+		},
+	}
+
+	bn2Data, err := proto.Marshal(bn2Model)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	x2, err := NewFloat32([]int64{3, 4}, deterministicFloats(12, 501))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	cpuBN2 := loadedModel(t, bn2Data, Options{})
+	cpuBN2Out, err := modelSession(t, cpuBN2).Run(context.Background(), map[string]*Tensor{"x": x2}, RunOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	gpuBN2 := loadedModel(t, bn2Data, Options{Execution: ExecutionOptions{Device: DeviceMetal}})
+	gpuBN2Sess := modelSession(t, gpuBN2)
+	gpuBN2Out, err := gpuBN2Sess.Run(context.Background(), map[string]*Tensor{"x": x2}, RunOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	compareOutputsAgainstCPU(t, cpuBN2Out, gpuBN2Out, 1e-5, 1e-4)
+	if stats, statsErr := gpuBN2Sess.GPUStats(); statsErr != nil || stats.DeviceOps != 1 || stats.HostFallbackOps != 0 || stats.ScopeSubmits != 1 {
+		t.Fatalf("unexpected rank-2 BN stats: %+v err=%v", stats, statsErr)
+	}
+
+	poolModel := &onnxpb.ModelProto{
+		IrVersion:    proto.Int64(8),
+		ProducerName: proto.String("onnx-gpu-test"),
+		OpsetImport:  []*onnxpb.OperatorSetIdProto{{Domain: proto.String(""), Version: proto.Int64(13)}},
+		Graph: &onnxpb.GraphProto{
+			Name:   proto.String("pool_chain"),
+			Input:  []*onnxpb.ValueInfoProto{makeFixedFloatValueInfo("x", []int64{2, 3, 9, 9})},
+			Output: []*onnxpb.ValueInfoProto{makeFixedFloatValueInfo("y", []int64{2, 3, 1, 1})},
+			Node: []*onnxpb.NodeProto{
+				{
+					Name:   proto.String("mp"),
+					OpType: proto.String("MaxPool"),
+					Input:  []string{"x"},
+					Output: []string{"p1"},
+					Attribute: []*onnxpb.AttributeProto{
+						{Name: proto.String("kernel_shape"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{3, 3}},
+						{Name: proto.String("strides"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{2, 2}},
+						{Name: proto.String("pads"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{1, 1, 1, 1}},
+					},
+				},
+				{
+					Name:   proto.String("ap"),
+					OpType: proto.String("AveragePool"),
+					Input:  []string{"p1"},
+					Output: []string{"p2"},
+					Attribute: []*onnxpb.AttributeProto{
+						{Name: proto.String("kernel_shape"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{2, 2}},
+						{Name: proto.String("strides"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{2, 2}},
+						{Name: proto.String("pads"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{1, 1, 1, 1}},
+						{Name: proto.String("ceil_mode"), Type: onnxpb.AttributeProto_INT.Enum(), I: proto.Int64(1)},
+						{Name: proto.String("count_include_pad"), Type: onnxpb.AttributeProto_INT.Enum(), I: proto.Int64(1)},
+					},
+				},
+				{
+					Name:   proto.String("gap"),
+					OpType: proto.String("GlobalAveragePool"),
+					Input:  []string{"p2"},
+					Output: []string{"y"},
+				},
+			},
+		},
+	}
+
+	poolData, err := proto.Marshal(poolModel)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	x4, err := NewFloat32([]int64{2, 3, 9, 9}, deterministicFloats(2*3*9*9, 502))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	cpuPool := loadedModel(t, poolData, Options{})
+	cpuPoolOut, err := modelSession(t, cpuPool).Run(context.Background(), map[string]*Tensor{"x": x4}, RunOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	gpuPool := loadedModel(t, poolData, Options{Execution: ExecutionOptions{Device: DeviceMetal}})
+	gpuPoolSess := modelSession(t, gpuPool)
+	gpuPoolOut, err := gpuPoolSess.Run(context.Background(), map[string]*Tensor{"x": x4}, RunOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	compareOutputsAgainstCPU(t, cpuPoolOut, gpuPoolOut, 1e-5, 1e-4)
+	if stats, statsErr := gpuPoolSess.GPUStats(); statsErr != nil || stats.DeviceOps != 3 || stats.HostFallbackOps != 0 || stats.ScopeSubmits != 1 {
+		t.Fatalf("unexpected pool chain stats: %+v err=%v", stats, statsErr)
+	}
+}
+
+func TestMetalConcatAndResNetBottleneckParity(t *testing.T) {
+	requireMetal(t)
+	graph := buildResNetBottleneckConcatGraph(t, 2, 16, 12, 12)
+	x, err := NewFloat32([]int64{2, 16, 12, 12}, deterministicFloats(2*16*12*12, 601))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	inputs := map[string]*Tensor{"x": x}
+	cpuModel := loadedModel(t, graph, Options{Limits: largeModelLimits()})
+	cpuOutputs, err := modelSession(t, cpuModel).Run(context.Background(), inputs, RunOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	cases := []struct {
+		name      string
+		precision WeightPrecision
+		atol      float64
+		rtol      float64
+	}{
+		{"float32", WeightFloat32, 1e-4, 1e-3},
+		{"float16", WeightFloat16, 5e-2, 5e-2},
+		{"bfloat16", WeightBFloat16, 1e-1, 1e-1},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			gpuModel := loadedModel(t, graph, Options{
+				Limits:    largeModelLimits(),
+				Execution: ExecutionOptions{Device: DeviceMetal, WeightPrecision: tc.precision},
+			})
+			gpuSess := modelSession(t, gpuModel)
+			gpuOutputs, err := gpuSess.Run(context.Background(), inputs, RunOptions{})
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			compareOutputsAgainstCPU(t, cpuOutputs, gpuOutputs, tc.atol, tc.rtol)
+			sessStats, err := gpuSess.GPUStats()
+			if err != nil || sessStats.DeviceOps == 0 || sessStats.HostFallbackOps != 0 || sessStats.ScopeSubmits != 1 || sessStats.HostDownloads != 1 {
+				t.Fatalf("unexpected ResNet+Concat stats (%s): %+v err=%v", tc.name, sessStats, err)
+			}
+		})
+	}
+}
+
+func buildMNISTCNNGraph(tb testing.TB, batch int64) (data []byte) {
+	tb.Helper()
+	model := &onnxpb.ModelProto{
+		IrVersion:    proto.Int64(8),
+		ProducerName: proto.String("onnx-gpu-test"),
+		OpsetImport:  []*onnxpb.OperatorSetIdProto{{Domain: proto.String(""), Version: proto.Int64(13)}},
+		Graph: &onnxpb.GraphProto{
+			Name:   proto.String("mnist_cnn"),
+			Input:  []*onnxpb.ValueInfoProto{makeFixedFloatValueInfo("x", []int64{batch, 1, 28, 28})},
+			Output: []*onnxpb.ValueInfoProto{makeFixedFloatValueInfo("logits", []int64{batch, 10})},
+			Initializer: []*onnxpb.TensorProto{
+				makeFloatInitializer("c1_w", []int64{8, 1, 5, 5}, deterministicFloats(8*1*5*5, 701)),
+				makeFloatInitializer("c1_b", []int64{8}, deterministicFloats(8, 702)),
+				makeFloatInitializer("c2_w", []int64{16, 8, 5, 5}, deterministicFloats(16*8*5*5, 703)),
+				makeFloatInitializer("c2_b", []int64{16}, deterministicFloats(16, 704)),
+				makeFloatInitializer("fc_w", []int64{16 * 4 * 4, 10}, deterministicFloats(16*4*4*10, 705)),
+				makeFloatInitializer("fc_b", []int64{10}, deterministicFloats(10, 706)),
+			},
+			Node: []*onnxpb.NodeProto{
+				{
+					Name:   proto.String("conv1"),
+					OpType: proto.String("Conv"),
+					Input:  []string{"x", "c1_w", "c1_b"},
+					Output: []string{"c1"},
+					Attribute: []*onnxpb.AttributeProto{
+						{Name: proto.String("pads"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{2, 2, 2, 2}},
+					},
+				},
+				{Name: proto.String("relu1"), OpType: proto.String("Relu"), Input: []string{"c1"}, Output: []string{"r1"}},
+				{
+					Name:   proto.String("pool1"),
+					OpType: proto.String("MaxPool"),
+					Input:  []string{"r1"},
+					Output: []string{"p1"},
+					Attribute: []*onnxpb.AttributeProto{
+						{Name: proto.String("kernel_shape"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{2, 2}},
+						{Name: proto.String("strides"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{2, 2}},
+					},
+				},
+				{
+					Name:   proto.String("conv2"),
+					OpType: proto.String("Conv"),
+					Input:  []string{"p1", "c2_w", "c2_b"},
+					Output: []string{"c2"},
+					Attribute: []*onnxpb.AttributeProto{
+						{Name: proto.String("pads"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{2, 2, 2, 2}},
+					},
+				},
+				{Name: proto.String("relu2"), OpType: proto.String("Relu"), Input: []string{"c2"}, Output: []string{"r2"}},
+				{
+					Name:   proto.String("pool2"),
+					OpType: proto.String("MaxPool"),
+					Input:  []string{"r2"},
+					Output: []string{"p2"},
+					Attribute: []*onnxpb.AttributeProto{
+						{Name: proto.String("kernel_shape"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{3, 3}},
+						{Name: proto.String("strides"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{3, 3}},
+					},
+				},
+				{Name: proto.String("flat"), OpType: proto.String("Flatten"), Input: []string{"p2"}, Output: []string{"f"}},
+				{Name: proto.String("fc"), OpType: proto.String("Gemm"), Input: []string{"f", "fc_w", "fc_b"}, Output: []string{"logits"}},
+			},
+		},
+	}
+
+	var err error
+	if data, err = proto.Marshal(model); err != nil {
+		tb.Fatal(err)
+	}
+
+	return data
+}
+
+func buildResNetBottleneckConcatGraph(tb testing.TB, batch, channels, height, width int64) (data []byte) {
+	tb.Helper()
+	mid := channels / 2
+	model := &onnxpb.ModelProto{
+		IrVersion:    proto.Int64(8),
+		ProducerName: proto.String("onnx-gpu-test"),
+		OpsetImport:  []*onnxpb.OperatorSetIdProto{{Domain: proto.String(""), Version: proto.Int64(13)}},
+		Graph: &onnxpb.GraphProto{
+			Name:   proto.String("resnet_bottleneck_concat"),
+			Input:  []*onnxpb.ValueInfoProto{makeFixedFloatValueInfo("x", []int64{batch, channels, height, width})},
+			Output: []*onnxpb.ValueInfoProto{makeFixedFloatValueInfo("logits", []int64{batch, 8})},
+			Initializer: []*onnxpb.TensorProto{
+				makeFloatInitializer("c1_w", []int64{mid, channels, 1, 1}, deterministicFloats(int(mid*channels), 801)),
+				makeFloatInitializer("bn1_s", []int64{mid}, deterministicFloats(int(mid), 802)),
+				makeFloatInitializer("bn1_b", []int64{mid}, deterministicFloats(int(mid), 803)),
+				makeFloatInitializer("bn1_m", []int64{mid}, deterministicFloats(int(mid), 804)),
+				makeFloatInitializer("bn1_v", []int64{mid}, positiveFloats(int(mid), 805)),
+				makeFloatInitializer("c2_w", []int64{mid, mid, 3, 3}, deterministicFloats(int(mid*mid*9), 806)),
+				makeFloatInitializer("bn2_s", []int64{mid}, deterministicFloats(int(mid), 807)),
+				makeFloatInitializer("bn2_b", []int64{mid}, deterministicFloats(int(mid), 808)),
+				makeFloatInitializer("bn2_m", []int64{mid}, deterministicFloats(int(mid), 809)),
+				makeFloatInitializer("bn2_v", []int64{mid}, positiveFloats(int(mid), 810)),
+				makeFloatInitializer("c3_w", []int64{channels, mid, 1, 1}, deterministicFloats(int(channels*mid), 811)),
+				makeFloatInitializer("bn3_s", []int64{channels}, deterministicFloats(int(channels), 812)),
+				makeFloatInitializer("bn3_b", []int64{channels}, deterministicFloats(int(channels), 813)),
+				makeFloatInitializer("bn3_m", []int64{channels}, deterministicFloats(int(channels), 814)),
+				makeFloatInitializer("bn3_v", []int64{channels}, positiveFloats(int(channels), 815)),
+				makeFloatInitializer("fc_w", []int64{channels * 2, 8}, deterministicFloats(int(channels*2*8), 816)),
+				makeFloatInitializer("fc_b", []int64{8}, deterministicFloats(8, 817)),
+			},
+			Node: []*onnxpb.NodeProto{
+				{Name: proto.String("c1"), OpType: proto.String("Conv"), Input: []string{"x", "c1_w"}, Output: []string{"c1_out"}},
+				{Name: proto.String("bn1"), OpType: proto.String("BatchNormalization"), Input: []string{"c1_out", "bn1_s", "bn1_b", "bn1_m", "bn1_v"}, Output: []string{"bn1_out"}},
+				{Name: proto.String("r1"), OpType: proto.String("Relu"), Input: []string{"bn1_out"}, Output: []string{"r1_out"}},
+				{
+					Name: proto.String("c2"), OpType: proto.String("Conv"), Input: []string{"r1_out", "c2_w"}, Output: []string{"c2_out"},
+					Attribute: []*onnxpb.AttributeProto{{Name: proto.String("pads"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{1, 1, 1, 1}}},
+				},
+				{Name: proto.String("bn2"), OpType: proto.String("BatchNormalization"), Input: []string{"c2_out", "bn2_s", "bn2_b", "bn2_m", "bn2_v"}, Output: []string{"bn2_out"}},
+				{Name: proto.String("r2"), OpType: proto.String("Relu"), Input: []string{"bn2_out"}, Output: []string{"r2_out"}},
+				{Name: proto.String("c3"), OpType: proto.String("Conv"), Input: []string{"r2_out", "c3_w"}, Output: []string{"c3_out"}},
+				{Name: proto.String("bn3"), OpType: proto.String("BatchNormalization"), Input: []string{"c3_out", "bn3_s", "bn3_b", "bn3_m", "bn3_v"}, Output: []string{"bn3_out"}},
+				{Name: proto.String("res"), OpType: proto.String("Add"), Input: []string{"x", "bn3_out"}, Output: []string{"res_out"}},
+				{Name: proto.String("r3"), OpType: proto.String("Relu"), Input: []string{"res_out"}, Output: []string{"r3_out"}},
+				{
+					Name: proto.String("mp"), OpType: proto.String("MaxPool"), Input: []string{"r3_out"}, Output: []string{"mp_out"},
+					Attribute: []*onnxpb.AttributeProto{
+						{Name: proto.String("kernel_shape"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{2, 2}},
+						{Name: proto.String("strides"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{2, 2}},
+					},
+				},
+				{
+					Name: proto.String("ap"), OpType: proto.String("AveragePool"), Input: []string{"r3_out"}, Output: []string{"ap_out"},
+					Attribute: []*onnxpb.AttributeProto{
+						{Name: proto.String("kernel_shape"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{2, 2}},
+						{Name: proto.String("strides"), Type: onnxpb.AttributeProto_INTS.Enum(), Ints: []int64{2, 2}},
+					},
+				},
+				{
+					Name: proto.String("cat"), OpType: proto.String("Concat"), Input: []string{"mp_out", "ap_out"}, Output: []string{"cat_out"},
+					Attribute: []*onnxpb.AttributeProto{{Name: proto.String("axis"), Type: onnxpb.AttributeProto_INT.Enum(), I: proto.Int64(-3)}},
+				},
+				{Name: proto.String("gap"), OpType: proto.String("GlobalAveragePool"), Input: []string{"cat_out"}, Output: []string{"gap_out"}},
+				{Name: proto.String("flat"), OpType: proto.String("Flatten"), Input: []string{"gap_out"}, Output: []string{"flat_out"}},
+				{Name: proto.String("fc"), OpType: proto.String("Gemm"), Input: []string{"flat_out", "fc_w", "fc_b"}, Output: []string{"logits"}},
+			},
+		},
+	}
+
+	var err error
+	if data, err = proto.Marshal(model); err != nil {
+		tb.Fatal(err)
+	}
+
+	return data
+}
+
+func positiveFloats(count, seed int) (out []float32) {
+	out = make([]float32, count)
+	for i := range out {
+		out[i] = 0.5 + float32((i*17+seed)%29)*0.05
+	}
+
+	return out
 }
