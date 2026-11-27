@@ -144,3 +144,56 @@ Paired Apple M3 `DeviceCPU` check (`-benchtime=5x -count=5`, medians; raw logs i
 | `TransformerBlock_B1_S16` | 4.835 ms (`14.5 MB/op`) | **27.441 ms** (`1.47 MB/op`, 320 allocs) | 27.021 ms (`1.47 MB/op`, 320 allocs) | **-89.8%** |
 
 `DeviceCPU` under `-tags=metal` now matches `CGO_ENABLED=0` CPU NEON latency, allocations, and alloc counts without legacy Metal buffer copies.
+
+## 7. `ONNX-04` Update: `neuralnetwork@v0.17.0` (Coalesced Command Encoding, Simdgroup GEMM/GEMV, Conv2D, BatchNorm, Pool2D, Concat)
+
+**Upstream dependency:** `github.com/itsmontoya/neuralnetwork@v0.17.0` (`GATE-K`)  
+**Upstream commit SHA:** `0567cf1157df78b38633d9cf7beb90c539204727`  
+**Module checksum:** `h1:N/Tnl5xq8/E2dIjL3Ui0nYDV+9WkQoKc/+hlGhYmx58=` (`go.mod`: `h1:SafbkuDehVErsuJAL5FHFsLhKJbeh/OI3ItvbmwDafw=`)  
+**Raw artifacts:** `.benchmarks/gpu-onnx-04/run1/` (gitignored: `before-cpu-neon.txt`, `before-metal.txt`, `after-cpu-neon.txt`, `after-metal.txt`, `test-matrix.log`)
+
+### Newly Wired Operators (`metal_plan.go` & `metal_evaluation.go`)
+
+| ONNX Operator | Metal GPU Path | Supported Weight DTypes | CPU Fallback Cases |
+| --- | --- | --- | --- |
+| `Conv` | `Scope.Conv2D` (NCHW, `auto_pad`/`pads`/`strides`/`dilations`/`group`) | `Float32`, `Float16`, `BFloat16` (weights & optional bias) | Empty dims, non-rank-4, non-`Float32`, `int32` coordinate overflow |
+| `BatchNormalization` | `Scope.BatchNorm` (rank 2 & rank 4 `[N, C, ...]`, finite nonnegative `epsilon`) | `Float32` (scale, bias, mean, variance) | Empty dims, non-`Float32`, invalid `epsilon`, extra outputs |
+| `MaxPool` | `Scope.MaxPool2D` (values-only, `auto_pad`/`pads`/`strides`/`dilations`/`ceil_mode`) | `Float32` | Empty dims, `indices` output requested, `int32` coordinate overflow |
+| `AveragePool` | `Scope.AvgPool2D` (`auto_pad`/`pads`/`strides`/`ceil_mode`/`count_include_pad`) | `Float32` | Empty dims, `int32` coordinate overflow |
+| `GlobalAveragePool` | `Scope.AvgPool2D` (`Kernel=[H,W]`, `Strides=[1,1]`, `Pads=[0,0,0,0]`, `CountIncludePad=false`) | `Float32` | Empty spatial dims (`H==0` or `W==0`), non-rank-4 |
+| `Concat` | `Scope.Concat` (rank 1–6, normalized ONNX axis) | `Float32` | Empty dims, rank > 6, `int64` tensors |
+
+*Note on `Transpose` + `MatMul`:* Kept 1-to-1 (`Scope.Transpose` + `Scope.BatchedMatMul`) rather than adding a graph-rewriting fusion pass, keeping `metalPlan` stateless with respect to intermediate step topologies while remaining 100% resident in 1 `gpu.Scope`.
+
+### Residency & Parity Verification
+
+- `TestMetalM2M3AndNormalizationFixturesParity` (`m3`): `cnn.onnx`, `conv_default_bias.onnx`, `bn_rank4_default.onnx`, `max_default.onnx`, `average_default.onnx`, and `global_default.onnx` all pass with **`HostFallbackOps == 0`**, **`ScopeSubmits == 1`**.
+- `TestMetalConv2DParity`: grouped + dilated + `SAME_UPPER`/`VALID` with/without bias across `WeightFloat32`, `WeightFloat16`, and `WeightBFloat16` (`HostFallbackOps == 0`, `ScopeSubmits == 1`).
+- `TestMetalBatchNormAndPoolingParity`: rank-2 `BatchNormalization` (`epsilon=0`) and chained `MaxPool` → `AveragePool` (`count_include_pad=1`, `ceil_mode=1`) → `GlobalAveragePool` (`HostFallbackOps == 0`, `ScopeSubmits == 1`).
+- `TestMetalConcatAndResNetBottleneckParity`: 16-op ResNet-style CNN bottleneck (`Conv` → `BatchNormalization` → `Relu` + residual `Add` + `MaxPool`/`AveragePool` + `Concat` + `GlobalAveragePool` + `Flatten` + `Gemm`) passes across `WeightFloat32`/`WeightFloat16`/`WeightBFloat16` with **`HostFallbackOps == 0`**, **`ScopeSubmits == 1`**, **`HostDownloads == 1`**.
+
+### Paired Apple M3 Benchmarks: `v0.13.1` vs `v0.17.0` & Metal vs CPU NEON
+
+Medians of 5 runs (`-benchtime=5x -count=5`).
+
+#### Existing Workloads (`v0.13.1` vs `v0.17.0` Metal)
+
+| Workload | `v0.13.1` Metal | `v0.17.0` Metal | `v0.17.0` vs `v0.13.1` | `v0.17.0` vs CPU NEON |
+| --- | ---: | ---: | ---: | ---: |
+| `HybridMLP_M1` (FP32) | 1.165 ms | **0.772 ms** | **1.51× faster** | 0.60× (`461.4 µs` CPU) |
+| `HybridMLP_M32` (FP32) | 3.733 ms | **1.158 ms** | **3.22× faster** | **7.45× faster** (`8.629 ms` CPU) |
+| `ResidentFFN_M1` (FP32) | 1.262 ms | **0.761 ms** | **1.66× faster** | 0.63× (`482.4 µs` CPU) |
+| `ResidentFFN_M32` (FP32) | 3.616 ms | **1.182 ms** | **3.06× faster** | **6.63× faster** (`7.840 ms` CPU) |
+| `TransformerBlock_B1_S16` (FP16) | 2.057 ms | **0.969 ms** | **2.12× faster** | **29.6× faster** (`28.674 ms` CPU) |
+| `TransformerBlock_B4_S32` (FP16) | 6.613 ms | **1.135 ms** | **5.82× faster** | **201.7× faster** (`228.957 ms` CPU) |
+| `TransformerBlock_B4_S32` (BF16) | 6.544 ms | **1.187 ms** | **5.51× faster** | **192.9× faster** |
+| `TransformerBlock_B4_S32` (FP32) | 6.547 ms | **1.424 ms** | **4.60× faster** | **160.8× faster** |
+
+#### New CNN & ResNet-Bottleneck Workloads (`v0.17.0`, 1 `Scope`, `HostFallbackOps == 0`)
+
+| Workload | CPU NEON (`CGO=0`) | Metal FP32 | Metal FP16 | Metal BF16 | Best Metal vs CPU NEON |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `MNIST_CNN_B1` | **49.5 µs** (`93.7 KB/op`) | 289.2 µs (`7.4 KB/op`) | 281.0 µs (`7.4 KB/op`) | 284.7 µs (`7.4 KB/op`) | 0.18× (submit-bound) |
+| `MNIST_CNN_B32` | 1.601 ms (`2.69 MB/op`) | **0.779 ms** (`114.4 KB/op`) | **0.564 ms** (`114.4 KB/op`) | **0.563 ms** (`114.4 KB/op`) | **2.84× faster** (BF16), **-95.7% allocs** |
+| `ResNetBottleneck_B1` | 1.069 ms (`1.06 MB/op`) | **0.523 ms** (`269.2 KB/op`) | **0.506 ms** (`269.2 KB/op`) | **0.365 ms** (`269.2 KB/op`) | **2.93× faster** (BF16), **-74.5% allocs** |
+| `ResNetBottleneck_B16` | 18.090 ms (`16.80 MB/op`) | **2.486 ms** (`4.20 MB/op`) | **2.546 ms** (`4.20 MB/op`) | **2.948 ms** (`4.20 MB/op`) | **7.28× faster** (FP32), **-75.0% allocs** |
