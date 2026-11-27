@@ -3,7 +3,7 @@ module github.com/itsmontoya/onnx
 go 1.27.3
 
 require (
-	github.com/itsmontoya/neuralnetwork v0.13.1
+	github.com/itsmontoya/neuralnetwork v0.17.0
 	google.golang.org/protobuf v1.36.12
 )
 
